@@ -227,7 +227,7 @@ git reset --hard 版本号
 - 版本穿梭之后，查看的文件就是对应版本号的文件。
 - 底层：HEAD指针的移动
 
-![](C:/NoteBook/pictures/2860321240278.png =456x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/2860321240278.png =456x)
 
 ```git
 zjk10@DESKTOP-HSVIOTH MINGW64 /g/GitDemo (master)
@@ -330,7 +330,7 @@ git merge 分支名
 
 **底层 指针**
 
-![](C:/NoteBook/pictures/144484721236833.png =470x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/144484721236833.png =470x)
 
 ### 正常合并
 
@@ -460,7 +460,7 @@ $ git commit -m "日志信息 matser 5 + hot-fix"
 
 **凭据管理器**
 
-![](C:/NoteBook/pictures/555244722248071.png =499x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/555244722248071.png =499x)
 
 **如何解决Github打不开的问题？**
 
@@ -490,11 +490,11 @@ $ git commit -m "日志信息 matser 5 + hot-fix"
 
 **创建GitHub库**
 
-![](C:/NoteBook/pictures/220061222232587.png =425x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/220061222232587.png =425x)
 
 **使用Https连接**
 
-![](C:/NoteBook/pictures/79841422250467.png =732x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/79841422250467.png =732x)
 
 - https://github.com/creatern/Git-Demo.git
 
@@ -615,19 +615,19 @@ Resolving deltas: 100% (1/1), done.
 
 **fork添加到自己的仓库**
 
-![](C:/NoteBook/pictures/61920823245573.png =640x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/61920823245573.png =640x)
 
 **Pull requests**
 
 - 给别人
-![](C:/NoteBook/pictures/175711123226814.png =432x)
-![](C:/NoteBook/pictures/395401123249254.png =438x)
-![](C:/NoteBook/pictures/157941223244390.png =439x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/175711123226814.png =432x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/395401123249254.png =438x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/157941223244390.png =439x)
 - 查看收到的
-![](C:/NoteBook/pictures/212891323237936.png =434x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/212891323237936.png =434x)
 - 合并收到的
-![](C:/NoteBook/pictures/81821523221600.png =458x)
-![](C:/NoteBook/pictures/342191523224104.png =449x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/81821523221600.png =458x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/342191523224104.png =449x)
 
 
 ## SSH免密登录
@@ -668,7 +668,7 @@ The key's randomart image is:
 ```
 
 - 在对应的目录生成了.ssh文件夹
-![](C:/NoteBook/pictures/576632823233051.png =445x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/576632823233051.png =445x)
    - id_rsa 私钥
    - id_rsa.pub 公钥
 
@@ -691,13 +691,13 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCo4Y42+qZM6Z0Y3dXnkOnWrP1zhJHfz3v6bRRkHt8
 
 **到GitHub中设置**
 
-![](C:/NoteBook/pictures/71373323225936.png =642x)
-![](C:/NoteBook/pictures/498163323226545.png =476x)
-![](C:/NoteBook/pictures/283203423253500.png =443x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/71373323225936.png =642x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/498163323226545.png =476x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/283203423253500.png =443x)
 
 ### 以ssh协议pull
 
-![](C:/NoteBook/pictures/121664023225011.png =823x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/121664023225011.png =823x)
 
 - git@github.com:creatern/Git-Demo.git
 
@@ -779,51 +779,51 @@ target
 
 ## 定位Git程序
 
-![](C:/NoteBook/pictures/188772600221263.png =705x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/188772600221263.png =705x)
 - 初始化Git 如下，然后找到项目根目录ok即可
-![](C:/NoteBook/pictures/182830304239577.png =394x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/182830304239577.png =394x)
 - add
-![](C:/NoteBook/pictures/131080604227444.png =573x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/131080604227444.png =573x)
 - commit
-![](C:/NoteBook/pictures/220630904240279.png =568x)
-![](C:/NoteBook/pictures/431380804247610.png =781x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/220630904240279.png =568x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/431380804247610.png =781x)
 
 ## 版本信息
 
 ### 查看版本信息
 
-![](C:/NoteBook/pictures/334981304248072.png =846x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/334981304248072.png =846x)
 
 ### 版本穿梭
 
-![](C:/NoteBook/pictures/98881304250468.png =850x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/98881304250468.png =850x)
 
 ## 分支
 
 ### 切换分支
 
 1. 方式1
-![](C:/NoteBook/pictures/353491504245574.png =407x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/353491504245574.png =407x)
 2. 方式2
-![](C:/NoteBook/pictures/316391704244391.png =300x)
-![](C:/NoteBook/pictures/57181904224105.png =394x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/316391704244391.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/57181904224105.png =394x)
 
 ### 创建分支
 
-![](C:/NoteBook/pictures/449951704237937.png =280x)
-![](C:/NoteBook/pictures/164811804231071.png =388x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/449951704237937.png =280x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/164811804231071.png =388x)
 
 ### 合并分支
 
 #### 正常合并
 
-![](C:/NoteBook/pictures/232082104233052.png =374x)
-![](C:/NoteBook/pictures/330172204225937.png =564x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/232082104233052.png =374x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/330172204225937.png =564x)
 
 #### 冲突合并
 
-![](C:/NoteBook/pictures/340442504226546.png =427x)
-![](C:/NoteBook/pictures/405683004235714.png =522x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/340442504226546.png =427x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/405683004235714.png =522x)
 
 ## 与GitHub的连接
 
@@ -833,42 +833,42 @@ target
 
 **GitHub生成口令**
 
-![](C:/NoteBook/pictures/120503904225012.png =144x)
-![](C:/NoteBook/pictures/240304004221402.png =243x)
-![](C:/NoteBook/pictures/581754004233492.png =414x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/120503904225012.png =144x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/240304004221402.png =243x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/581754004233492.png =414x)
 
 - 设置口令权限
 
-![](C:/NoteBook/pictures/463824304238531.png =554x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/463824304238531.png =554x)
 
 **获取口令并在IDEA中设置**
 
-![](C:/NoteBook/pictures/256234504239826.png =675x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/256234504239826.png =675x)
 
 - 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
 
-![](C:/NoteBook/pictures/590794504240828.png =574x)
-![](C:/NoteBook/pictures/304074604241005.png =389x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/590794504240828.png =574x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/304074604241005.png =389x)
 
 ### 分享项目到GitHub
 
-![](C:/NoteBook/pictures/429654804226557.png =404x)
-![](C:/NoteBook/pictures/516425004242836.png =564x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/429654804226557.png =404x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/516425004242836.png =564x)
 
 ### push 推送本地库到远程库
 
-![](C:/NoteBook/pictures/31080405246777.png =470x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/31080405246777.png =470x)
 
 **自定义别名ssh连接**
 
 - 获取ssh
 
-![](C:/NoteBook/pictures/258310205241022.png =545x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/258310205241022.png =545x)
 
 - git@github.com:creatern/JavaSerrior.git
 
-![](C:/NoteBook/pictures/287145504232648.png =426x)
-![](C:/NoteBook/pictures/580165504222979.png =454x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/287145504232648.png =426x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/580165504222979.png =454x)
 
 ### pull
 
@@ -878,13 +878,13 @@ target
 - 也就是说，要想push成功，一定要保证本地库的版本要比远程库的版本高！
 - 如果本地的代码版本己经落后，切记要先pull拉取一下远程库的代码，将本地代码更新到最新以后，然后再修改，提交，推送！
 
-![](C:/NoteBook/pictures/596800505238145.png =255x)
-![](C:/NoteBook/pictures/306160805249813.png =271x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/596800505238145.png =255x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/306160805249813.png =271x)
 
 ### clone 克隆远程库到本地
 
-![](C:/NoteBook/pictures/395101205244921.png =464x)
-![](C:/NoteBook/pictures/100281405252432.png =474x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/395101205244921.png =464x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/100281405252432.png =474x)
 
 # Gitee 码云
 
@@ -894,39 +894,39 @@ target
 
 **安装Gitee插件**
 
-![](C:/NoteBook/pictures/68383005238783.png =578x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/68383005238783.png =578x)
 
 **设置登录**
 
-![](C:/NoteBook/pictures/350503305225774.png =583x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/350503305225774.png =583x)
 
 ### 分享本地库到Gitee
 
-![](C:/NoteBook/pictures/450903405236251.png =226x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/450903405236251.png =226x)
 
 ### push
 
-![](C:/NoteBook/pictures/262383605228821.png =472x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/262383605228821.png =472x)
 
 ### pull
 
-![](C:/NoteBook/pictures/476803905227978.png =118x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/476803905227978.png =118x)
 
-![](C:/NoteBook/pictures/355153905249363.png =258x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/355153905249363.png =258x)
 
 ## Gitee复制Github
 
 - Gitee新建仓库
-![](C:/NoteBook/pictures/598674105246657.png =405x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/598674105246657.png =405x)
 - Github获取https
-![](C:/NoteBook/pictures/13694305248754.png =587x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/13694305248754.png =587x)
 - Gitee
-![](C:/NoteBook/pictures/366414305253772.png =392x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/366414305253772.png =392x)
 
 ### Gitee更新迁移的项目库
 
-![](C:/NoteBook/pictures/584394405253867.png =445x)
-![](C:/NoteBook/pictures/119994505241147.png =327x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/584394405253867.png =445x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/119994505241147.png =327x)
 
 # GitLab 自建代码托管平台
 

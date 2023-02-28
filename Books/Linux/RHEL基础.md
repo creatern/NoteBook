@@ -144,13 +144,13 @@ tcp6       0      0 :::22                   :::*                    LISTEN
 
 - Xshell 终端
 
-![](c:/notebook/pictures/149153913227439.png =292x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/149153913227439.png =292x)
 
-![](c:/notebook/pictures/375583913240274.png =292x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/375583913240274.png =292x)
 
 - Xftp 文件传输
 
-![](c:/notebook/pictures/293774313236829.png =298x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/293774313236829.png =298x)
 
 # 图形化界面
 
@@ -159,7 +159,7 @@ tcp6       0      0 :::22                   :::*                    LISTEN
 - 以位图方式显示的软件窗口系统
 - 用来创建图形化界面，在X Window基础上开发出GNOME、KDE、CDE
 
-![](c:/notebook/pictures/308405213232583.png =407x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/308405213232583.png =407x)
 
 **进入X Window环境**
 
@@ -184,17 +184,17 @@ startx
 
 - setting -> Region&Language
 
-![](c:/notebook/pictures/247450614250463.png =295x)
-![](c:/notebook/pictures/389750714248067.png =293x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/247450614250463.png =295x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/389750714248067.png =293x)
 
 **切换输入法**
 
-![](c:/notebook/pictures/416270814245569.png =141x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/416270814245569.png =141x)
 
 #### 配置网卡和有线
 
-![](c:/notebook/pictures/463371114226810.png =294x)
-![](c:/notebook/pictures/23051214249250.png =298x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/463371114226810.png =294x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/23051214249250.png =298x)
 
 #### 使用U盘、光盘和移动硬盘
 
@@ -206,7 +206,7 @@ startx
 
 **Linux系统结构**
 
-![](c:/notebook/pictures/440202214237932.png =459x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/440202214237932.png =459x)
 
 **切换至命令行**
 
@@ -255,7 +255,7 @@ startx
 4. 用户登录时，通过登录进程验证用户的合法性。
 5. 用户验证通过后根据用户的设置启动相关的Shell，以便接收用户输入的命令并返回执行结果。
 
-![](c:/notebook/pictures/320973214224100.png =198x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/320973214224100.png =198x)
 
 ## 常用快捷键和通配符
 
@@ -592,7 +592,7 @@ anaconda-ks.cfg  Desktop  Documents  Downloads  initial-setup-ks.cfg  Music  Pic
 
 进程从标准输入文件得到输入数据，将正常输出数据输出到标准输出文件，而错误信息则打印到标准错误文件。
 
-![](c:/notebook/pictures/153845716239573.png =369x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/153845716239573.png =369x)
 
 ### echo 输出指定的字符串或者变量
 
@@ -623,7 +623,7 @@ echo -e "\033[37;31;5mMySQL Server Stop...\033[39;49;0m"
 
 ### printf 格式化并输出结果
 
-![](c:/notebook/pictures/Snipaste_2022-12-17_16-07-55.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-17_16-07-55.png =400x)
 
 ```shell
 
@@ -682,7 +682,7 @@ test
     - 如果没有指定文件或者文件名为“-”，则读取标准输入。
 - 注意：如果表示字节或行数的N值之前有一个”+”号，则从文件开头的第N项开始显示，而不是显示文件的最后N项。N值后面可以有后缀：b表示512，k表示1024，m表示1048576(1M)。
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_17-01-43.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_17-01-43.png =1100x)
 
 ### head
 
@@ -971,7 +971,7 @@ operator:x:11:0:operator:/root:/sbin/nologin
 
 - 在指定时间执行任务，只执行一次。
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_23-24-32.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_23-24-32.png =300x)
 
 **格式**
 
@@ -1002,7 +1002,7 @@ at> <EOT>
 job 3 at Sun Nov 27 23:43:00 2022
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_23-44-25.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_23-44-25.png =400x)
 
 #### atq 显示当前所有定时任务
 
@@ -1019,7 +1019,7 @@ job 3 at Sun Nov 27 23:43:00 2022
 atrm 任务序号
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_23-49-33.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_23-49-33.png =300x)
 
 ### crontab 周期任务
 
@@ -1032,7 +1032,7 @@ atrm 任务序号
 crontab [选项] [参数]
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_23-55-50.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_23-55-50.png =550x)
 
 #### 系统任务调度 和 用户任务调度 。
 
@@ -1041,7 +1041,7 @@ crontab [选项] [参数]
 - 系统周期性所要执行的工作，比如写缓存数据到硬盘、日志清理等。
 - 系统任务调度的配置文件`/etc/crontab`
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_00-01-43.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_00-01-43.png =600x)
 
 ```shell
 [root@localhost etc]# ll | grep cron
@@ -1071,9 +1071,9 @@ drwxr-xr-x.  2 root root        6 Dec 28  2013 cron.weekly
 crontab [选项] [crontab 的任务列表文件]
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_00-30-55.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_00-30-55.png =400x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_00-12-54.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_00-12-54.png =800x)
 
 **常用`crontab -e`进行设置和删除**
 
@@ -1185,7 +1185,7 @@ uptime
 
 #### vmstat
 
-![](C:/notebook/pictures/Snipaste_2022-12-12_15-05-21.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_15-05-21.png =300x)
 
 ```shell
 [root@bogon ipv4]# vmstat
@@ -1267,7 +1267,7 @@ Total:        10063         911        8157
 
 **解释**
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_20-59-05.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_20-59-05.png =700x)
 
 
 ### IO
@@ -1278,9 +1278,9 @@ Total:        10063         911        8157
 
 - iostat命令 被用于监视系统输入输出设备和CPU的使用情况。它的特点是汇报磁盘活动统计情况，同时也会汇报出CPU使用情况。同vmstat一样，iostat也有一个弱点，就是它不能对某个进程进行深入分析，仅对系统的整体情况进行分析。
 
-![](C:/notebook/pictures/Snipaste_2022-12-12_15-13-00.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_15-13-00.png =300x)
 
-![](C:/notebook/pictures/Snipaste_2022-12-12_15-14-15.png =430x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_15-14-15.png =430x)
 
 ```shell
 [root@bogon ipv4]# iostat -x /dev/sda1
@@ -1301,17 +1301,17 @@ sda1              0.00     0.00    0.18    0.00     0.56     0.20     8.34     0
 
 **启动**
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-10-41.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-10-41.png =700x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-13-01.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-13-01.png =700x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-14-09.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-14-09.png =800x)
 
 **紧急模式 systemctl rescue**
 
 ### runlevel 查看当前用户运行级别
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-22-29.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-22-29.png =300x)
 
 ### init 改变系统运行级别
 
@@ -1321,7 +1321,7 @@ sda1              0.00     0.00    0.18    0.00     0.56     0.20     8.34     0
 init [选项] 运行级别
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-23-31.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-23-31.png =300x)
 
 ### /etc/inittab init配置文件
 
@@ -1355,11 +1355,11 @@ Created symlink from /etc/systemd/system/default.target to /usr/lib/systemd/syst
 
 **扩展与单元类型**
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-33-29.png =750x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-33-29.png =750x)
 
 - systemctl命令 是系统服务管理器指令，它实际上将 service 和 chkconfig 这两个命令组合到一起。
 
-![](c:/notebook/pictures/Snipaste_2022-12-01_16-30-36.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-01_16-30-36.png =1100x)
 
 ### 对服务单元操作
 
@@ -1412,7 +1412,7 @@ systemctl suspend # 待机
 [root@bogon ~]# cat /usr/lib/systemd/system/vmtoolsd.service
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-02_17-45-08.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-02_17-45-08.png =900x)
 
 #### 添加单元配置文件
 
@@ -1450,8 +1450,8 @@ systemctl suspend # 待机
 ps [选项]
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_14-39-40.png =600x)
-![](c:/notebook/pictures/Snipaste_2022-12-03_14-40-11.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_14-39-40.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_14-40-11.png =600x)
 
 **常用**
 
@@ -1475,9 +1475,9 @@ ps -aux | grep named # 查看named进程详细信息
 ps -o command -p 91730 | sed -n 2p # 通过进程id获取服务名称
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_14-55-49.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_14-55-49.png =1100x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_14-57-52.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_14-57-52.png =700x)
 
 ```shell
 [root@bogon ~]# ps aux | head -2
@@ -1490,9 +1490,9 @@ root          1  0.0  0.0 191700  4760 ?        Ss   13:15   0:04 /usr/lib/syste
 - 动态交互命令
 - 默认每5秒刷新一次
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_15-02-00.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_15-02-00.png =800x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_15-20-11.png =1000x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_15-20-11.png =1000x)
 
 - 应用程序实际占用的内存：MemTotal - MemFree - Buffer - Cached (KB)而不是MemUsed
 
@@ -1561,7 +1561,7 @@ For more details see ps(1).
 - 程序或工作的编号可利用ps指令或jobs指令查看。
 - <mark>kill 按PID杀死单个进程，killall 按进程名杀死同名的所有进程</mark>。
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_15-44-29.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_15-44-29.png =500x)
 
 **信号 默认15**
 
@@ -1592,7 +1592,7 @@ For more details see ps(1).
 - 在创建进程（可以是命令的执行）时指定进程的优先级
 - 优先级是父进程和nice指定的优先的相加和，即：<mark>nice指定的并不就是该进程的优先级，而是一个**增量**</mark>。
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_15-58-39.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_15-58-39.png =300x)
 
 - 注：指定优先级时：`nice -19 进程`表示优先级是19而不是-19，如果要-19则：`nice --19 进程`；也可以使用`nice -n -19 进程`表示-19.
 
@@ -1631,7 +1631,7 @@ Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
 
 ## 文件信息
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_20-30-27.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-30-27.png =700x)
 
 **文件类型**
 
@@ -1664,7 +1664,7 @@ Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
 
 ### chown 改变文件所有者
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_20-35-01.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-35-01.png =700x)
 
 **常用**
 
@@ -1711,7 +1711,7 @@ drwxr-xr-x. 2 zjk root  63 Nov 27 20:27 zipTest
 chgrp [选项][组群][文件|目录]
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_20-41-22.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-41-22.png =700x)
 
 ```shell
 [root@bogon zipTest]# chgrp -R root /root/Test/zipTest
@@ -1719,7 +1719,7 @@ chgrp [选项][组群][文件|目录]
 
 ### chmod 变更文件或目录的权限
 
-![](c:/notebook/pictures/Snipaste_2022-12-09_16-46-13.png =650x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-09_16-46-13.png =650x)
 
 **权限**
 
@@ -1729,7 +1729,7 @@ chgrp [选项][组群][文件|目录]
 
 - 一是用于把已存在文件的时间标签更新为系统当前的时间（默认方式），它们的数据将原封不动地保留下来；二是用来创建新的空文件。
 
-![](c:/notebook/pictures/Snipaste_2022-12-19_16-48-24.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-19_16-48-24.png =600x)
 
 
 ### sed 流编辑器
@@ -1926,7 +1926,7 @@ Archive:  zipTest1.zip
 1. 如果目标文件是到某一目录文件的路径，源文件会被移到此目录下，且文件名不变。
 2. 如果目标文件不是目录文件，则源文件名（只能有一个）会变为此目标文件名，并覆盖己存在的同名文件。
 
-![](c:/notebook/pictures/Snipaste_2022-12-03_16-13-44.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_16-13-44.png =1100x)
 
 
 **常用**
@@ -1947,7 +1947,7 @@ cp 复制的文件路径 目标
 
 ### mkdir 新建文件夹
 
-![](c:/notebook/pictures/Snipaste_2022-12-09_16-43-44.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-09_16-43-44.png =500x)
 
 
 ```shell
@@ -2009,7 +2009,7 @@ lrwxrwxrwx. 1 root root 22 Feb 19 14:24 testlns.test -> /root/Test/test01.test
 df [选项][参数]
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_20-45-10.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-45-10.png =700x)
 
 **常用组合**
 
@@ -2058,7 +2058,7 @@ Filesystem            1K-blocks    Used Available Use% Mounted on
 
 ## du 查看文件/目录占用空间
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_20-54-15.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-54-15.png =700x)
 
 **常用**
 
@@ -2111,7 +2111,7 @@ lrwxrwxrwx. 1 root root      8 Nov 13 21:14 /usr/sbin/mkfs.vfat -> mkfs.fat
 -rwxr-xr-x. 1 root root 368464 May 10  2017 /usr/sbin/mkfs.xfs
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_23-27-57.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_23-27-57.png =400x)
 
 **常用**
 
@@ -2127,7 +2127,7 @@ mkfs -t ext4 /dev/sdb1
 
 - 挂载点必须是一个目录，如果挂载点原本有内容，则在挂载时看不到，卸载后才能重新看到。
 
-![](c:/notebook/pictures/Snipaste_2022-11-28_23-34-30.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_23-34-30.png =1100x)
 
 **常用**
 
@@ -2153,11 +2153,11 @@ mount -t iso9660 /dev/cdrom /mnt/room
 
 ### /etc/fstab文件 自动挂载
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_00-08-22.png =850x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_00-08-22.png =850x)
 
 ## fdisk 基本磁盘管理
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_14-57-50.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_14-57-50.png =900x)
 
 **常用**
 
@@ -2225,7 +2225,7 @@ Command action
 | lastlog    | 记录最后一次失败的登录和最近几次成功的登录  |           |
 
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-22-13.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-22-13.png =900x)
 
 ###  查看日志文件
 
@@ -2239,7 +2239,7 @@ Command action
 
 #### who 显示目前登录系统的用户信息
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-31-13.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-31-13.png =900x)
 
 - 参数：/var/log/wtmp
 
@@ -2271,7 +2271,7 @@ root     pts/0        2022-11-29 14:58 (192.168.186.1)
 
 #### w 显示目前登入系统的用户信息
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-34-45.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-34-45.png =400x)
 
 
 ```shell
@@ -2288,7 +2288,7 @@ USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 
 - 如果一个用户有不止一个登录会话，那他的用户名将显示相同的次数
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-36-53.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-36-53.png =300x)
 
 ```shell
 [root@bogon ~]# users
@@ -2299,7 +2299,7 @@ root
 
 - 用于显示用户最近登录信息。单独执行last命令，它会读取/var/log/wtmp的文件，并把该给文件的内容记录的登入系统的用户名单全部显示出来
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-38-09.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-38-09.png =400x)
 
 
 ```shell
@@ -2315,7 +2315,7 @@ root     pts/0        192.168.186.1    Mon Nov 28 19:48 - 21:08  (01:19)
 - 内核会将开机信息存储在ring buffer中。若是开机时来不及查看信息，可利用dmesg来查看。
 - 开机信息保存在/var/log/dmesg文件里。
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_15-42-37.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_15-42-37.png =400x)
 
 **常用**
 
@@ -2327,11 +2327,11 @@ root     pts/0        192.168.186.1    Mon Nov 28 19:48 - 21:08  (01:19)
 
 **配置文件 /etc/rsyslog.conf rsyslog**
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_19-47-09.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_19-47-09.png =800x)
 
 **设备**
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_19-48-07.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_19-48-07.png =800x)
 
 **优先符限定符**
 
@@ -2345,7 +2345,7 @@ root     pts/0        192.168.186.1    Mon Nov 28 19:48 - 21:08  (01:19)
 
 - 每条消息都会经过所有的规则，并非唯一匹配的。
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_19-52-55.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_19-52-55.png =800x)
 
 ```shell
 # 编辑/etc/rsyslog.conf
@@ -2369,7 +2369,7 @@ main.=info                       /dev/tty12
 - 每个记录文件都可被设置成每日，每周或每月处理，也能在文件太大时立即处理。
 - 必须自行编辑，指定配置文件，预设的配置文件存放在 **/etc/logrotate.conf** 文件中。
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_20-05-50.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_20-05-50.png =600x)
 
 ```shell
 [root@bogon ~]# vim /etc/logrotate.conf
@@ -2417,7 +2417,7 @@ include /etc/logrotate.d
 
 **logrotate配置文件参数**
 
-![](c:/notebook/pictures/Snipaste_2022-11-29_20-11-41.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-29_20-11-41.png =800x)
 
 ### 测试轮转
 
@@ -2461,31 +2461,31 @@ include /etc/logrotate.d
 
 #### /etc/passwd
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_13-43-52.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_13-43-52.png =500x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_14-12-25.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_14-12-25.png =800x)
 
 - 普通用户的UID默认1000以上的数字
 
 #### /etc/shadow
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_16-21-03.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_16-21-03.png =800x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_16-35-15.png =1000x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_16-35-15.png =1000x)
 
 #### /etc/group
 
 - 用户登录时默认的组放在/etc/passwd中
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_18-46-41.png =200x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_18-46-41.png =200x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_18-52-02.png =280x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_18-52-02.png =280x)
 
 ### 用户管理命令
 
 #### useradd 添加用户
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_18-55-07.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_18-55-07.png =400x)
 
 ```shell
 [root@bogon ~]# useradd user1
@@ -2501,7 +2501,7 @@ user1:x:1001:
 
 - usermod 命令不允许你改变正在线上的使用者帐号名称。当 usermod 命令用来改变user id，必须确认这名user没在电脑上执行任何程序。你需手动更改使用者的 crontab 档。也需手动更改使用者的 at 工作档。采用 NIS server 须在server上更动相关的NIS设定。
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-01-28.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-01-28.png =400x)
 
 ```shell
 [root@bogon ~]# usermod -l newuser user1 
@@ -2513,7 +2513,7 @@ newuser:x:1001:1001::/home/user1:/bin/bash
 
 #### userdel 删除用户
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-04-45.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-04-45.png =300x)
 
 - 不加`-r`选项的userdel只是对用户删除，而不包含该用户的相关任务和文件。
 
@@ -2545,7 +2545,7 @@ passwd: all authentication tokens updated successfully.
 
 #### su 切换用户
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-13-25.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-13-25.png =700x)
 
 **常用**
 
@@ -2575,7 +2575,7 @@ Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
 - 在**/etc/sudoers**中设置了可执行sudo指令的用户。若其未经授权的用户企图使用sudo，则会发出警告的邮件给管理员。
 - 用户使用sudo时，必须先输入密码，之后有5分钟的有效期限，超过期限则必须重新输入密码。
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-21-53.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-21-53.png =600x)
 
 ```shell
 [zjk@bogon ~]$ fdisk -l
@@ -2613,7 +2613,7 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 - 可以显示真实有效的用户ID(UID)和组ID(GID)。
 - id命令已经默认预装在大多数Linux系统中。
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-44-47.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-44-47.png =400x)
 
 ```shell
 [root@bogon ~]# id
@@ -2633,7 +2633,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 #### groupadd 添加用户组
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-33-36.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-33-36.png =400x)
 
 ```shell
 [root@bogon ~]# groupadd group1 -p tiger
@@ -2646,7 +2646,7 @@ group1:x:1002:
 - 命令要修改的系统文件包括/ect/group和/ect/shadow。
 - 若该群组中仍包括某些用户，则必须先删除这些用户后，方能删除群组。
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-35-45.png =200x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-35-45.png =200x)
 
 ```shell
 [root@bogon ~]# groupadd group1 -p tiger
@@ -2659,7 +2659,7 @@ groupdel: cannot remove the primary group of user 'user1'
 
 #### groupmod 修改用户组
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-39-45.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-39-45.png =300x)
 
 ```shell
 [root@bogon ~]# groupadd group0
@@ -2684,7 +2684,7 @@ root : root
 
 ## rpm RPM包
 
-![](c:/notebook/pictures/Snipaste_2022-11-30_19-47-03.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-30_19-47-03.png =700x)
 
 **常用**
 
@@ -3183,13 +3183,13 @@ export LD_LIBRARY_PATH=/usr/local/ssl/lib:$LD_LIBRARY_PATH:.
 
 ### ip 网络配置工具
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_00-40-46.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_00-40-46.png =500x)
 
 ### ping
 
 - 用来测试主机之间网络的连通性。执行ping指令会使用ICMP传输协议，发出要求回应的信息，若远端主机的网络功能没有问题，就会回应该信息，因而得知该主机运作正常。
 
-![](c:/notebook/pictures/Snipaste_2022-12-04_16-47-45.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-04_16-47-45.png =400x)
 
 **常用**
 
@@ -3199,15 +3199,15 @@ ping -c 指定次数 域名/IP # 指定次数
 ping -c 指定次数 -i 间隔秒数 域名/IP # 指定次数和每次间隔时间
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-04_16-57-38.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-04_16-57-38.png =800x)
 
 ### ifconfig 配置和显示Linux系统网卡的网络参数
 
 - 用ifconfig命令配置的网卡信息，在网卡重启后机器重启后，配置就不存在。要想将上述的配置信息永远保存电脑，要修改网卡的配置文件。
 
-![](c:/notebook/pictures/Snipaste_2022-12-04_16-59-24.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-04_16-59-24.png =500x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-04_17-23-14.png =1000x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-04_17-23-14.png =1000x)
 
 **常用**
 
@@ -3243,9 +3243,9 @@ ifconfig eth0 mtu 1500    #设置能通过的最大数据包大小为 1500 bytes
 - 在Linux系统中设置路由通常是为了解决以下问题：该Linux系统在一个局域网中，局域网中有一个网关，能够让机器访问Internet，那么就需要将这台机器的ip地址设置为Linux机器的默认路由。
 - 要注意的是，直接在命令行下执行route命令来添加路由，不会永久保存，当网卡重启或者机器重启之后，该路由就失效了；可以在**/etc/rc.local**中添加route命令来保证该路由设置永久有效。
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_14-39-35.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_14-39-35.png =300x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-11_23-07-07.png =750x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-11_23-07-07.png =750x)
 
 ```shell
 # 显示
@@ -3267,7 +3267,7 @@ route add -net 224.0.0.0 netmask 240.0.0.0 reject #删除屏蔽的路由
 
 - 用于在Linux下进行远程拷贝文件的命令，和它类似的命令有cp，不过cp只是在本机进行拷贝不能跨服务器，而且scp传输是加密的，可能会稍微影响速度。当服务器硬盘变为只读read only system时，用scp可以把文件移出来。另外，scp还非常不占资源，不会提高多少系统负荷，在这一点上，rsync就远远不及它了。虽然 rsync比scp会快一点，但当小文件众多的情况下，rsync会导致硬盘I/O非常高，而scp基本不影响系统正常使用。
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_15-01-17.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_15-01-17.png =500x)
 
 ```shell
 # scp 源文件 目标文件
@@ -3314,7 +3314,7 @@ drwxrwxr-x.  9 zjk    zjk   4096 Jun 28 18:40 vim90
 #### Linux 与 Windows的传输
 
 - 需要在Windos安装SSH功能。**OPENSSH服务器和OPENSSH客户端**
-![](c:/notebook/pictures/Snipaste_2022-12-05_15-40-47.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_15-40-47.png =500x)
 - 需要启动SSH服务
 
 ##### Windows到Linux
@@ -3346,9 +3346,9 @@ root@192.168.186.154's password:
 
 - rsync命令 是一个远程数据同步工具，可通过LAN/WAN快速同步多台主机间的文件。rsync使用所谓的“rsync算法”来使本地和远程两个主机之间的文件达到同步，这个算法只传送两个文件的不同部分，而不是每次都整份传送，因此速度相当快。 
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_15-33-10.png =900x)
-![](c:/notebook/pictures/Snipaste_2022-12-05_15-34-06.png =900x)
-![](c:/notebook/pictures/Snipaste_2022-12-05_15-34-52.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_15-33-10.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_15-34-06.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_15-34-52.png =500x)
 
 ```shell
 # 传送本地到远程主机
@@ -3357,7 +3357,7 @@ root@192.168.186.154's password:
 
 ### netstat 查看网络系统状态信息
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_19-32-19.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_19-32-19.png =500x)
 
 ```shell
 # 列出所有端口 (包括监听和未监听的)
@@ -3415,7 +3415,7 @@ netstat -anpo | grep "php-cgi" | wc -l
 - 有时我们在某一网关处延时比较长，有可能是某台网关比较阻塞，也可能是物理设备本身的原因。当然如果某台DNS出现问题时，不能解析主机名、域名时，也会有延时长的现象；您可以加-n参数来避免DNS解析，以IP格式输出数据。
 - 如果在局域网中的不同网段之间，可以通过traceroute 来排查问题所在，是主机的问题还是网关的问题。如果通过远程来访问某台服务器遇到问题时，我们用到traceroute 追踪数据包所经过的网关，提交IDC服务商，也有助于解决问题。
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_20-14-21.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_20-14-21.png =400x)
 
 ```shell
 traceroute 域名/IP地址
@@ -3441,7 +3441,7 @@ traceroute to 10.22.114.22 (10.22.114.22), 30 hops max, 60 byte packets
 - telnet程序基于TELNET协议，TELNET协议是TCP/IP协议族中的一员，是Internet远程登录服务的标准和主要方式。
 - telnet因为采用明文传送报文，安全性不好。
 
-![](c:/notebook/pictures/Snipaste_2022-12-05_20-48-25.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-05_20-48-25.png =550x)
 
 **需要安装该程序telnet**
 
@@ -3736,7 +3736,7 @@ cat /etc/sysconfig/network-scripts/ifcfg-ens33
 systemctl restart network
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-06_23-25-20.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-06_23-25-20.png =700x)
 
 #### 子接口
 
@@ -3856,7 +3856,7 @@ yum install network-service
 
 #### /etc/resolv.conf  当接口配置文件中的DEFROUTE=yes时，失效。
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_00-21-46.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_00-21-46.png =700x)
 
 ## DHCP 动态主机配置协议
 
@@ -3867,9 +3867,9 @@ yum install network-service
 
 - 每个DHCP客户端通过广播连接到区域内的DHCP服务器，该服务器响应请求，返回包括IP地址、网关和其他网络配置信息。
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_00-49-08.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_00-49-08.png =500x)
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_00-50-46.png =650x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_00-50-46.png =650x)
 
 ### 配置DHCP服务器
 
@@ -4044,7 +4044,7 @@ Updating / installing...
 - /etc/named.conf DNS主配置文件
 - /usr/lib/systemd/named.service DNS服务器的控制单元文件
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_14-56-54.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_14-56-54.png =1100x)
 
 ```shell
 [root@mylinuxHost Packages]# cat /etc/named.conf
@@ -4126,7 +4126,7 @@ vim /var/named/oa.com.zone
 chmod 777 /var/named/oa.com/zone
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_15-22-09.png =1000x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_15-22-09.png =1000x)
 
 #### 4.启动域名服务
 
@@ -4216,7 +4216,7 @@ route del [-net | host] 目标网络/主机 [netmask] [gw] [matric] [dev]
 
 ### 策略路由
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_00-12-12.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_00-12-12.png =600x)
 
 #### 路由表的管理
 
@@ -4285,7 +4285,7 @@ ip rule flush
    - 私有IP地址：A类10.0.0.0~10.255.255.255; B类172.16.0.0~172.31.255.255；C类192.168.0.0~192.168.255.255
 - NAT会自动修改IP报文的源IP地址和目的IP地址，IP地址校验在NAT处理过程中自动完成。
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_14-33-36.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_14-33-36.png =300x)
 
 **NAT的实现：**
 
@@ -4356,17 +4356,17 @@ firewall-cmd --permanent --zone=internal --change-interface=ens101
 
 ###### exportfs 管理NFS共享文件系统列表
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_17-00-45.png =1100x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_17-00-45.png =1100x)
 
 ###### showmount 查询“mountd”守护进程，以显示NFS服务器加载的信息。
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_17-01-59.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_17-01-59.png =300x)
 
 #### 2.配置文件/etc/ports
 
 - 在/etc/ports文件中，每一行代表一个共享目录，并且描述了该目录如何被共享。
 
-![](c:/notebook/pictures/Snipaste_2022-12-07_17-09-36.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-07_17-09-36.png =800x)
 
 ```shell
 [root@bogon /]# mkdir /root/nfsshare
@@ -4541,7 +4541,7 @@ echo $?
 #### Windows使用
 
 - 在Windows打开相关的服务
-![](c:/notebook/pictures/Snipaste_2022-12-08_19-09-06.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-08_19-09-06.png =500x)
 - 在Windows的运行或文件资源管理器，输入`\\192.168.186.155`（Samba对应的IP地址）
 
 ## FTP服务器
@@ -4551,14 +4551,14 @@ echo $?
 
 **主动FTP和被动FTP**
 
-![](c:/notebook/pictures/Snipaste_2022-12-08_19-27-20.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-08_19-27-20.png =800x)
 
 
 ### ftp
 
 #### ftp命令
 
-![](c:/notebook/pictures/Snipaste_2022-12-08_22-58-25.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-08_22-58-25.png =500x)
 
 | 常用命令     | 说明                                                                                                                                                                                                                                                               |
 | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -4938,9 +4938,9 @@ chmod -R 777 /data/guest/
 
 **数据包通信步骤**
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_19-10-31.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_19-10-31.png =400x)
 
-![](C:/notebook/pictures/Snipaste_2022-12-12_19-13-32.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_19-13-32.png =700x)
 
 ### 包过滤
 
@@ -4957,7 +4957,7 @@ chmod -R 777 /data/guest/
 
 - 在netfiter框架上已经创建了一个包选择系统，这个包选择工具默认注册了3个表：过滤filter表、网络地址转换NAT表：mangle表。
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_19-42-30.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_19-42-30.png =600x)
 
 - 在调用钩子函数时，按照如上的顺序来调用需要的表。
 - 包过滤表只是过滤包，而不改变包，实际中由网络过滤框架来通过NF_IP_FORWARD钩子的输入和输出接口。NF_IP_LOCAL_IN和NF_IP_LOCAL_OUT也可以过滤，但只对本机。
@@ -4971,7 +4971,7 @@ chmod -R 777 /data/guest/
 
 - Zone：防火墙区域/网络区域，是一系列可以被快速执行到网络接口的预设置。
 
-![](c:/notebook/pictures/Snipaste_2022-12-12_19-52-57.png =630x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_19-52-57.png =630x)
 
 - 一个网络接口只能与一个网络区域对应。当数据包进入区域后，防火墙会依据区域内的规则进行逐一过滤，只有符合规则的数据包才能通过区域到达本机应用。
 
@@ -5276,7 +5276,7 @@ make install
 
 [httpd](https://www.cnblogs.com/hgzero/p/14136149.html#1.%20httpd)
 
-![](C:/notebook/pictures/Snipaste_2022-12-10_00-57-06.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-10_00-57-06.png =800x)
 
 ```shell
 vim /usr/local/apache2/conf/httpd.conf
@@ -5306,8 +5306,8 @@ EnableSendfile on
 </IfModule>
 ```
 
-![](c:/notebook/pictures/Snipaste_2022-12-10_10-05-01.png =700x)
-![](c:/notebook/pictures/Snipaste_2022-12-10_10-05-49.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-10_10-05-01.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-10_10-05-49.png =700x)
 
 ### 虚拟主机配置
 
@@ -5690,7 +5690,7 @@ AuthType Basic
 
 # LVS 集群负载均衡
 
-![](C:/notebook/pictures/Snipaste_2022-12-12_15-30-22.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_15-30-22.png =300x)
 
 # 集群技术与双机热备
 

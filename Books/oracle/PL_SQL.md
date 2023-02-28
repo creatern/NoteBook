@@ -1546,7 +1546,7 @@ END;
 - INDEX BY表的大小是没有限制的，在INDEX BY表中，数据行（元素）的个数可以动态地增长，因此可以在INDEX BY表中添加新的数据行（元素）
 - 列(元素)可以属于任何变量或记录数据类型，而主键（下标）既可以是一个数字，也可以是一个字符串。不能在声明INDEX BY表时将其初始化，即在声明时不能为INDEX BY表赋值，此时它没有包含任何键（下标）也没有包含任何（元素）值。需要使用显示的执行语句为INDEX BY表赋值，其INDEX BY表的结构：
 
-![](C:/NoteBook/pictures/238484315239470.png =302x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/238484315239470.png =302x)
 
 ```
 DECLARE
@@ -3618,7 +3618,7 @@ SELECT object_id
 FROM user_objects
 WHERE object_type = 'PROCEDURE';
 ```
-![](C:/NoteBook/pictures/54505115221047.png =402x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/54505115221047.png =402x)
 
 - status属性：
    - VALID 表示可以被调用
@@ -3896,7 +3896,7 @@ FROM user_objects
 WHERE object_type = 'FUNCTION';
 ```
 
-![](C:/NoteBook/pictures/Snipaste_2022-11-18_11-14-17.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-18_11-14-17.png =400x)
 
 - status属性：
    - VALID 表示可以被调用

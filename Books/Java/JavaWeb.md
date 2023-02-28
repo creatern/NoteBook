@@ -1,10 +1,10 @@
 # JavaWeb 概述
 
-![](C:/NoteBook/pictures/26080321227450.png =709x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/26080321227450.png =709x)
 
 
 
-![](C:/NoteBook/pictures/Snipaste_2022-11-17_01-43-35.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_01-43-35.png =600x)
 
 # HTML
 
@@ -110,7 +110,7 @@
         - _parent 在父窗口打开
         - _top 在顶层窗口打开
         
-![](C:/NoteBook/pictures/Snipaste_2022-11-17_02-00-52.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_02-00-52.png =600x)
 
 **层**
 
@@ -314,7 +314,7 @@
 
 - 表单就是一个容器，
 
-![](C:/NoteBook/pictures/Snipaste_2022-11-17_20-14-04.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_20-14-04.png =600x)
 
 当属性名和属性值相同是，属性值可以省略
 
@@ -334,7 +334,7 @@
     - 建议在同一系列的单选框和复选框保持相同的name 
     - 需要name的：与同级的标签：`<input/>``<select></select>``<textarea></textarea>`
     - 以下显示的都是name具有属性的，没有name属性的不显示（不发送）
-![](C:/NoteBook/pictures/Snipaste_2022-11-17_21-08-32.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_21-08-32.png =400x)
 
 - value 发送给服务器的值 
    - `<textarea></textarea>`的value值是开始和结束标签之间的区域。 
@@ -457,7 +457,7 @@
 2. 类样式表 class属性 `.类名`
 3. ID样式表 id属性 `#ID名`
 
-![](c:/notebook/pictures/Snipaste_2022-11-18_15-59-57.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-18_15-59-57.png =400x)
 
 - 组合样式表
 
@@ -1260,7 +1260,7 @@ console.log(arr01);
 
 ## BOM 浏览器对象模型
 
-![](c:/notebook/pictures/Snipaste_2022-11-22_14-58-35.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-22_14-58-35.png =600x)
 
 **主要包含的对象**
 
@@ -1338,7 +1338,7 @@ console.log(arr01);
 | onkeydown   | 某个键盘按键             |
 | onchange    | 域的内容改变             |
 
-![](c:/notebook/pictures/Snipaste_2022-11-22_21-34-58.png =900x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-22_21-34-58.png =900x)
 
 **例1**
 
@@ -1635,9 +1635,9 @@ function showHand(){
 
 - 数据结构：整个HTML文档中标签、文本、属性、注释等等节点对象组成的一个树形结构
 
-![](c:/notebook/pictures/Snipaste_2022-11-22_21-21-35.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-22_21-21-35.png =300x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-22_21-14-08.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-22_21-14-08.png =300x)
 
 ##### Core DOM操作节点
 
@@ -1718,7 +1718,7 @@ function showHand(){
 
 # CS和BS架构的异同
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_00-02-13.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-02-13.png =600x)
 
 # Tomcat
 
@@ -1726,7 +1726,7 @@ function showHand(){
 
 **目录结构说明**
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_00-15-23.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-15-23.png =300x)
 
 **配置环境变量**
 
@@ -1734,8 +1734,8 @@ function showHand(){
   - 因为Tomcat是用C和Java编写的，需要JRE。 
   - 需要指向JDK的JAVA_HOME，否则不行。
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_00-58-11.png =400x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_01-00-14.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-58-11.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_01-00-14.png =400x)
 
 
 2.  配置Tomcat环境变量
@@ -1747,7 +1747,7 @@ function showHand(){
 
 - 在Tomcat解压的bin目录中，打开startup.bat
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_00-24-36.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-24-36.png =500x)
 
 ##  部署项目
 
@@ -1758,7 +1758,7 @@ function showHand(){
 - 到Tomcat解压目录的webapps目录中创建文件目录
 - 并且在该目录下创建文件目录：`WEB-INFO`
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_01-17-51.png =200x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_01-17-51.png =200x)
 
 **打开**
 
@@ -1767,24 +1767,24 @@ function showHand(){
 ## IDEA 部署
 
 1. 先新建一个项目Project，再新建一个Module，然后将Moudle设置为Web
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-24-42.png =300x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-27-17.png =550x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-28-00.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-24-42.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-27-17.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-28-00.png =300x)
 
 2. 配置IDEA的Tomcat设置
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-16-09.png =300x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-17-22.png =300x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-19-28.png =550x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-32-24.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-16-09.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-17-22.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-19-28.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-32-24.png =550x)
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_10-39-54.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_10-39-54.png =550x)
 
 
 ### 404和`$END$`
 
 - 修改web.xml中的内容，添加`<welcome-file-list></welcome-file-list>`
-![](C:/notebook/pictures/Snipaste_2022-11-24_14-53-50.png =550x)
-![](c:/notebook/pictures/Snipaste_2022-11-24_11-20-55png.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-24_14-53-50.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-24_11-20-55png.png =550x)
 
 ### 405
 
@@ -1798,9 +1798,9 @@ function showHand(){
 
 #### 控制台编码
 
-![](c:/notebook/pictures/Snipaste_2022-11-19_11-17-35.png =550x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_11-25-51.png =550x)
-![](c:/notebook/pictures/Snipaste_2022-11-19_11-26-57.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-17-35.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-25-51.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-26-57.png =550x)
 
 ### Servlet 输出中文字符
 
@@ -1815,7 +1815,7 @@ function showHand(){
 
 - 方式2
    - 从IDEA中导入
-![](c:/notebook/pictures/Snipaste_2022-11-21_23-17-14.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-21_23-17-14.png =600x)
 
 
 ## Servlet
@@ -1827,17 +1827,17 @@ function showHand(){
 3. Servlet经过处理之后，生成响应的内容
 4. 服务器将响应的内容返回给客服端
 
-![](c:/notebook/pictures/Snipaste_2022-11-21_23-49-44.png =650x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-21_23-49-44.png =650x)
 
 ### Servlet结构体系
 
-![](c:/notebook/pictures/Snipaste_2022-11-23_16-02-35.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-23_16-02-35.png =600x)
 
 #### HttpServlet类
 
 **HttpServlet容器响应Web客户请求流程如下：**
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_09-43-35.png =550x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_09-43-35.png =550x)
 
 1. Web客户向Servlet容器发出Http请求；
 2. Servlet容器解析Web客户的Http请求；
@@ -1898,7 +1898,7 @@ function showHand(){
 
 ### Servlet生命周期
 
-![](c:/notebook/pictures/Snipaste_2022-11-23_15-52-30.png =400x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-23_15-52-30.png =400x)
 
 
 - 第一次接收请求时，这个Servlet会进行实例化(调用构造方法)、初始化(调用init())、然后服务(调用service())
@@ -1955,7 +1955,7 @@ function showHand(){
   - 必须在获取参数之前完成设置
 - get方式不需要设置编码，基于Tomcat8
   - Tomcat8之前
-![](c:/notebook/pictures/Snipaste_2022-11-24_15-13-46.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-24_15-13-46.png =600x)
 
 **例**
 
@@ -2075,11 +2075,11 @@ public class MyServlet extends HttpServlet {
 
 **服务器内部转发**
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_10-06-35.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_10-06-35.png =600x)
 
 **客服端重定向**
 
-![](c:/notebook/pictures/Snipaste_2022-11-27_10-09-04.png =600x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-27_10-09-04.png =600x)
 
 ```java
 package com.zjk.redirect;
@@ -2113,20 +2113,20 @@ public class ServletDemo01 extends HttpServlet {
     
 - 请求包含三个部分： 1.请求行 ； 2.请求消息头 ； 3.请求主体
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-26-34.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-26-34.png =500x)
 
 
 #### 请求行
 
 **1. 请求的方式 ； 2.请求的URL ； 3.请求的协议（一般都是HTTP1.1）**
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-31-49.png =650x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-31-49.png =650x)
 
 #### 请求消息头
 
 - 包含了很多客户端需要告诉服务器的信息
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-29-04.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-29-04.png =500x)
 
 #### 请求体
 
@@ -2134,13 +2134,13 @@ public class ServletDemo01 extends HttpServlet {
 - post方式，有请求体，form data
 - json格式，有请求体，request payload
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-29-54.png =650x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-29-54.png =650x)
 
 ### 响应：
 
 **1. 响应行 ； 2.响应头 ； 3.响应体**
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-32-42.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-32-42.png =500x)
 
 #### 响应行
 
@@ -2148,17 +2148,17 @@ public class ServletDemo01 extends HttpServlet {
 
 ##### 响应状态码
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-33-24.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-33-24.png =500x)
 
 #### 响应头
 
 - 包含了服务器的信息；服务器发送给浏览器的信息（内容的媒体类型、编码、内容长度等）
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_11-36-19.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-36-19.png =500x)
 
 #### 响应体
 
-![](c:/NoteBook/pictures/Snipaste_2022-11-25_11-35-01.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_11-35-01.png =300x)
 
 ## session 会话
 
@@ -2173,7 +2173,7 @@ public class ServletDemo01 extends HttpServlet {
 - 客户端第一次发请求给服务器，服务器获取session，获取不到，则创建新的，然后响应给客户端
 - 下次客户端给服务器发请求时，会把sessionID带给服务器，那么服务器就能获取到了，那么服务器就判断这一次请求和上次某次请求是同一个客户端，从而能够区分开客户端
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_14-33-58.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_14-33-58.png =500x)
 
 | 方法                              | 说明                                                                                                    |
 | :------------------------------- | :------------------------------------------------------------------------------------------------------ |
@@ -2225,7 +2225,7 @@ public class ServletSession extends HttpServlet {
 
 - session保存作用域是和具体的某一个session对应的，切换其他session时，保存域不同。
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_14-51-25.png =800x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_14-51-25.png =800x)
 
 | 方法                            | 说明 |
 | :----------------------------- | :--- |
@@ -2295,7 +2295,7 @@ public class SecondeSession extends HttpServlet {
 
 **过滤器的工作原理**
 
-![](c:/notebook/pictures/Snipaste_2022-11-24_23-53-56.png =500x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-24_23-53-56.png =500x)
 
 **过滤器链**
 
@@ -2313,7 +2313,7 @@ public class SecondeSession extends HttpServlet {
 
 **生命周期**
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_00-07-59.png =300x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_00-07-59.png =300x)
 
 **init(FilterConfig filterConfig)**
      
@@ -2340,7 +2340,7 @@ public class SecondeSession extends HttpServlet {
 
 **2. 配置web.xml文件**
 
-![](c:/notebook/pictures/Snipaste_2022-11-25_10-28-42.png =700x)
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-25_10-28-42.png =700x)
 
 ```java
 package com.zjk.filters;
