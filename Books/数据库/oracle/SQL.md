@@ -161,22 +161,19 @@ COMMIT;
 
 ## 基本查询
 
-### 查询基本语句
+### SELECT  查询基本语句
 
-```
+```sql
 SELCET column
 FROM table;
 ```
 
-注 查询他人的表需要注明如scott.employees
-否则 ORA-00942: 表或视图不存在
-***
-
-### 查询
+- 注 查询他人的表需要注明如scott.employees
+- 否则 ORA-00942: 表或视图不存在
 
 #### 查询表中的所有字段
 
-```
+```sql
 SELECT *
 FROM employees
 ;
@@ -184,59 +181,57 @@ FROM employees
 
 #### 查询指定字段
 
-```
+```sql
 SELECT last_name
       ,emploee_id
 FROM employees
 ;
 ```
 
-### 给字段设置别名 AS
+### AS 给字段设置别名 
 
-不会更改字段的名字，可以为多个字段设置别名 还可以是特殊符号，中文等
+- 不会更改字段的名字，可以为多个字段设置别名 还可以是特殊符号，中文等
 
-```
+```sql
 SELECT last_name AS name
       ,employee_id emploee_id  --AS可以省略，但是最好加上
 FROM employees
 ;
 ```
 
-### 连接符 || 合成列 函数 WM_CONNECT()  /  CONCAT()
+### || 连接符
+ 
+- 函数 WM_CONNECT()  和  CONCAT() 作用相同
 
-```
+```sql
 dbms_output.put_line('hello'||','||'world');
 ```
 
-```
+```sql
 SELECT first_name||''||last_name
 FROM employees
 ;
 ```
 
-```
+```sql
 SELECT CONCAT('C','D')
 FROM dual;
 ```
 
-### 查看唯一值 DISTINCT
+### DISTINCT 查看唯一值 
 
-```
+```sql
 SELECT DISTINCT username AS 用户名
 FROM users;
 ```
 
 ### 运算符和表达式
 
- Oracle中的操作数可以有变量、常量、字段。
+- Oracle中的操作数可以有变量、常量、字段。
 
 #### 运算符
 
 #### 1)算术运算符 +  - * /
-
-**MOD(n,m) 取余函数**
-
-- 相当于Java中的 `n % m`
 
 #### 2)比较运算符 > >= < <= = <> !=
 
@@ -249,7 +244,7 @@ FROM users;
 
 - WHERE子句必须紧跟FROM子句，而HAVING不必
 
-```
+```sql
 SELECT last_name
       ,employee_id
       ,salary
@@ -262,7 +257,7 @@ WHERE salary > 1000
 
 #### IS NULL 空值
 
-### 模糊查询 LIKE
+#### 模糊查询 LIKE
 
 **通配符**
  
@@ -286,7 +281,7 @@ WHERE last_name LIKE '%a%'
 !
 ```  
 
-### 范围查询 BEWTEEN……AND……
+#### 范围查询 BEWTEEN……AND……
 
 - 表示在之间，即<=和>=
 
@@ -330,6 +325,43 @@ SELECT employee_id
       ,salary*1.1 sal --别名
 FROM employees
 ORDER BY sal;
+```
+
+#### rownum 伪列 Top~n分析
+
+- Oracle不支持SELECT TOP语句;而是使用ORDER BY来进行TOP~n
+- TOP~n分析 查询一个列中最大/最小的n个值的集合
+- **rownum行号 是一个伪列**，表上没有这一列，当做一些特殊操作的时候，Oracle自动加上。
+
+**注意**
+
+1. 行号永远按照默认的顺序生成；  
+2. **行号只能使用<,<=**，不能使用=,>,>=的符号。
+3. **对伪列ROWNUM起别名可以使用=,>,>=**
+
+```sql
+SELECT rownum,column1,column2
+FROM (
+      SELECT column1,column2
+      FROM table1
+      ORDER BY column1
+      )
+WHERE rownum <= 10; 
+--/ FETCH FIRST 10 ROWS ONLY; 12c以上才可以使用FETCH语句
+```
+
+```sql
+--对伪列ROWNUM起别名可以使用=,>,>=
+SELECT rn,column1,column2
+FROM (
+      SELECT rownum rn,column1,column2
+      FROM (
+           SELECT column1,column2
+           FROM table1
+           ORDER BY salary DESC
+            )
+      )
+WHERE rownum >= 10;
 ```
 
 ### CASE……WHEN语句
@@ -412,28 +444,29 @@ WHERE department_id IN (10,20,30);
 - CLOB 可存4G数据以字符串存放
 - BFILB 存储外部文件的二进制数据，最大4G
 
-### 创建表 CREATE TABLE
+### CREATE TABLE 创建表 
+
+**需要：**
 
 1. 权限
 2. 存储空间
 3. 命名规则:
-
-- 1)以字母开头
-- 2)在1-30个字符之间
-- 3)只能包含A ~ Z,a ~ z，0~9，_，$，#
-- 4)不能和其他对象重名
-- 5)不能是关键字
+   - 1) 以字母开头
+   - 2) 在1-30个字符之间
+   - 3) 只能包含A ~ Z,a ~ z，0~9，_，$，#
+   - 4) 不能和其他对象重名
+   - 5) 不能是关键字
 
 ```sql
 CREATE TABLE emp (
-                  id NUMBER(6,2) --6位有效数字，包含2位小数位即:9999.99
-                 ,salary NUMBER(10) --10位有效数字
-                 ,name VARCHAR2(25) --25长度
-                 ,hire_date DATE
-                  );
+ id NUMBER(6,2) --6位有效数字，包含2位小数位即:9999.99
+,salary NUMBER(10) --10位有效数字
+,name VARCHAR2(25) --25长度
+,hire_date DATE
+);
 ```
 
-### 复制表结构 AS
+### AS 复制表结构 
 
 ```sql
 CREATE TABLE emp
@@ -444,56 +477,45 @@ WHERE 1 = 2;  --只复制结构，不复制内容
 --WHERE 1 = 1;  --既复制结构也 复制内容
 ```
 
-### 修改表的结构
+### ALTER TABLE 修改表的结构
 
-#### 添加字段(列) ADD
+#### ADD 添加字段(列) 
 
 ```sql
 ALTER TABLE emp
 ADD job VARCHAR2(30);
 ```
 
-#### 更改字段数据类型 MODIFY  
+#### MODIFY 更改字段数据类型   
 
- (可以为新追加的列定义默认值DEFAULT)
+- (可以为新追加的列定义默认值DEFAULT)
 
 ```sql
 ALTER TABLE emp
 MODIFY id NUMBER(10) [DEFAULT 100];
 ```
 
-#### 删除字段 DROP
+#### DROP COLUMN 删除字段 
 
 ```sql
 ALTER TABLE emp
 DROP COLUMN job;
 ```
 
-#### 修改字段名 RENAME
+#### RENAME COLUMN 修改字段名 
 
 ```sql
 ALTER TABLE emp
 RENAME COLUMN id TO emp_id;
 ```
 
-#### 修改表名 RENAEM
+### RENAEM TABLE 修改表名 
 
 ```sql
 RENAME TABLE emp TO emp1;
 ```
 
-### 删除表
-
-#### TRUNCATE
-
-删除表中的全部数据，没有删除表，比DELETE快很多。
-不可回滚;(DELETE可以回滚)
-
-```sql
-TRUNCATE TABLE emp;
-```
-
-#### DROP
+### DROP 删除表
 
 **删除表,数据和结构都删掉**
 
@@ -501,7 +523,7 @@ TRUNCATE TABLE emp;
 DROP TABLE emp;
 ```
 
-并未真正删除表，而是把表放在回收站 RECYCLEBIN
+- 并未真正删除表，而是把表放在回收站 RECYCLEBIN
 
 **删除表的同时，删除约束**
 
@@ -509,46 +531,45 @@ DROP TABLE emp;
 DROP TABLE emp CASCADE CONSTRAINTS;
 ```
 
-
 **一次性删除  **
 
 ```sql
 DROP TABLE emp PURGE;
 ```
 
-#### RECYCLEBIN
+#### RECYCLEBIN 回收站
 
 当删除一个表时，Oracle并没有真正删除该表，而是将该表重命名之后放在回收站
 
-##### 查看回收站
+##### SHOW 查看回收站
 
 ```sql
 SHOW RECYCLEBIN
 ```
 
-##### 清空回收站中指定的表
+##### PURGE 清空回收站中指定的表
 
-```
+```sql
 PURGE TABLE "recyclebin_name"; --SHOW RECYCLEBIN; 获得RECYCLEBIN NAME
 ```
 
-```
+```sql
 PURGE RECYCLEBIN;
 ```
 
-##### 捡回
+##### FLASHBACK 捡回
 
-```
+```sql
+--捡回
 FLASHBACK TABLE emp TO BEFORE DROP;
 
-并重命名
+--捡回并重命名
 FLASH TABLE emp TO BEFORE DROP
 RENAME TO employees;
 
-DESC 查看是否捡回
+DESC --查看是否捡回
 ```
 
-***
 
 ### 操作表中的数据
 
@@ -562,97 +583,94 @@ NAME      VARCHAR2(25) Y
 HIRE_DATE DATE         Y
 ```
 
-***
+#### INSERT 添加数据
 
-#### 添加数据
-
-```
+```sql
 INSERT INTO table1
 VALUES (values,...)
 ```  
 
-  一次只能向表中插入一条数据
+- 一次只能向表中插入一条数据
+1. 为每一列添加一个新值
+2. 按默认顺序列出每个列的值
+3. 在INSERT子句中随意列出列名和值
+4. 字符和日期型数据要在单引号''中
 
-  1. 为每一列添加一个新值
-  2. 按默认顺序列出每个列的值
-  3. 在INSERT子句中随意列出列名和值
-  4. 字符和日期型数据要在单引号''中
+##### 1) 按默认
 
-##### 1)按默认
-
-```
+```sql
 INSERT INTO emp(id,salary,name,hire_date)
 VALUES(1,1500,'张三',TO_DATE('2002-2-3','yyyy-mm-dd')); --转换日期输入
 ```
 
-##### 2)不列出列名
+##### 2) 不列出列名
 
-```
+```sql
 INSERT INTO emp
 VALUES(2,3000,'李四',TO_DATE('2003-3-2','yyyy-mm-dd'));
 ```
 
-##### 3)随意列出列名
+##### 3) 随意列出列名
 
-```
+```sql
 INSERT INTO emp(name,salary,hire_date,id)
 VALUES(2500,'王五',TO_DATE('2004-4-5','yyyy-mm-dd'),3);
 ```
 
-##### 4)向表中插入空值  
+##### 4) 向表中插入空值  
 
 - 隐式 忽略
 
-```
+```sql
 INSERT INTO emp(id,name)
 VALUES(4,'陈六');
 ```
 
 - 显式 NULL (VALUES)
 
-```
+```sql
 INSERT INTO emp
 VALUES(5,NULL,'赵七'，NULL);
 ```
 
-##### 5)创建脚本 &变量(VALUES) 窗口输入
+##### 5) &变量 窗口输入
 
 - 在使用&输入时，对于日期和字符型等需要单引号的数据类型，可以在&外面加上单引号，从而不用在窗口输入时使用单引号
     - `'&name'`
 - 而其他不需要单引号的数据类型则可以直接使用&
     - `&id`  
 
-```
+```sql
 INSERT INTO emp
 VALUES(&id,&name,&salary,&hire_date); --注意日期默认: 'dd-mm-yyyy'
                                       --注意字符和日期也要单引号''
-例：5 '李四' 2000 '11-2月-1999'
+--例：5 '李四' 2000 '11-2月-1999'
 
 INSERT INTO emp
 VALUES(&id,'&name',&salary,'&hire_date');
-例：5 李四 2000 11-2月-1999
+--例：5 李四 2000 11-2月-1999
 ```
 
-##### 6)使用函数chr
+##### 6) 函数CHR
 
-Chr() 函数表示返回指定 ASCII 码的字符，作用和 ASCII() 相反。
-ASCII()函数表示返回指定字符的ASCII码，作用和 CHR() 相反。
+- CHR() 函数表示返回指定 ASCII 码的字符，作用和 ASCII() 相反。
+- ASCII()函数表示返回指定字符的ASCII码，作用和 CHR() 相反。
 
-```
+```sql
 INSERT INTO mytable 
 VALUES chr(38);
 ```
 
 - ASCII
 
-```
+```sql
 SELECT ASCII('x'), ASCII('y'),ASCII('z') 
 FROM dual;
 ```
 
 - CHR
 
-```
+```sql
 chr（）函数，
 chr(9);  tab
 chr(10);  换行符
@@ -661,24 +679,28 @@ chr(32);  空格符
 chr(34;，  双引号“"”
 ```
 
-##### 7)从其他表中拷贝数据
+##### 7) SELECT 从其他表中拷贝数据
 
-```
+- 相应的列数据类型要一致
+
+```sql
 INSERT INTO emp
 SELECT employee_id
       ,salary
       ,last_name
-      ,hire_date --相应的列数据类型要一致
+      ,hire_date 
 FROM employees
 WHERE department_id = 90;
 ```
 
-##### 8)MERGE 命令
-- 数据转储操作
-- 从表中选择数据行以修改或插入到另一个表。MERGE命令是基于ON子句中的条件来决定对目标表执行的是修改还是插入操作。因此必须在目标表上有INSERT和UPDATE系统权限，并且源表上具有SELECT系统权限。
-- 语法：
+#### MERGE 合并数据
 
-```
+- 数据转储操作：从表中选择数据行以修改或插入到另一个表。
+- MERGE命令是基于ON子句中的条件来决定对目标表执行的是修改还是插入操作。因此必须在目标表上有INSERT和UPDATE系统权限，并且源表上具有SELECT系统权限。
+
+**语法：**
+
+```sql
 MERGE INTO 表 别名  --说明正在修改或插入的目标表
  USING (table|view|sub_query) 别名  --标识要修改或插入的数据源（表，视图，子查询等）
  ON (条件) --定义MERGE语句是进行修改还是插入操作的条件
@@ -691,13 +713,13 @@ MERGE INTO 表 别名  --说明正在修改或插入的目标表
   VALUES (值)
 ```
 
-###### 需求是，从T1表更新数据到T2表中。假设T2表的NAME 在T1表中已存在，就将MONEY累加，假设不存在。将T1表的记录插入到T2表中。
+**例：**
 
-在等价的情况下，一定需要至少两条语句，一条为UPDATE，一条为INSERT,并且语句中必需要与推断的逻辑，或者写在过程中，假设是单条语句，就要写全条件。
+-需求是，从T1表更新数据到T2表中。假设T2表的NAME 在T1表中已存在，就将MONEY累加，假设不存在。将T1表的记录插入到T2表中。
+- 在等价的情况下，一定需要至少两条语句，一条为UPDATE，一条为INSERT,并且语句中必需要与推断的逻辑，或者写在过程中，假设是单条语句，就要写全条件。
+- 写在UPDATE和INSERT的语句中，显的比较麻烦并且容易出错。假设了解MERGE，我们能够不借助存储过程，直接用单条SQL便实现了该业务逻辑，且代码非常简洁。详细例如以下：
 
-写在UPDATE和INSERT的语句中，显的比较麻烦并且容易出错。假设了解MERGE，我们能够不借助存储过程，直接用单条SQL便实现了该业务逻辑，且代码非常简洁。详细例如以下：
-
-```
+```sql
 MERGE INTO T2
 USING T1
 ON (T1.NAME=T2.NAME)
@@ -710,11 +732,11 @@ WHEN NOT MATCHED THEN
 ```
  
 
-###### Merge的四大灵活之处
+##### 灵活之处
 
-1. UPDATE和INSERT动作可仅仅出现其一(必须同一时候出现。)
+###### 1. UPDATE和INSERT动作可仅仅出现其一(必须同一时候出现。)
 
-```
+```sql
 --我们可选择只UPDATE目标表
 MERGE INTO T2
 USING T1
@@ -733,9 +755,9 @@ WHEN NOT MATCHED THEN
  VALUES (T1.NAME,T1.MONEY);
 ```
 
-2. 可对MERGE语句加条件
+###### 2. 可对MERGE语句加条件
 
-```
+```sql
 MERGE INTO T2
 USING T1
 ON (T1.NAME=T2.NAME)
@@ -745,9 +767,9 @@ WHEN MATCHED THEN
  WHERE T1.NAME='A';
 ```
 
-3. 可用DELETE子句清除行
+######  3. 可用DELETE子句清除行
 
-```
+```sql
 /*
 在这样的情况下，首先是要先满足T1.NAME = T2.NAME的记录，假设T2.NAME=’A’并不满足T1.NAME=T2.NAME过滤出的记录集，
 那这个DELETE是不会生效的。在满足的条件下，能够删除目标表的记录。
@@ -763,9 +785,9 @@ WHEN MATCHED THEN
  DELETE WHERE (T2.NAME = 'A');
 ```
 
-4. 可采用无条件方式Insert
+###### 4. 可采用无条件方式Insert
 
-```
+```sql
 /*
 在语法ON(keyword)处写上恒不等条件（如1=2）后，MATCHED语句的INSERT就变为无条件INSERT了，详细例如以下
 */
@@ -778,11 +800,11 @@ MERGE INTO T2
 VALUES (T1.NAME,T1.MONEY);
 ```
 
-###### Merge的误区
+##### 误区
 
-1. 不能更新ON子句引用的列
+###### 1. 不能更新ON子句引用的列
 
-```
+```sql
 MERGE INTO T2
 USING T1
 ON (T1.NAME=T2.NAME)
@@ -793,9 +815,9 @@ WHEN MATCHED THEN
 ORA-38104: 无法更新 ON 子句中引用的列: "T2"."NAME"
 ```
 
-2.  DELETE子句的WHERE顺序必须最后
+###### 2.  DELETE子句的WHERE顺序必须最后
 
-```
+```sql
 MERGE INTO T2
 USING T1
 ON (T1.NAME=T2.NAME)
@@ -811,9 +833,9 @@ WHEN MATCHED THEN
 ORA-00933: SQL 命令未正确结束
 ```
 
-3. DELETE 子句仅仅能够删除目标表。而无法删除源表
+###### 3. DELETE 子句仅仅能够删除目标表。而无法删除源表
 
-```
+```sql
 /*
  这里须要引起注意，不管DELETE WHERE (T2.NAME = 'A' )这个写法的T2是否改写为T1。效果都一样，都是对目标表进行删除。
 */
@@ -855,9 +877,9 @@ NAME                      MONEY
 C                            20
 ```
 
-4. 更新同一张表的数据,需操心USING的空值
+###### 4. 更新同一张表的数据,需操心USING的空值
 
-```
+```sql
 SELECT * FROM T2;
 NAME                      MONEY
 -------------------- ----------
@@ -914,9 +936,9 @@ C                            20
 D                           100
 ```
 
-5. 必需要在源表中获得一组稳定的行
+###### 5. 必需要在源表中获得一组稳定的行
 
-```
+```sql
 ---构造数据，请注意这里多插入一条A记录，就产生了ORA-30926错误
 INSERT INTO T1 
 VALUES ('A',30);
@@ -951,7 +973,9 @@ WHEN MATCHED THEN
  --正常情况下，一般出现反复的NAME须要引起怀疑，不太应该。
 ```
 
-###### 例：根据基本工资salary设置员工奖金bonus
+##### 例1
+
+- 根据基本工资salary设置员工奖金bonus
 
 目标表
 
@@ -1020,7 +1044,7 @@ WHEN NOT MATCHED THEN
   WHERE (S.salary > 3000)
 ```
 
-###### 例2：
+##### 例2：
 
 目标表
 
@@ -1064,17 +1088,16 @@ VALUES(null," ")
 ;
 ```
 
-***
+#### UPDATE 更新数据 
 
-#### 更新数据 UPDATE
+```sql
+UPDATE 表
+SET 列=新的列
+WHERE --没有WHERE ，则全部更新
+```
 
-```
-          SET
-          WHERE --没有WHERE ，则全部更新
-```
-
-```
-更新114号员工的工作和工资使其和205号员工相同
+```sql
+--更新114号员工的工作和工资使其和205号员工相同
 UPDATE employees
 SET job_id = (
              SELECT job_id
@@ -1089,57 +1112,106 @@ SET job_id = (
 WHERE employee_id = 114;
 ```
 
-***
 
-#### 删除数据 DELETE 可以回滚
+#### DELETE 删除数据 
 
-```
-          DELETE FROM
-          WHERE  --若无WHERE子句，则全部删除
+- 可以回滚
+
+```sql
+DELETE FROM
+WHERE  --若无WHERE子句，则全部删除
 ```
 
-```
+```sql
 删除emp表中id为1的员工
 DELETE FROM emp
 WHERE id = 1;
 ```
 
-***
+#### TRUNCATE 清空数据
 
-#### 设置某字段的默认值 DEFAULT
+- 不可回滚
 
-1) 创建表时添加
-
+```sql
+TRUNCATE TABLE 表;
 ```
+
+#### DEFAULT 设置某字段的默认值 
+
+##### 1) 创建表时添加
+
+```sql
 CREATE TABLE emp(
-                 salary NUMBER(20) DEFAULT 1000
-                 );
+ salary NUMBER(20) DEFAULT 1000
+);
 ```
 
-2) 在创建表以后添加默认值 MODIFY
+##### 2) 修改表时添加默认值 MODIFY
 
-```
+```sql2
 ALTER TABLE emp
 MODIFY salary NUMBER(10) DEFAULT 1000;
 --如果在新加记录的时候不想要默认值了，
   则按正常的添加方式添加了就可以替换默认值了
 ```
 
-***
+### 查看表的属性
+
+#### DESC
+
+```sql
+DESC tablename;
+```
+
+#### ALL_TAB_COLUMS 表的列属性
+
+```sql
+SELECT column_name,data_type,nullable,data_default
+FROM ALL_TAB_COLUMNS
+WHERE table_name = 'employees'
+```
+
+DBA_TAB_COLUMNS描述了数据库中所有表、视图和群集的列。  
+USER_TAB_COLUMNS介绍了当前用户拥有的表、视图和群集的列。此视图不显示该列。OWNER
+
+#### USER_TAB_COLS 查看用户下所有表是否含日期字段
+
+```sql
+SELECT c.table_name,c.column_name
+FROM USER_TAB_COLS c
+WHERE c.data_type = 'DATE'
+ORDER BY table_name;
+```
+
+#### DBA_EXTENTS视图 与 DBA_SEGMENTS视图
+
+```sql
+SELECT segment_name,SUM(bytes)/1024/1024 ||'M'
+FROM dba_extents
+WHERE segment_name = ' '
+GROUP BY segment_name;
+```
+
+##### DBA_EXTENDS描述的是数据库所有表空间中段的扩展信息  
+
+使用DBA_EXTENDS必须保证相应的数据文件处于online状态，否则无法返回任何记录。  
+常使用的是USER_EXTENTS视图，比DBA_EXTENDS视图少几个字段。
+
+##### DBA_SEGMENTS 视图描述的是数据库中所有段的存储和分配信息
 
 ### 只读表
 
-```
+```sql
 ALTER TABLE tb_ordernary5 READ ONLY;
 ```
 
-回到可读写
+**回到可读写**
 
-```
+```sql
 ALTER TABLE tb_ordernary5 READ WRITE;
 ```
 
-不允许在只读表上进行的操作:
+**不允许在只读表上进行的操作:**
 
 - DML
 - TRUNCATE
@@ -1152,65 +1224,60 @@ ALTER TABLE tb_ordernary5 READ WRITE;
 - 在线重定义
 - 闪回表 FLASHBACK TABLE
 
-### 临时表
+### 临时表 GLOBLE TEMPORARY TABLE 
 
-只在会话期间或在事务处理期间存在的表.
-临时表在插入数据时，动态分配空间
+- 只在会话期间或在事务处理期间存在的表.
+- 临时表在插入数据时，动态分配空间
 
+```sql
+create global temporary table temp_dept
+(dno number,
+dname varchar2(10))
+on commit delete rows;
+insert into temp_dept values(10,'ABC');
+commit;
+
+select * from temp_dept; --无数据显示,数据自动清除
+
+on commit preserve rows:在会话期间表一直可以存在（保留数据）
+on commit delete rows:事务结束清除数据（在事务结束时自动删除表的数据）
 ```
-   create global temporary table temp_dept
-   (dno number,
-   dname varchar2(10))
-   on commit delete rows;
-   insert into temp_dept values(10,'ABC');
-   commit;
-   
-   select * from temp_dept; --无数据显示,数据自动清除
-   
-   on commit preserve rows:在会话期间表一直可以存在（保留数据）
-   on commit delete rows:事务结束清除数据（在事务结束时自动删除表的数据）
-```
 
-***
-
-### GLOBLE TEMPORARY TABLE (临时表 详细)
-
-Oracle、SqlServer——临时表
-1、概述：
-oracle数据库的临时表的特点：
+**oracle数据库的临时表的特点：**
 
 - 临时表默认保存在TEMP中；
 - 表结构一直存在，直到删除；即创建一次，永久使用；
 - 不支持主外键。
 - 可以索引临时表和在临时表基础上建立视图。建立在临时表上的索引也是临时的,也是只对当前会话或者事务有效. 临时表可以拥有触发器.
 
-#### 临时表分为事务型和会话型
+**事务型和会话型临时表**
 
-- 会话型：
-  - 基于会话的临时表，数据从会话开始到会话结束之间是有效的，当会话结束时，表中的数据会自动清空。
-  - 不同会话之间的数据是隔离的，互不影响。
-- 事务型：
-  - 基于事务的临时表，其比会话型的临时表更灵活，可以认为是从会话型临时表的优化，
-  - 因为表中的数据的保存时间与会话型相同，有效期从会话开始，在会话结束时，数据库自动清空临时表中的数据。
-  - 与会话型临时表不同的是 在事务提交或者事务回滚时将清空临时表中的数据。
-  - 当然，会话型临时表在会话期间可以采用 delete 临时表名; 的方式清空临时表数据。
+**会话型：**
 
-#### 语法
+- 基于会话的临时表，数据从会话开始到会话结束之间是有效的，当会话结束时，表中的数据会自动清空。
+- 不同会话之间的数据是隔离的，互不影响。
 
-```
-create global temporary table 临时表名
+**事务型：**
+
+- 基于事务的临时表，其比会话型的临时表更灵活，可以认为是从会话型临时表的优化，
+- 因为表中的数据的保存时间与会话型相同，有效期从会话开始，在会话结束时，数据库自动清空临时表中的数据。
+- 与会话型临时表不同的是 在事务提交或者事务回滚时将清空临时表中的数据。
+- 当然，会话型临时表在会话期间可以采用 delete 临时表名; 的方式清空临时表数据。
+
+#### 创建临时表
+
+```sql
+CREATE GLOBAL TEMPORARY TABLE 临时表
 (
-……
+    ……
 )
-on commit [preserve|delete] rows;　
+ON COMMIT [PRESERVE | DELETE] ROWS;
 
-preserve时就是会话（SESSION）型的临时表
-delete就是事务（TRANSACTION）型的临时表 
+--preserve时就是会话（SESSION）型的临时表
+--delete就是事务（TRANSACTION）型的临时表 
 ```
 
-#### (1)、创建临时表
-
-```
+```sql
 declare tempisexist integer := 0;
 begin
 　 select count(*) 
@@ -1234,9 +1301,9 @@ begin
 end;
 ```
 
-#### (2)、使用临时表
+#### 使用临时表
 
-```
+```sql
 　　declare
 　　　　FXZ NUMBER;
 　　　　FJNM varchar(36);
@@ -1273,118 +1340,54 @@ end;
 end;
 ```
 
-#### (3)、oracle创建全局表
+#### 全局临时表
 
-以常规表的形式创建临时数据表的表结构，但要在每一个表的主键中加入一个 SessionID 列以区分不同的会话。(可以有 lob 列和主外键)
-写一个用户注销触发器，在用户结束会话的时候删除本次会话所插入的所有记录 (SessionID 等于本次会话 ID 的记录 ) 。
+- 以常规表的形式创建临时数据表的表结构，但要在每一个表的主键中加入一个**SessionID 列**以区分不同的会话。(可以有 lob 列和主外键)
+- 写一个**用户注销触发器**，在用户结束会话的时候删除本次会话所插入的所有记录 (SessionID 等于本次会话 ID 的记录 ) 。
+   - 程序写入数据时，要顺便将当前的会话 ID(SessionID) 写入表中。
+   - 程序读取数据时，只读取与当前会话 ID 相同的记录即可。
 
-- 程序写入数据时，要顺便将当前的会话 ID(SessionID) 写入表中。
-- 程序读取数据时，只读取与当前会话 ID 相同的记录即可。
-
-功能增强的扩展设计：
+**功能增强的扩展设计：**
 
 - 可以在数据表上建立一个视图，视图对记录的筛选条件就是当前会话的SessionID 。
 - 数据表中的SessionID 列可以通过Trigger 实现，以实现对应用层的透明性。
 - 高级用户可以访问全局数据，以实现更加复杂的功能。
 
-```
-二、SqlServer
+### 簇表 CLUSTER
 
-1、临时表概述
-
-SqlServer临时表有两种：局部临时表、全局临时表。
-
-(1)临时表的共同特点：
-
-无论会话的数据库上下文如何，临时表都被保存到 tempdb 数据库中；
-当临时表数据较少时，页被保存到内存中；内存不足时，才持久化临时表的页；
-判断临时表是否存在：if object_id('tempdb..#临时表名','U') N) is not null　print '存在';
-(2)临时表之间的区别
-
-局部临时表：
-
-　　临时表名前以#开头，临时表由创建该表的会话所有，为实现不同会话之间同名的临时表相互隔离，SqlServer为表名称添加下划线和唯一的数字后缀以区分不同会话间同名的临时表。即不同会话之间创建的临时表表名虽然我们看到的是一样，但实际上不一样。临时表的可见性与C#、C语言的变量类似，只对调用堆栈中的创建级别和创建级别的内部级别可见，如在存储过程中创建临时表，在存储过程结束后，临时表即被自动销毁。如果临时表在会话的最外层创建临时表，则在会话、批处理和内部级别中的任何地方都有效，直到会话终止时才销毁。 有效期为到创建级别范围内。同一个会话内可以在不同的级别内创建相同名称的局部临时表，但容易在表名解析时导致错误。
-
-全局临时表：
-
-　　表名以##开头，可以被所有的会话访问，且任何会话均可以删除全局临时表。全局临时表适用于在多个会话之间共享临时数据而不用担心安全问题，全局临时表的有效期为会话期间而不是创建级别，在创建全局临时表的会话结束后，全局临时表不再向新的会话发放锁，而等现有的会话访问完释放完锁后将销毁全局临时表。
-
- 2、创建不属于任何会话的全局临时表
-
-该全局临时表由SqlServer维护一个大于0的引用计数器以确保不会被数据库自动删除。
-
-方法：
-
-在master数据库中创建有 sp_前缀、使用 startup 选项标记的特殊存储过程，
-
-例：
-
-use master;
-go
-if object_id('dbo.sp_test') is not null
-　　drop proc dbo.sp_test
-go
-create proc dbo.sp_test
-as 
-　　create table ##test
-　　(
-　　　　name varchar(36)
-　　);
-go
-exec dbo.sp_procoption 'sp_test','startup','true';
-
-这样一来，这种临时表的作用就和永久表没有多大区别了。
-```
-
-#### 三、oracle与SqlServer 临时表的区别
-
-- oracle：
-
-  - 有事务表和会话表两种；
-  - 临时表永远保留表结构，数据保存在磁盘上。与永久表唯一不同的是在用户会话结束或者事务提交、回滚后删除数据，但是保留表结构；
-  - SqlServer则是本地和全局临时表。
-
-- SqlServer：
-  - 在需要临时表时手动创建，会话结束时直接删除表结构。
-  - 当临时表数据较少时，页被保存到内存中；内存不足时，才持久化临时表的页；
-
-***
-
-### 簇表CLUSTER
-
-```
+```sql
 CREATE CLUSTER tb_cluster(postcode int)
 TABLESPACE userdb;
 ```
 
-```
+```sql
 CREATE TABLE student
 (
-         id INT PRIMARY KEY
-        ,name VARCHAR2(20) NOT NULL
-        ,postcode INT
+ id INT PRIMARY KEY
+,name VARCHAR2(20) NOT NULL
+,postcode INT
 )
 CLUSTER tb_cluster(postcode)
 ;
 ```
 
-```
+```sql
 CREATE TABLE address_info
 (
-         postcode INT PRIMARY KEY
-        ,name VARCHAR2(40)
-        ,detail VARCHAR2(40)
+ postcode INT PRIMARY KEY
+,name VARCHAR2(40)
+,detail VARCHAR2(40)
 )
 CLUSTER tb_cluster(postcode)
 ;
 ```
 
-```
+```sql
 CREATE TABLE students
 (
-         name VARCHAR2(40) PRIMARY KEY
-        ,id NUMBER
-        ,detail VARCHAR2(100)
+ name VARCHAR2(40) PRIMARY KEY
+,id NUMBER
+,detail VARCHAR2(100)
 )
 ORGANIZATION INDEX
 TABLESPACE userdb
@@ -1394,174 +1397,13 @@ OVERFLOW TABLESPACE userdb
 ;
 ```
 
-***
-
-#### 一、oracle
-
-##### 1、概述
-
-###### oracle数据库的临时表的特点
-
-- 临时表默认保存在TEMP中；
-- 表结构一直存在，直到删除；即创建一次，永久使用；
-- 不支持主外键。
-- 可以索引临时表和在临时表基础上建立视图。建立在临时表上的索引也是临时的,也是只对当前会话或者事务有效. 临时表可以拥有触发器.
-- 临时表分为事务型和会话型
-  - 会话型：基于会话的临时表，数据从会话开始到会话结束之间是有效的，当会话结束时，表中的数据会自动清空。不同会话之间的数据是隔离的，互不影响。
-  - 事务型：基于事务的临时表，其比会话型的临时表更灵活，可以认为是从会话型临时表的优化，因为表中的数据的保存时间与会话型相同，有效期从会话开始，在会话结束时，数据库自动清空临时表中的数据。与会话型临时表不同的是 在事务提交或者事务回滚时将清空临时表中的数据。当然，会话型临时表在会话期间可以采用 delete 临时表名; 的方式清空临时表数据。
-
-语法:
-
-```
-create global temporary table 临时表名
-(
-……
-)
-on commit [preserve|delete] rows;　
-
-preserve时就是会话（SESSION）型的临时表
-delete就是事务（TRANSACTION）型的临时表 
-```
-
-##### 2、示例
-
-(1)、创建临时表
-
-declare tempisexist integer := 0;
-begin
-　 select count(*)
-   into tempisexist
-   from all_tables
-   where table_name='NK_SLTJ';
-　 if tempisexist=0 then--不存在临时表就创建一个
-　　　　execute immediate('
-　　　　　　CREATE GLOBAL TEMPORARY TABLE NK_SLTJ
-　　　　　　(
-　　　　　　　　LCK_FJNM varchar(36),
-　　　　　　　　LCMC varchar(70),
-　　　　　　　　GFX integer,
-　　　　　　　　ZFX integer,
-　　　　　　　　DFX integer,
-　　　　　　　　KZDSL integer
-　　　　　　)
-　　　　　　on commit preserve rows'　　--preserve表示会话级。
-　　　　);
-　　end if;
-end;
-
-(2)、使用临时表
-
-　　declare
-　　　　FXZ NUMBER;
-　　　　FJNM varchar(36);
-　　　　ZZNM varchar(36):='77c48880-a2be-4d3c-97b7-26f8de0bee63';
-　　　　CURSOR NKFXZcur is
-            select NKFXJZ_FXZ
-                  ,NKLCK_FJNM
-            from NKFXJZ
-            INNER JOIN NKLCK ON NKLCK_NM = NKFXJZ_LCNM
-            where NKLCK_ZZNM=ZZNM;
-　　begin
-　　　　delete NK_SLTJ;　--防止在统一会话中多次执行导致数据重复，因此程序一开始就应清空临时表数据
-　　　　insert into NK_SLTJ SELECT NKLCK_FJNM, NKLCK_MC,0,0,0,KZD FROM　　--向临时表插入数据。
-　　　　　　( select KZDSL.NKLCK_FJNM,KZDSL.KZD,LCJZ.NKLCK_MC from
-　　　　　　(select substr(NKLCK_FJNM,1,4) as NKLCK_FJNM, count(NKNKJZ_KZD) AS KZD from NKLCK LEFT join NKNKJZ ON NKNKJZ_LCNM =NKLCK_NM WHERE NKLCK_ZZNM=ZZNM group by substr(NKLCK_FJNM,1,4)) KZDSL
-　　　　INNER JOIN
-　　　　　　(select NKLCK_FJNM, NKLCK_MC from NKLCK WHERE NKLCK_JC=1 and NKLCK_ZZNM=ZZNM) LCJZ ON LCJZ.NKLCK_FJNM=KZDSL.NKLCK_FJNM) ccc;
-
-　　　　open NKFXZcur; --打开游标
-　　　　fetch NKFXZcur INTO FXZ,FJNM; --提取游标数据
-　　　　while NKFXZcur%FOUND loop --循环
-　　　　　　if FXZ>=3.5 and FXZ<=5 then --高风险
-　　　　　　　　update NK_SLTJ set GFX=GFX+1 where LCK_FJNM=substr(FJNM,0,4);
-　　　　　　elsif FXZ>2 and FXZ<3.5 then --中风险
-　　　　　　　　update NK_SLTJ set ZFX=ZFX+1 where LCK_FJNM=substr(FJNM,0,4);
-　　　　　　else
-　　　　　　　　if FXZ>=0 and FXZ<=2 then --低风险
-　　　　　　　　　　update NK_SLTJ set DFX=DFX+1 where LCK_FJNM=substr(FJNM,0,4);
-　　　　　　　　end if;
-　　　　　　end if;
-　　　　　　fetch NKFXZcur INTO FXZ,FJNM ;
-　　　　end loop;--结束循环
-　　close NKFXZcur; --关闭游标
-end;
-
-3、oracle创建全局表
-
-以常规表的形式创建临时数据表的表结构，但要在每一个表的主键中加入一个 SessionID 列以区分不同的会话。(可以有 lob 列和主外键)
-写一个用户注销触发器，在用户结束会话的时候删除本次会话所插入的所有记录 (SessionID 等于本次会话 ID 的记录 ) 。
-程序写入数据时，要顺便将当前的会话 ID(SessionID) 写入表中。
-程序读取数据时，只读取与当前会话 ID 相同的记录即可。
-功能增强的扩展设计：
-
-可以在数据表上建立一个视图，视图对记录的筛选条件就是当前会话的SessionID 。
-数据表中的SessionID 列可以通过Trigger 实现，以实现对应用层的透明性。
-高级用户可以访问全局数据，以实现更加复杂的功能。
-二、SqlServer
-
-1、临时表概述
-
-SqlServer临时表有两种：局部临时表、全局临时表。
-
-(1)临时表的共同特点：
-
-无论会话的数据库上下文如何，临时表都被保存到 tempdb 数据库中；
-当临时表数据较少时，页被保存到内存中；内存不足时，才持久化临时表的页；
-判断临时表是否存在：if object_id('tempdb..#临时表名','U') N) is not null　print '存在';
-(2)临时表之间的区别
-
-局部临时表：
-
-　　临时表名前以#开头，临时表由创建该表的会话所有，为实现不同会话之间同名的临时表相互隔离，SqlServer为表名称添加下划线和唯一的数字后缀以区分不同会话间同名的临时表。即不同会话之间创建的临时表表名虽然我们看到的是一样，但实际上不一样。临时表的可见性与C#、C语言的变量类似，只对调用堆栈中的创建级别和创建级别的内部级别可见，如在存储过程中创建临时表，在存储过程结束后，临时表即被自动销毁。如果临时表在会话的最外层创建临时表，则在会话、批处理和内部级别中的任何地方都有效，直到会话终止时才销毁。 有效期为到创建级别范围内。同一个会话内可以在不同的级别内创建相同名称的局部临时表，但容易在表名解析时导致错误。
-
-全局临时表：
-
-　　表名以##开头，可以被所有的会话访问，且任何会话均可以删除全局临时表。全局临时表适用于在多个会话之间共享临时数据而不用担心安全问题，全局临时表的有效期为会话期间而不是创建级别，在创建全局临时表的会话结束后，全局临时表不再向新的会话发放锁，而等现有的会话访问完释放完锁后将销毁全局临时表。
-
- 2、创建不属于任何会话的全局临时表
-
-该全局临时表由SqlServer维护一个大于0的引用计数器以确保不会被数据库自动删除。
-
-方法：
-
-在master数据库中创建有 sp_前缀、使用 startup 选项标记的特殊存储过程，
-
-例：
-
-use master;
-go
-if object_id('dbo.sp_test') is not null
-　　drop proc dbo.sp_test
-go
-create proc dbo.sp_test
-as
-　　create table ##test
-　　(
-　　　　name varchar(36)
-　　);
-go
-exec dbo.sp_procoption 'sp_test','startup','true';
-
-这样一来，这种临时表的作用就和永久表没有多大区别了。
-
-三、oracle与SqlServer 临时表的区别
-
-oracle：
-
-有事务表和会话表两种；
-临时表永远保留表结构，数据保存在磁盘上。与永久表唯一不同的是在用户会话结束或者事务提交、回滚后删除数据，但是保留表结构；
-SqlServer则是本地和全局临时表。
-
-SqlServer：在需要临时表时手动创建，会话结束时直接删除表结构。
-当临时表数据较少时，页被保存到内存中；内存不足时，才持久化临时表的页；
-
 ### 外部表
 
 <https://www.cnblogs.com/xidabei/p/7453274.html>
 
 #### 1
 
-```
+```sql
 建立文件:
 ‪F:\temtb\data\temstu.txt
 ‪‪50016,小张,上海,22
@@ -1578,7 +1420,7 @@ F:\temtb\bad
 
 #### 2
 
-```
+```sql
 SQL> CREATE OR REPLACE DIRECTORY dat_dir
   2  AS 'F:\temtb\data';      --外部表文件路径
 
@@ -1609,7 +1451,7 @@ SQL> GRANT READ,WRITE ON DIRECTORY bad_dir TO rawman;
 
 #### 3
 
-```
+```sql
 CREATE TABLE fitness_member
 (
          id INTEGER
@@ -1639,7 +1481,7 @@ REJECT LIMIT UNLIMITED;
 表创建成功
 ```
 
-```
+```sql
 SELECT *
 FROM fitness_member;
 
@@ -1658,57 +1500,9 @@ KUP-01008: the bad identifier was: fileds
 KUP-01007: at line 4 column 17
 ```
 
-### 查看表的属性
 
-#### DESC
 
-```
-DESC tablename;
-```
-
-#### ALL_TAB_COLUMS 表的列属性
-
-```
-SELECT column_name,data_type,nullable,data_default
-FROM ALL_TAB_COLUMNS
-WHERE table_name = 'employees'
-```
-
-DBA_TAB_COLUMNS描述了数据库中所有表、视图和群集的列。  
-USER_TAB_COLUMNS介绍了当前用户拥有的表、视图和群集的列。此视图不显示该列。OWNER
-
-#### USER_TAB_COLS 查看用户下所有表是否含日期字段
-
-```
-SELECT c.table_name,c.column_name
-FROM USER_TAB_COLS c
-WHERE c.data_type = 'DATE'
-ORDER BY table_name;
-```
-
-#### DBA_EXTENTS视图 与 DBA_SEGMENTS视图
-
-```
-SELECT segment_name,SUM(bytes)/1024/1024 ||'M'
-FROM dba_extents
-WHERE segment_name = ' '
-GROUP BY segment_name;
-```
-
-##### DBA_EXTENDS描述的是数据库所有表空间中段的扩展信息  
-
-使用DBA_EXTENDS必须保证相应的数据文件处于online状态，否则无法返回任何记录。  
-常使用的是USER_EXTENTS视图，比DBA_EXTENDS视图少几个字段。
-
-![](vx_images/519681611220656.png =605x)
-
-##### DBA_SEGMENTS 视图描述的是数据库中所有段的存储和分配信息
-
-![](vx_images/35831911239082.png =565x)
-
-***
-
-## 视图 VIEW
+## VIEW 视图
 
 **SCOTT用户创建视图VIEW权限不足：**
 
@@ -1744,18 +1538,20 @@ GRANT CREATE VIEW TO scott;
 
 - 在该视图上执行INSERT或UPDATE操作时,数据必须符合查询结果。
 
-### 创建视图    CREATE [OR REPLACE] VIEW
+### 创建视图  CREATE [OR REPLACE] VIEW
 
-CREATE VIEW子句中各列的别名应和子查询中各列相对应
+- CREATE VIEW子句中各列的别名应和子查询中各列相对应
 
 #### 简单视图和复杂视图
 
+**简单视图 是单个表并且不包含函数或表达式的视图，**
 
-- 简单视图 是单个表并且不包含函数或表达式的视图，
-     - 可以在该视图上可以执行DML语句（即可执行增、删、改操作）
-- 复杂视图 就是指那些包含函数、表达式或者分组数据的视图，
-     - 在该视图上执行DML语句时必须要符合特定条件。
-     - 通常我们在定义复杂视图时必须为函数或表达式定义别名。
+- 可以在该视图上可以执行DML语句（即可执行增、删、改操作）
+
+**复杂视图 就是指那些包含函数、表达式或者分组数据的视图，**
+
+- 在该视图上执行DML语句时必须要符合特定条件。
+- 通常我们在定义复杂视图时必须为函数或表达式定义别名。
 
 | 特性     | 简单视图 | 复杂视图   |
 | :------- | :------- | :-------- |
@@ -1786,9 +1582,10 @@ FROM employees
 GROUP BY department_id;
 ```
 
-#### 连接视图   (table1,table2外键为column2)
+#### 连接视图   
 
 ```sql
+--(table1,table2外键为column2)
 CREATE OR REPLACE VIEW table1_view
 AS
 SELECT column1,t1.column2,column3
@@ -1827,11 +1624,13 @@ FROM table1;
 4. 且若还包含以下的元素时，不能用INSERT INTO语句
      - 表中非空的列在视图定义中未包括
 
-**屏蔽DML操作**
+#### WITH READ ONLY 屏蔽DML操作
 
 - 用户是可以通过视图对基表执行增删改操作(现实基本不能)，但是有很多在基表上的限制,如:
     - 基表中某列不能为空，但是该列没有出现在视图中，则不能通过视图执行INSERT操作，
     - 基表设置了某些约束，这时候插入视图或者修改视图的值，有可能会报错
+    
+**WITH READ ONLY**
 
 1. `WITH READ ONLY` 选读屏蔽，设置只读
 2. 任何DML操作的返回ORACLE SEVER错误
@@ -1854,16 +1653,22 @@ DROP VIEW table1_view;
 
 ## 子查询
 
-子查询可以返回单行结果，可以返回多行结果，也可以不返回结果  
-(如果子查询未返回任何行，则主查询也不会返回任何结果)
+- 子查询可以返回单行结果，可以返回多行结果，也可以不返回结果  
+    - 如果子查询未返回任何行，则主查询也不会返回任何结果
+
+**目的**
 
 - 主要目的：子查询的出现主要是为了解决多表查询之中的性能问题。
 - 次要目的：
   - 很多时候在 FROM 子句里面使用子查询，
   - 是因为在外部查询里无法再继续使用统计函数操作的时侯
 
-1) 在括号内  
-2) 在比较条件右侧  
+**使用方式**
+
+1. 在括号内  
+2. 在比较条件右侧  
+
+**规定**
 
 - 子查询 (内查询) 在主查询之前一次执行完成。
 - 子查询的结果被主查询(外查询)使用
@@ -1876,111 +1681,116 @@ DROP VIEW table1_view;
   - SOME
   - ALL
 
-***
-
 ### IN 等号列表中任意一个
 
-```
-子查询中是NULL值的问题
-子查询中的NULL: 
-可以使用 IN(10,20,NULL)
-但是不可以使用 NOT IN(10,20,null)
-单行子查询中返回空值，要使用IN之类的关键字，= 的话永远为空
-在使用NOT IN的时候子查询之中必须不能包含NULL，
-否则不会有任何数据返回。      
-- Oracle判断规则： 对于NOT IN如果测试值不在列表内，且列表中有一个NULL，则结果为FALSE
-- null 不是0或者空格 而是表示未知
-```
+#### NULL值问题
 
-***
+- NULL 不是0或者空格 而是**表示未知**
 
-```
-查询不是管理者的员工
+**子查询中的NULL:**
+
+- 可以使用 IN(10,20,NULL)，但是**不可以使用 NOT IN(10,20,null)**
+  - **在使用NOT IN的时候子查询之中必须不能包含NULL，否则不会有任何数据返回**。      
+  - Oracle判断规则： 对于NOT IN如果测试值不在列表内，且列表中有一个NULL，则结果为FALSE
+- 单行子查询中返回**空值，要使用IN之类的关键字，= 的话查询结果永远为空**
+
+```sql
+--查询不是管理者的员工
 SELECT *
 FROM employees
 WHERE employee_id NOT IN (
-                          SELECT manager_id
-                          FROM employees  --包含null值
-                          );  
+    SELECT manager_id
+    FROM employees  --包含null值
+);  
 --会不返回结果，返回空值，
-因为当子查询中包含空值的时候，不能使用NOT IN，
-因为NOT IN等同于不等于所有（永远为假）
-改为：
+--因为当子查询中包含空值的时候，不能使用NOT IN，NOT IN等同于不等于所有（永远为假）
+
+--改为：
 SELECT*
 FROM employees
 WHERE employee_id NOT IN (
-                          SELECT manager_id
-                          FROM employees
-                          WHERE manager_id IS NOT NULL);
-                          );
-
+    SELECT manager_id
+    FROM employees
+    WHERE manager_id IS NOT NULL --去除NULL值的影响
+);
 ```
 
-***
+#### IN 与 "=" 的区别
+
+```sql
+select name 
+from student 
+where name in ('zhang','wang','li','zhao');
+与
+select name 
+from student 
+where name = 'zhang' 
+  or name = 'li' 
+  or name = 'wang' 
+  or name= 'zhao'
+;
+的结果是相同的。
+```
 
 ### EXISTS 检查在子查询中是否存在满足条件的行
 
-    1.如果在子查询中存在满足条件的行
-       不在子查询中继续查找
-       条件返回TRUE
-    2.如果在子查询中不存在满足条件的行
-       条件返回FALSE
-       继续在子查询中查找
+**检查规则**
 
-```
-查询公司管理者的employee_id,last_name,job_id,department_id
+1. 如果在子查询中存在满足条件的行，不在子查询中继续查找，条件返回TRUE。
+2. 如果在子查询中不存在满足条件的行，条件返回FALSE，继续在子查询中查找。
+
+```sql
+--查询公司管理者的employee_id,last_name,job_id,department_id
 SELECT employee_id
       ,last_name
       ,job_id
       ,department_id
 FROM employees OUTER
 WHERE EXISTS(
-             SELECT *
-             FROM employees
-             WHERE manager_id = OUTER.employee_id
-             );
+    SELECT *
+    FROM employees
+    WHERE manager_id = OUTER.employee_id
+);
 ```
 
-***
+#### NOT EXISTS
 
-### NOT EXISTS
+- 检查在子查询中是否存在不满足条件的行
 
-```
-查询departments表中不存在与employees表的部门的department_id,department_name
-
+```sql
+--查询departments表中不存在与employees表的部门的department_id,department_name
 SELECT department_id
       ,department_name
 FROM departments d
 WHERE NOT EXISTS(
-                 SELECT 'x'  --'x'可以是任何
-                 FROM employees
-                 WHERE department_id = d.department_id
-                 )
+    SELECT 'x'  --'x'可以是任何
+    FROM employees
+    WHERE department_id = d.department_id
+);
 ```
 
-### IN和EXISTS的区别
+#### IN和EXISTS的区别
 
- 如果子查询得出的结果集记录较少，主查询中的表较大且又有索引时应该用IN,  
- 如果外层的主查询记录较少，子查询中的表大，又有索引时使用EXISTS。  
- 其实我们区分IN和EXISTS主要是造成了驱动顺序的改变（这是性能变化的关键）
+- 如果**子查询**得出的结果集记录较少，主查询中的表较大且又有索引时应该用**IN**,  
+- 如果**外层**的主查询记录较少，子查询中的表大，又有索引时使用**EXISTS**。  
+- 另外IN是不对NULL进行处理
+
+**区分IN和EXISTS主要是造成了驱动顺序的改变（这是性能变化的关键）**
 
 - 如果是EXISTS，那么以外层表为驱动表，先被访问，
 - 如果是IN，那么先执行子查询，所以我们会以驱动表的快速返回为目标，那么就会考虑到索引及结果集的关系了
+- **IN是把外表和内表作hash join，而EXISTS是对外表作LOOP**，每次LOOP再对内表进行查询
 
-  另外IN是不对NULL进行处理
-  IN是把外表和内表作hash join，  
-  而EXISTS是对外表作LOOP，每次LOOP再对内表进行查询
+**性能上的比较**
 
-性能上的比较  
-
-```
-比如
+```sql
+--比如
 select * 
 from T1 
 where x in ( select y 
              from T2 
             )
-执行的过程相当于:
+--执行的过程相当于:
 select*
 from t1
     ,( 
@@ -1990,8 +1800,8 @@ from t1
 where t1.x = t2.y;
 ```
 
-```
-相对的
+```sql
+--相对的
 select * 
 from t1 
 where exists ( 
@@ -1999,7 +1809,7 @@ where exists (
               from t2 
               where y = x 
               )
-执行的过程相当于:
+--执行的过程相当于:
 for x in ( select * 
            from t1 
           )
@@ -2012,11 +1822,11 @@ for x in ( select *
          OUTPUT THE RECORD
       end if
 end loop
-表 T1 不可避免的要被完全扫描一遍
+--表 T1 不可避免的要被完全扫描一遍
 ```
 
-in 是把外表和内表作hash join，  
-而exists是对外表作loop，每次loop再对内表进行查询。
+- in 是把外表和内表作hash join，  
+- 而exists是对外表作loop，每次loop再对内表进行查询。
 
 ```
 例如：表A（小表），表B（大表）
@@ -2055,11 +1865,10 @@ where exists(select cc
 效率低，用到了A表上cc列的索引。
 ```
 
-带in的关联子查询是多余的，因为in子句和子查询中相关的操作的功能是一样的。  
-如：
+- 带in的关联子查询是多余的，因为in子句和子查询中相关的操作的功能是一样的。  如：
 
-```
-查找员工中在部门的员工姓名
+```sql
+--查找员工中在部门的员工姓名
 select staff_name 
 from staff_member 
 where staff_id in (select staff_id 
@@ -2070,7 +1879,7 @@ where staff_id in (select staff_id
 
 改为：
 
-```
+```sql
 select staff_name 
 from staff_member 
 where staff_id in (select staff_id 
@@ -2078,10 +1887,9 @@ where staff_id in (select staff_id
                   );
 ```
 
-为非关联子查询指定exists子句是不适当的，因为这样会产生笛卡乘积。  
-如：
+- 为非关联子查询指定exists子句是不适当的，因为这样会产生笛卡乘积。  如：
 
-```
+```sql
 select staff_name 
 from staff_member 
 where staff_id exists (select staff_id 
@@ -2091,7 +1899,7 @@ where staff_id exists (select staff_id
 
 改为：
 
-```
+```sql
 select staff_name 
 from staff_member 
 where staff_id exists (select staff_id 
@@ -2100,14 +1908,14 @@ where staff_id exists (select staff_id
                       );
 ```
 
-### not in 和not exists
+#### NOT IN 和 NOT EXISTS
 
-如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；  
-而not extsts 的子查询依然能用到表上的索引。  
-所以无论哪个表大，用not exists都比not in要快。  
-尽量不要使用not in子句。使用minus 子句都比not in 子句快，虽然使用minus子句要进行两次查询：  
+- 如果查询语句使用了**not in 那么内外表都进行全表扫描，没有用到索引**；  
+- 而not extsts 的子查询依然能用到表上的索引。  
+- 所以无论哪个表大，用not exists都比not in要快。  
+- **尽量不要使用not in子句**。使用minus 子句都比not in 子句快，虽然使用minus子句要进行两次查询：  
 
-```
+```sql
 select staff_name 
 from staff_member 
 where staff_id in (select staff_id 
@@ -2119,29 +1927,12 @@ where staff_id in (select staff_id
                    );
 ```
 
-### in 与 "=" 的区别
-
-```
-select name 
-from student 
-where name in ('zhang','wang','li','zhao');
-与
-select name 
-from student 
-where name = 'zhang' 
-  or name = 'li' 
-  or name = 'wang' 
-  or name= 'zhao'
-;
-的结果是相同的。
-```
-
 ### ANY 和子查询返回的一个值比较
 
 ### SOME 一些 和ANY的用法基本相同,用ANY的地方都可以用SOME代替
 
-SOME大多用在=操作中,表示等于所选集合中的任何一个。  
-ANY也可以用于=操作中，效果和SOME相同
+- SOME大多用在=操作中,表示等于所选集合中的任何一个。  
+- ANY也可以用于=操作中，效果和SOME相同
 
 ### ALL 和子查询返回的所有值比较
 
@@ -2158,13 +1949,13 @@ ANY也可以用于=操作中，效果和SOME相同
 
 #### 主查询和子查询可以不是同一张表  
 
- 从理论上来讲，尽量使用多表查询比较好，  
-  因为子查询需要对数据库访问两次，而多表查询只需要对数据库访问一次。  
-  但实际情况下有可能不一样，因为多表查询的笛卡尔集可能很大所以慢了。  
- 一般不在子查询中，使用排序ORDER BY;但在Top-N分析问题中，必须对子查询排序  
+**从理论上来讲，尽量使用多表查询比较好，  **
 
-```
-返回job_id和141号员工相同，salary比143号员工多的姓名，job_id工资
+-  因为子查询需要对数据库访问两次，而多表查询只需要对数据库访问一次。但实际情况下有可能不一样，因为多表查询的笛卡尔集可能很大所以慢了。  
+- 一般不在子查询中使用排序ORDER BY；但在**Top-N分析**问题中，必须对子查询排序  
+
+```sql
+--返回job_id和141号员工相同，salary比143号员工多的姓名，job_id工资
 SELECT last_name
       ,salary
       ,job_id
@@ -2181,8 +1972,8 @@ AND salary > (
               );
 ```
 
-```
-返回其他部门中比job_id为'IT_PROG'部门任一工资低的员工的员工号，姓名，job_id和salary
+```sql
+--返回其他部门中比job_id为'IT_PROG'部门任一工资低的员工的员工号，姓名，job_id和salary
 SELECT employee_id
       ,last_name
       ,job_id
@@ -2195,24 +1986,13 @@ WHERE salary < ANY(
                    );
 ```
 
-#### 单列子查询表达式 在一行中只返回一列的子查询
+#### CASE中使用单列子查询
 
-可用：  
+```sql
+--显示员工的employee_id,last_name和location。
+--其中，若员工department_id与location_id为1800的department_id相同，则location为’Canada’,其余则 为’USA’。
 
-- 8i
-- 1. SELECT的WHERE和FROM子句
-- 2. INSERT的VALUES子句
-- 9i
-- 1. SELECT除GROUP外所有
-- 2. DECODE和CASE
-
-#### 在CASE中使用单列子查询
-
-```
-显示员工的employee_id,last_name和location。
-其中，若员工department_id与location_id为1800的department_id相同，则location为’Canada’,其余则 为’USA’。
-
-1.1 CASE --在CASE中使用单列子查询
+--1.1 CASE --在CASE中使用单列子查询
 SELECT employee_id
       ,last_name
       ,department_id
@@ -2227,7 +2007,7 @@ SELECT employee_id
 FROM employees
 ORDER BY department_id;
 
-1.2 CASE --在CASE中使用单列子查询
+--1.2 CASE --在CASE中使用单列子查询
 SELECT employee_id
       ,last_name
       ,department_id
@@ -2242,7 +2022,7 @@ END) location
 FROM employees
 ORDER BY department_id;
 
-1. DECODE
+--2. DECODE
 SELECT employee_id
       ,last_name
       ,DECODE( department_id
@@ -2260,7 +2040,7 @@ ORDER BY location DESC;
 
 #### 相关子查询 按照一行接一行的顺序执行
 
-主查询的每一行都执行一次子查询
+**主查询的每一行都执行一次子查询**
 
 - GET 从主查询中获取候选列
 - EXECUTE 子查询使用主查询数据
@@ -2268,8 +2048,8 @@ ORDER BY location DESC;
 
 #### 子查询中使用主查询的列
 
-```
-查询员工中工资大于部门平均工资的员工last_name,salary和department_id
+```sql
+--查询员工中工资大于部门平均工资的员工last_name,salary和department_id
 SELECT last_name
       ,salary
       ,department_id
@@ -2281,8 +2061,8 @@ WHERE salary > (
                 );
 ```
 
-```
-若employees表中的employee_id与job_history中employee_Id相同的数目不小于2，输出这些相同的员工的employee_id,job_id
+```sql
+--若employees表中的employee_id与job_history中employee_Id相同的数目不小于2，输出这些相同的员工的employee_id,job_id
 SELECT e.employee_id
       ,last_name
       ,e.job_id
@@ -2294,18 +2074,16 @@ WHERE 2 <= (
             );
 ```
 
-#### 相关更新 使用相关子查询依据一个表中的数据更新另一个表中的数据
+#### 相关更新 
 
-1)
+- 使用相关子查询依据一个表中的数据更新/修改另一个表中的数据
 
-```
+```sql
 ALTER TABLE employees
 ADD(department_name VARCHAR2(14));
 ```
 
-2)
-
-```
+```sql
 UPDATE emlpoyees e
 SET department_name = (
                        SELECT department_name
@@ -2316,8 +2094,8 @@ SET department_name = (
 
 #### 相关删除
 
-```
-删除employees表中，基于emp_history表皆有数据
+```sql
+-- 删除employees表中，基于emp_history表皆有数据
 DELETE FROM employees e
 WHERE (
        SELECT employee_id
@@ -2328,27 +2106,26 @@ WHERE (
 
 ### GROUP BY多字段分组和FROM子查询的区别？
 
-即：此时 emp 表之中存在有 14000 条数据，dept 表中存在有 4000 条数据。  多表查询一定会产生笛卡儿积  
+- 即：此时 emp 表之中存在有 14000 条数据，dept 表中存在有 4000 条数据。  多表查询一定会产生笛卡儿积  
 
-- 多字段分组：积的数量：emp 的 14000 条*dept 的 4000 条 = 56,000,000 条数据；
+**多字段分组**：积的数量：emp 的 14000 条*dept 的 4000 条 = 56,000,000 条数据；
 
-- FROM子查询：
-  - 第一步（内嵌子查询）：针对于 emp 表查询，最多操作 14000 条记录，最多返回 4000 条记录；
-  - 第二步，子查询和 dept 表关联；
-  - 积的数量：dept 表的 4000 条* 子查询返回的最多 4000 条 = 16000000 条记录；
-  - 总的数据量：16000000 + 14000 = 16,014,000 条记录
+**FROM子查询**：
 
-## 高级子查询
+- 第一步（内嵌子查询）：针对于 emp 表查询，最多操作 14000 条记录，最多返回 4000 条记录；
+- 第二步，子查询和 dept 表关联；
+- 积的数量：dept 表的 4000 条* 子查询返回的最多 4000 条 = 16000000 条记录；
+- 总的数据量：16000000 + 14000 = 16,014,000 条记录
 
 ### 多列子查询 主查询与子查询返回的多个列进行比较
 
 - 成对比较
 - 不成对比较
 
-```
-查询与141号或174号员工的manager_id,department_id相同的其他员工信息
+```sql
+--查询与141号或174号员工的manager_id,department_id相同的其他员工信息
 
-1)成对比较
+--1)成对比较
 SELECT employee_id
       ,manager_id
       ,department_id
@@ -2361,7 +2138,7 @@ WHERE (manager_id,department_id) IN (
                                      )
 AND employee_id NOT IN  (141,174);
 
-2)不成对比较
+--2)不成对比较
 SELECT employee_id
       ,manager_id
       ,department_id
@@ -2381,9 +2158,9 @@ WHERE manager_id IN (
 
 ### 在FROM中使用子查询
 
-```
-查找部门中工资高于部门平均工资的员工
-1)
+```sql
+--查找部门中工资高于部门平均工资的员工
+--1)
 SELECT last_name
       ,department_id
       ,salary
@@ -2401,7 +2178,7 @@ WHERE salary > (
                 GROUP BY department_id
                 );
 
-2)
+--2)
 SELECT a.last_name
       ,a.salary
       ,a.department_id
@@ -3990,30 +3767,31 @@ FROM employees;
 
 - 例如：LEAD(FIELD, NUM, DEFAULTVALUE) FIELD需要查找的字段，NUM往后查找的NUM行的数据，DEFAULTVALUE没有符合条件的默认值。
 
-## 组函数; DISTINCT; GROUP BY ;HAVING
+## 组函数
 
-### 组函数 (多行函数) 输入多个参数，或者是内部扫描多次，输出一个结果
+### 常用组函数
 
-#### AVG() 平均值
+-  组函数 (多行函数) 输入多个参数，或者是内部扫描多次，输出一个结果
 
-#### COUNT() 记录总数
+|   组函数   |   说明   |
+| --------- | -------- |
+| AVG()     | 平均值   |
+| COUNT()   | 记录总数 |
+| MAX()     | 最大值   |
+| MIN()     | 最小值   |
+| STDDEN()  | 标准差   |
+| SUM()     | 总和     |
+| WM_CONCAT | 行转列   |
 
-#### MAX() 最大值
 
-#### MIN() 最小值
-
-#### STDDEN() 标准差
-
-#### SUM() 总和
-
-#### WM_CONCAT 行转列
-
-```
+```sql
 SELECT department_id,WM_CONCAT(last_name)
 FROM employees
-GROUP BY department_id --使用GROUP BY可以对多个字段进行分组,
-                       --GROUP BY关键字后面跟需要分组的字段
+GROUP BY department_id 
+--使用GROUP BY可以对多个字段进行分组,
+--GROUP BY关键字后面跟需要分组的字段
 
+/*
 输出:
 DEPARTMENT_ID WM_CONCAT(LAST_NAME)
 ------------- --------------------------------------------------------------------------------
@@ -4030,36 +3808,33 @@ DEPARTMENT_ID WM_CONCAT(LAST_NAME)
           110 Higgins,Gietz
               Grant
 12 rows selected
+*/
 ```
 
-### 可使用NVL使无法忽略空值
+### NVL 使无法忽略空值
 
-### DISTINCT关键字 非空不重复
+### DISTINCT 非空不重复
 
-```
+```sql
 SELECT DISTINCT employee_id,salary
 FROM employees;
 ```
 
-```
+```sql
 SELECT COUNT(DISTINCT employee_id)
 FROM employees;
 ```
 
 ### GROUP BY
 
-在SELECT中所有未包含在组函数的列都应该包含在GROUP BY中
-GROUP BY中的列不必包含在SELECT中
-
-1. 不能在WHEHE子句中使用组函数
+- **在SELECT中所有未包含在组函数的列都应该包含在GROUP BY中**
+- GROUP BY中的列不必包含在SELECT中
+1. **不能在WHEHE子句中使用组函数**
 2. 在HAVING中使用组函数
+- 如果在能使用WHERE的场景下，从SQL优化的角度来看，尽量使用WHERE效率更高，因为HAVING是在分组的基础上过滤分组的结果,而WHERE是先过滤,再分组,要处理的记录数不同。所以WHERE能使分组记录数大大降低，从而提高效率
 
-如果在能使用WHERE的场景下，从SQL优化的角度来看，尽量使用WHERE效率更高,
- 因为HAVING是在分组的基础上过滤分组的结果,而WHERE是先过滤,再分组,要处理的记录数不同。
-  所以WHERE能使分组记录数大大降低，从而提高效率
-
-```
-求表中各部门平均工资
+```sql
+--求表中各部门平均工资
 SELECT AVG(salary)
 FROM employees
 GROUP BY department_id;
@@ -4067,7 +3842,7 @@ GROUP BY department_id;
 
 #### 查找平均工资最低的部门
 
-```
+```sql
 SELECT rownum
       ,d.department_name "部门名称"
       ,t1.department_id "部门号"
@@ -4084,16 +3859,16 @@ WHERE rownum <= 1
  AND t1.department_id = d.department_id
 ```
 
-### 多列GROUP BY
+#### 多列GROUP BY
 
-```
+```sql
 SELECT AVG(salary),department_id,employee_id
 FROM employees
 GROUP BY department_id,employee_id; --按department_id分组后在内部按employee_id分组
 ```
 
-```
-查询表中平均工资高于4000的部门
+```sql
+--查询表中平均工资高于4000的部门
 SELECT AVG(salary),department_id
 FROM employees
 HAVING AVG(salary) > 4000
@@ -4102,15 +3877,15 @@ GROUP BY department_id;
 
 ### 嵌套组函数
 
-```
-求部门平均工资的最大值
+```sql
+--求部门平均工资的最大值
 SELECT MAX(AVG(salary))
 FROM employees
 GROUP BY department_id;
 ```  
 
-```
-求部门平均工资最大值及部门名称
+```sql
+--求部门平均工资最大值及部门名称
 SELECT DISTINCT (
         SELECT MAX(AVG(salary))
         FROM employees
@@ -4132,17 +3907,22 @@ SELECT DISTINCT (
 FROM employees
 ```
 
-### GROUP BY语句的增强
+### ROLLUP()
 
- ROLLUP就可以实现小计、总计的效果，可以用在报表里面。
+- ROLLUP就可以实现小计、总计的效果，可以用在报表里面。
 
-```
-按部门、不同的职位显示工资的总额；同时按部门，统计工资总额；统计所有员工的工资总额。
+
+- **rollup 按分组的第一个列进行统计和最后的小计**
+- **cube 按分组的所有列的进行统计和最后的小计**
+
+
+```sql
+--按部门、不同的职位显示工资的总额；同时按部门，统计工资总额；统计所有员工的工资总额。
 SELECT department_id,job_id,SUM(salary) 
 FROM employees 
 GROUP BY ROLLUP(department_id,job_id);
 
-再次优化，先运行:
+--再次优化，先运行:
 BREAK ON department_id SKIP 2
 
 DEPARTMENT_ID JOB_ID     SUM(SALARY)
@@ -4185,15 +3965,7 @@ DEPARTMENT_ID JOB_ID     SUM(SALARY)
 33 rows selected
 ```
 
-### stddev 返回一组值的标准偏差
-
-```
-    select deptno,stddev(sal) from emp group by deptno;
-    variance 返回一组值的方差差
-    select deptno,variance(sal) from emp group by deptno;
-```
-
-### 带有rollup和cube操作符的GROUP BY  分级汇总
+#### 分级汇总
 
 ```sql
 select deptno
@@ -4216,14 +3988,16 @@ from emp
 group by cube(deptno,job);
 ```
 
-#### rollup 按分组的第一个列进行统计和最后的小计
+### STADEV() 返回一组值的标准偏差
 
-#### cube 按分组的所有列的进行统计和最后的小计
+```sql
+select deptno,stddev(sal) from emp group by deptno;
+--variance 返回一组值的方差差
+select deptno,variance(sal) from emp group by deptno;
+```
 
 
-## 行列转换
-
-将以下转换
+### 行列转换
 
 ```sql
 SELECT name "姓名"
@@ -4231,7 +4005,7 @@ SELECT name "姓名"
       ,cnt "数量(元)"
 FROM salary_composite;
 
-行转列
+--行转列
 
 SELECT name "姓名"
       ,SUM(DECODE(salary_type,'基本工资',cnt,0)) "基本工资"
@@ -4241,7 +4015,7 @@ SELECT name "姓名"
 FROM salary_composite
 GROUP BY name;
 
-再换回去
+--再换回去
 
 SELECT name "姓名"
       ,'基本工资' "薪水类型"
@@ -4282,52 +4056,14 @@ ORDER BY 1 DESC;
 ···
 ```
 
-## Top~n分析
-
-Oracle不支持SELECT TOP语句;而是使用ORDER BY来进行TOP~n
-TOP~n分析 查询一个列中最大/最小的n个值的集合
-rownum行号 是一个伪列，表上没有这一列，当做一些特殊操作的时候，Oracle自动加上。
-注意
-
-1. 行号永远按照默认的顺序生成；  
-2. 行号只能使用<,<=，不能使用=,>,>=的符号。
-3. 对伪列ROWNUM起别名可以使用=,>,>=
-
-```sql
-SELECT rownum,column1,column2
-FROM (
-      SELECT column1,column2
-      FROM table1
-      ORDER BY column1
-      )
-WHERE rownum <= 10; 
---/ FETCH FIRST 10 ROWS ONLY; 12c以上才可以使用FETCH语句
-```
-
-```sql
---对伪列ROWNUM起别名可以使用=,>,>=
-SELECT rn,column1,column2
-FROM (
-      SELECT rownum rn,column1,column2
-      FROM (
-           SELECT column1,column2
-           FROM table1
-           ORDER BY salary DESC
-            )
-      )
-WHERE rownum >= 10;
-```
-
-***
-
-## WITH
+## WITH 临时查询表
 
 1. 避免在SELECT语句中重复书写相同的语句块
 2. WITH子句将该子句执行一次并存储到用户的临时表空间中
 3. 使用WITH子句可提高查询效率
 
-```
-查询公司各部门的总工资大于公司中各部门的平均总工资的部门信息
+```sql
+--查询公司各部门的总工资大于公司中各部门的平均总工资的部门信息
 WITH
 dept_costs
 AS
@@ -4353,9 +4089,7 @@ WHERE sum_sal >(
 ORDER BY department_name
 ```
 
-***
-
-## 序列 SEQUENCE
+## SEQUENCE 序列
 
 序列 可供多个用户来产生唯一数据的数据库对象,与表无关系
 
@@ -4367,7 +4101,7 @@ ORDER BY department_name
 1. SEQUENCE号是数据库系统按照一定规则自增的数字序列，因为自增所以不会重复。
 2. 用于记录数据库中最新动作的语句，只要语句有动作(I/U/D等),SEQUENCE号都会随着更新,可以根据SEQUENCE号来SELECT出更新的语句
 
-### 创建一个sequence（db2，oracle均适用）
+### CREATE SEQUENCE 创建序列
 
 ```sql
 CREATE SEQUENCE sequence_name
@@ -4376,15 +4110,15 @@ CREATE SEQUENCE sequence_name
 [MAXVALUE n3|NO MAXVALUE] --MAXVALUE 最大值，NO MAXVALUE 用于指定序列没有上限
 [MINVALUE n4|NO MINVALUE] --MINVALUE 最小值，NO MINVALUE 没有指定最小下限
 [CACHE n5|NOCACHE] --CACHE 用高速缓存中可以预分配的序列号个数,默认是20。 
-                            如果缓存中的序列号没有用完就关闭数据库等其它原因. 没有使用的序列号就丢失了,所以不能保证序列号是连续的。
-                            如果指定CACHE值，ORACLE就可以预先在内存里面放置一些SEQUENCE,这样存取的快些。CACHE里面的取完后，oracle自动再取一组到CACHE。 
-                            使用CACHE或许会跳号,故使用NOCACHE避免
-                            SEQUENCE_CACHE_ENTRIES参数，设置能同时被cache的sequence数目
+   --如果缓存中的序列号没有用完就关闭数据库等其它原因. 没有使用的序列号就丢失了,所以不能保证序列号是连续的。
+   --如果指定CACHE值，ORACLE就可以预先在内存里面放置一些SEQUENCE,这样存取的快些。CACHE里面的取完后，oracle自动再取一组到CACHE。 
+      --使用CACHE或许会跳号,故使用NOCACHE避免
+   --SEQUENCE_CACHE_ENTRIES参数，设置能同时被cache的sequence数目
                     --nocache高速缓冲中不预分配序列号，每次只生成一个序列号,虽然降低了获取序列号的速度,但是可以保证序列号的连续性。
 [CYCLE|NOCYCLE] --CYCLE 序列达到最大值或最小值后是否循环。再从n1开始循环，默认NO CYCLE
 [ORDER|NO ORDER] --ORDER 用于指定按顺序生成序列，只有在RAC时需要指定，
-                         指定ORDER是为了保证序列号是因为有请求才生成的。
-                         在使用序列号作为一个时间戳时很有用，
+                    --指定ORDER是为了保证序列号是因为有请求才生成的。
+                    --在使用序列号作为一个时间戳时很有用，
                  --NO ORDER 是不指定按顺序生成序列(默认)
 --n1到n5都是整数
 ```
@@ -4400,7 +4134,7 @@ NOCYCLE;       -- 不需要循环
 
 ### 使用序列 .NEXTVAL和.CURRVAL
 
-- 要先查询下一值.nextval才能使用查询当前值.currval
+- 在创建序列后，**第一次使用序列要先查询下一值.nextval才能使用查询当前值.currval**
    - 序列创建后初始无值,无法查询当前值.currval
 
 ```sql
@@ -4425,14 +4159,14 @@ FROM dual;
    - 多个表同时使用同一个序列
 3. 若不将序列的值装入内存NOCACHE可使用表USER_SEQUENCES查看当前有效值
 
+**在SQL语句中可以使用SEQUENCE的地方：**
 
+- 不包含子查询、SNAPSHOT、VIEW的 SELECT 语句
+- INSERT语句的子查询中
+- INSERT语句的VALUES中
+- UPDATE 的 SET中
 
-在SQL语句中可以使用SEQUENCE的地方：
-    - 不包含子查询、SNAPSHOT、VIEW的 SELECT 语句
-    - INSERT语句的子查询中
-    - INSERT语句的VALUES中
-    - UPDATE 的 SET中
-在表中使用sequence：
+**在表中使用sequence：**
 
 ```sql
 CREATE TABLE tab_name(
@@ -4476,14 +4210,15 @@ FROM USER_SEQUENCES;
 
 ### 修改序列 ALTER sequence_name ……
 
- 如果想要修改START WITH的值必须先删除SEQUENCE再重新写
- 想改变序列化的MINVALUE必须删除序列化后再重新建立序列化.不可以修改序列化的MINVALUE。
- 修改序列的增量、最大值、最小值、循环选项、是否装入内存
- 注意:
+- **如果想要修改START WITH的值必须先删除SEQUENCE再重新写**
+- 想改变序列化的MINVALUE必须删除序列化后再重新建立序列化.**不可以修改序列化的MINVALUE**。
+- 修改序列的增量、最大值、最小值、循环选项、是否装入内存
 
- 1. 必须是序列的拥有者或对序列有ALTER权限
- 2. 只有将来的序列值会被改变
- 3. 改变序列的初始值只能通过删除后重建序列
+**注意:**
+
+1. 必须是序列的拥有者或对序列有ALTER权限
+2. 只有将来的序列值会被改变
+3. 改变序列的初始值只能通过删除后重建序列
 
 ### 删除序列
 
@@ -4491,10 +4226,10 @@ FROM USER_SEQUENCES;
 DROP SEQUENCE emp_seq;
 ```
 
-### 实现自动递增列
+### 触发器实现自动递增列
 
-Oracle不支持实现自动递增列，即不能够把SEQUENCE做为默认值放在列的属性里，
-但可以通过触发器实现，设置好触发器之后，所有的插入语句，将忽略传入的主键，只使用指定的SEQUENCE生成主键。
+- Oracle不支持实现自动递增列，即不能够把SEQUENCE做为默认值放在列的属性里，
+- 但可以通过**触发器实现**，设置好触发器之后，所有的插入语句，将忽略传入的主键，只使用指定的SEQUENCE生成主键。
 
 ```sql
 CREATE SEQUENCE seq_id
@@ -4525,11 +4260,9 @@ END;
       :nextid表示引用sqlplus中定义的变量 
 ```
 
-***
+## INDEX 索引 
 
-## 索引 INDEX
-
-数据库中索引(Index)的概念与目录的概念非常类似。如果某列出现在查询的条件中，而该列的数据是无序的，查询时只能从第一行开始一行一行的匹配。创建索引就是对某些特定列中的数据排序，生成独立的索引表。在某列上创建索引后，如果该列出现在查询条件中，Oracle会自动的引用该索引，先从索引表中查询出符合条件记录的ROWID，由于ROWID是记录的物理地址，因此可以根据ROWID快速的定位到具体的记录，表中的数据非常多时，引用索引带来的查询效率非常可观。
+数据库中索引(Index)的概念与目录的概念非常类似。如果某列出现在查询的条件中，而该列的数据是无序的，查询时只能从第一行开始一行一行的匹配。创建索引就是对某些特定列中的数据排序，生成独立的索引表。在某列上创建索引后，如果该列出现在查询条件中，Oracle会自动的引用该索引，先从索引表中查询出符合条件记录的ROWID，由于ROWID是记录的物理地址，因此可以根据ROWID快速的定位到具体的记录，**表中的数据非常多时，引用索引带来的查询效率非常可观**。
 
 1. 一种独立于表的模糊对象，可以存储在与表不同的磁盘或表空间
 2. 索引被删除或破坏，不会对表产生影响，其影响的只是查询的速度
@@ -4979,13 +4712,13 @@ FROM USER_SYNONYMS;
 
 ## 布尔运算
 
+**对查询的结果集进行的运算**
+
 - 并集 UNION / UNION ALL
   - UNION 去重
   - UNION ALL 不去重
 - 交集 INTERSECT
 - 差集 MINUS
-
-ORDER BY
 
 ```sql
 SELECT employee_id,job_id
@@ -5000,7 +4733,6 @@ FROM job_history;
 - ORDER BY子句
   - 只能在语句最后出现
   - 可以使用第一个查询中的列名，别名或相对位置
-
 - 除UNION ALL以外，系统会自动将重复的记录删除
 - 系统第一个查询的列名显示在输出中
 - 除UNION ALL之外，系统会自动按照第一个查询中的第一个列的升序排列
