@@ -6,6 +6,11 @@
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_01-43-35.png =600x)
 
+## CS和BS架构的异同
+
+![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-02-13.png =600x)
+
+
 # HTML
 
 - HTML是解释型的标记语言，不区分大小写
@@ -1716,10 +1721,6 @@ function showHand(){
 
 ### screen对象
 
-# CS和BS架构的异同
-
-![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_00-02-13.png =600x)
-
 # Tomcat
 
 ## Tomcat安装和配置
@@ -1798,9 +1799,22 @@ function showHand(){
 
 #### 控制台编码
 
+- 修改IDEA中的配置setting
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-17-35.png =550x)
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-25-51.png =550x)
+- 修改IDEA中的VM：
+  - -Dfile.encoding=utf-8
+  - -Dconsole.encoding=utf-8
+
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-19_11-26-57.png =550x)
+
+- 修改IDEA中Tomcat的配置
+![](c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-05_17-23-02.png =550x)
+
+- 以及修改Tomcat的"D:\Tomcat8\conf\ **logging.properties**"文件
+![](c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-05_17-19-23.png =550x)
+
+- 重新启动IDEA即可
 
 ### Servlet 输出中文字符
 
