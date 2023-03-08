@@ -218,35 +218,6 @@ startx
 - `Ctrl + Windows + Alt + F3` 切换到终端3 （命令行界面)
 - `Ctrl + Windows + Alt + F1` 切换到终端1 （图形化界面)
 
-
-## Linux的目录结构
-
-- 基于文件系统层级标准FHS
-
-| 目录         | 名称            | 说明                                                                                                                                                                                                               |
-| :---------- | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| /           | 根目录          | 文件的最顶端，/ect、/bin、/dev、/lib、/sbin应该和根目录放置在一个分区中，而类似/usr/local可以单独位于另一个分区                                                                                                           |
-| /bin        | 二进制目录       | 存放系统所需要的重要命令，比如文件或目录操作的命令ls、cp、mkdir等。另外/usr/bin也存放了一些系统命令，这些命令对应的文件都是可执行的，普通用户可以使用大部分的命令                                                              |
-| /boot       | 启动目录         | 这是存放Linux启动时内核及引导系统程序所需要的核心文件，内核文件和gub系统引导管理器（或称引导装载程序）都位于此目录                                                                                                          |
-| /dev        | 设备目录         | 存放Linux系统下的设备文件，如光驱、磁盘等。访问该目录下某个文件相当于访问某个硬件设备，常用的是挂载光驱                                                                                                                    |
-| /etc        | 系统配置文件目录 | 一般存放系统的配置文件，作为一些软件启动时默认配置文件读取的目录，如/etc/fstab存放系统分区信息                                                                                                                            |
-| /home       | 主目录          | 系统默认的用户主目录。如果添加用户时不指定用户的主目录，默认在/home下创建与用户名同名的文件夹。代码中可以用HOME环境变量表示当前用户的主目录                                                                                   |
-| /lib        | 库目录          | 64位系统有/lib64文件夹，主要存放动态链接库。类似的目录有/usr/1ib、/usr/local/lib等                                                                                                                                     |
-| /lost+found | 媒体目录         | 存放一些当系统意外崩溃或机器意外关机时产生的文件碎片                                                                                                                                                                   |
-| /mnt        | 挂载目录         | 用于存放挂载储存设备的挂载目录，如光驱等                                                                                                                                                                              |
-| /proc       | 进程目录         | 存放操作系统运行时的信息，如进程信息、内核信息、网络信息等。此目录的内容存在于内存中，实际不占用磁盘空间，如/etc/cpuinfo存放CPU的相关信息                                                                                    |
-| /root       | -               | Linux超级权限用户root的主目录                                                                                                                                                                                       |
-| /sbin       | 系统二进制目录   | 存放一些系统管理的命令，一般只能由超级权限用户root执行。大多数命令普通用户一般无权限执行，类似/sbin/ifconfig，普通用户使用绝对路径也可执行，用于查看当前系统的网络配置。类似的目录有usr/sbin、usr/local/sbin                     |
-| /tmp        | 临时目录         | 临时文件目录，任何人都可以访问。系统软件或用户运行程序（如MySQL)时产生的临时文件存放到这里。此目录数据需要定期清除。重要数据不可放置在此目录下，此目录空间不易过小                                                              |
-| /usr        | 用户二进制目录   | 应用程序存放目录，如命令、帮助文件等。安装Linux软件包时默认安装到/usr/local目录下。比如/usr/share/fonts存放系统字体，/usr/share/man存放帮助文档，/usr/include存放软件的头文件等。/usr/local目录建议单独分区并设置较大的磁盘空间 |
-| /var        | 可变目录         | 这个目录的内容是经常变动的，如/var/log用于存放系统日志、/var/lib用于存放系统库文件等                                                                                                                                     |
-| /sys        | 系统目录         | 目录与/proc类似，是一个虚拟的文件系统，主要记录与系统核心相关的信息，如系统当前已经载入的模块信息等。这个目录实际不占硬盘容量                                                                                                |
-| /srv        | 服务目录         | 存放本地服务的相关文件                                                                                                                                                                                              |
-| /sbin       | 系统二进制目录   | 存放许多GNU管理员级工具                                                                                                                                                                                             |
-| /run        | 运行目录         | 存放系统运行时的运行数据                                                                                                                                                                                             |
-| /opt        | 可选目录         | 常用于存放第三方软件包和数据文件                                                                                                                                                                                     |
-| /media      | 媒体目录         | 可移动媒体设备的常用挂载点                                                                                                                                                                                           |
-
 # vim
 
 ## 模式
@@ -1470,6 +1441,8 @@ ntsysv # 查看crond服务是否已经设置为开机启动
 chkconfig –level 35 crond on # 加入开机自动启动
 ```
 
+## Tab制表符 自动补全
+
 # 系统管理
 
 ## 性能检测与优化
@@ -1792,6 +1765,8 @@ ps -o command -p 91730 | sed -n 2p # 通过进程id获取服务名称
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-03_14-57-52.png =700x)
 
+- 僵尸进程是指进程完成了，但父进程没有响应。
+
 ```shell
 [root@bogon ~]# ps aux | head -2
 USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
@@ -1868,7 +1843,7 @@ For more details see ps(1).
 ### kill / killall 杀死进程
 
 - <mark>当父进程被终止时，子进程也被终止；而子进程的终止不会导致父进程的终止</mark>。
-
+- 只有进程的属主和root用户可以杀死进程。
 - 用来删除执行中的程序或工作。kill可将指定的信息送至程序。
 - 预设的信息为SIGTERM(15),可将指定程序终止。若仍无法终止该程序，可使用SIGKILL(9)信息尝试强制删除程序。
 - 程序或工作的编号可利用ps指令或jobs指令查看。
@@ -1941,6 +1916,104 @@ Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
 ```
 
 # 文件管理
+
+## Linux的目录结构
+
+- Linux将文件存储在单个目录结构中（虚拟目录），虚拟目录将安装在PC上的所有存储设备的文件路劲纳入单个目录结构中。
+- Linux虚拟目录结构只包含一个根目录 / 的基础目录。根目录下的目录和文件会按照访问的目录路径一一列出。
+- **根驱动器**：在Linux PC上安装的第一个硬盘，包含了虚拟目录的核心，从此开始构造其他目录。
+- **挂载点**：在根驱动器上创建的目录，是虚拟目录中用于分配额外存储设备的目录。虚拟目录会让（该额外存储设备上的）文件和目录出现在这些挂载点的目录上。
+
+**基于文件系统层级标准FHS**
+
+| 目录         | 名称            | 说明                                                                                                                                                                                                               |
+| :---------- | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| /           | 根目录          | 文件的最顶端，/ect、/bin、/dev、/lib、/sbin应该和根目录放置在一个分区中，而类似/usr/local可以单独位于另一个分区                                                                                                           |
+| /bin        | 二进制目录       | 存放系统所需要的重要命令，比如文件或目录操作的命令ls、cp、mkdir等。另外/usr/bin也存放了一些系统命令，这些命令对应的文件都是可执行的，普通用户可以使用大部分的命令                                                              |
+| /boot       | 启动目录         | 这是存放Linux启动时内核及引导系统程序所需要的核心文件，内核文件和gub系统引导管理器（或称引导装载程序）都位于此目录                                                                                                          |
+| /dev        | 设备目录         | 存放Linux系统下的设备文件，如光驱、磁盘等。访问该目录下某个文件相当于访问某个硬件设备，常用的是挂载光驱                                                                                                                    |
+| /etc        | 系统配置文件目录 | 一般存放系统的配置文件，作为一些软件启动时默认配置文件读取的目录，如/etc/fstab存放系统分区信息                                                                                                                            |
+| /home       | 主目录          | 系统默认的用户主目录。如果添加用户时不指定用户的主目录，默认在/home下创建与用户名同名的文件夹。代码中可以用HOME环境变量表示当前用户的主目录                                                                                   |
+| /lib        | 库目录          | 64位系统有/lib64文件夹，主要存放动态链接库。类似的目录有/usr/1ib、/usr/local/lib等                                                                                                                                     |
+| /lost+found | 媒体目录         | 存放一些当系统意外崩溃或机器意外关机时产生的文件碎片                                                                                                                                                                   |
+| /mnt        | 挂载目录         | 用于存放挂载储存设备的挂载目录，如光驱等                                                                                                                                                                              |
+| /proc       | 进程目录         | 存放操作系统运行时的信息，如进程信息、内核信息、网络信息等。此目录的内容存在于内存中，实际不占用磁盘空间，如/etc/cpuinfo存放CPU的相关信息                                                                                    |
+| /root       | -               | Linux超级权限用户root的主目录                                                                                                                                                                                       |
+| /sbin       | 系统二进制目录   | 存放一些系统管理的命令，一般只能由超级权限用户root执行。大多数命令普通用户一般无权限执行，类似/sbin/ifconfig，普通用户使用绝对路径也可执行，用于查看当前系统的网络配置。类似的目录有usr/sbin、usr/local/sbin                     |
+| /tmp        | 临时目录         | 临时文件目录，任何人都可以访问。系统软件或用户运行程序（如MySQL)时产生的临时文件存放到这里。此目录数据需要定期清除。重要数据不可放置在此目录下，此目录空间不易过小                                                              |
+| /usr        | 用户二进制目录   | 应用程序存放目录，如命令、帮助文件等。安装Linux软件包时默认安装到/usr/local目录下。比如/usr/share/fonts存放系统字体，/usr/share/man存放帮助文档，/usr/include存放软件的头文件等。/usr/local目录建议单独分区并设置较大的磁盘空间 |
+| /var        | 可变目录         | 这个目录的内容是经常变动的，如/var/log用于存放系统日志、/var/lib用于存放系统库文件等                                                                                                                                     |
+| /sys        | 系统目录         | 目录与/proc类似，是一个虚拟的文件系统，主要记录与系统核心相关的信息，如系统当前已经载入的模块信息等。这个目录实际不占硬盘容量                                                                                                |
+| /srv        | 服务目录         | 存放本地服务的相关文件                                                                                                                                                                                              |
+| /sbin       | 系统二进制目录   | 存放许多GNU管理员级工具                                                                                                                                                                                             |
+| /run        | 运行目录         | 存放系统运行时的运行数据                                                                                                                                                                                             |
+| /opt        | 可选目录         | 常用于存放第三方软件包和数据文件                                                                                                                                                                                     |
+| /media      | 媒体目录         | 可移动媒体设备的常用挂载点                                                                                                                                                                                           |
+
+### cd 切换文件目录
+
+```shell
+# 到达指定目录
+cd 绝对路径/相对路径
+# 当前目录
+.
+# 切换到当前目录的父目录
+cd .. 
+# 返回到/home
+cd ~
+# 
+```
+
+### pwd 显示当前的绝对路径
+
+```shell
+pwd
+```
+
+### ls （按行）列出当前目录下的文件和目录
+
+```shell
+# 列出当前的文件和目录
+ls
+# 列出所有，包括隐藏的内容
+ls -a 
+# 递归输出当前目录的所有子目录中的文件
+ls -R
+# ll 显示长列表
+ls -l
+# 搭配通配符使用
+ls -l 字符串通配符匹配
+# 显示文件大小
+ls -i
+```
+
+### ll 显示长列表
+
+```shell
+ll 
+# 等于 ls -l
+```
+
+### file 查看文件类型
+
+```shell
+file 文件    
+```
+
+```shell
+# 对普通目录
+[root@bogon /]# file boot
+boot: directory  
+# 对软连接文件
+[root@bogon /]# file bin
+bin: symbolic link to usr/bin
+# 对脚本文件，而且可以确定文件的字符集
+[root@bogon shellTest]# file if_demo01.sh
+if_demo01.sh: Bourne-Again shell script, UTF-8 Unicode text executable
+# 对二进制文件 可以确定该程序编译时所面向的平台以及需要何种类型的库
+[root@bogon shellTest]# file /bin/ls
+/bin/ls: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=bccb4c17516c6a9ad59c3ec19b347c83236c04c2, stripped
+```
 
 ## 文件信息
 
@@ -2229,6 +2302,31 @@ Archive:  zipTest1.zip
     1070              924  14%                            4 files
 ```
 
+### sort 对文件数据排序
+
+- sort命令**默认会将文本中的数据当成字符来排序按照会话指定的默认语言的排序顺序输出，<mark>包括数字和时间日期等</mark>**，而不是按照相应的规则来排序。
+- **默认是升序排序**
+
+|                   命令                   |                             说明                              |
+| ---------------------------------------- | ------------------------------------------------------------- |
+| sort -n                                  | 将文本识别为数字来排序                                          |
+| sort -M                                  | 将文本识别为Mar形式的月份来排序                                 |
+| sort -t '分隔字符' -k 指定排序的字符段位置 | -t对每行的字符段进行分隔，然后-k选择每行分隔的其中一段字符进行排序 |
+| sort -r                                  | 将排序结果降序输出                                             |
+
+![](c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-08_15-24-01.png =600x)
+
+```shell
+# sort -t '字符' -k  文件
+# 将/etc/passwd按uid来排序
+[root@bogon ~]# sort -t ':' -k 3  /etc/passwd | head -n 5
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+bin:x:1:1:bin:/bin:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+```
+
 ### mv 移动/重命名
 
 - 用来对文件或目录重新命名，或者将文件从一个目录移到另一个目录中。
@@ -2303,6 +2401,62 @@ total 0
 lrwxrwxrwx. 1 root root 22 Feb 19 14:24 testlns.test -> /root/Test/test01.test
 ```
 
+## 查看文件
+
+### cat 一次性显示文本文件的所有内容
+
+- 不适用于内容大的文件
+- 一旦运行就无法控制后面的操作
+
+```shell
+# 一次性显示文本文件的所有内容
+cat 文件
+# 为每一行加上行号
+cat -n 文件
+# 只给有文本的行加上行号
+cat -b 文件
+# 替换制表符为^I字符
+cat -T 文件
+```
+
+### more 分页显示文本内容
+
+- 分页的形式查看，使用空格或回车来逐行查看文件内容，只支持文本文件中的基本查看。
+- 使用q来退出查看
+
+```shell
+# 分页显示
+more 文件
+```
+
+### less more的加强
+
+- 在more的基础上，能够使用上下和翻页键。
+
+```shell
+less 文件
+```
+
+### tail 显示文件的最后几行
+
+- 默认显示文件的最后10行
+
+```shell
+# 指定显示的末尾n行
+tail -n 行数 文件
+# 保持活动状态，不断显示文件中更改的内容
+tail -f 文件
+```
+
+### head 显示文件的头几行
+
+- 默认显示文件的前10行。
+
+```shell
+# 指定显示前n行
+head -n 行数 文件
+```
+
 # 磁盘管理
 
 - Linux的所有文件和目录都存在于根分区/中
@@ -2316,18 +2470,22 @@ lrwxrwxrwx. 1 root root 22 Feb 19 14:24 testlns.test -> /root/Test/test01.test
 
 ## df 查看磁盘占用情况
 
-**格式**
-
-```shell
-df [选项][参数]
-```
-
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-45-10.png =700x)
+
+- df命令会显示每个有数据的**已挂载文件系统**，内容如下：
+   - 设备文件位置
+   - 以KB显示最大容量的块
+   - 以KB显示已用的块
+   - 以KB显示剩余的块
+   - 已用空间所占的比例
+   - 设备的挂载点
+- Linux后台一直有进程在处理和使用文件。**df命令显示的是Linux系统认为的当前值**。如果有进程已经创建或删除某个文件，但并未释放文件，则不会计算该文件的值。
 
 **常用组合**
 
 | 组合       | 说明                         |
 | :-------- | :-------------------------- |
+| df -h     | 使输出的内容易读，M和G             |
 | df -ah    | 查看当前系统所有分区使用情况   |
 | df -i     | 查看各个分区inode节点占用情况  |
 | df -T     | 显示分区类型                 |
@@ -2362,7 +2520,7 @@ Filesystem            Type     1K-blocks    Used Available Use% Mounted on
 /dev/mapper/rhel-root xfs       46110724 3259844  42850880   8% /
 devtmpfs              devtmpfs   2515252       0   2515252   0% /dev
 
-# DF -T xfs 
+# df -t xfs 
 [root@bogon zipTest]# df -t xfs
 Filesystem            1K-blocks    Used Available Use% Mounted on
 /dev/mapper/rhel-root  46110724 3259844  42850880   8% /
@@ -2373,12 +2531,16 @@ Filesystem            1K-blocks    Used Available Use% Mounted on
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-28_20-54-15.png =700x)
 
+- du命令可以显示某个指定目录下的磁盘使用情况，默认显示当前目录下的所有文件、目录和子目录的磁盘使用情况，以磁盘块单位（KB）来显示。
+- 每行输出的左边为每个文件或目录占用的磁盘块。该列表从当前目录层级的最底部开始，然后按文件、子目录、目录逐级向上显示。
+
 **常用**
 
-| 组合                 | 说明                             |
-| :------------------ | :------------------------------ |
-| du -sh              | 统计当前文件大小，默认不统计软链接 |
-| du --max-depth=1 -h | 按层级统计文件夹大小              |
+| 组合                   | 说明                             |
+| :-------------------- | :------------------------------ |
+| du -sh                | 统计当前文件大小，默认不统计软链接 |
+| du --max-depth=1-- -h | 按层级统计文件夹大小              |
+| du -c                 | 显示所有已列出文件总的大小         |
 
 ```shell
 # du -sh
@@ -2389,6 +2551,31 @@ Filesystem            1K-blocks    Used Available Use% Mounted on
 [root@bogon ~]# du --max-depth=1-- -h /root/Test
 24K     /root/Test/zipTest
 32K     /root/Test
+```
+
+```shell
+[root@bogon ~]# du -h
+4.0K    ./.pip
+4.0K    ./.cache/pip/http/f/e/d/0/e
+4.0K    ./.cache/pip/http/f/e/d/0
+4.0K    ./.cache/pip/http/f/e/d
+4.0K    ./.cache/pip/http/f/e
+4.0K    ./.cache/pip/http/f
+36K     ./.cache/pip/http/b/b/8/7/6
+36K     ./.cache/pip/http/b/b/8/7
+36K     ./.cache/pip/http/b/b/8
+36K     ./.cache/pip/http/b/b
+36K     ./.cache/pip/http/b
+40K     ./.cache/pip/http
+44K     ./.cache/pip
+44K     ./.cache
+0       ./.ssh
+8.0K    ./download
+0       ./shellTest/test_dir
+28K     ./shellTest
+0       ./.config/procps
+0       ./.config
+124K    .
 ```
 
 ## tune2fs 调整查看文件系统参数
@@ -2444,24 +2631,27 @@ mkfs -t ext4 /dev/sdb1
 
 **常用**
 
-| 组合                           | 说明                                                  |
-| :----------------------------- | :--------------------------------------------------- |
-| mount                          | 查看系统的挂载                                         |
-| mount -a                       | 挂载/ect/fstab里的所有分区                             |
-| mount 磁盘分区 目录             | 挂载指定分区到指定目录                                  |
-| mount -o re 磁盘分区 目录       | 以只读的方式挂载                                       |
-| mount -t iso9660 磁盘分区 目录  | 挂载光驱，使用ISO文件避免将文件解压，可以在挂载后直接访问 |
-| mount -t nfs 地址:磁盘分区 目录 | NFS挂载                                               |
-| mount -t ntfs 磁盘分区 目录     | 挂载Windows下分区格式的分区                            |
+| 组合                                 | 说明                                                  |
+| :---------------------------------- | :---------------------------------------------------- |
+| mount                               | 查看系统的挂载以及媒体设备文件目录等信息                  |
+| mount -a                            | 挂载/ect/fstab里的所有分区                              |
+| mount 磁盘分区 目录                  | 挂载指定分区到指定目录                                  |
+| mount -o re 磁盘分区 目录            | 以只读的方式挂载                                        |
+| mount -t iso9660 磁盘分区 目录       | 挂载光驱，使用ISO文件避免将文件解压，可以在挂载后直接访问  |
+| mount -t nfs 磁盘分区 目录           | NFS挂载                                               |
+| mount -t ntfs 磁盘分区 目录          | 挂载Windows下分区格式的分区                             |
+| mount -t vfat 设备文件 虚拟目录挂载点 | 大多数U盘和软盘会被格式化为vfat文件系统,Windows长文件系统 |
 
-- 光盘的磁盘分区通常是/dev/cdrom
-- 挂载到的目录可以是/mnt中新建。
+- 虚拟目录挂载点通常是在/mnt中新建一个目录来挂载。
+- 媒体设备挂载到虚拟目录后，root用户就有了对该设备的所有访问权限，而其他用户的访问会被限制。
 
 ```shell
+# 提供信息：设备文件 虚拟目录挂载点 文件系统类型 访问状态
+mount 
 # 新建文件目录
 mkdir -p /mnt/room
-# 光盘挂载磁盘分区一般是 /dev/cdrom
-mount -t iso9660 /dev/cdrom /mnt/room
+# 光盘挂载磁盘分区一般是 /dev/cdrom (设备文件) /mnt/room (虚拟目录挂载点)
+mount -t iso9660 设备文件 虚拟目录挂载点
 ```
 
 ### /etc/fstab文件 自动挂载
@@ -2470,9 +2660,19 @@ mount -t iso9660 /dev/cdrom /mnt/room
 
 ## umount 卸载
 
+- 从Linux上移除一个媒体设备时，需要先使用umount将其从虚拟目录挂载点中卸载，再弹出。
+- umount可以提供设备文件或挂载点来卸载指定的设备。
+- 如果有任何程序正在使用该设备上的文件，则不能成功卸载。需要先停止使用。可以使用lsof来查看，再搭配kill来处理。
+
 ```shell
-# 卸载指定挂载目录的设备
+# 卸载指定挂载点/设备文件目录的设备
 umount /mnt/cdrom
+```
+
+### lsof 获取使用指定文件的进程
+
+```shell
+lsof 设备文件或挂载点
 ```
 
 ## fdisk 基本磁盘管理
@@ -6063,10 +6263,11 @@ avg $num1 $num2;
 minus $num1 $num2;
 ```
 
+# 安装配置服务
 
-# MySQL
+## MySQL
 
-## 安装 mariadb
+### 安装 mariadb
 
 ```shell
 cd /mnt/Packages
@@ -6080,19 +6281,19 @@ rpm -ivh perl-PlRPC-0.2020-14.el7.noarch.rpm
 rpm -ivh mariadb-server-5.5.56-2.el7.x86_64.rpm mariadb-5.5.56-2.el7.x86_64.rpm
 ```
 
-### 配置文件
+#### 配置文件
 
 ```shell
 /etc/my.cnf
 ```
 
-# Apache服务和LAMP
+## Apache服务和LAMP
 
 - 镜像下载地址[apache](https://mirrors.tuna.tsinghua.edu.cn/apache/)
 
-## Apache服务的安装配置
+### Apache服务的安装配置
 
-### 安装OpenSSL
+#### 安装OpenSSL
 
 ```shell
 cd /root/install
@@ -6106,7 +6307,7 @@ echo /usr/local/ssl/lib/ >> /etc/ld.so.conf
 ldconfig
 ```
 
-### 安装Apache
+#### 安装Apache
 
 ```shell
 # 安装apr
@@ -6157,7 +6358,7 @@ make install
 - 方法1：静态编译二进制文件，
 - 方法2：启用SSL加密和mod_rewrite，并且采用动态编译模式，需要启用mod_so。可以动态的添加模块，而不用重新编译。
 
-### 配置httpd.conf
+#### 配置httpd.conf
 
 [httpd](https://www.cnblogs.com/hgzero/p/14136149.html#1.%20httpd)
 
@@ -6194,7 +6395,7 @@ EnableSendfile on
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-10_10-05-01.png =700x)
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-10_10-05-49.png =700x)
 
-### 虚拟主机配置
+#### 虚拟主机配置
 
 **基于IP、基于端口、基于域名3种方式**
 
@@ -6206,7 +6407,7 @@ EnableSendfile on
 
 - 将/usr/local/apache2/conf/httpd.conf中其他配置的Listen删除。
 
-#### 基于IP
+##### 基于IP
 
 **有多个IP**
 
@@ -6286,7 +6487,7 @@ vim /usr/local/apache2/conf/vhost/www.zjk03.conf
 </VirtualHost>
 ```
 
-#### 基于端口 
+##### 基于端口 
 
 **只有1个IP或需要不同端口访问不同的虚拟主机**
 
@@ -6364,7 +6565,7 @@ vim /usr/local/apache2/conf/vhost/www.zjk04.9081.conf
 </VirtualHost>
 ```
 
-#### 基于域名
+##### 基于域名
 
 1. 绑定IP
 
@@ -6441,11 +6642,11 @@ vim /usr/local/apache2/conf/vhost/www.test.com.conf
 </VirtualHost>
 ```
 
-#### 在现有的Web服务器上增加虚拟主机
+##### 在现有的Web服务器上增加虚拟主机
 
 **为现存主机建造一个`<VirtualHost>`定义块**
 
-### 启动Apache服务
+#### 启动Apache服务
 
 ```shell
 /usr/local/apache2/bin/apachectl start
@@ -6460,9 +6661,9 @@ curl http://www.zjk03.com
 <html><body><h1>It works!</h1></body></html>
 ```
 
-## Apache安全控制与认证
+### Apache安全控制与认证
 
-### `<Diretory>`定义块 虚拟目录
+#### `<Diretory>`定义块 虚拟目录
 
 ```shell
 <Diretory "目录路径">
@@ -6486,12 +6687,12 @@ curl http://www.zjk03.com
 
 - 访问没有权限的的地址时：Forbidden ....
 
-#### Apache认证
+##### Apache认证
 
 **基本认证和摘要认证**
 
 
-##### 基本认证 (用户认证) 
+###### 基本认证 (用户认证) 
 
 ###### /usr/local/apache2/bin/htpasswd 
 
@@ -6573,17 +6774,17 @@ AuthType Basic
     Require user admin
 ```
 
-# LVS 集群负载均衡
+## LVS 集群负载均衡
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-12_15-30-22.png =300x)
 
-# 集群技术与双机热备
+## 集群技术与双机热备
 
 
-# KVM虚拟化
+## KVM虚拟化
 
-# OpenStack
+## OpenStack
 
-# Hadoop
+## Hadoop
 
-# Spark
+## Spark

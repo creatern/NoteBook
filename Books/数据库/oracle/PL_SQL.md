@@ -691,17 +691,17 @@ END;
 
 #### 1)IF
 
-```
-  IF …… THEN
-    ……;
-  ELSIF …… THEN
-    ……;
-  ESLE
-    ……;
-  END IF;
+```plsql
+IF …… THEN
+……;
+ELSIF …… THEN
+……;
+ESLE
+……;
+END IF;
 ```
 
-```
+```plsql
 DECLARE
  v_age NUMBER(3) := &p_age;
 BEGIN
@@ -715,12 +715,14 @@ BEGIN
 END; 
 ```
 
-```
+```plsql
+/*
 查询150号员工的工资
 若工资大于10000，则打印'salary > 10000'，
 若在5000到1000之间则打印'5000 <= salary <= 10000'
 否则打印'salary < 5000'
- 1.
+*/
+-- 1.
 DECLARE
   v_emp_sal employees.salary%type;
 BEGIN
@@ -738,7 +740,7 @@ BEGIN
   END IF;
 END;
 
- 2.使用赋值给v_temp表来打印
+-- 2.使用赋值给v_temp表来打印
 DECLARE 
  v_emp_sal employees.salary%type;
  v_temp VARCHAR2(25);
@@ -763,7 +765,8 @@ END;
 #### 2)CASE  --DECODE()只能在SQL中使用
 
 1. CASE语句
-```
+
+```plsql
 CASE 选择器
  WHEN 表达式 THEN...
  WHEN   ... THEN...
@@ -771,20 +774,27 @@ CASE 选择器
  [ELSE...]
 END；
 ```
+
 2. CASE表达式
-```
+
+```plsql
 CASE
   WHEN 布尔条件表达式 THEN...
    ...
   [ELSE...]
 END;
 ```
+
 ##### 例1
-```
+
+```plsql
+/*
 查询150号员工的工资
 若工资大于或等于10000，则打印'salary >= 10000'，
 若在5000到1000之间则打印'5000 <= salary < 10000'
 否则打印'salary < 5000'
+*/
+
 DECLARE
  v_emp_sal employees.salary%type;
  v_temp VARCHAR2(25);
@@ -805,12 +815,15 @@ END;
 
 ##### 例2
 
-```
+```plsql
+/*
 查询122号员工的job_id，
 若其值为'IT_PROG' 则打印'A'
        'AC_MGT' 则打印'B'
        'AC_ACCOUNT' 则打印'C'
        否则打印'D'
+*/
+
 DECLARE
  v_emp_job employees.job_id%type;
  v_temp VARCHAR2(25);
@@ -832,7 +845,7 @@ END;
 
 ##### 例3
 
-```
+```plsql
 DECLARE
  v_emp_id NUMBER := &p_emp_id;
  v_last_name employees.last_name%TYPE;
@@ -872,7 +885,7 @@ END;
 
 - 例2中的CASE语句
 
-```
+```plsql
 变量 :=
 CASE 选择器
  WHEN 条件值 THEN
@@ -882,7 +895,7 @@ CASE 选择器
 
 - 例3中的CASE语句
 
-```
+```plsql
 CASE 选择器
   WHEN 条件值 THEN
     语句; --有分号；代码块；不是简单的值。
@@ -900,20 +913,20 @@ END CASE;
 
 #### 1)LOOP
 
-```
-  LOOP
-    执行语句；
-    ...
-    EXIT [WHEN 条件表达式];
-    --如果EXIT语句放在循环体后面，则必定先执行一次循环
-    --在不满足条件时，也会多执行一次执行
-    --如果EXIT语句放在循环体前面，则先检查是否满足条件
-  END LOOP;
+```plsql
+LOOP
+执行语句；
+...
+EXIT [WHEN 条件表达式];
+--如果EXIT语句放在循环体后面，则必定先执行一次循环
+--在不满足条件时，也会多执行一次执行
+--如果EXIT语句放在循环体前面，则先检查是否满足条件
+END LOOP;
 ```
 
-```
-使用循环语句打印1~100
- 1.
+```plsql
+--使用循环语句打印1~100
+-- 1.
  DECLARE
  v_i NUMBER(10) := 1;
 BEGIN
@@ -924,7 +937,7 @@ BEGIN
   END LOOP;
 END;
  
-2.
+--2.
  DECLARE
  v_i NUMBER(10) := 1;
 BEGIN
@@ -936,8 +949,8 @@ BEGIN
 END;
 ```
 
-```
-使用循环语句往表中插入数据
+```plsql
+--使用循环语句往表中插入数据
 
 CREATE TABLE emp_p1
 (
@@ -976,10 +989,10 @@ END;
 
 #### 2)FOR
 
-```
-  FOR 循环计数器 IN [REVERSE] 下限……上限 LOOP
-    要执行的语句;
-  END LOOP;
+```plsql
+FOR 循环计数器 IN [REVERSE] 下限……上限 LOOP
+要执行的语句;
+END LOOP;
 ```
 
 - 每循环一次，循环变量自动加1；
@@ -1002,7 +1015,7 @@ END;
 - 只有EXIT WHEN 表达式中表达式的结果是TRUE才会执行EXIT；
 - NULL或者FASLE不执行
 
-```
+```plsql
 BEGIN
   FOR i IN 最小..最大 LOOP
     循环体;
@@ -1011,8 +1024,8 @@ BEGIN
 END;
 ```
 
-```
-使用循环语句打印1~100
+```plsql
+--使用循环语句打印1~100
 BEGIN
   FOR i IN 1..100 LOOP
     dbms_output.put_line(i);
@@ -1020,8 +1033,8 @@ BEGIN
 END;
 ```
 
-```
-输出2~100之间的质数
+```plsql
+--输出2~100之间的质数
 DECLARE
   v_flag NUMBER(1) := 0;
 BEGIN
@@ -1040,15 +1053,16 @@ END;
 ```
 
 #### 2)WHILE
+
 - 在WHILE LOOP循环语句中，循环的条件必须放在WHILE和LOOP两个关键字之间，而循环的条件是每次开始循环前检查的。
 
-```
+```plsql
 WHILE 条件 LOOP
   循环体;
 END LOOP;
 ```
 
-```
+```plsql
 CREATE TABLE dept_p1
 (
  dept_no NUMBER(10)
@@ -1079,8 +1093,8 @@ BEGIN
 END;
 ```
 
-```
-输出2~100的质数
+```plsql
+--输出2~100的质数
 DECLARE
   v_flag NUMBER(1):=1;
   v_i NUMBER(3):=2;
@@ -1103,14 +1117,14 @@ END;
 
 #### 3)GOTO语句 无条件跳转到指定的标号中去 (非必要不使用)
 
-```
-          GOTO label;
-          ……
-          <<label>>
+```plsql
+GOTO label;
+……
+<<label>>
 ```
 
-```
-输出2~100之间的质数
+```plsql
+--输出2~100之间的质数
 DECLARE
  v_flag NUMBER(5) := 1;
 BEGIN
@@ -1136,7 +1150,7 @@ END;
    - 在FOR和WHILE循环中，标号要放在关键字FOR和WHILE之前。
    - 如果一个循环加上了标号，在END LOOP之后可以包含标号名（非强制）
 
-```
+```plsql
 DECLARE
  v_i NUMBER := 1;
 BEGIN
@@ -1149,7 +1163,7 @@ BEGIN
 END;
 ```
 
-```
+```plsql
 DECLARE
  v_total NUMBER := 0;
  v_factorial NUMBER := 1;
@@ -1186,7 +1200,7 @@ PL/SQL procedure successfully completed
 
 #### CONTINUE语句
 
-```
+```plsql
 BEGIN
   FOR i IN 最小..最大 LOOP
     循环体;
@@ -1195,7 +1209,7 @@ BEGIN
 END;
 ```
 
-```
+```plsql
 DECLARE
  v_max_num  NUMBER := &p_max_num;
  v_sum NUMBER := 0;
@@ -1253,7 +1267,7 @@ END;
 
 #### 自定义记录类型
 
-```
+```plsql
 DECLARE
   TYPE 要定义的记录数据类型名称 IS RECORD(
     --字段声明
@@ -1269,11 +1283,11 @@ BEGIN
 END;
 ```
 
-```
+```plsql
 
 ```
 
-```
+```plsql
 DECLARE
   --定义一个记录类型
   TYPE customer_type IS RECORD(
@@ -1288,7 +1302,7 @@ BEGIN
 END;
 ```
 
-```
+```plsql
 DECLARE 
  TYPE person IS RECORD(
    name VARCHAR2(20)
@@ -1319,7 +1333,7 @@ END;
 
 #### 自定义记录类型
 
-```
+```plsql
 DECLARE
   --定义一个记录类型
   TYPE emp_record IS RECORD(
@@ -1342,7 +1356,7 @@ END;
 
 ##### 使用 %TYPE 定义变量，动态的获取数据的声明类型
 
-```
+```plsql
 DECLARE
   --定义一个记录类型
   TYPE emp_record IS RECORD(
@@ -1369,7 +1383,7 @@ END;
 - 数据类型动态变化
 - 不需要在定义一个变量；直接就是变量而不再是数据类型
 
-```
+```plsql
 DECLARE 
  记录名 要存储的表名/视图名%ROWTYPE;
  --不需要在定义一个变量；直接就是变量而不再是数据类型
@@ -1396,7 +1410,7 @@ END;
 
 ##### 赋值语句：通过变量实现查询语句
 
-```
+```plsql
 DECLARE
   v_emp_record employees%ROWTYPE;
   v_employee_id employees.employee_id%TYPE;
@@ -1417,7 +1431,7 @@ END;
 
 ###### DELETE
 
-```
+```plsql
 DECLARE
   v_emp_id employees.employee_id%TYPE;
 BEGIN
@@ -1430,7 +1444,7 @@ END;
 
 ###### INSERT
 
-```
+```plsql
 DECLARE
  copy_emp_rec employees%ROWTYPE;
  
@@ -1445,7 +1459,7 @@ BEGIN
 END;
 ```
 
-```
+```plsql
 DECLARE
  copy_emp_rec copy_emp%ROWTYPE;
  
@@ -1465,7 +1479,7 @@ END;
 
 ###### UPDATE
 
-```
+```plsql
 DECLARE
  copy_emp_rec copy_emp%ROWTYPE;
  
@@ -1485,7 +1499,7 @@ END;
 - UPDATE ...
 - SET ROW = ...
 
-```
+```plsql
 DECLARE
  copy_emp_rec employees%ROWTYPE;
  
@@ -1525,7 +1539,7 @@ END;
 
 **声明INDEX BY表数据类型和INDEX BY表型变量的语法：**
 
-```
+```plsql
 DECLARE
  TYPE 数据类型名 IS TABLE OF 列数据类型|变量%TYPE|表%ROWTYPE
      [INDEX BY PLS_INTEGER|BINARY_INTEGER|VARCHAR2(20)];
@@ -1546,9 +1560,7 @@ END;
 - INDEX BY表的大小是没有限制的，在INDEX BY表中，数据行（元素）的个数可以动态地增长，因此可以在INDEX BY表中添加新的数据行（元素）
 - 列(元素)可以属于任何变量或记录数据类型，而主键（下标）既可以是一个数字，也可以是一个字符串。不能在声明INDEX BY表时将其初始化，即在声明时不能为INDEX BY表赋值，此时它没有包含任何键（下标）也没有包含任何（元素）值。需要使用显示的执行语句为INDEX BY表赋值，其INDEX BY表的结构：
 
-![](C:/Users/zjk10/OneDrive/NoteBook/pictures/238484315239470.png =302x)
-
-```
+```plsql
 DECLARE
  TYPE name_table_type IS TABLE OF employees.last_name%TYPE
       INDEX BY PLS_INTEGER;
@@ -1591,7 +1603,7 @@ END;
 - PRIOR()和NEXT()这两种方法到底有什么用处？
    - 对于“主键”（下标)是VARCHAR2的关联数组(associative arrays),利用这些方法可以方便地返回适当的“主键”(下标)，而其顺序是基于字符串中字符的二进制的值。在循环操作中使用这些方法要比利用下标加减的方法更可靠，因为在循环操作期间有可能数组中有些元素被删除了或插入了新的元素。
 
-```
+```plsql
 DECLARE
  TYPE emp_num_type IS TABLE OF NUMBER
       INDEX BY VARCHAR(20);
@@ -2848,7 +2860,7 @@ CREATE[OR REPLACE]TRIGGER触发器名
 
 **用户级触发器**
 
-```
+```plsql
 --创建序列，当作编号log_id
 CREATE SEQUENCE log_onoff_seq
  START WITH 1
@@ -2970,14 +2982,14 @@ CREATE OR REPLACE TRIGGER sys_startup_database_trigger
 
 - 删除之前的触发器或DISABLE(简单粗暴)
 
-```
+```plsql
 ALTER TRIGGER user_log_on_trigger DISABLE;
 DROP TIRGGER user_log_on_trigger;
 ```
 
 - 掀桌子 SYSDBA
 
-```
+```plsql
 SQL> DROP TRIGGER user_log_on_trigger;
 
 触发器已删除。
@@ -2985,7 +2997,7 @@ SQL> DROP TRIGGER user_log_on_trigger;
 
 - 查看
 
-```
+```plsql
 SELECT trigger_name
       ,trigger_type
       ,triggering_event
@@ -2999,7 +3011,7 @@ FROM USER_TRIGGERS;
 
 **语法：**
 
-```
+```plsql
 CALL 过程名
 ```
 
@@ -3010,7 +3022,7 @@ CALL 过程名
 
 #### 例
 
-```
+```plsql
 --创建过程
 CREATE OR REPLACE PROCEDURE update_sal_action
  IS

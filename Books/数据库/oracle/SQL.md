@@ -4476,7 +4476,7 @@ CREATE TABLE 表名
 ```sql
 CREATE TABLE 表名
 (
- 列1 数据类型 [CONSTRAINT 约束名] [DATATYPE] REFERENCES(要关联的表.列)
+ 列1 数据类型 [CONSTRAINT 约束名] [DATATYPE] REFERENCES 要关联的表(列,...)
  -- DATATYPE 仅数据类型关联
  [ON DELETE CASCADE]  --级联删除
  [ON DELETE SET NULL] --级联置空
@@ -4492,7 +4492,7 @@ CREATE TABLE 表名
  列1 数据类型 
 ,列2 数据类型
 ,[CONSTRAINT 约束名] FOREIGN KEY(列1[,列2,...])
- REFENRENCES (要关联的表.列)
+ REFERENCES 要关联的表(列,...)
  [ON DELETE CASCADE]  --级联删除
  [ON DELETE SET NULL] --级联置空
 );
