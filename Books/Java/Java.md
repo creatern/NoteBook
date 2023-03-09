@@ -27489,6 +27489,7 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 - 可设置的组件外观感觉（look and feel ）
 - 与AWT相比提供更丰富的GUI组件，引入新的特征，并提供更丰富的功能。
 - 一般如果使用Swing组件，则程序中只使用Swing组件和Swing容器。
+- JavaSwing组件和不能直接添加到顶层容器中，必须添加到一个与Swing顶层容器相关联的内容面板（ContentPane）上，内容面板即一个中间容器，是一个轻量级组件。
 
 **Swing包中定义了两类组件：**
 
@@ -28114,8 +28115,6 @@ public class GUITest {
 ##### JMenuBar 下拉式菜单
 
 <img src="C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-21_10-25-00.png" width="300"/> 
-
-
 
 ##### JPopupMenu 弹出式菜单/上下文菜单
 

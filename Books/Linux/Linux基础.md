@@ -1176,6 +1176,17 @@ drwxr-xr-x. 2 root root    6 Nov  5 13:31 Downloads
 grep 选项 指定字符串 文件路径
 ```
 
+```shell
+# 反向搜索
+grep -v 字符串 
+# 匹配的同时输出行号
+grep -n 字符串
+# 统计含有匹配的行数
+grep -c 字符串
+# 指定多个匹配模式
+grep -e 模式1 -e 模式2 ...
+```
+
 **查找指定字符串在文件中的匹配内容**
 
 ```shell
@@ -1215,6 +1226,14 @@ operator:x:11:0:operator:/root:/sbin/nologin
 ```
 
 **递归查询的使用**
+
+### egrep
+
+- 支持POSIX扩展正则表达式。
+
+### fgrep 
+
+- 支持将匹配模式指定为用换行符分隔的一列固定长度的字符串
 
 ## awk
 
@@ -1853,7 +1872,7 @@ For more details see ps(1).
 
 **信号 默认15**
 
-![](c:notebook/pictures/Snipaste_2022-12-03_15-45-41.png =500x)
+![](c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2022-12-03_15-45-41.png =500x)
 
 ```shell
 # ps/top 找出进程号PID
@@ -2178,7 +2197,7 @@ daemon:x:2:2:daemon:/sbin:/sbin/nologin
 | x\{m,\}  | 重复字符x，至少m次，如：/0\{5,\}/匹配至少有5个0的行。                                      |
 | x\{m,n\} | 重复字符x，至少m次，不多于n次，如：/0\{5,10\}/匹配5~10个0的行。                             |
 
-### tar 打包/解包
+### tar 打包/解包 归档
 
 ```shell
 tar 选项 参数
@@ -2187,14 +2206,30 @@ tar 选项 参数
 **扩展名**
 
 - `.tar`
-- `.tar.gz`
+- `.tar.gz`：.tgz：gzip压缩的tar包
 - `.tar.bz2`
+
+**选项**
+
+```shell
+-c # 创建空的归档文件
+-f # 将指定的文件覆盖到归档文件中
+-r # 将指定的文件追加到归档文件中
+```
+
+**归档**：
+
+- 是指使用-c创建一个空的归档文件（不是文件的压缩）
+- 再通过-f 文件 的方式覆盖新的内容到该归档文件
+- 或使用-r 文件 的方式追加新的文件到该归档文件中
+
+<img src="c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-09_13-16-45.png" width="600"/>
 
 **常用组合**
 
 | 组合                                                        | 作用                    |
 | :---------------------------------------------------------- | :--------------------- |
-| tar -cvf 输出文件 目标文件                                   | 仅打包                  |
+| tar -cvf 归档文件 目标文件                                   | 仅打包                  |
 | tar -zcvf 输出文件 目标文件                                  | 打包，gzip压缩          |
 | tar -jcvf 输出文件 目标文件                                  | 打包，bzip2压缩         |
 | tar -ztvf 目标文件                                           | 查看压缩包文件列表       |
@@ -2212,7 +2247,7 @@ tar -zxvf /tmp/etc.tar.gz etc/passwd
 tar --exclude /home/*log -zcvf /tmp/etc2.tar.gz etc/passwd
 ```
 
-### zip / unzip 压缩/解压缩
+### zip / unzip 压缩/解压缩 .zip
 
 **格式**
 
@@ -2301,6 +2336,13 @@ Archive:  zipTest1.zip
 --------          -------  ---                            -------
     1070              924  14%                            4 files
 ```
+
+### gzip 压缩 .gz
+
+#### gzcat 查看压缩文件的内容
+
+#### gunzip 解压
+
 
 ### sort 对文件数据排序
 
@@ -5716,7 +5758,75 @@ END
 echo "Hello World"
 ```
 
-## 执行
+## shell
+
+### /bin/bash和/bin/sh
+
+**shell有默认的交互shell（通常是/bin/bash）和默认的系统shell（/bin/sh）**
+
+- 用户默认shell：默认的交互shell会在用户登录某个虚拟控制台终端或在GUI中运行终端仿真器时启动。
+- 系统默认shell sh：需要在启动时使用的系统shell脚本。
+
+### shell的父子关系
+
+- 用于登录某个虚拟控制器终端或在GUI中运行终端仿真器时所启动的默认交互shell是一个父shell
+- 当输入/bin/bash或其他的bash命令时，会创建一个新的子shell。**可以通过ps -f来查看进程中的shell。shell也是一个进程。**
+- 此时该父shell就是这个子shell的父进程。
+- **使用exit可以退出当前的子shell，在父shell中使用exit则是退出终端**
+- **还可以使用kill来杀死子shell**
+
+```shell
+[root@bogon test_dir]# /bin/bash
+[root@bogon test_dir]# ps -f
+UID          PID    PPID  C STIME TTY          TIME CMD
+root        5888    5887  0 13:03 pts/0    00:00:00 -bash
+root        6043    5888  1 13:47 pts/0    00:00:00 /bin/bash
+root        6062    6043  0 13:47 pts/0    00:00:00 ps -f
+```
+
+### ; 命令列表
+
+- 将命令按分号依次执行，不生成子shell
+
+```shell
+
+```
+
+#### ( ; ; ) 进程列表
+ 
+- 生成了一个子shell来将命令按括号内的分号依次执行。在执行之后，该子shell自动被杀死。
+
+```shell
+[root@bogon ~]# ( ps;ll;ifconfig;echo $BASH_SUBSHELL )
+
+# ..省略..
+
+1 # 表示有一个子shell生成
+```
+
+```shell
+[root@bogon ~]# (ll;echo $BASH_SUBSHELL;(ll; echo $BASH_SUBSHELL);echo $BASH_SUBSHELL)
+total 0
+drwxr-xr-x 2 root root 23 Mar  7 11:25 download
+drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
+1
+total 0
+drwxr-xr-x 2 root root 23 Mar  7 11:25 download
+drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
+2
+1
+```
+
+#### $BASH_SUBSHELL查看命令是否产生子shell
+
+- `echo $BASH_SUBSHELL` ，如果返回0则没有子shell产生，如果是1或更大的，则有子shell产生。
+
+
+#### {;}
+
+
+
+### 3种执行方式
 
 ```shell
 # 1.直接执行 需要可执行权限
