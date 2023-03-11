@@ -61,9 +61,14 @@
 
 ## `<img/>` 图片
 
-- src 图片文件的路径
-- width height 设置图片的大小缩放，注意看图片的分辨率，防止图片变形
-- alt 图片的提示，图片显示失败后，在图片位置显示的文字
+| 属性    | 描述                                         |
+| :----- | :------------------------------------------- |
+| src    | 图片的url                                     |
+| width  | 宽度                                         |
+| height | 高度                                         |
+| border | 边框的宽度，默认0                              |
+| alt    | 图片的提示，图片显示失败后，在图片位置显示的文字 |
+
 
 ## `<h></h>` 标题
 
@@ -311,16 +316,17 @@
 
 ### `<form></form>` 表单
 
-- action 用户在表单里填写的信息需要发送到服务器端，对于Java项目来说就是交给Java代码来处理。那么在页面上我们就必须正确填写服务器端的能够接收表单数据的地址。这个地址要写在form标签的action属性中。不写则仍然是提交到当前页面
-- method 用来定义提交表单的『请求方式』。method属性只有两个可选值：get或post
-    - get 默认，信息都显示在地址栏，且最多2KB
-    - post 
+```html
+<form action = "url" method = "get|post" name = "name" onSubmit = "" target = ""></form>
+```
 
-### 表单的下级标签
+### 通用属性
 
-#### 通用属性
+#### action  服务器接收地址
 
-##### name 表单名称
+- 填写服务器端能够接收表单数据的地址。不写则仍然是提交到当前页面。
+
+#### name 表单名称
 
 **name 必须要指定，否则这个文本框的数据将来是不会发送给服务端的。**
 
@@ -329,27 +335,22 @@
 - 以下显示的都是name具有属性的，没有name属性的不显示（不发送）
 <img src="C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-11-17_21-08-32.png" width="400"/> 
 
-##### value
+#### value 值
 
 **value 发送给服务器的值**
 
 - `<textarea></textarea>`的value值是开始和结束标签之间的区域。 
 
-##### onSubmit 指定党用户单击提交按钮时触发事件
+#### onSubmit 指定党用户单击提交按钮时触发事件
 
-##### method 指定数据传输到服务器的方式
+#### method 指定数据传输到服务器的方式
 
-- 有get和post两种方式
+**有get和post两种方式**
 
-###### get
+- **get**  默认，将输入的数据追加到action指定的地址后面，且最多2KB
+- **post** 会将输入的数据按照HTTP协议中的post传输方式传送到服务器。
 
-- get表示将输入的数据追加在action指定的地址后面，并传送到服务器。
-
-###### post
-
-- post会将输入的数据按照HTTP协议中的post传输方式传送到服务器。
-
-##### target 指定输入数据结果显示的窗口
+#### target 指定输入数据结果显示的窗口
 
 **该属性可以设置为：**
 
@@ -358,7 +359,42 @@
 - _parent 在父级窗口打开，一般使用框架页时使用。
 - _top 在浏览器的整个窗口中打开，忽略任何框架。
 
-#### `<input/>` 输入 
+### `<input/>` 输入 
+
+**type属性的值**
+
+| 属性值    | 描述     |
+| :------- | :------- |
+| text     | 文本框   |
+| password | 密码域   |
+| file     | 文件域   |
+| radio    | 单选按钮 |
+| checkbox | 复选框   |
+| submit   | 提交按钮 |
+| reset    | 重置按钮 |
+| button   | 普通按钮 |
+| hidden   | 隐藏域   |
+| image    | 图像域   |
+
+**属性**
+
+| 属性             | 描述                           |                      属性值                       |                                    type属性                                    |
+| :-------------- | :---------------------------- | :-----------------------------------------------: | :----------------------------------------------------------------------------: |
+| type            | 指定输入字段的类型              |                         -                         |                                       -                                        |
+| disabled        | 指定输入字段不可用（变为灰色）。 |                 null 或 disabled                  |                                       -                                        |
+| checked         | 指定输入字段是否处于被选中状态。 |                  null 或 checked                  |                               radio 和 checkbox                                |
+| maxlength       | 指定指定可输入文字的个数。       |                  默认没有字符限制                  |                                text 和 password                                |
+| readonly        | 指定字段是否只读。              |                 null 或 readonly                  |                                                                                |
+| size            | 指定输入字段的宽度。            | text和password以文字个数为单位。其他时，以像素为单位 |                                       -                                        |
+| src             | 指定图片的url。                 |                         -                         |                                     image                                      |
+| width 和 height | 指定输入字段的宽和高。          |                         -                         |                                     image                                      |
+| usemap          | 为图片设置热点地图              |      URI，URI格式为："#+`<map>`标记的name值"       |                                     image                                      |
+| alt             | 指定当图片无法显示时显示的文字   |                         -                         |                                     image                                      |
+| name            | 输入指定字段的名称              |                         -                         |                                       -                                        |
+| value           | 指定输入字段默认的数据值         |     checkbox和radio不可忽略该属性；其他可忽略。     | button、reset和submit指定的是按钮上的文字；checkbox和radio指定的是数据项选定时的值 |
+
+
+**示例：**
 
 - `<input type="text"/>` 文本框
 - `<input type="password">` 密码框
@@ -377,22 +413,37 @@
 - `<input type="hidden" name="userId" value="2233"/>` 表单隐藏域
     - 通过表单隐藏域设置的表单项不会显示到页面上，用户看不到。但是提交表单时会一起被提交。用来设置一些需要和表单一起提交但是不希望用户看到的数据
 
-<img src="C:/users/zjk10/onedrive/notebook/pictures/" width="500"/>
-<img src="C:/users/zjk10/onedrive/notebook/pictures/" width="500"/>
-<img src="C:/users/zjk10/onedrive/notebook/pictures/" width="500"/>
-
-#### `<select></select>` 下拉选项
+### `<select></select>` 下拉选项
 
 - `<select></select>`  
    - selected 默认选中 
 - `<option></option>` 选项
 
-#### `<textarea></textarea>` 多行文本框/文本域 
+### `<textarea></textarea>` 多行文本框/文本域 
 
 - `<textarea></textarea>` 
     - rows 默认显示n行
     - cols 默认显示n列
 - 其value值就是开始`<textarea>`和结束`</textarea>`标签之间的内容
+
+**属性**
+
+| 属性      | 描述                               |
+| :------- | :-------------------------------- |
+| name     | 用于指定多行文本的名称              |
+| cols     | 用于指定多行文本框显示的列数（宽度） |
+| rows     | 用于指定多行文本框显示的行数（高度） |
+| disabled | 用于指定当前多行文本框不可用（灰色） |
+| readonly | 用于指定当前多行文本框为只读         |
+| wrap     | 用于设置多行文本框的文字是否自动换行 |
+
+**wrap属性的可选值**
+
+| 可选值 | 描述                                                                                      |
+| :----- | :--------------------------------------------------------------------------------------- |
+| hard   | 默认，表示自动换行，如果文字超过cols属性所指的列数就自动换行，并且提交到服务器时换行符自动被提交 |
+| soft   | 表示自动换行，如果文字超过cols属性所指的列数就自动换行，但提交到服务器时换行符不被提交          |
+| off    | 表示不自动换行，如果想让文字换行，只能按下Enter回车强制换行                                   |
 
 ```html
 <html>
@@ -423,6 +474,29 @@
     </body>
 </html>
 ```
+
+# HTML5 新增
+
+## `<section></section>` 
+
+- `<section></section>`元素表示页面中的一个区域。例如页眉、章节、页脚等部分。可以和h1、h2等元素结合使用，标示文档结构。
+
+## `<acticle></acticle>`
+
+- `<acticle></acticle>`表示页面中一块与上下文不相关的独立内容。例如博客中的一篇文章、评论等。
+- 该元素通常有自己的标题、脚注等内容
+
+## `<header></header>` 
+
+- 表示页面中一个内容区域或整个页面的标题。
+
+## `<footer></footer>`
+
+- 表示整个页面或页面中一个内容区域的脚注。
+
+## `<aside></aside>`
+
+- 表示当前页面或文字的附属信息部分。
 
 # frame和iframe
 
