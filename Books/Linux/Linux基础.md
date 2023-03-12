@@ -569,9 +569,7 @@ p|粘贴|
 | Ctrl + s     | 挂起当前Shell，不接收任何输入                                                                               |
 | Ctrl + q     | 重新启用挂起的Shell，接收用户输入                                                                           |
 
-
-
-**自动补齐 Tab键**
+### 通配符
 
 | 通配符 | 说明                                       |
 | :----- | :----------------------------------------- |
@@ -579,6 +577,8 @@ p|粘贴|
 | *      | 匹配任意多个字符                            |
 | []     | 或，如[123]表示123中的任意一个               |
 | -      | 代表一个范围：如a-z表示26个小写字母中任意一个 |
+
+### Tab制表符 自动补全
 
 ## alias命令 别名(自定义命令)
 
@@ -588,12 +588,14 @@ alias
 
 - 用来设置指令的别名。使用该命令可以将一些较长的命令进行简化。
 - 使用alias时，用户必须使用单引号''将原来的命令引起来，防止特殊字符导致错误。
-
+- 一般的命令别名只能在当前的shell中使用，或者在当前shell的脚本中使用。一个别名仅在他所被定义的shell进程中才有效，除非被设置为永久的。
 
 ### 查看系统已经设置的自定义命令(别名)
 
 ```shell
 alias
+或
+alias -p
 ```
 
 ```shell
@@ -673,7 +675,6 @@ vim ~/.bashrc
 source ~/.bashrc
 ```
 
-
 ```shell
 [root@localhost ~]# vim ~/.bashrc
 
@@ -734,6 +735,11 @@ fi
 
 ## history命令 历史命令的使用
 
+- 默认最大保存1000条历史命令
+- 命令历史记录被保存在隐藏文件.bash_history中，位于用户的主目录中。bash命令的历史记录先放在内存中，当shell退出时才被写入到历史文件中。
+   - history -a 可以提前将历史命令缓冲区中命令写入历史命令文件（.bash_history）中
+   - 当打开多个终端时，使用**history -a**将命令历史记录写入.bash_history中后，其他终端的历史记录不会自动更新，需要使用使用**history -n**来强制重新读取.bash_history文件。因为 **.bash_history文件只有在第一个终端被打开时才会被读取** 。
+   
 **或者上下光标**
 
 ```shell
@@ -847,6 +853,10 @@ anaconda-ks.cfg  Desktop  Documents  Downloads  initial-setup-ks.cfg  Music  Pic
 ls
 anaconda-ks.cfg  Desktop  Documents  Downloads  initial-setup-ks.cfg  Music  Pictures  Public  Templates  Videos
 ```
+
+### $HISTSIZE  设置最大历史记录数
+
+- 默认最大1000条
 
 ## 管道与重定向
 
@@ -1460,7 +1470,7 @@ ntsysv # 查看crond服务是否已经设置为开机启动
 chkconfig –level 35 crond on # 加入开机自动启动
 ```
 
-## Tab制表符 自动补全
+
 
 # 系统管理
 
@@ -1830,13 +1840,13 @@ Usage:
 For more details see ps(1).
 ```
 
-**从前台进程切换到后台**
+#### bg  从前台进程切换到后台
 
 1. Ctrl + Z 让正在执行的前台进程暂停
 2. `jobs` 获取当前的后台作业号
 3. `bg 作业号` 将进程放入后台执行
 
-**从后台到前台**
+#### fg 从后台到前台
 
 1. `jobs` 获取当前的后台作业号
 2. `fg 作业号` 将进程放入前台执行
@@ -1858,6 +1868,8 @@ For more details see ps(1).
 [root@bogon ~]# fg 1
 #前台显示。。。
 ```
+
+#### 子shell的使用
 
 ### kill / killall 杀死进程
 
@@ -5769,11 +5781,12 @@ echo "Hello World"
 
 ### shell的父子关系
 
-- 用于登录某个虚拟控制器终端或在GUI中运行终端仿真器时所启动的默认交互shell是一个父shell
-- 当输入/bin/bash或其他的bash命令时，会创建一个新的子shell。**可以通过ps -f来查看进程中的shell。shell也是一个进程。**
-- 此时该父shell就是这个子shell的父进程。
+- 用于登录某个虚拟控制器终端或在GUI中运行终端仿真器时所启动的默认交互shell是一个父shell.
+- 当输入/bin/bash或其他的bash命令时，会创建一个新的子shell。此时该父shell就是这个子shell的父进程。**可以通过ps -f来查看进程中的shell。shell也是一个进程。**
 - **使用exit可以退出当前的子shell，在父shell中使用exit则是退出终端**
 - **还可以使用kill来杀死子shell**
+- **通过ps -l来查看当前shell的进程号**
+- 创建子shell的代价较高，还需要为该子shell创建出新的环境。
 
 ```shell
 [root@bogon test_dir]# /bin/bash
@@ -5795,6 +5808,7 @@ root        6062    6043  0 13:47 pts/0    00:00:00 ps -f
 #### ( ; ; ) 进程列表
  
 - 生成了一个子shell来将命令按括号内的分号依次执行。在执行之后，该子shell自动被杀死。
+- 在括号内的命令都是子shelll执行的。
 
 ```shell
 [root@bogon ~]# ( ps;ll;ifconfig;echo $BASH_SUBSHELL )
@@ -5825,7 +5839,6 @@ drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
 #### {;}
 
 
-
 ### 3种执行方式
 
 ```shell
@@ -5842,6 +5855,105 @@ sh test.sh
 . test.sh
 source test.sh
 # 子shell中设置的当前变量，父 shell 是不可见的
+```
+
+### 对前台或后台进程的管理
+
+#### sleep 睡眠
+
+- sleep接受一个进程睡眠时间的参数。
+- 加上&可以将命令置入后台
+- 没有置入后台时，睡眠就是在当前的CLI进行睡眠，直到该进程睡眠结束才可以在该DLI上输入下一个命令。
+- 当睡眠结束时，如果是在后台的进程，会直接恢复到前台（可能有时时间不准确）。
+
+```shell
+[root@bogon ~]# /bin/bash
+[root@bogon ~]# ps -f
+UID         PID   PPID  C STIME TTY          TIME CMD
+root      21324  21313  0 10:01 pts/1    00:00:00 -bash
+root      29622  21324  1 10:15 pts/1    00:00:00 /bin/bash
+root      29659  29622  0 10:15 pts/1    00:00:00 ps -f
+# 使当前的子shell在后台睡眠300s
+[root@bogon ~]# sleep 300& 
+[1] 29660
+[root@bogon ~]# jobs -l
+[1]+ 29660 Running                 sleep 300 &
+```
+
+##### 将进程列表置入后台
+
+- 将sleep加入到进程列表中即可
+
+```shell
+[root@bogon ~]# (sleep 5 ; echo $BASH_SUBSHELL ; sleep 5)
+# 睡眠5s 子shell
+1
+# 睡眠5s 子shell
+```
+
+#### coproc 协程
+
+- 协程可以同时处理两件事情，在后台生成一个子shell，并在这个子shell中执行命令。
+- 除了创建子shell外，协程基本上就是将命令置入后台。（相当于启动一个后台作业）
+
+```shell
+# 默认名称
+coproc 命令
+# 自定义进程名 
+coproc 进程名 { 命令; 命令; }
+```
+
+```shell
+[root@bogon ~]# coproc sleep 10
+[1] 29834
+[root@bogon ~]# jobs
+[1]+  Running                 coproc COPROC sleep 10 &
+[root@bogon ~]# ps -f
+UID         PID   PPID  C STIME TTY          TIME CMD
+root      21324  21313  0 10:01 pts/1    00:00:00 -bash
+root      29843  21324  0 10:27 pts/1    00:00:00 ps -f
+[1]+  Done                    coproc COPROC sleep 10
+```
+
+```shell
+[root@bogon ~]# coproc my_job { sleep 10; echo "已经睡眠10s"; }
+[1] 29888
+# 由于是后台进程；echo没有输出
+[root@bogon ~]# 
+[1]+  Done                    coproc my_job { sleep 10; echo "已经睡眠10s"; }
+```
+
+### 内建命令和外部命令
+
+- **内建命令**：不需要子进程来执行，已经和shell编译成一体，作为shell工具的组成部分。不需要借助外部程序文件来执行。
+- **外部命令**：是存在于bash shell之外的程序，并不是shell程序的一部分。外部命令执行时会创建一个子shell（**衍生**）。外部命令通常位于/bin、/usr/bin、/usr/sbin中。
+
+#### type 查看是否为内建命令
+
+- `type -a` 显示所有的实现方式
+
+```shell
+# 内建命令
+[root@bogon ~]# type cd
+cd is a shell builtin
+# 外部命令
+[root@bogon ~]# type ps
+ps is hashed (/usr/bin/ps)
+# type -a 显示所有的实现方式
+[root@bogon ~]# type -a cd
+cd is a shell builtin
+cd is /usr/bin/cd
+```
+
+#### which 显示外部命令的文件
+
+- 对于有多种方式实现的命令，如果需要指定为外部命令的方式实现，可以通过which找到相应的文件，直接执行该文件即可。
+
+```shell
+[root@bogon ~]# which cd
+/usr/bin/cd
+[root@bogon ~]# which ps
+/usr/bin/ps
 ```
 
 ## 引号
@@ -5871,9 +5983,23 @@ tar -czvf /root/Test/log-`date +%Y%m%d`.tar.gz /var/log
 current position is  /root/Test
 ```
 
-## 变量
+## 环境变量
 
-### 系统变量
+- 环境变量存储有关shell会话和工作环境的信息。允许用户在内存中存储数据。
+
+### 全局变量（系统变量）和局部变量
+
+- 全局环境变量对于shell会话和所有生成的子shell都是可见的。局部变量只对创建该局部变量的shell可见。
+- 对于父shell创建的局部变量，子shell是不可见的。子shell创建的局部变量，父shell也不可见。
+- 当在一个shell中创建了局部变量，再加入到其子shell中，再返回到那个shell，局部变量仍然存在。而一旦退出该shell，局部变量就不可用。
+
+|  -   |          全局环境变量          |     局部环境变量      |
+| ---- | :---------------------------: | :------------------: |
+| 可见 | 对shell会话和所有生成的子shell | 创建该局部变量的shell |
+| 名称 |             大写              |         小写         |
+| 查看 |        env 或 printenv        |       printenv       |
+
+**系统环境变量**
 
 | 系统变量     | 说明                                                                          |
 | :---------- | :--------------------------------------------------------------------------- |
@@ -5888,14 +6014,14 @@ current position is  /root/Test
 | $PS1        | 基本提示符                                                                    |
 | $RANDOM     | 随机数的变量                                                                  |
 
-### 自定义变量
+### 用户定义变量
 
 #### 定义变量 
 
 **变量定义规则**
 
 1. 变量名称可以由字母、数字和下划线组成，但是不能以数字开头，环境变量名建议大写。
-2. 等号两侧不能有空格
+2. **等号两侧不能有空格**
 3. 在 bash 中，变量默认类型都是字符串类型，无法直接进行数值运算。
 4. 变量的值如果有空格，需要使用双引号或单引号括起来。
 
@@ -5911,7 +6037,7 @@ declare 变量名=变量值
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-17_17-10-06.png =400x)
 
-##### set 
+##### set 赋值
 
 - set命令 作用主要是显示系统中已经存在的shell变量，以及设置shell变量的新变量值。
 - 使用set更改shell特性时，符号“+”和“-”的作用分别是打开和关闭指定的模式。
@@ -5936,7 +6062,7 @@ unset 变量
 
 语法
 
-![](c:/notebook./pictures/Snipaste_2022-12-17_17-05-03.png =300x)
+![](c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2022-12-17_17-05-03.png =300x)
 
 ```shell
 readonly 变量名=变量值
@@ -5946,6 +6072,7 @@ readonly 变量名=变量值
 
 - export命令 用于将shell变量输出为环境变量，或者将shell函数输出为环境变量。
 - 一个变量创建时，它不会自动地为在它之后创建的shell进程所知。而命令export可以向后面的shell传递变量的值。当一个shell脚本调用并执 行时，它不会自动得到原为脚本（调用者）里定义的变量的访问权，除非这些变量已经被显式地设置为可用。export命令可以用于传递一个或多个变量的值到任何后继脚本。
+- 修改子shell中全局变量的值，不会影响到父shell中该全局变量的值，只会影响该子shell创建的子shell的全局变量的值。
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-17_17-07-19.png =450x)
 
@@ -6047,7 +6174,16 @@ $@  3
 
 ### 相关命令
 
+#### `$`符号的使用
+
+- 如果涉及到变量的使用，使用`$`
+- 如果是操作变量，不使用`$`，printenv也不使用`$`。
+
 #### echo
+
+```shell
+echo $变量
+```
 
 #### printf
 
@@ -6069,6 +6205,23 @@ echo "输出：$value1"
 - 如果使用env命令在新环境中执行指令时，会因为没有定义环境变量“PATH”而提示错误信息“such file or directory”。此时，用户可以重新定义一个新的“PATH”或者使用绝对路径。
 
 ![](C:/Users/zjk10/OneDrive/NoteBook/pictures/Snipaste_2022-12-17_17-13-00.png =500x)
+
+##### env、printenv、set的区别
+
+**set**
+
+- set会显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量、用户定义变量。
+- 同时对输出的结果按照字母顺序来排序。
+
+**env**
+
+- 不对输出结果排序，不输出局部变量和用户定义变量
+- 查看全局变量时，使用env或printenv
+
+**printenv**
+
+- 不对输出结果排序，不输出局部变量和用户定义变量
+- 查看个别环境变量时，使用printenv而不是env
 
 #### locale 和 localectl
 
