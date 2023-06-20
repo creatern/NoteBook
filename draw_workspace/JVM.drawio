@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-06-19T13:53:36.277Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="gErRvLQsMABe7k3OmvVp" version="21.2.8" type="device" pages="20">
+<mxfile host="Electron" modified="2023-06-20T13:31:43.726Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="_iuet1G46QY-e0U7gx3o" version="21.2.8" type="device" pages="21">
   <diagram id="XW1gBk-q0uhA0YKLkGZS" name="StringTable的G1去重">
     <mxGraphModel dx="941" dy="644" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -2044,6 +2044,38 @@
         </mxCell>
         <mxCell id="CC91IQgXmxPfzatN3_sP-8" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;fontStyle=1;fillColor=none;strokeColor=#FF1100;" parent="1" vertex="1">
           <mxGeometry x="620" y="423" width="60" height="17" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="Hd6781xhiEoKOMv49M7-" name="数组操作指令">
+    <mxGraphModel dx="649" dy="444" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-1" value="0 bipush 10&#xa;&amp;nbsp;2 newarray 10 (int)&#xa;&amp;nbsp;4 astore_1&#xa;&amp;nbsp;5 aload_1&#xa;&amp;nbsp;6 iconst_3&#xa;&amp;nbsp;7 bipush 20&#xa;&amp;nbsp;9 iastore&#xa;10 getstatic #7 &lt;java lang=&quot;&quot; system.out=&quot;&quot; :=&quot;&quot; ljava=&quot;&quot; io=&quot;&quot; printstream;=&quot;&quot; style=&quot;font-size: 13px;&quot;&gt;&#xa;13 aload_1&#xa;14 iconst_1&#xa;15 iaload&#xa;16 invokevirtual #13 &lt;java io=&quot;&quot; printstream.println=&quot;&quot; :=&quot;&quot; (i)v=&quot;&quot; style=&quot;font-size: 13px;&quot;&gt;&#xa;19 bipush 10&#xa;21 newarray 4 (boolean)&#xa;23 astore_2&#xa;24 aload_2&#xa;25 iconst_1&#xa;26 iconst_1&#xa;27 bastore&#xa;28 return&lt;/java&gt;&lt;/java&gt;" style="text;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="460" y="120" width="230" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-3" value="&lt;div style=&quot;font-size: 12px;&quot;&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;int[] &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;intArray &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;= new int&lt;/span&gt;[&lt;span style=&quot;font-size: 12px;&quot;&gt;10&lt;/span&gt;];&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;intArray&lt;/span&gt;[&lt;span style=&quot;font-size: 12px;&quot;&gt;3&lt;/span&gt;] &lt;span style=&quot;font-size: 12px;&quot;&gt;= &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;20&lt;/span&gt;;&lt;br style=&quot;font-size: 12px;&quot;&gt;System.out.&lt;span style=&quot;font-size: 12px;&quot;&gt;println&lt;/span&gt;(&lt;span style=&quot;font-size: 12px;&quot;&gt;intArray&lt;/span&gt;[&lt;span style=&quot;font-size: 12px;&quot;&gt;1&lt;/span&gt;]);&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;boolean[] &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;arr &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;= new boolean&lt;/span&gt;[&lt;span style=&quot;font-size: 12px;&quot;&gt;10&lt;/span&gt;];&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;arr&lt;/span&gt;[&lt;span style=&quot;font-size: 12px;&quot;&gt;1&lt;/span&gt;] &lt;span style=&quot;font-size: 12px;&quot;&gt;= true&lt;/span&gt;;&lt;/div&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontColor=default;labelBackgroundColor=none;fontFamily=Lucida Console;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="170" y="160" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=-0.004;entryY=0.332;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="gYJsKjh4YEaplBEdLPbF-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="190" as="sourcePoint" />
+            <mxPoint x="410" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-6" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;fontStyle=1;fillColor=none;strokeColor=#FF1100;" vertex="1" parent="1">
+          <mxGeometry x="459" y="174" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-7" value="索引" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="568" y="187" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-8" value="值" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="564" y="201" width="29" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gYJsKjh4YEaplBEdLPbF-10" value="数组引用" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="571" y="217" width="46" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
