@@ -212,9 +212,37 @@
 
 # Linux
 
-## [Linux基础](./Books/Linux/Linux基础.md)
+## 基础
 
-## [Linux内核](./Books/Linux/Linux内核.md)
+### [安装配置](./Books/Linux/基础/安装配置.md)
+
+### [vim](./Books/Linux/基础/vim.md)
+
+### [基础命令](./Books/Linux/基础/基础命令.md)
+
+### [文件管理](./Books/Linux/基础/文件管理.md)
+
+### [应用程序管理](./Books/Linux/基础/应用程序管理.md)
+
+### [用户管理](./Books/Linux/基础/用户管理.md)
+
+### [系统管理](./Books/Linux/基础/系统管理.md)
+
+### [日志系统](./Books/Linux/基础/日志系统.md)
+
+### [防火墙管理](./Books/Linux/基础/防火墙管理.md)
+
+### [网络管理](./Books/Linux/基础/网络管理.md)
+
+### [网络共享](./Books/Linux/基础/网络共享.md)
+
+### [磁盘管理](./Books/Linux/基础/磁盘管理.md)
+
+### [服务安装配置](./Books/Linux/基础/服务安装配置.md)
+
+### [Shell](./Books/Linux/基础/Shell.md)
+
+## [内核](./Books/Linux/Linux内核.md)
 
 # 计算机
 
