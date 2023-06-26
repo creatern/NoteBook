@@ -12,36 +12,37 @@
 
 ## 环境配置
 
-| 环境配置变量 | 路径                                  |
-| ------------ | ------------------------------------- |
-| JAVA_HOME    | D:\Java\jdk-18.0.1.1                  |
-| MAVEN_HOME   | D:\apache-maven-3.9.0                 |
-| Path         | %JAVA_HOME%\bin<br />%MAVEN_HOME%\bin |
+| 环境配置变量     | 路径                                    |
+| ---------- | ------------------------------------- |
+| JAVA_HOME  | D:\Java\jdk-18.0.1.1                  |
+| MAVEN_HOME | D:\apache-maven-3.9.0                 |
+| Path       | %JAVA_HOME%\bin<br />%MAVEN_HOME%\bin |
 
 ## 基础概念
 
 ### 仓库
 
 - 仓库：存储资源，包含各种jar包。
+
 - Maven中央仓库：[mvn](https://mvnrepository.com/)。
 
 - 获取jar包的方式：中央仓库、本地仓库、私服。
 
-| 仓库     | 说明                               |
-| -------- | ---------------------------------- |
-| 本地仓库 |                                    |
+| 仓库   | 说明                   |
+| ---- | -------------------- |
+| 本地仓库 |                      |
 | 远程仓库 | 中央仓库<br />私服：版权和访问速度 |
 
 ### 坐标
 
 - 坐标：描述仓库中资源的位置。
 
-| 坐标的主要组成 | 说明                                                 |
-| -------------- | ---------------------------------------------------- |
-| groupid        | 当前Maven项目隶属组织名称：org.mybatis等（域名反写） |
-| artifactid：   | 当前Maven项目名称：通常是模块名称：CRM、SMS等        |
-| version        | 当前项目版本号                                       |
-| packaging      | 该项目的打包方式                                     |
+| 坐标的主要组成     | 说明                                 |
+| ----------- | ---------------------------------- |
+| groupid     | 当前Maven项目隶属组织名称：org.mybatis等（域名反写） |
+| artifactid： | 当前Maven项目名称：通常是模块名称：CRM、SMS等       |
+| version     | 当前项目版本号                            |
+| packaging   | 该项目的打包方式                           |
 
 <img src="../../pictures/Snipaste_2023-03-16_21-09-16.jpg" width="800"/>  
 
@@ -49,10 +50,10 @@
 
 - Maven配置文件：conf/settings.xml。
 
-| setting     | 说明                                                         |
-| ----------- | ------------------------------------------------------------ |
+| setting   | 说明                                                 |
+| --------- | -------------------------------------------------- |
 | 全局setting | 当前计算器中Maven的公共配置。<br />maven安装路径的conf/settings.xml |
-| 用户setting | 当前用户的配置                                               |
+| 用户setting | 当前用户的配置                                            |
 
 ## 本地仓库配置
 
@@ -72,7 +73,7 @@
 
 ## 远程仓库配置
 
-### 中央仓库 cetral
+### 中央仓库 central
 
 - pom-4.0.0.xml文件：在lib目录下随便找一个jar包，用WinRAR打开，并在WinRAR回到上一级目录，搜索`pom*.*`找到不同的那个，并打开即可发现pom-4.0.0.xml。
 
@@ -116,17 +117,17 @@
 ## 标准Maven项目
 
 1. 标准Maven项目的文件结构：
-
 - 项目 --> src 
-
+  
   - main 主目录
+    
     - java Java文件
     - resources 静态资源
-
+  
   - test  测试目录
+    
     - java Java测试文件
     - resources 静态资源
-
 2. src同级目录配置pom.xml：
 
 ```xml
@@ -238,8 +239,6 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 </project>
 ```
 
-
-
 <img src="../../pictures/Snipaste_2023-03-17_12-12-47.jpg" width="800"/>    
 
 ### 导入Maven项目
@@ -254,16 +253,16 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 
 <img src="../../pictures/Snipaste_2023-03-17_11-10-46.jpg" width="1000"/>
 
-| 依赖分类             | 说明                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| 直接依赖             | 导入仓库中的坐标。                                           |
+| 依赖分类       | 说明                                                        |
+| ---------- | --------------------------------------------------------- |
+| 直接依赖       | 导入仓库中的坐标。                                                 |
 | 依赖传递（间接依赖） | 将另一个项目的坐标复制到当前项目的dependencies中作为dependency；可以使用另一个项目中的依赖。 |
 
 - 依赖冲突问题：
 
-| 解决方式 | 说明                                 |
-| -------- | ------------------------------------ |
-| 路径优先 | 层级越深，优先级越低。               |
+| 解决方式 | 说明                    |
+| ---- | --------------------- |
+| 路径优先 | 层级越深，优先级越低。           |
 | 声明优先 | om.xml中配置的位置先后，在上的优先。 |
 
 ## 可选依赖 optional
@@ -299,19 +298,18 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 - scope：设定依赖的作用范围。
   - 依赖jar包默认情况下可以在任何地方使用。
 
+| 作用范围   | 说明               |
+| ------ | ---------------- |
+| main   | 主程序范围有效 main目录下  |
+| test   | 测试程序范围有效 test目录下 |
+| 是否参与打包 | package指令范围      |
 
-| 作用范围     | 说明                        |
-| ------------ | --------------------------- |
-| main         | 主程序范围有效 main目录下   |
-| test         | 测试程序范围有效 test目录下 |
-| 是否参与打包 | package指令范围             |
-
-| scope           | 主代码 | 测试代码 | 打包 |
-| :-------------- | :----: | :------: | :--: |
-| compile（默认） |   √    |    √     |  √   |
-| test            |        |    √     |      |
-| provided        |   √    |    √     |      |
-| runtime         |        |          |  √   |
+| scope       | 主代码 | 测试代码 | 打包  |
+|:----------- |:---:|:----:|:---:|
+| compile（默认） | √   | √    | √   |
+| test        |     | √    |     |
+| provided    | √   | √    |     |
+| runtime     |     |      | √   |
 
 ```xml
 <dependency>
@@ -325,11 +323,11 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 - 依赖范围具有传递性：
 
 | 间接依赖、直接依赖 | compile | test | provided | runtime |
-| :----------------: | :-----: | :--: | :------: | :-----: |
-|      compile       | compile | test | provided | runtime |
-|        test        |         |      |          |         |
-|      provided      |         |      |          |         |
-|      runtime       | runtime | test | provided | runtime |
+|:---------:|:-------:|:----:|:--------:|:-------:|
+| compile   | compile | test | provided | runtime |
+| test      |         |      |          |         |
+| provided  |         |      |          |         |
+| runtime   | runtime | test | provided | runtime |
 
 ## 父级 parent
 
@@ -351,19 +349,20 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 
 > 执行test：会先执行compile等命令。
 
-| 命令        | 功能           | 说明                                                         |
-| :---------- | :------------- | ------------------------------------------------------------ |
-| mvn compile | 编译           | 在项目下创建新的内容：<br />`E:\project-java\target`         |
-| mvn clean   | 清理           |                                                              |
-| mvn test    | 测试           | 存放测试报告日志的内容：<br />`E:\project-java\target\surefire-reports` |
-| mvn package | 打包           | 打包的jar包放在项目同级目录下                                |
-| mvn install | 安装到本地仓库 | 由groupid和version来确定存放在仓库的位置                     |
+| 命令          | 功能      | 说明                                                          |
+|:----------- |:------- | ----------------------------------------------------------- |
+| mvn compile | 编译      | 在项目下创建新的内容：<br />`E:\project-java\target`                   |
+| mvn clean   | 清理      |                                                             |
+| mvn test    | 测试      | 存放测试报告日志的内容：<br />`E:\project-java\target\surefire-reports` |
+| mvn package | 打包      | 打包的jar包放在项目同级目录下                                            |
+| mvn install | 安装到本地仓库 | 由groupid和version来确定存放在仓库的位置                                 |
 
 # build
 
 ## 插件 plugins
 
 - 插件与生命周期内的阶段绑定：在执行到对应生命周期时，执行对应的插件功能。
+  
   - Maven默认在各个生命周期上绑定有预设的功能。
 
 - 插件可以自定义其他功能。
@@ -410,4 +409,3 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 # 分模块开发与设计
 
 ## 模块拆分思想
-
