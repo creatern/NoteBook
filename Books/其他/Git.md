@@ -4,17 +4,17 @@
 
 > Linux命令和Git命令通用。
 
-| 命令                                  | 说明                      |
-| :----------------------------------- | :------------------------ |
-| git config --global user.name 用户名  | 设置用户名 (设置一次即可)   |
+| 命令                                 | 说明              |
+|:---------------------------------- |:--------------- |
+| git config --global user.name 用户名  | 设置用户名 (设置一次即可)  |
 | git config --global user.email 邮箱名 | 设置用户签名 (设置一次即可) |
-| git init                             | 初始化本地库               |
-| git status                           | 查看本地库状态             |
-| git add 文件名                        | 添加到暂存区               |
-| git -rm --cached 文件 | 从暂存区移除 |
-| git commit [-m "日志信息"] 文件名     | 提交到本地库               |
-| git reflog                           | 查看历史记录               |
-| gir reset --hard 版本号               | 版本穿梭                   |
+| git init                           | 初始化本地库          |
+| git status                         | 查看本地库状态         |
+| git add 文件名                        | 添加到暂存区          |
+| git -rm --cached 文件                | 从暂存区移除          |
+| git commit [-m "日志信息"] 文件名         | 提交到本地库          |
+| git reflog                         | 查看历史记录          |
+| gir reset --hard 版本号               | 版本穿梭            |
 
 ## 注册、初始化
 
@@ -49,13 +49,13 @@ Initialized empty Git repository in G:/GitDemo/.git/
 
 - 命令别名：简化git命令的使用。文件位置：用户目录下的.gitconfig。
 
-| 操作                                       | 语句                                                         |
-| ------------------------------------------ | ------------------------------------------------------------ |
-| 新建全局命令别名                           | `git config --global alias.命令别名 '原git命令'`             |
-| 删除全局命令别名                           | `git config --global --unset alias.命令别名`                 |
+| 操作                       | 语句                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| 新建全局命令别名                 | `git config --global alias.命令别名 '原git命令'`                                      |
+| 删除全局命令别名                 | `git config --global --unset alias.命令别名`                                       |
 | 新建局部命令别名<br />（只对当前仓库有效） | `git config --local alias.命令别名 '原git命令'`<br />`git config alias.命令别名 '原git命令'` |
-| 删除所有全局别名                           | `git config --global --remove-section alias`                 |
-| 删除所有局部别名                           | `git config --remove-section alias`                          |
+| 删除所有全局别名                 | `git config --global --remove-section alias`                                   |
+| 删除所有局部别名                 | `git config --remove-section alias`                                            |
 
 - 命令别名执行多条命令：需要shell函数的方式。（Linux）
   - `!`->以shell执行，可以使用分号分割语句。
@@ -68,18 +68,16 @@ git config --global alias.book '!f(){git add --all;git commit -m "$@";git push b
 
 ```
 [alias]
-	book = "!f(){git add --all;git commit -m "$1";git push book;};f"
+    book = "!f(){git add --all;git commit -m "$1";git push book;};f"
 ```
-
-
 
 # 历史版本
 
-| 命令                    | 说明            |
-| :---------------------- | :-------------- |
-| git reflog              | 查看版本信息     |
-| git log                 | 查看版本详细信息 |
-| git reset --hard 版本号 | 版本穿梭         |
+| 命令                   | 说明       |
+|:-------------------- |:-------- |
+| git reflog           | 查看版本信息   |
+| git log              | 查看版本详细信息 |
+| git reset --hard 版本号 | 版本穿梭     |
 
 ## 版本指针的移动
 
@@ -127,7 +125,7 @@ $ git commit -m "second Commit 日志信息" hello.txt
 warning: in the working copy of 'hello.txt', LF will be replaced by CRLF the next time Git touches it
 [master fb9be28] second Commit 日志信息
  1 file changed, 2 insertions(+)
- 
+
 zjk10@DESKTOP-HSVIOTH MINGW64 /g/GitDemo (master)
 $ git reflog
 fb9be28 (HEAD -> master) HEAD@{0}: commit: second Commit 日志信息
@@ -189,11 +187,13 @@ fb9be28 (HEAD -> master) HEAD@{1}: commit: second Commit 日志信息
 ```
 
 - 查看指针文件（隐藏文件）：
-
+  
   - 路径G:\GitDemo\.git
+    
     - 查看内容 ref: refs/heads/master 
-
+  
   - 根据查看的内容，选择路径G:\GitDemo\.git\refs\heads\master
+    
     - 查看内容（即为记录的版本号）  5920c4ad653816559f14c65e11d613cb899b1010 
 
 # 分支
@@ -203,18 +203,18 @@ fb9be28 (HEAD -> master) HEAD@{1}: commit: second Commit 日志信息
 - 分支：在开发过程中，任何分支的修改都不会对其他分支有影响。
   - 并行推进多个分支，提高开发效率。
 
-| 命令    | 说明    |
-| :-- | :-- |
-|git branch 分支名     | 创建分支    |
-|git branch -v     | 查看分支     |
-|git checkout 分支名     | 切换分支    |
-|  git merge 分支名   |把指定的分支合并到当前分支上     |
+| 命令               | 说明             |
+|:---------------- |:-------------- |
+| git branch 分支名   | 创建分支           |
+| git branch -v    | 查看分支           |
+| git checkout 分支名 | 切换分支           |
+| git merge 分支名    | 把指定的分支合并到当前分支上 |
 
 ## 分支-指针
 
 <img src="../../pictures/144484721236833.png" width="600"/> 
 
-## 合并分支 
+## 合并分支
 
 ### 正常合并
 
@@ -233,7 +233,7 @@ Updating 5920c4a..8f45a48
 Fast-forward
  hello.txt | 2 ++
  1 file changed, 2 insertions(+)
- 
+
 zjk10@DESKTOP-HSVIOTH MINGW64 /g/GitDemo (master)
 $ git reflog
 8f45a48 (HEAD -> master, hot-fix) HEAD@{0}: merge hot-fix: Fast-forward
@@ -250,7 +250,6 @@ fb9be28 HEAD@{7}: commit: second Commit 日志信息
 ### 冲突合并
 
 - 冲突合并：合并分支时，两个分支在同一个文件的同一个位置有两套完全不同的修改。Git无法决定要保留哪个修改，需要我们进行选择。
-
 1. 在完成修改后，此时提交到本地库时，不能带有文件名：`fatal: cannot do a partial commit during a merge.`
 2. 只会修改合并到的分支的文件，要被合并的分支不受影响。
 
@@ -344,13 +343,13 @@ $ git commit -m "日志信息 matser 5 + hot-fix"
 
 ### 基础命令
 
-| 命令                               | 说明                                                         |
-| :--------------------------------- | :----------------------------------------------------------- |
-| git remote -v                      | 查看当前所有的远程地址别名<br />没有则都不显示               |
-| git remote add 别名 远程地址       | 新建远程地址的别名                                           |
-| git push 别名 [远程仓库分支]       | 推送本地仓库上的内容到远程仓库<br />必须要保证本地库的版本要比远程库的版本高：如果版本不一致，push的操作会被拒绝。 |
-| git clone 远程地址                 | 克隆远程仓库到本地                                           |
-| git pull 远程库地址别名 远程分支名 | 拉取远程库到本地库、且直接合并后自动提交到本地库             |
+| 命令                     | 说明                                                             |
+|:---------------------- |:-------------------------------------------------------------- |
+| git remote -v          | 查看当前所有的远程地址别名<br />没有则都不显示                                     |
+| git remote add 别名 远程地址 | 新建远程地址的别名                                                      |
+| git push 别名 [远程仓库分支]   | 推送本地仓库上的内容到远程仓库<br />必须要保证本地库的版本要比远程库的版本高：如果版本不一致，push的操作会被拒绝。 |
+| git clone 远程地址         | 克隆远程仓库到本地                                                      |
+| git pull 远程库地址别名 远程分支名 | 拉取远程库到本地库、且直接合并后自动提交到本地库                                       |
 
 ```
 git remote add Git-Demo https://github.com/creatern/Git-Demo.git
@@ -387,18 +386,18 @@ git push -f 远程仓库地址 远程分支
 
 ## 创建远程仓库
 
-### GitHub 
+### GitHub
 
 - Windows凭据管理器：
 
 <img src="../../pictures/555244722248071.png" width="499"/> 
 
 > 如何解决Github打不开的问题？
->
+> 
 > - 打开C:\Windows\System32\drivers\etc\hosts
 > - 添加(以管理员权限打开记事本，Ctrl + O 输入文件地址进行修改)
 > - 修改完映射文件，打开cmd输入`ipconfig/flushdns`刷新dns缓存
->
+> 
 > ```
 > # GitHub Start 
 > 
@@ -454,24 +453,24 @@ git push -f 远程仓库地址 远程分支
 **Pull requests**
 
 - 给别人
-<img src="../../pictures/175711123226814.png" width="432"/> 
-<img src="../../pictures/395401123249254.png" width="438"/> 
-<img src="../../pictures/157941223244390.png" width="439"/> 
+  <img src="../../pictures/175711123226814.png" width="432"/> 
+  <img src="../../pictures/395401123249254.png" width="438"/> 
+  <img src="../../pictures/157941223244390.png" width="439"/> 
 - 查看收到的
-<img src="../../pictures/212891323237936.png" width="434"/> 
+  <img src="../../pictures/212891323237936.png" width="434"/> 
 - 合并收到的
-<img src="../../pictures/81821523221600.png" width="458"/> 
-<img src="../../pictures/342191523224104.png" width="449"/> 
+  <img src="../../pictures/81821523221600.png" width="458"/> 
+  <img src="../../pictures/342191523224104.png" width="449"/> 
 
 ## SSH
 
 - SSH方式：使用时和HTTP基本一致。
 - 对于网络连接情况不好的，尽量使用SSH，而不是HTTP协议。
 
-| ssh文件类型 | 说明 |
-| ----------- | ---- |
-| id_rsa      | 私钥 |
-| id_rsa.pub  | 公钥 |
+| ssh文件类型    | 说明  |
+| ---------- | --- |
+| id_rsa     | 私钥  |
+| id_rsa.pub | 公钥  |
 
 - 生成.ssh文件
 
@@ -570,12 +569,13 @@ target
 ## 定位Git程序
 
 <img src="../../pictures/188772600221263.png" width="705"/> 
+
 - 初始化Git 如下，然后找到项目根目录ok即可
-<img src="../../pictures/182830304239577.png" width="394"/> 
+  <img src="../../pictures/182830304239577.png" width="394"/> 
 - add
-<img src="../../pictures/131080604227444.png" width="573"/> 
+  <img src="../../pictures/131080604227444.png" width="573"/> 
 - commit
-<img src="../../pictures/220630904240279.png" width="568"/> 
+  <img src="../../pictures/220630904240279.png" width="568"/> 
 
 ## 版本信息
 
@@ -592,10 +592,10 @@ target
 ### 切换分支
 
 1. 方式1
-<img src="../../pictures/353491504245574.png" width="407"/> 
+   <img src="../../pictures/353491504245574.png" width="407"/> 
 2. 方式2
-<img src="../../pictures/316391704244391.png" width="300"/> 
-<img src="../../pictures/57181904224105.png" width="394"/> 
+   <img src="../../pictures/316391704244391.png" width="300"/> 
+   <img src="../../pictures/57181904224105.png" width="394"/> 
 
 ### 创建分支
 
@@ -663,8 +663,3 @@ target
 <img src="../../pictures/450903405236251.png" width="400"/> 
 
 # GitLab 自建代码托管平台
-
-
-
-
-
