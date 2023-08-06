@@ -28,8 +28,6 @@ gradle init
 
 - 构建文件（.gradle）：默认build.gradle，通常位于项目文件的根目录。
 
-<img title="" src="../../pictures/Gradle-buildFile_System.drawio.svg" alt="" width="307">
-
 - Gradle指令：需要在包含构建文件（build.gradle）的目录下执行。
 
 | 指令             | 说明            |
@@ -38,6 +36,26 @@ gradle init
 | gradle classes | 编译业务代码和配置文件   |
 | gradle test    | 编译测试代码，生成测试报告 |
 | gradle build   | 构建项目          |
+
+### .gradle 执行
+
+<img title="" src="../../pictures/Gradle-gradle-build执行顺序.drawio.svg" alt="" width="374">
+
+### Project、Task
+
+![](../../pictures/Gradle-buildFile_System.drawio.svg)
+
+| 项目属性        | 类型           | 默认值                 |
+| ----------- | ------------ | ------------------- |
+| project     | Project      | 该Project实例          |
+| name        | String       | 项目目录的名称。            |
+| path        | String       | 项目的绝对路径。            |
+| description | String 项目说明。 |                     |
+| projectDir  | File         | 包含构建脚本的目录。          |
+| buildDir    | File         | *projectDir* /build |
+| group       | Object       | unspecified         |
+| version     | Object       | unspecified         |
+| ant         | ant build    | 一个AntBuilder实例      |
 
 ### repositories 仓库源
 
@@ -49,9 +67,16 @@ repositories {
 }
 ```
 
-### 启用.gradle
+### dependencies 依赖
 
-<img title="" src="../../pictures/Gradle-gradle-build执行顺序.drawio.svg" alt="" width="374">
+| 依赖方式                      | 说明                                   |
+| ------------------------- | ------------------------------------ |
+| compileOnly               | 编译生产代码所必需的依赖关系，<br/>但不应该属于运行时类路径的一部分 |
+| implementation（取代compile） | 编译和运行时                               |
+| runtimeOnly（取代runtime）    | 仅在运行时使用，不用于编译                        |
+| testCompileOnly           | 测试相当于compileOnly                     |
+| testImplementation        | 测试相当于 implementation                 |
+| testRuntimeOnly           | 测试相当于 runtimeOnly                    |
 
 ## gradle wrapper
 
@@ -63,12 +88,19 @@ repositories {
 
 - gradle-wrapper.properties：首次执行 ./gradlew build时，gradlew读取gradle-wrapper.properties中的配置信息，将指定的Gradle下载并解压到指定目录（GRADLE_USER_HOME/wrapper/dists），并构建本地缓存（GRADLE_USER_HOME/caches）。
 
+> GRADLE_USER_HOME：环境变量。如果未配置，则默认为`$USER_HOME/.gradle`。
+
 ```properties
+# 解压后的目录
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
+
+# Gradle下载
 distributionUrl=https\://services.gradle.org/distributions/gradle-8.2.1-bin.zip
 networkTimeout=10000
 validateDistributionUrl=true
+
+# 下载的压缩包存放目录
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dist
 ```
