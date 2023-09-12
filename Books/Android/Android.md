@@ -6,8 +6,6 @@
 
 ## 项目结构
 
-### AndroidMainifest.xml
-
-- AndroidMainifest.xml：全局描述文件（清单文件）。
+<img title="" src="../../pictures/Android-AndroidProjectStruct.drawio.svg" alt="" width="655">
 
 # 界面编程
