@@ -78,13 +78,7 @@
 
 ## [Mybatis](./Books/Web/JavaEE/Mybatis.md)
 
-## Spring
-
-### [Spring基础](./Books/Web/JavaEE/Spring/Spring基础.md)
-
-### [SpringMVC](./Books/Web/JavaEE/Spring/SpringMVC.md)
-
-### [SpringBoot](./Books/Web/JavaEE/Spring/SpringBoot.md)
+## [Spring](./Books/Web/JavaEE/Spring/Spring.md)
 
 ## [Redis](./Books/Web/JavaEE/Redis.md)
 

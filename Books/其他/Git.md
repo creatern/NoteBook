@@ -20,29 +20,15 @@
 
 - 设置Git用户名、用户签名：首次安装Git时必须设置用户签名，否则无法提交代码。
 
-```
+```git
 git config --global user.name 用户名
 git config --global user.email 邮箱(不会检验邮箱是否正确)
-```
-
-```
-zjk10@DESKTOP-HSVIOTH MINGW64 ~/Desktop
-$ git config --global user.name scott
-
-zjk10@DESKTOP-HSVIOTH MINGW64 ~/Desktop
-$ git config --global user.email zjk1054860443@163.com
 ```
 
 - 初始化本地库：目标文件目录位置再右键打开Git Bash，自动切换到该路径。
 
 ```git
 git init
-```
-
-```git
-zjk10@DESKTOP-HSVIOTH MINGW64 /g/GitDemo
-$ git init
-Initialized empty Git repository in G:/GitDemo/.git/
 ```
 
 # 命令别名 config
@@ -60,11 +46,11 @@ Initialized empty Git repository in G:/GitDemo/.git/
 - 命令别名执行多条命令：需要shell函数的方式。（Linux）
   - `!`->以shell执行，可以使用分号分割语句。
 
-```
+```git
 git config --global alias.book '!f(){git add --all;git commit -m "$@";git push book;};f'
 ```
 
-- 相当于.gitconfig中：
+- 相当于`~/.gitconfig`中：
 
 ```
 [alias]
@@ -351,7 +337,7 @@ $ git commit -m "日志信息 matser 5 + hot-fix"
 | git clone 远程地址         | 克隆远程仓库到本地                                                      |
 | git pull 远程库地址别名 远程分支名 | 拉取远程库到本地库、且直接合并后自动提交到本地库                                       |
 
-```
+```git
 git remote add Git-Demo https://github.com/creatern/Git-Demo.git
 ```
 
@@ -661,5 +647,3 @@ target
 - 分享本地库到Gitee：
 
 <img src="../../pictures/450903405236251.png" width="400"/> 
-
-# GitLab 自建代码托管平台

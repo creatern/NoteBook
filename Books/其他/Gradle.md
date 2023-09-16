@@ -39,7 +39,7 @@ gradle init
 
 ### .gradle 执行
 
-<img title="" src="../../pictures/Gradle-gradle-build执行顺序.drawio.svg" alt="" width="374">
+<img title="" src="../../pictures/Gradle-gradle-build执行顺序.drawio.svg" alt="" width="442">
 
 ### Project、Task
 
