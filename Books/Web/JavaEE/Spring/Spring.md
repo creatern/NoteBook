@@ -23,6 +23,8 @@ AOP --> 声明式事务控制
 
 <img src="../../../../pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
 
+## 概述
+
 ### 基本思想
 
 | 基本思想 | 名词     | 说明                              |
@@ -30,17 +32,6 @@ AOP --> 声明式事务控制
 | IoC  | 控制反转   | 将创造Bean的权利交给Spring进行管理          |
 | DI   | 依赖注入   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。 |
 | AOP  | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。    |
-
-- AOP（Aspect Oriented Programming）面向切面编程：
-
-| 面向  | 说明                                           |
-| --- | -------------------------------------------- |
-| OOP | 纵向对一个事物的抽象                                   |
-| AOP | 横向的对不同事物的抽象<br />属性与属性、方法与方法、对象与对象都可以组成一个切面。 |
-
-<img src="../../../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>  
-
-<img src="../../../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>    
 
 ### 命名空间
 
@@ -1855,7 +1846,7 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 }
 ```
 
-## 第三方框架整合
+## 第三方框架
 
 **两种整合方案**
 
@@ -2534,6 +2525,11 @@ public class ApplicationContextConfig {
 
 ### AOP概念
 
+| 面向 | 说明                                                         |
+| ---- | ------------------------------------------------------------ |
+| OOP  | 纵向对一个事物的抽象                                         |
+| AOP  | 横向的对不同事物的抽象<br />属性与属性、方法与方法、对象与对象都可以组成一个切面。 |
+
 | 概念    | 名词        | 解释                         |
 |:----- |:--------- |:-------------------------- |
 | 目标对象  | Target    | 被增强方法                      |
@@ -2544,7 +2540,11 @@ public class ApplicationContextConfig {
 | 切面    | Aspect    | 增强和切入点的组合                  |
 | 织入    | Weaving   | 将通知和切入点组合动态组合的过程           |
 
+<img src="../../../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
+
 <img src="../../../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
+
+<img src="../../../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
 
 ### 通知
 
@@ -2991,13 +2991,15 @@ personProxy.show();
 | 事务定义 TransactionDefinition         | 封装事务的隔离级别、传播行为、过期时间等属性信息                       |
 | 事务状态 TransactionStatus             | 存储当前事务的状态信息，如果事务是否提交、是否回滚、是否有回滚点等              |
 
+> spring-jdbc坐标已经引入的spring-tx坐标。
+
 ###### 平台事务管理器
 
 - MyBatis作为持久层框架时，使用的平台事务管理器实现是DataSourceTransactionManager。
 
-- Hibernate作为持久层框架时，使用的平台事务管理器是HibernateTransactionManager
+- Hibernate作为持久层框架时，使用的平台事务管理器是HibernateTransactionManager。
 
-###### # Mybatis平台事务管理器
+**Mybatis平台事务管理器**
 
 - MyBatis使用的平台事务管理器： **DataSourceTransactionManager**
 
@@ -3008,10 +3010,6 @@ personProxy.show();
 ```java
 private DataSource dataSource;
 ```
-
-##### 依赖
-
-- spring-jdbc坐标已经引入的spring-tx坐标
 
 #### 基于xml
 
@@ -3047,7 +3045,7 @@ private DataSource dataSource;
 | read-only       | 设置当前的只读状态，如果是查询则设置为true，可以提高查询性能，如果是DML（增删改）操作则设置为false。           |
 | propagation     | 设置事务的传播行为，主要解决是A方法调用B方法时，事务的传播方式问题的。例如：使用单方的事务，还是A和B都使用自己的事务等      |
 
-###### # isolation
+**isolation**
 
 - 指定事务的隔离级别，事务并发存在三大问题：脏读、不可重复读、幻读/虚读。可以通过设置事务的隔离级别来保证并发问题的出现，常用的是READ_COMMITTED 和 REPEATABLE_READ。
 
@@ -3059,7 +3057,7 @@ private DataSource dataSource;
 | REPEATABLE_READ  | A事务多次从数据库读取某条记录结果一致，可以解决不可重复读，不可以解决幻读                   |
 | SERIALIZABLE     | 串行化，可以解决任何并发问题，安全性最高，但是性能最低                             |
 
-###### # propagation
+**propagation**
 
 | 事务传播行为        | 解释                                            |
 |:------------- |:--------------------------------------------- |
@@ -3085,8 +3083,10 @@ private DataSource dataSource;
 
 ##### 事务控制 @Transactional
 
-- 对类注释：该类下的所有方法都使用这注释的事务。 
-- 对方法注释：只对该方法使用该注释的事务。优先大于对类注释（就近原则）。
+| 注释位置 | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 类       | 该类下的所有方法都使用这注释的事务。                         |
+| 方法     | 只对该方法使用该注释的事务。<br />优先级大于对类注释（就近原则）。 |
 
 ```java
 @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED,readOnly = false,timeout = 5)
@@ -3203,21 +3203,24 @@ MVC --> Interceptor
 
 ## 工作流程
 
-- 如果是Spring5在使用之前一定要修改为JRE8（jdk1.8）： [解决:javac: 无效的目标发行版: 1.8](https://blog.csdn.net/qq_37107280/article/details/73246274)
+> 如果是Spring5在使用之前一定要修改为JRE8（jdk1.8）： [解决:javac: 无效的目标发行版: 1.8](https://blog.csdn.net/qq_37107280/article/details/73246274)
+
 1. 控制器 @Controller（@Component的衍生注解）配置映射信息。
 
 2. SpringMVC配置
 
 3. 前端控制器DispatcherServlet
-- 启动服务器初始化过程和单次请求过程：
 
-- 服务器初始化
+**启动服务器初始化过程和单次请求过程**
+
+- 服务器初始化：
+
 1. 服务器启动，执行ServletContainersInitConfig类，初始化web容器（web.xml）。
 
 2. 执行createServletApplicationContext()方法，创建WebApplicationContext对象。（加载配置类ApplicationContextConfig来初始化Spring容器。）
 
 3. 执行getServletMappings()方法，设定SpringMVC拦截请求的路径规则。
-- 单次请求过程
+- 单次请求过程：
 1. 发送请求`http://localhost/save`。
 2. web容器发现该请求满足SpringMVC拦截规则，将请求交给SpringMVC处理。
 3. 解析请求路径/save。@RequestMapping("/save")
@@ -3226,11 +3229,11 @@ MVC --> Interceptor
 
 ## @Controller 控制器类
 
-| 名称  | @Controller           |
-| --- | --------------------- |
-| 类型  | 类注解                   |
-| 位置  | SpringMVC控制器类定义上方     |
-| 作用  | 设定SpringMVC的核心控制器bean |
+| 名称 | @Controller                   |
+| ---- | ----------------------------- |
+| 类型 | 类注解                        |
+| 位置 | SpringMVC控制器类定义上方     |
+| 作用 | 设定SpringMVC的核心控制器bean |
 
 ## ServletInitializer 前端控制器
 
