@@ -4264,6 +4264,8 @@ public class BootStudyApplication {
 
     public static void main(String[] args) {
         //启动相应的SpringBoot容器，在之前可以对容器进行一系列的设置
+
+        //创建Spring应用上下文：配置类、命令行参数。
         SpringApplication.run(BootStudyApplication.class, args);
     }
 }
@@ -4274,58 +4276,6 @@ public class BootStudyApplication {
 | @EnableAutoConfiguration | 自动配置          |
 | @SpringBootConfiguration | SpringBoot配置类 |
 | @ComponentScan           | 组件扫描          |
-
-```java
-@Target({ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@SpringBootConfiguration //SpringBoot配置类
-@EnableAutoConfiguration //自动配置
-@ComponentScan( //组件扫描
-    excludeFilters = {@Filter(
-    type = FilterType.CUSTOM,
-    classes = {TypeExcludeFilter.class}
-), @Filter(
-    type = FilterType.CUSTOM,
-    classes = {AutoConfigurationExcludeFilter.class}
-)}
-)
-public @interface SpringBootApplication {
-    @AliasFor(
-        annotation = EnableAutoConfiguration.class
-    )
-    Class<?>[] exclude() default {};
-
-    @AliasFor(
-        annotation = EnableAutoConfiguration.class
-    )
-    String[] excludeName() default {};
-
-    @AliasFor(
-        annotation = ComponentScan.class,
-        attribute = "basePackages"
-    )
-    String[] scanBasePackages() default {};
-
-    @AliasFor(
-        annotation = ComponentScan.class,
-        attribute = "basePackageClasses"
-    )
-    Class<?>[] scanBasePackageClasses() default {};
-
-    @AliasFor(
-        annotation = ComponentScan.class,
-        attribute = "nameGenerator"
-    )
-    Class<? extends BeanNameGenerator> nameGenerator() default BeanNameGenerator.class;
-
-    @AliasFor(
-        annotation = Configuration.class
-    )
-    boolean proxyBeanMethods() default true;
-}
-```
 
 ### 自动配置
 
