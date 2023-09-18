@@ -176,7 +176,7 @@ System.out.println(userService);
 
 #### DI 依赖注入
 
-- ID：通过注入的方式反转Bean的创建权。
+- DI：通过注入的方式反转Bean的创建权。
 
 <img src="../../../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
 
@@ -2525,10 +2525,10 @@ public class ApplicationContextConfig {
 
 ### AOP概念
 
-| 面向 | 说明                                                         |
-| ---- | ------------------------------------------------------------ |
-| OOP  | 纵向对一个事物的抽象                                         |
-| AOP  | 横向的对不同事物的抽象<br />属性与属性、方法与方法、对象与对象都可以组成一个切面。 |
+| 面向  | 说明                                           |
+| --- | -------------------------------------------- |
+| OOP | 纵向对一个事物的抽象                                   |
+| AOP | 横向的对不同事物的抽象<br />属性与属性、方法与方法、对象与对象都可以组成一个切面。 |
 
 | 概念    | 名词        | 解释                         |
 |:----- |:--------- |:-------------------------- |
@@ -3083,10 +3083,10 @@ private DataSource dataSource;
 
 ##### 事务控制 @Transactional
 
-| 注释位置 | 说明                                                         |
-| -------- | ------------------------------------------------------------ |
-| 类       | 该类下的所有方法都使用这注释的事务。                         |
-| 方法     | 只对该方法使用该注释的事务。<br />优先级大于对类注释（就近原则）。 |
+| 注释位置 | 说明                                   |
+| ---- | ------------------------------------ |
+| 类    | 该类下的所有方法都使用这注释的事务。                   |
+| 方法   | 只对该方法使用该注释的事务。<br />优先级大于对类注释（就近原则）。 |
 
 ```java
 @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED,readOnly = false,timeout = 5)
@@ -3214,7 +3214,6 @@ MVC --> Interceptor
 **启动服务器初始化过程和单次请求过程**
 
 - 服务器初始化：
-
 1. 服务器启动，执行ServletContainersInitConfig类，初始化web容器（web.xml）。
 
 2. 执行createServletApplicationContext()方法，创建WebApplicationContext对象。（加载配置类ApplicationContextConfig来初始化Spring容器。）
@@ -3229,11 +3228,11 @@ MVC --> Interceptor
 
 ## @Controller 控制器类
 
-| 名称 | @Controller                   |
-| ---- | ----------------------------- |
-| 类型 | 类注解                        |
-| 位置 | SpringMVC控制器类定义上方     |
-| 作用 | 设定SpringMVC的核心控制器bean |
+| 名称  | @Controller           |
+| --- | --------------------- |
+| 类型  | 类注解                   |
+| 位置  | SpringMVC控制器类定义上方     |
+| 作用  | 设定SpringMVC的核心控制器bean |
 
 ## ServletInitializer 前端控制器
 
@@ -3290,34 +3289,33 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 
 ## 请求和响应
 
->**PostMan**
->
->- PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件。常用于进行接口测试。
->
->1. 创建WorkSpace工作空间。
->
->2. 发送请求。
->
->3. 保存当前请求。第一次请求需要创建一个新的目录，后面就不需要创建新目录，直接保存到已经创建好的目录即可。
+> **PostMan**
+> 
+> - PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件。常用于进行接口测试。
+> 1. 创建WorkSpace工作空间。
+> 
+> 2. 发送请求。
+> 
+> 3. 保存当前请求。第一次请求需要创建一个新的目录，后面就不需要创建新目录，直接保存到已经创建好的目录即可。
 
 ### @RequestMapping 请求映射路径
 
-| 名称     | @RequestMapping                |
-| -------- | ------------------------------ |
-| 类型     | 类/方法注解                    |
-| 位置     | SpringMVC控制器类/方法定义上方 |
-| 作用     | 设置当前控制器方法请求访问路径 |
-| 相关属性 | value(默认)，请求访问路径      |
+| 名称   | @RequestMapping      |
+| ---- | -------------------- |
+| 类型   | 类/方法注解               |
+| 位置   | SpringMVC控制器类/方法定义上方 |
+| 作用   | 设置当前控制器方法请求访问路径      |
+| 相关属性 | value(默认)，请求访问路径     |
 
 - @RequestMapping注解控制器类时，作为请求路径的前置。
 - @RequestMapping注解value属性前面加不加`/`都可以
 
-| 返回值         | 说明                                                         |
-| -------------- | ------------------------------------------------------------ |
+| 返回值            | 说明                                                                               |
+| -------------- | -------------------------------------------------------------------------------- |
 | ModelAndView   | ModelAndView对象（Model和View的组合）。<br />Model是Map类型对象，存储需要返回的数据。<br />View表示需要渲染的视图。 |
-| String         | 表示返回的视图名称。<br />需要通过viewResolver来进行视图解析，将该字符串解析为具体的视图。 |
-| ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。 |
-| void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。 |
+| String         | 表示返回的视图名称。<br />需要通过viewResolver来进行视图解析，将该字符串解析为具体的视图。                           |
+| ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。       |
+| void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。                       |
 
 - 被注释的方法的返回值：String，进行页面跳转：
 
@@ -3337,7 +3335,7 @@ http://localhost:8080/user/commonParam?name=zjk&age=19
 ```
 
 >  Tomcat7中文乱码：
->
+> 
 > ```xml
 > <build>
 >     <plugins>
@@ -3358,9 +3356,9 @@ http://localhost:8080/user/commonParam?name=zjk&age=19
 ##### POST
 
 > **过滤器 编码集乱码处理**
->
+> 
 > - getServletFilters()：使用Spring内准备的过滤器。
->
+> 
 > ```java
 > public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 >     //部分方法省略
@@ -3692,10 +3690,10 @@ public interface HttpMessageConverter<T> {
 
 #### 表现网络资源
 
-| 资源描述形式 | 说明                                                         | 例                                                           |
-| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 传统风格     | 一个请求url对应一种操作。                                    | `http://localhost/user/getById?id=1` 查询id为1的用户信息<br />`http://localhost/user/saveUser` 保存用户信息 |
-| REST风格     | 隐藏资源的访问行为，无法通过地址得知对资源是何种操作。<br />书写简化。 | `http://localhost/users/1`<br />`http://localhost/users`     |
+| 资源描述形式 | 说明                                     | 例                                                                                             |
+| ------ | -------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 传统风格   | 一个请求url对应一种操作。                         | `http://localhost/user/getById?id=1` 查询id为1的用户信息<br />`http://localhost/user/saveUser` 保存用户信息 |
+| REST风格 | 隐藏资源的访问行为，无法通过地址得知对资源是何种操作。<br />书写简化。 | `http://localhost/users/1`<br />`http://localhost/users`                                      |
 
 #### 区分请求
 
@@ -3733,10 +3731,10 @@ public String getById(@PathVariable Integer id){
 }
 ```
 
-| 注解            | 区别：接收参数                     | 应用                                                         |
-| --------------- | ---------------------------------- | ------------------------------------------------------------ |
-| `@RequestBody`  | url地址/表单传参                   | 发送请求参数超过1个时，以json格式为主                        |
-| `@RequestParam` | json数据                           | 发送非json格式数据，接收请求参数。                           |
+| 注解              | 区别：接收参数             | 应用                                       |
+| --------------- | ------------------- | ---------------------------------------- |
+| `@RequestBody`  | url地址/表单传参          | 发送请求参数超过1个时，以json格式为主                    |
+| `@RequestParam` | json数据              | 发送非json格式数据，接收请求参数。                      |
 | `@PathVariable` | 路径参数，`{参数名称}`描述路径参数 | RESTful进行开发，当参数数量较少时，接收请求路径变量，通常用于传递id值。 |
 
 #### @RestController
@@ -3749,21 +3747,19 @@ public String getById(@PathVariable Integer id){
 
 #### @XxxMapping
 
-| 名称 | @GetMapping、@PostMapping、@PutMapping、@DeleteMapping       |
-| ---- | ------------------------------------------------------------ |
-| 类型 | 方法注解                                                     |
-| 位置 | 基于SpringMVC的RESTful开发控制器方法定义上方                 |
-| 作用 | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求 |
+| 名称  | @GetMapping、@PostMapping、@PutMapping、@DeleteMapping      |
+| --- | -------------------------------------------------------- |
+| 类型  | 方法注解                                                     |
+| 位置  | 基于SpringMVC的RESTful开发控制器方法定义上方                           |
+| 作用  | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求 |
 
-| 返回值                           | 说明                                   |
-| -------------------------------- | -------------------------------------- |
-| String                           | 响应的视图名称、重定向到的URL。        |
-| void                             | 不需要返回任何响应。                   |
-| ModelAndView                     | 响应的视图和模型数据的容器。           |
-| ResponseEntity                   | 带有自定义HTTP头和状态代码的HTTP响应。 |
-| 其他类型<br />（例如自定义对象） | 响应的序列化数据类型。                 |
-
-
+| 返回值                 | 说明                      |
+| ------------------- | ----------------------- |
+| String              | 响应的视图名称、重定向到的URL。       |
+| void                | 不需要返回任何响应。              |
+| ModelAndView        | 响应的视图和模型数据的容器。          |
+| ResponseEntity      | 带有自定义HTTP头和状态代码的HTTP响应。 |
+| 其他类型<br />（例如自定义对象） | 响应的序列化数据类型。             |
 
 ```java
 @RestController
@@ -3866,11 +3862,17 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 
 ### @RestControllerAdvice 异常处理器、@ExceptionHandler
 
-| 名称 | @ExceptionHandler                                            |
-| ---- | ------------------------------------------------------------ |
-| 类型 | 方法注解                                                     |
-| 位置 | 专用于异常处理的控制器方法上方                               |
-| 作用 | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
+| 名称  | @RestControllerAdvice |
+| --- | --------------------- |
+| 类型  | 类注解                   |
+| 位置  | 异常处理器类                |
+| 作用  | 标注异常处理器               |
+
+| 名称  | @ExceptionHandler                                |
+| --- | ------------------------------------------------ |
+| 类型  | 方法注解                                             |
+| 位置  | 专用于异常处理的控制器方法上方                                  |
+| 作用  | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
 
 ```java
 @RestControllerAdvice
@@ -3942,14 +3944,14 @@ try {
 
 ## 拦截器
 
-- 拦截器（Interceptor），动态拦截方法调用的机制，在SpringMVC中动态拦截控制器方法的执行。
+- 拦截器（Interceptor）：动态拦截方法调用的机制，在SpringMVC中动态拦截控制器（Controller）方法的执行。
   - 在指定的方法调用前后执行预先设定的代码。
   - 阻止原始方法的执行。
 
-**拦截器和过滤器的区别**
-
-- 归属不同：Filter属于Servlet技术，Interceptor属于SpringMVC技术。
-- 拦截内容不同：Filter对所有访问进行增强，Interceptor仅针对SpringMVC的访问进行增强。
+| 区别   | 拦截器（Interceptor）    | 过滤器（Filter） |
+| ---- | ------------------- | ----------- |
+| 归属   | SpringMVC           | Servlet     |
+| 拦截内容 | 仅针对SpringMVC的访问进行增强 | 对所有访问进行增强   |
 
 ### HandlerInterceptor 拦截器接口
 
@@ -4019,7 +4021,7 @@ public class SpringMvcSupport extends WebMvcConfigurationSupport {
 }
 ```
 
-#### 侵入式
+- 侵入式：
 
 ```java
 @Configuration
