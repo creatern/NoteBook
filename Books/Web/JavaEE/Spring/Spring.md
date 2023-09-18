@@ -3290,51 +3290,45 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 
 ## 请求和响应
 
-### PostMan工具
+>**PostMan**
+>
+>- PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件。常用于进行接口测试。
+>
+>1. 创建WorkSpace工作空间。
+>
+>2. 发送请求。
+>
+>3. 保存当前请求。第一次请求需要创建一个新的目录，后面就不需要创建新目录，直接保存到已经创建好的目录即可。
 
-- PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件。常用于进行接口测试。
+### @RequestMapping 请求映射路径
 
-#### PostMan使用
-
-1. 创建WorkSpace工作空间。
-
-2. 发送请求。
-
-3. 保存当前请求。第一次请求需要创建一个新的目录，后面就不需要创建新目录，直接保存到已经创建好的目录即可。
-
-### @RequestMapping
-
-#### 设置请求映射路径
-
-| 名称   | @RequestMapping      |
-| ---- | -------------------- |
-| 类型   | 类注解或方法注解             |
-| 位置   | SpringMVC控制器类或方法定义上方 |
-| 作用   | 设置当前控制器方法请求访问路径      |
-| 相关属性 | value(默认)，请求访问路径     |
+| 名称     | @RequestMapping                |
+| -------- | ------------------------------ |
+| 类型     | 类/方法注解                    |
+| 位置     | SpringMVC控制器类/方法定义上方 |
+| 作用     | 设置当前控制器方法请求访问路径 |
+| 相关属性 | value(默认)，请求访问路径      |
 
 - @RequestMapping注解控制器类时，作为请求路径的前置。
 - @RequestMapping注解value属性前面加不加`/`都可以
 
-#### 返回值
+| 返回值         | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| ModelAndView   | ModelAndView对象（Model和View的组合）。<br />Model是Map类型对象，存储需要返回的数据。<br />View表示需要渲染的视图。 |
+| String         | 表示返回的视图名称。<br />需要通过viewResolver来进行视图解析，将该字符串解析为具体的视图。 |
+| ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。 |
+| void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。 |
 
-1. `ModelAndView`: 该方法返回一个`ModelAndView`对象，用于表示Model和View的组合。其中Model是一个Map类型的对象，用于存储需要返回的数据；View用于表示需要渲染的视图。
-
-2. `String`: 返回一个字符串，用于表示返回的视图名称。在此情况下，需要通过`viewResolver`来进行视图解析，将该字符串解析为具体的视图。
-
-3. `ResponseEntity`: 返回一个`ResponseEntity`对象，该对象包含了HTTP响应的状态码、头部信息和响应体等内容。使用该对象可以直接控制HTTP响应，包括重定向、返回Json数据等操作。
-
-4. `void`: 如果方法不需要返回任何数据，也可以使用`void`作为返回类型。此时，可以通过`HttpServletResponse`对象来手动控制HTTP响应。例如，可以在方法中设置状态码、设置响应头部信息等。但是，不推荐使用该方式来控制响应。
 - 被注释的方法的返回值：String，进行页面跳转：
 
 ```java
-return "/user/index.html"; //
+return "/user/index.html"; 
 return "redirect:/user/index.html"; //重定向
 ```
 
-### 请求参数
+### 请求
 
-#### 参数传递
+#### 参数传递方式
 
 ##### GET
 
@@ -3342,44 +3336,44 @@ return "redirect:/user/index.html"; //重定向
 http://localhost:8080/user/commonParam?name=zjk&age=19
 ```
 
-###### Tomcat7中文乱码
-
-```xml
-<build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <port>8080</port><!--tomcat端口号-->
-          <path>/</path> <!--虚拟目录-->
-          <uriEncoding>UTF-8</uriEncoding><!--访问路径编解码字符集-->
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-```
+>  Tomcat7中文乱码：
+>
+> ```xml
+> <build>
+>     <plugins>
+>       <plugin>
+>         <groupId>org.apache.tomcat.maven</groupId>
+>         <artifactId>tomcat7-maven-plugin</artifactId>
+>         <version>2.1</version>
+>         <configuration>
+>           <port>8080</port><!--tomcat端口号-->
+>           <path>/</path> <!--虚拟目录-->
+>           <uriEncoding>UTF-8</uriEncoding><!--访问路径编解码字符集-->
+>         </configuration>
+>       </plugin>
+>     </plugins>
+>   </build>
+> ```
 
 ##### POST
 
-###### 过滤器 编码集乱码处理
-
-- getServletFilters()：使用Spring内准备的过滤器。
-
-```java
-public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
-    //部分方法省略
-
-    protected Filter[] getServletFilters() {
-        //org.springframework.web.filter.CharacterEncodingFilter;
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
-        filter.setEncoding("utf-8");
-        return new Filter[]{filter};
-    }
-
-}
-```
+> **过滤器 编码集乱码处理**
+>
+> - getServletFilters()：使用Spring内准备的过滤器。
+>
+> ```java
+> public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+>     //部分方法省略
+> 
+>     protected Filter[] getServletFilters() {
+>         //org.springframework.web.filter.CharacterEncodingFilter;
+>         CharacterEncodingFilter filter = new CharacterEncodingFilter();
+>         filter.setEncoding("utf-8");
+>         return new Filter[]{filter};
+>     }
+> 
+> }
+> ```
 
 #### 参数类型
 
@@ -3597,9 +3591,9 @@ public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
 
 #### Converter接口 类型转换器
 
-- 由SpringMVC对传递参数进行类型转换。
+- Converter接口：由SpringMVC对传递参数进行类型转换。
 
-- Converter所属的包为org.springframework.core.convert.converter。
+> Converter所属的包为org.springframework.core.convert.converter。
 
 ```java
 @FunctionalInterface
@@ -3690,26 +3684,24 @@ public interface HttpMessageConverter<T> {
 }
 ```
 
-## REST风格
+## REST
 
-### REST风格介绍
+### REST风格
 
-- REST（Representational State Transfer），表现形式状态转换,它是一种软件架构 **风格** 。
+- REST（Representational State Transfer）：表现形式状态转换，一种软件架构**风格**（不是规范）。
 
 #### 表现网络资源
 
-- 传统风格资源描述形式：一个请求url对应一种操作。
-  - `http://localhost/user/getById?id=1` 查询id为1的用户信息
-  - `http://localhost/user/saveUser` 保存用户信息
-- REST风格描述形式：隐藏资源的访问行为，无法通过地址得知对资源是何种操作，书写简化。
-  - `http://localhost/users/1`
-  - `http://localhost/users`
+| 资源描述形式 | 说明                                                         | 例                                                           |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 传统风格     | 一个请求url对应一种操作。                                    | `http://localhost/user/getById?id=1` 查询id为1的用户信息<br />`http://localhost/user/saveUser` 保存用户信息 |
+| REST风格     | 隐藏资源的访问行为，无法通过地址得知对资源是何种操作。<br />书写简化。 | `http://localhost/users/1`<br />`http://localhost/users`     |
 
 #### 区分请求
 
-- 按照REST风格（不是规范）访问资源时使用 **行为动作** 区分对资源进行了何种操作。
-- REST提供了对应的架构方式，按照这种架构设计项目可以降低开发的复杂性，提高系统的可伸缩性
-- 描述模块的名称通常使用复数，也就是加s的格式描述，表示此类资源，而非单个资源，例如:users、books、accounts......
+- 按照REST风格访问资源时使用**行为动作**区分对资源进行了何种操作。
+- REST提供了对应的架构方式，按照这种架构设计项目可以降低开发的复杂性，提高系统的可伸缩性。
+- 描述模块的名称通常使用复数（加s的格式描述）表示此类资源，而非单个资源。例如:users、books、accounts......
 
 **按照不同的请求方式代表不同的操作类型**
 
@@ -3722,7 +3714,7 @@ public interface HttpMessageConverter<T> {
 
 ### RESTful
 
-- 根据REST风格对资源进行访问。
+- RESTful：根据REST风格对资源进行访问。
 
 #### @PathVariable
 
@@ -3741,16 +3733,11 @@ public String getById(@PathVariable Integer id){
 }
 ```
 
-##### @RequestBody、@RequestParam、@PathVariable比较
-
-- 区别
-  - @RequestParam用于接收url地址传参或表单传参
-  - @RequestBody用于接收json数据
-  - @PathVariable用于接收路径参数，使用{参数名称}描述路径参数
-- 应用
-  - 后期开发中，发送请求参数超过1个时，以json格式为主，@RequestBody应用较广
-  - 如果发送非json格式数据，选用@RequestParam接收请求参数
-  - 采用RESTful进行开发，当参数数量较少时，例如1个，可以采用@PathVariable接收请求路径变量，通常用于传递id值
+| 注解            | 区别：接收参数                     | 应用                                                         |
+| --------------- | ---------------------------------- | ------------------------------------------------------------ |
+| `@RequestBody`  | url地址/表单传参                   | 发送请求参数超过1个时，以json格式为主                        |
+| `@RequestParam` | json数据                           | 发送非json格式数据，接收请求参数。                           |
+| `@PathVariable` | 路径参数，`{参数名称}`描述路径参数 | RESTful进行开发，当参数数量较少时，接收请求路径变量，通常用于传递id值。 |
 
 #### @RestController
 
@@ -3762,14 +3749,21 @@ public String getById(@PathVariable Integer id){
 
 #### @XxxMapping
 
-| 名称    | @GetMapping @PostMapping @PutMapping @DeleteMapping                                                                                                        |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 类型    | 方法注解                                                                                                                                                       |
-| 位置    | 基于SpringMVC的RESTful开发控制器方法定义上方                                                                                                                             |
-| 作用    | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求                                                                                                   |
-| 方法返回值 | String：表示响应的视图名称或重定向到的URL。<br>void：表示不需要返回任何响应。<br>ModelAndView：表示响应的视图和模型数据的容器。<br>ResponseEntity：表示带有自定义HTTP头和状态代码的HTTP响应。<br>其他类型（例如自定义对象）：表示响应的序列化数据类型 |
+| 名称 | @GetMapping、@PostMapping、@PutMapping、@DeleteMapping       |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 方法注解                                                     |
+| 位置 | 基于SpringMVC的RESTful开发控制器方法定义上方                 |
+| 作用 | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求 |
 
-**方法返回值：**
+| 返回值                           | 说明                                   |
+| -------------------------------- | -------------------------------------- |
+| String                           | 响应的视图名称、重定向到的URL。        |
+| void                             | 不需要返回任何响应。                   |
+| ModelAndView                     | 响应的视图和模型数据的容器。           |
+| ResponseEntity                   | 带有自定义HTTP头和状态代码的HTTP响应。 |
+| 其他类型<br />（例如自定义对象） | 响应的序列化数据类型。                 |
+
+
 
 ```java
 @RestController
@@ -3818,9 +3812,9 @@ public class UserController {
 }
 ```
 
-### WebMvcConfigurationSupport
+### WebMvcConfigurationSupport 静态资源
 
-- 设置静态资源放行。
+- WebMvcConfigurationSupport：设置静态资源放行。
 
 ```java
 @Configuration
@@ -3855,43 +3849,6 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 }
 ```
 
-## SSM整合
-
-### 表现层数据封装
-
-- 设置统一数据返回结果类：如：
-
-```java
-public class Result{
-    private Object data;
-    private Integer code;
-    private String message;
-}
-```
-
-```java
-public class Code {
-    public static final Integer SAVE_OK = 20011;
-    public static final Integer DELETE_OK = 20021;
-    public static final Integer UPDATE_OK = 20031;
-    public static final Integer GET_OK = 20041;
-    public static final Integer SAVE_ERR = 20010;
-    public static final Integer DELETE_ERR = 20020;
-    public static final Integer UPDATE_ERR = 20030;
-    public static final Integer GET_ERR = 20040;
-}
-```
-
-```java
-@GetMapping
-public Result getAll() {
-    List<Book> bookList = bookService.getAll();
-    Integer code = bookList != null ? Code.GET_OK : Code.GET_ERR;
-    String msg = bookList != null ? "" : "查询失败";
-    return new Result(code,bookList,msg);
-}
-```
-
 ## 异常处理机制
 
 ### 异常处理思路
@@ -3907,7 +3864,13 @@ public Result getAll() {
 - 所有的异常均抛出到表现层进行处理。
 - AOP思想进行处理异常。
 
-### 异常处理器 @RestControllerAdvice
+### @RestControllerAdvice 异常处理器、@ExceptionHandler
+
+| 名称 | @ExceptionHandler                                            |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 方法注解                                                     |
+| 位置 | 专用于异常处理的控制器方法上方                               |
+| 作用 | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
 
 ```java
 @RestControllerAdvice
@@ -3931,14 +3894,6 @@ public class ProjectExceptionAdvice {
     }
 }
 ```
-
-#### @ExceptionHandler
-
-| 名称  | @ExceptionHandler                                |
-| --- | ------------------------------------------------ |
-| 类型  | 方法注解                                             |
-| 位置  | 专用于异常处理的控制器方法上方                                  |
-| 作用  | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
 
 ### 项目异常分类
 
