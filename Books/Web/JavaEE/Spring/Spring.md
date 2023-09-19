@@ -3510,14 +3510,10 @@ public class SpringMvcConfig {}
 | 位置  | SpringMVC控制器方法形参定义前面                  |
 | 作用  | 将请求中请求体所包含的数据传递给请求参数，此注解一个处理器方法只能使用一次 |
 
-**@RequestBody与@RequestParam区别**
-
-- 区别
-  - @RequestParam用于接收url地址传参，表单传参【application/x-www-form-urlencoded】
-  - @RequestBody用于接收json数据【application/json】
-- 应用
-  - 后期开发中，发送json格式数据为主，@RequestBody应用较广
-  - 如果发送非json格式数据，选用@RequestParam接收请求参数
+| 注解            | 区别：接收                                               | 应用        |
+| ------------- | --------------------------------------------------- | --------- |
+| @RequestBody  | json数据【application/json】                            | json格式数据  |
+| @RequestParam | url地址传参<br/>表单传参【application/x-www-form-urlencoded】 | 非json格式数据 |
 
 ###### POJO类型参数
 
@@ -4047,6 +4043,137 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 - 拦截器链的运行顺序按照拦截器的添加顺序先后执行。
 - 当拦截器中出现对原始处理器的拦截，后面的拦截器均终止运行。
 
+## @WebMvcTest 测试
+
+- @WebMvcTest：测试注解，在SpringMVC应用的上下文中执行。
+
+## Model
+
+- Model主要用于将数据传递给视图层，以便在视图中渲染数据：Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
+
+```java
+public interface Model {
+    Model addAttribute(String attributeName, @Nullable Object attributeValue);
+
+    Model addAttribute(Object attributeValue);
+
+    Model addAllAttributes(Collection<?> attributeValues);
+
+    Model addAllAttributes(Map<String, ?> attributes);
+
+    Model mergeAttributes(Map<String, ?> attributes);
+
+    boolean containsAttribute(String attributeName);
+
+    @Nullable
+    Object getAttribute(String attributeName);
+
+    Map<String, Object> asMap();
+}
+```
+
+- Model 接口的实现类：Spring MVC默认使用ExtendedModelMap（继承 LinkedHashMap），可用于存储和检索数据。
+
+```java
+@GetMapping("/thymeleafHello")
+public String hello(Model model){
+    model.addAttribute("name","张三");
+    model.addAttribute("age",18);
+    return "thymeleafHello";
+}
+```
+
+## 模板引擎
+
+### Thymeleaf
+
+**Thymeleaf 视图模板技术**
+
+- Thymeleaf是适用于Web和独立环境的现代服务器端Java模板引擎。
+- 默认`/classpath:/templates（src/main/resources/tempaltes）`目录下的.html文件被识别为**模板文件**，由模板引擎解析。
+- Thymeleaf使用`@Controller`注解，不能带有`@ResponseBody`。由Controller方法的返回值（String）进行页面跳转。
+
+#### 表达式
+
+| EL表达式 | 名称                                       |
+| -------- | ------------------------------------------ |
+| `@{}`    | 链接表达式                                 |
+| `${}`    | 变量表达式：对整个上下文                   |
+| `*{}`    | 选择变量表达式：对选定对象                 |
+| `#{}`    | 消息表达（文本外部化）：读取配置文件中数据 |
+
+```html
+<!--@{}链接表达式-->
+<link rel="stylesheet" th:href="@{index.css}">
+<script type="text/javascript" th:src="@{index.js}"></script>
+<a th:href="@{index.html}">url</a>
+```
+
+```html
+<!--${}变量表达式-->
+
+<!--普通字符串-->
+<p th:text="${name}"></p>
+<!--POJO类型 person(name,age)-->
+<p th:text="${person.name}"></p>
+<p th:text="${person['name']}"></p>
+<p th:text="${person.getName()}"></p>
+
+<!--List-->
+<tr th:each="item:${userlist}">
+    <td th:text="${item}"></td>
+</tr>
+
+<!--Map取值-->
+<td th:text="${map.place}"></td>
+<td th:text="${map.['place']}"></td>
+<td th:text="${map.get('place')}"></td>
+
+<!--Map遍历-->
+<tr th:each="item:${map}">
+    <td th:text="${item.key}"></td>
+    <td th:text="${item.value}"></td>
+</tr>
+```
+
+```html
+<!--*{}选择变量表达式-->
+<div th:object="${user}">
+    <p>Name: <span th:text="*{name}">赛</span>.</p>
+    <p>Age: <span th:text="*{age}">18</span>.</p>
+    <p>Detail: <span th:text="*{detail}">好好学习</span>.</p>
+</div>
+```
+
+#### 常用标签
+
+| 标签               | 作用               |
+| ------------------ | ------------------ |
+| th:id              | 替换id             |
+| th:text            | 文本替换           |
+| th:utext           | 支持html的文本替换 |
+| th:src             | 替换资源           |
+| th:href            | 替换超链接         |
+| th:object          | 替换对象           |
+| th:value           | 替换值             |
+| th:if<br>th:unless | 判断               |
+| th:each            | 循环               |
+
+- th:each所在标签的内部都会被循环
+
+```html
+<!--List循环-->
+<td th:each="user:${userList}" th:text="${user}"></td>
+
+<!--Map循环-->
+<table>
+    <tr th:each="person:${personMapper}">
+        <td th:text="${person.key}"></td>
+        <td th:text="${person.value}"></td>
+    </tr>
+</table>
+```
+
 # Sping Boot
 
 ```mermaid
@@ -4298,169 +4425,6 @@ public class BootStudyApplication {}
 Exclusions:
 -----------
     org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
-```
-
-## Model
-
-### 数据传递
-
-- Model主要用于将数据传递给视图层，以便在视图中渲染数据。
-
-- 在 Spring MVC 中，Controller 控制器将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet（派发器），DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。(具体来说，可以通过在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据)
-
-### Model 和 Map
-
-- Model 接口的实现类：在 Spring MVC 中，默认使用的是 ExtendedModelMap，该类继承了 LinkedHashMap，因此与 Map 方法类似，Model 可以用于存储和检索数据。
-
-```java
-@GetMapping("/thymeleafHello")
-public String hello(Model model){
-    model.addAttribute("name","张三");
-    model.addAttribute("age",18);
-    return "thymeleafHello";
-}
-```
-
-```java
-public interface Model {
-    Model addAttribute(String attributeName, @Nullable Object attributeValue);
-
-    Model addAttribute(Object attributeValue);
-
-    Model addAllAttributes(Collection<?> attributeValues);
-
-    Model addAllAttributes(Map<String, ?> attributes);
-
-    Model mergeAttributes(Map<String, ?> attributes);
-
-    boolean containsAttribute(String attributeName);
-
-    @Nullable
-    Object getAttribute(String attributeName);
-
-    Map<String, Object> asMap();
-}
-```
-
-## 模板引擎
-
-### Thymeleaf
-
-#### Thymeleaf 视图模板技术
-
-- Thymeleaf是适用于Web和独立环境的现代服务器端Java模板引擎
-- 默认/classpath:/templates（src/main/resources/tempaltes）目录下的.htm文件被识别为模板文件，由模板引擎解析。
-- Thymeleaf的应该使用@Controller注解，不能带有@ResponseBody。由Controller方法的返回值进行页面跳转。
-
-#### 表达式
-
-| EL表达式 | 名称                    |
-| ----- | --------------------- |
-| `@{}` | 链接表达式                 |
-| `${}` | 变量表达式：对整个上下文          |
-| `*{}` | 选择变量表达式：对选定对象         |
-| `#{}` | 消息表达（文本外部化）：读取配置文件中数据 |
-
-```html
-<!--@{}链接表达式-->
-<link rel="stylesheet" th:href="@{index.css}">
-<script type="text/javascript" th:src="@{index.js}"></script>
-<a th:href="@{index.html}">url</a>
-```
-
-```html
-<!--${}变量表达式-->
-
-<!--普通字符串-->
-<p th:text="${name}"></p>
-<!--POJO类型 person(name,age)-->
-<p th:text="${person.name}"></p>
-<p th:text="${person['name']}"></p>
-<p th:text="${person.getName()}"></p>
-
-<!--List-->
-<tr th:each="item:${userlist}">
-    <td th:text="${item}"></td>
-</tr>
-
-<!--Map取值-->
-<td th:text="${map.place}"></td>
-<td th:text="${map.['place']}"></td>
-<td th:text="${map.get('place')}"></td>
-
-<!--Map遍历-->
-<tr th:each="item:${map}">
-    <td th:text="${item.key}"></td>
-    <td th:text="${item.value}"></td>
-</tr>
-```
-
-```html
-<!--*{}选择变量表达式-->
-<div th:object="${user}">
-    <p>Name: <span th:text="*{name}">赛</span>.</p>
-    <p>Age: <span th:text="*{age}">18</span>.</p>
-    <p>Detail: <span th:text="*{detail}">好好学习</span>.</p>
-</div>
-```
-
-```
-首先在templates目录下建立home.properties中写入以下内容：
-
-bigsai.nane=bigsai
-bigsai.age=22
-province=Jiang Su
-在application.properties中加入以下内容：
-
-spring.messages.basename=templates/home
-这样我们就可以在Thymeleaf中读取配置的文件了，完整代码如下：
-
-<h2>消息表达</h2>
-<table bgcolor="#ffe4c4" border="1">
-    <tr>
-    <td>name</td>
-    <td th:text="#{bigsai.name}"></td>
-    </tr>
-    <tr>
-    <td>年龄</td>
-    <td th:text="#{bigsai.age}"></td>
-    </tr>
-    <tr>
-    <td>province</td>
-    <td th:text="#{province}"></td>
-    </tr>
-</table>
-```
-
-#### 常用标签
-
-| 标签                 | 作用          |
-| ------------------ | ----------- |
-| th:id              | 替换id        |
-| th:text            | 文本替换        |
-| th:utext           | 支持html的文本替换 |
-| th:src             | 替换资源        |
-| th:href            | 替换超链接       |
-| th:object          | 替换对象        |
-| th:value           | 替换值         |
-| th:if<br>th:unless | 判断          |
-| th:each            | 循环          |
-
-##### th:each
-
-- th:each所在标签的内部都会被循环
-
-```html
-<!--List循环-->
-<td th:each="user:${userList}" th:text="${user}"></td>
-
-<!--Map循环-->
-<table>
-    <tr th:each="person:${personMapper}">
-        <td th:text="${person.key}"></td>
-        <td th:text="${person.value}"></td>
-    </tr>
-</table>
 ```
 
 ## Multipart 文件上传
