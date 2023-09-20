@@ -3201,7 +3201,9 @@ MVC --> RestControllerAdvice
 MVC --> Interceptor
 ```
 
-## 工作流程
+## MVC基础
+
+### 工作流程
 
 > 如果是Spring5在使用之前一定要修改为JRE8（jdk1.8）： [解决:javac: 无效的目标发行版: 1.8](https://blog.csdn.net/qq_37107280/article/details/73246274)
 
@@ -3226,7 +3228,7 @@ MVC --> Interceptor
 4. 由/save匹配执行对应的方法save()。
 5. 检测到有@ResponseBody直接将save()方法的返回值作为响应体返回给请求方。
 
-## @Controller 控制器类
+### @Controller 控制器
 
 | 名称  | @Controller           |
 | --- | --------------------- |
@@ -3234,7 +3236,7 @@ MVC --> Interceptor
 | 位置  | SpringMVC控制器类定义上方     |
 | 作用  | 设定SpringMVC的核心控制器bean |
 
-## ServletInitializer 前端控制器
+### ServletInitializer 前端控制器
 
 #### AbstractAnnotationConfigDispatcherServletInitializer
 
@@ -3287,78 +3289,72 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 }
 ```
 
+### @EnableWebMvc MVC配置类
+
+- @EnableWebMvc：开启SpringMVC注解驱动。
+
+```java
+@Configuration
+@ComponentScan("com.zjk.controller")
+@EnableWebMvc
+public class SpringMvcConfig {}
+```
+
+| 名称 | @EnableWebMvc             |
+| ---- | ------------------------- |
+| 类型 | 配置类注解                |
+| 位置 | SpringMVC配置类定义上方   |
+| 作用 | 开启SpringMVC多项辅助功能 |
+
 ## 请求和响应
 
 > **PostMan**
-> 
+>
 > - PostMan是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件。常用于进行接口测试。
+>
 > 1. 创建WorkSpace工作空间。
-> 
+>
 > 2. 发送请求。
-> 
+>
 > 3. 保存当前请求。第一次请求需要创建一个新的目录，后面就不需要创建新目录，直接保存到已经创建好的目录即可。
 
-### @RequestMapping 请求映射路径
+### @RequestMapping 请求映射
 
-| 名称   | @RequestMapping      |
-| ---- | -------------------- |
-| 类型   | 类/方法注解               |
-| 位置   | SpringMVC控制器类/方法定义上方 |
-| 作用   | 设置当前控制器方法请求访问路径      |
-| 相关属性 | value(默认)，请求访问路径     |
+| 名称 | @RequestMapping                              |
+| ---- | -------------------------------------------- |
+| 类型 | 类/方法注解                                  |
+| 位置 | SpringMVC控制器类/方法定义上方               |
+| 作用 | 设置当前控制器方法请求访问路径               |
+| 参数 | value（默认）：请求映射路径（默认根路径"/"） |
 
 - @RequestMapping注解控制器类时，作为请求路径的前置。
 - @RequestMapping注解value属性前面加不加`/`都可以
 
-| 返回值            | 说明                                                                               |
-| -------------- | -------------------------------------------------------------------------------- |
-| ModelAndView   | ModelAndView对象（Model和View的组合）。<br />Model是Map类型对象，存储需要返回的数据。<br />View表示需要渲染的视图。 |
-| String         | 表示返回的视图名称。<br />需要通过viewResolver来进行视图解析，将该字符串解析为具体的视图。                           |
-| ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。       |
-| void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。                       |
+| 返回值         | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| ModelAndView   | Model：Map类型对象，存储需要返回的数据。<br />View：视图。   |
+| String         | 视图名称。<br />viewResolver将该字符串解析为具体的视图。     |
+| ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。 |
+| void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。 |
 
-- 被注释的方法的返回值：String，进行页面跳转：
+- String，进行页面跳转：
 
 ```java
-return "/user/index.html"; 
+return "/user/index.html";
 return "redirect:/user/index.html"; //重定向
 ```
 
-### 请求
+### 请求：参数传递
 
-#### 参数传递方式
+| 传递方式 | 说明                                                   |
+| -------- | ------------------------------------------------------ |
+| GET      | http://localhost:8080/user/commonParam?name=zjk&age=19 |
+| POST     |                                                        |
 
-##### GET
-
-```http
-http://localhost:8080/user/commonParam?name=zjk&age=19
-```
-
->  Tomcat7中文乱码：
-> 
-> ```xml
-> <build>
->     <plugins>
->       <plugin>
->         <groupId>org.apache.tomcat.maven</groupId>
->         <artifactId>tomcat7-maven-plugin</artifactId>
->         <version>2.1</version>
->         <configuration>
->           <port>8080</port><!--tomcat端口号-->
->           <path>/</path> <!--虚拟目录-->
->           <uriEncoding>UTF-8</uriEncoding><!--访问路径编解码字符集-->
->         </configuration>
->       </plugin>
->     </plugins>
->   </build>
-> ```
-
-##### POST
-
-> **过滤器 编码集乱码处理**
-> 
+> **过滤器 Post编码集乱码处理**
+>
 > - getServletFilters()：使用Spring内准备的过滤器。
-> 
+>
 > ```java
 > public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 >     //部分方法省略
@@ -3373,26 +3369,104 @@ http://localhost:8080/user/commonParam?name=zjk&age=19
 > }
 > ```
 
+### 请求：参数接收
+
 #### 参数类型
 
-| 参数类型       | 传递方式                                       |
-| ---------- | ------------------------------------------ |
-| 普通参数       | url地址传参，地址参数名与形参变量名相同，定义形参即可接收参数           |
-| POJO类型参数   | 请求参数名与形参对象属性名相同，定义POJO类型形参即可接收参数           |
-| 嵌套POJO类型参数 | 请求参数名与形参对象属性名相同，按照对象层次结构关系即可接收嵌套POJO属性参数   |
-| 数组类型参数     | 请求参数名与形参对象属性名相同且请求参数为多个，定义数组类型即可接收参数       |
-| 集合类型参数     | 同名请求参数可以使用@RequestParam注解映射到对应名称的集合对象中作为数据 |
+| 参数类型 | 传递方式                                                     |
+| -------- | ------------------------------------------------------------ |
+| 值       | url地址传参，地址参数名与形参变量名相同时，自动接收参数。    |
+| POJO     | 请求参数名与形参对象属性名相同时，自动接收参数。             |
+| 嵌套POJO | 请求参数名与形参对象属性名相同时，按照对象层次结构关系接收嵌套POJO属性参数。 |
+| 数组     | 请求参数名与形参对象属性名相同且请求参数为多个，定义数组类型即可接收参数 |
+| 集合     | 同名请求参数可以使用@RequestParam注解映射到对应名称的集合对象中作为数据 |
 
-##### @RequestParam 地址参数名
+##### POJO参数
 
-- 形参与地址参数名不一致时，通过@RequestParam指定当前形参传递到的地址参数。默认将当前参数名作为地址参数名。
+- 对POJO的属性名注入。
 
-| 名称   | @RequestParam                           |
-| ---- | --------------------------------------- |
-| 类型   | 形参注解                                    |
-| 位置   | SpringMVC控制器方法形参定义前面                    |
-| 作用   | 绑定请求参数与处理器方法形参间的关系                      |
+> GET请求：将地址参数注入到对应的POJO属性中。
+>
+> ```http
+> http://localhost:8080/user/userParam?id=9&name=zjk&age=18
+> ```
+
+```java
+@RequestMapping("/userParam")
+@ResponseBody
+public String commonParam(User user){ //id、name、age
+    return "{'info':'userParam'}";
+}
+```
+
+##### 嵌套POJO参数
+
+- 按照对象层次结构关系：作为属性的POJO.属性。
+
+```java
+@RequestMapping("/userParam")
+@ResponseBody
+public String commonParam(User user){ //User:id,name,age,address(Address:province,city)
+    return "{'info':'userParam'}";
+}
+```
+
+##### 数组参数
+
+- 数组名必须一致才能封装到一个数组中。
+
+```java
+@RequestMapping("/arrParam")
+@ResponseBody
+public String arrParam(String[] infos) {
+    return "{'info':'arrParam'}";
+}
+```
+
+##### 日期参数 @DateTimeFormat
+
+| 名称     | @DateTimeFormat                 |
+| -------- | ------------------------------- |
+| 类型     | 形参注解                        |
+| 位置     | SpringMVC控制器方法形参前面     |
+| 作用     | 设定日期时间型数据格式          |
+| 相关属性 | pattern：指定日期时间格式字符串 |
+
+```java
+@RequestMapping("/dateParam")
+@ResponseBody
+public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
+                        @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss") Date date2){
+    return "{'info':'date'}";
+}
+```
+
+> 默认格式 yyyy/mm/dd
+>
+> ```java
+> @RequestMapping("/dateParam")
+> @ResponseBody
+> public String dateParam(Date date){
+>     return "{'info':'date'}";
+> }
+> ```
+
+#### @RequestParam 指定地址参数
+
+- @RequestParam：指定当前形参接收到的地址参数。（形参与地址参数名不一致时，需要该注解指定）
+
+> 默认将当前参数名作为地址参数名。
+
+| 名称     | @RequestParam                                         |
+| -------- | ----------------------------------------------------- |
+| 类型     | 形参注解                                              |
+| 位置     | SpringMVC控制器方法形参定义前面                       |
+| 作用     | 绑定请求参数与处理器方法形参间的关系                  |
 | 相关参数 | required：是否为必传参数 <br>defaultValue：参数默认值 |
+
+```http
+http://localhost:8080/user/userParam?id=9&name=zjk&age=18
+```
 
 ```java
 @RequestMapping("/commonParam")
@@ -3405,183 +3479,83 @@ public String commonParam(@RequestParam("name") String userName,
 }
 ```
 
-##### POJO类型参数
+>  如果按数组注入： **SpringMVC将List看做是一个POJO来处理** ，将其创建一个对象并准备把前端的数据封装到对象中，但是List是一个接口无法创建对象，所以报错。
 
-- 按POJO类型的属性名进行注入。
-
-```java
-@RequestMapping("/userParam")
-@ResponseBody
-public String commonParam(User user){ //id、name、age
-    System.out.println(user);
-    return "{'info':'userParam'}";
-}
-```
-
-- GET
-
-```http
-http://localhost:8080/user/userParam?id=9&name=zjk&age=18
-```
-
-- POST
-
-##### 嵌套POJO类型参数
-
-- 按照对象层次结构关系：作为属性的POJO.属性
-
-```java
-@RequestMapping("/userParam")
-@ResponseBody
-public String commonParam(User user){ //User:id,name,age,address(Address:province,city)
-    System.out.println(user);
-    return "{'info':'userParam'}";
-}
-```
-
-##### 数组类型参数
-
-- 数组名必须一致才能封装到一个数组中。
-
-```java
-@RequestMapping("/arrParam")
-@ResponseBody
-public String arrParam(String[] infos) {
-    for (String info : infos) {
-        System.out.println(info);
-    }
-    return "{'info':'arrParam'}";
-}
-```
-
-##### 集合类型参数 @RequestParam
-
-- 如果按数组注入： **SpringMVC将List看做是一个POJO对象来处理** ，将其创建一个对象并准备把前端的数据封装到对象中，但是List是一个接口无法创建对象，所以报错。
-
-###### 集合保存普通参数
-
-- 请求参数名与形参集合对象名相同且请求参数为多个，@RequestParam绑定参数关系。
+- 请求参数名与形参名（集合对象）相同且请求参数为多个时，@RequestParam绑定参数关系。
 
 ```java
 @RequestMapping("/listParam")
 @ResponseBody
 public String listParam(@RequestParam List<String> list) {
-    System.out.println(list);
     return "{'info':'arrParam'}";
 }
 ```
 
-###### 集合保存POJO类型参数
+#### @RequestBody
 
-##### JSON对象数组传递
+| 名称 | @RequestBody                                                 |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 形参注解                                                     |
+| 位置 | SpringMVC控制器方法形参定义前面                              |
+| 作用 | 将请求中请求体所包含的数据传递给请求参数<br />此注解一个处理器方法只能使用一次 |
 
-- 坐标
+| 注解          | 区别：接收                                                   | 应用   |
+| ------------- | ------------------------------------------------------------ | ------ |
+| @RequestBody  | json数据【application/json】                                 | json   |
+| @RequestParam | url地址传参<br/>表单传参【application/x-www-form-urlencoded】 | 非json |
 
-```xml
-<dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.9.0</version>
-</dependency>
-```
-
-###### @EnableWebMvc
-
-- 开启SpringMVC注解驱动
-
-```java
-@Configuration
-@ComponentScan("com.zjk.controller")
-@EnableWebMvc
-public class SpringMvcConfig {}
-```
-
-| 名称  | @EnableWebMvc     |
-| --- | ----------------- |
-| 类型  | 配置类注解             |
-| 位置  | SpringMVC配置类定义上方  |
-| 作用  | 开启SpringMVC多项辅助功能 |
-
-###### @RequestBody
-
-| 名称  | @RequestBody                          |
-| --- | ------------------------------------- |
-| 类型  | 形参注解                                  |
-| 位置  | SpringMVC控制器方法形参定义前面                  |
-| 作用  | 将请求中请求体所包含的数据传递给请求参数，此注解一个处理器方法只能使用一次 |
-
-| 注解            | 区别：接收                                               | 应用        |
-| ------------- | --------------------------------------------------- | --------- |
-| @RequestBody  | json数据【application/json】                            | json格式数据  |
-| @RequestParam | url地址传参<br/>表单传参【application/x-www-form-urlencoded】 | 非json格式数据 |
-
-###### POJO类型参数
+>  JSON对象数组：
+>
+> ```xml
+> <dependency>
+>     <groupId>com.fasterxml.jackson.core</groupId>
+>     <artifactId>jackson-databind</artifactId>
+>     <version>2.9.0</version>
+> </dependency>
+> ```
+>
 
 ```java
 @RequestMapping("/userParamForJson")
 @ResponseBody
 public String userParamForJson(@RequestBody User user) {
-    System.out.println(user);
     return "{'info':'userParamForJson'}";
 }
 ```
-
-###### 普通类型集合参数
 
 ```java
 @RequestMapping("/listParamForJson")
 @ResponseBody
 public String listParamForJson(@RequestBody List<String> list) {
-    System.out.println(list);
     return "{'info':'listParamForJson'}";
 }
 ```
-
-###### POJO类型集合参数
 
 ```java
 @RequestMapping("/userListParamForJson")
 @ResponseBody
 public String userListParamForJson(@RequestBody List<User> list) {
-    System.out.println(list);
     return "{'info':'userListParamForJson'}";
 }
 ```
 
-- 对于传输中的数据：考虑使用Map集合来存储。
+### @ResponseBody  响应体
 
-##### 日期类型参数 @DateTimeFormat
+| 名称     | @ResponseBody                                                |
+| -------- | ------------------------------------------------------------ |
+| 类型     | 方法\类注解                                                  |
+| 位置     | SpringMVC控制器方法定义上方和控制类上。                      |
+| 作用     | 设置当前控制器返回值作为响应体。（注解类==该类所有方法被注解） |
+| 相关属性 | pattern：指定日期时间格式字符串。                            |
 
-###### 默认格式 yyyy/mm/dd
+| 返回值 | 说明                                            |
+| ------ | ----------------------------------------------- |
+| String | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
+| 对象   | 对象转换成JSON响应给前端。                      |
 
-```java
-@RequestMapping("/dateParam")
-@ResponseBody
-public String dateParam(Date date){
-    System.out.println(date);
-    return "{'info':'date'}";
-}
-```
 
-###### @DateTimeFormat 设置格式pattern
 
-| 名称   | @DateTimeFormat     |
-| ---- | ------------------- |
-| 类型   | 形参注解                |
-| 位置   | SpringMVC控制器方法形参前面  |
-| 作用   | 设定日期时间型数据格式         |
-| 相关属性 | pattern：指定日期时间格式字符串 |
-
-```java
-@RequestMapping("/dateParam")
-@ResponseBody
-public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
-                        @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss") Date date2){
-    System.out.println(date1);
-    System.out.println(date2);
-    return "{'info':'date'}";
-}
-```
+### 类型转换
 
 #### Converter接口 类型转换器
 
@@ -3594,56 +3568,23 @@ public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
 public interface Converter<S, T> {
     @Nullable
     T convert(S var1);
-}
-```
 
-### 响应
-
-- 响应页面
-- 响应数据
-  - 文本数据
-  - JSON数据
-
-#### 文本数据
-
-- 默认返回的字符串作为页面跳转的路径：
-- 如下：返回的是index.jsp，但是跳转页面时，如果有模块名，则需要加上模块名(/user)。则跳转到：/user/index.jsp。
-
-```java
-@Controller
-@RequestMapping("/user")
-public class UserController {
-
-    @RequestMapping("/toJumpPage")
-    public String toJumpPage(){
-        System.out.println("跳转页面...");
-        //返回的是index.jsp，但是跳转页面时，如果有模块名，则需要加上模块名/user/index.jsp
-        return "index.jsp"; 
+    default <U> Converter<S, U> andThen(Converter<? super T, ? extends U> after) {
+        Assert.notNull(after, "After Converter must not be null");
+        return (s) -> {
+            T initialResult = this.convert(s);
+            return initialResult != null ? after.convert(initialResult) : null;
+        };
     }
 }
 ```
 
-#### JSON数据 @ResponseBody
+#### HttpMessageConvert接口
 
-| 名称   | @ResponseBody                           |
-| ---- | --------------------------------------- |
-| 类型   | 方法\类注解                                  |
-| 位置   | SpringMVC控制器方法定义上方和控制类上                 |
-| 作用   | 设置当前控制器返回值作为响应体,<br>写在类上，该类的所有方法都有该注解功能 |
-| 相关属性 | pattern：指定日期时间格式字符串                     |
+- HttpMessageConvert接口：内部通过 Converter接口（HttpMessageConvert接口）的实现类完成类型转换。
+  - 对象转Json数据（POJO -> json）
+  - 集合转Json数据（Collection -> json）
 
-**@ReponseBody注解之后:**
-
-- 方法的返回值为字符串，会将其 **作为文本内容 **直接响应给前端。 **而不是页面跳转** 。
-- 方法的返回值为对象，会将 **对象转换成JSON** 响应给前端。
-
-#### 类型转换
-
-- 内部还是通过 **Converter接口（HttpMessageConvert接口）** 的实现类完成的。
-
-- 对象转Json数据(POJO -> json)
-
-- 集合转Json数据(Collection -> json)
 
 ```java
 @Controller
@@ -3662,100 +3603,83 @@ public class UserController {
 }
 ```
 
-##### HttpMessageConvert接口
+### REST
 
-```java
-public interface HttpMessageConverter<T> {
-    boolean canRead(Class<?> var1, @Nullable MediaType var2);
-
-    boolean canWrite(Class<?> var1, @Nullable MediaType var2);
-
-    List<MediaType> getSupportedMediaTypes();
-
-    T read(Class<? extends T> var1, HttpInputMessage var2) throws IOException, HttpMessageNotReadableException;
-
-    void write(T var1, @Nullable MediaType var2, HttpOutputMessage var3) throws IOException, HttpMessageNotWritableException;
-}
-```
-
-## REST
-
-### REST风格
+#### REST风格
 
 - REST（Representational State Transfer）：表现形式状态转换，一种软件架构**风格**（不是规范）。
 
-#### 表现网络资源
+1. 表现网络资源。
+2. 区分请求。
 
-| 资源描述形式 | 说明                                     | 例                                                                                             |
-| ------ | -------------------------------------- | --------------------------------------------------------------------------------------------- |
-| 传统风格   | 一个请求url对应一种操作。                         | `http://localhost/user/getById?id=1` 查询id为1的用户信息<br />`http://localhost/user/saveUser` 保存用户信息 |
-| REST风格 | 隐藏资源的访问行为，无法通过地址得知对资源是何种操作。<br />书写简化。 | `http://localhost/users/1`<br />`http://localhost/users`                                      |
-
-#### 区分请求
+| 资源描述形式 | 说明                                                         | 例                                                           |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 传统风格     | 一个请求url对应一种操作。                                    | `http://localhost/user/getById?id=1` 查询id为1的用户信息<br />`http://localhost/user/saveUser` 保存用户信息 |
+| REST风格     | 隐藏资源的访问行为，无法通过地址得知对资源是何种操作。<br />书写简化。 | `http://localhost/users/1`<br />`http://localhost/users`     |
 
 - 按照REST风格访问资源时使用**行为动作**区分对资源进行了何种操作。
 - REST提供了对应的架构方式，按照这种架构设计项目可以降低开发的复杂性，提高系统的可伸缩性。
-- 描述模块的名称通常使用复数（加s的格式描述）表示此类资源，而非单个资源。例如:users、books、accounts......
+- 描述模块的名称通常使用复数（加s的格式描述）表示此类资源，而非单个资源。例如:users、books、accounts...
 
 **按照不同的请求方式代表不同的操作类型**
 
-| 请求     | 对应操作  |
-| ------ | ----- |
-| GET    | 查询    |
+| 请求   | 对应操作  |
+| ------ | --------- |
+| GET    | 查询      |
 | POST   | 增加/保存 |
 | PUT    | 修改/更新 |
-| DELETE | 删除    |
+| DELETE | 删除      |
 
-### RESTful
+#### RESTful
 
 - RESTful：根据REST风格对资源进行访问。
 
-#### @PathVariable
+##### @PathVariable
 
-| 名称  | @PathVariable                      |
-| --- | ---------------------------------- |
-| 类型  | 形参注解                               |
-| 位置  | SpringMVC控制器方法形参定义前面               |
-| 作用  | 绑定路径参数与处理器方法形参间的关系，要求路径参数名与形参名一一对应 |
+| 名称 | @PathVariable                                                |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 形参注解                                                     |
+| 位置 | SpringMVC控制器方法形参定义前面                              |
+| 作用 | 绑定路径参数与处理器方法形参间的关系，要求路径参数名与形参名一一对应 |
 
 ```java
 @RequestMapping(value = "/users/{id}",method = RequestMethod.GET)
 @ResponseBody
 public String getById(@PathVariable Integer id){
-    System.out.println("user getById..." + id);
     return "{'module':'user getById'}";
 }
 ```
 
-| 注解              | 区别：接收参数             | 应用                                       |
-| --------------- | ------------------- | ---------------------------------------- |
-| `@RequestBody`  | url地址/表单传参          | 发送请求参数超过1个时，以json格式为主                    |
-| `@RequestParam` | json数据              | 发送非json格式数据，接收请求参数。                      |
+| 注解            | 区别：接收参数                     | 应用                                                         |
+| --------------- | ---------------------------------- | ------------------------------------------------------------ |
+| `@RequestBody`  | url地址/表单传参                   | 发送请求参数超过1个时，以json格式为主                        |
+| `@RequestParam` | json数据                           | 发送非json格式数据，接收请求参数。                           |
 | `@PathVariable` | 路径参数，`{参数名称}`描述路径参数 | RESTful进行开发，当参数数量较少时，接收请求路径变量，通常用于传递id值。 |
 
-#### @RestController
+##### @RestController
 
-| 名称  | @RestController                                             |
-| --- | ----------------------------------------------------------- |
-| 类型  | 类注解                                                         |
-| 位置  | 基于SpringMVC的RESTful开发控制器类定义上方                               |
-| 作用  | 设置当前控制器类为RESTful风格，<br>等同于@Controller与@ResponseBody两个注解组合功能 |
+| 名称 | @RestController                                              |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 类注解                                                       |
+| 位置 | 基于SpringMVC的RESTful开发控制器类定义上方                   |
+| 作用 | 设置当前控制器类为RESTful风格，<br>等同于@Controller与@ResponseBody两个注解组合功能 |
 
-#### @XxxMapping
+##### @XxxMapping
 
-| 名称  | @GetMapping、@PostMapping、@PutMapping、@DeleteMapping      |
-| --- | -------------------------------------------------------- |
-| 类型  | 方法注解                                                     |
-| 位置  | 基于SpringMVC的RESTful开发控制器方法定义上方                           |
-| 作用  | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求 |
+| 名称 | @GetMapping、@PostMapping、@PutMapping、@DeleteMapping       |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 方法注解                                                     |
+| 位置 | 基于SpringMVC的RESTful开发控制器方法定义上方                 |
+| 作用 | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作，<br>例如@GetMapping对应GET请求 |
+| 参数 | value：请求映射路径（默认根路径"/"）                         |
 
-| 返回值                 | 说明                      |
-| ------------------- | ----------------------- |
-| String              | 响应的视图名称、重定向到的URL。       |
-| void                | 不需要返回任何响应。              |
-| ModelAndView        | 响应的视图和模型数据的容器。          |
-| ResponseEntity      | 带有自定义HTTP头和状态代码的HTTP响应。 |
-| 其他类型<br />（例如自定义对象） | 响应的序列化数据类型。             |
+| 返回值                           | 说明                                   |
+| -------------------------------- | -------------------------------------- |
+| String                           | 响应的视图名称、重定向到的URL。        |
+| void                             | 不需要返回任何响应。                   |
+| ModelAndView                     | 响应的视图和模型数据的容器。           |
+| ResponseEntity                   | 带有自定义HTTP头和状态代码的HTTP响应。 |
+| 其他类型<br />（例如自定义对象） | 响应的序列化数据类型。                 |
 
 ```java
 @RestController
@@ -3804,260 +3728,11 @@ public class UserController {
 }
 ```
 
-### WebMvcConfigurationSupport 静态资源
+### Model
 
-- WebMvcConfigurationSupport：设置静态资源放行。
+- Model对象负责控制器和视图之间的数据传递：Model属性中的数据被复制到Servlet Request属性中。
 
-```java
-@Configuration
-public class SpringMvcSupport extends WebMvcConfigurationSupport {
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //当访问/pages/*时，走/pages目录下的内容
-        registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/plugins/**").addResourceLocations("/plugins/");
-    }
-}
-```
-
-```java
-@Configuration
-@ComponentScan({"com.zjk.controller","com.zjk.config"}) //扫描SpringMvcSupport
-@EnableWebMvc
-public class SpringMvcConfig {}
-```
-
-- SpringMVC拦截了静态资源：
-
-```java
-public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
-    //部分方法
-
-    protected String[] getServletMappings() {
-        return new String[]{"/"}; //拦截路径
-    }
-}
-```
-
-## 异常处理机制
-
-### 异常处理思路
-
-| 抛出异常的常见位置 | 诱因                         |
-| --------- | -------------------------- |
-| 框架内部      | 使用不合规                      |
-| 数据层       | 外部服务器故障（服务器访问超时）           |
-| 业务层       | 业务逻辑书写错误（遍历业务书写操作，导致索引异常）  |
-| 表现层       | 数据收集、校验等规则（不匹配的数据类型间导致异常）  |
-| 工具类       | 工具类书写不严谨不够健壮（必要释放的连接长期未释放） |
-
-- 所有的异常均抛出到表现层进行处理。
-- AOP思想进行处理异常。
-
-### @RestControllerAdvice 异常处理器、@ExceptionHandler
-
-| 名称  | @RestControllerAdvice |
-| --- | --------------------- |
-| 类型  | 类注解                   |
-| 位置  | 异常处理器类                |
-| 作用  | 标注异常处理器               |
-
-| 名称  | @ExceptionHandler                                |
-| --- | ------------------------------------------------ |
-| 类型  | 方法注解                                             |
-| 位置  | 专用于异常处理的控制器方法上方                                  |
-| 作用  | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
-
-```java
-@RestControllerAdvice
-public class ProjectExceptionAdvice {
-    @ExceptionHandler(SystemException.class)
-    public Result doSystemException(SystemException ex) {
-        //记录日志
-        //发送消息给运维
-        //发送消息给开发人员
-        return new Result(ex.getCode(), null, ex.getMessage());
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    public Result doBusinessException(BusinessException ex) {
-        return new Result(ex.getCode(), null, ex.getMessage());
-    }
-
-    @ExceptionHandler(Exception.class)
-    public Result doException(Exception ex) {
-        return new Result(Code.SYSTEM_UNKNOW, null, "安抚客户");
-    }
-}
-```
-
-### 项目异常分类
-
-| 异常                      | 说明                              | 处理方案                                                  |
-| ----------------------- | ------------------------------- | ----------------------------------------------------- |
-| 业务异常（BusinessException） | 规范的用户行为产生的异常<br>不规范的用户行为操作产生的异常 | 发送对应消息传递给用户，提醒规范操作                                    |
-| 系统异常（SytemException）    | 项目运行过程中可预计且无法避免的异常              | 发送固定消息给用户，安抚用户<br>发送特点消息给运维人员，提醒维护<br>记录日志            |
-| 其他异常（Exception）         | 编程人员未预期到的异常                     | 发送固定消息传递给用户，安抚用户<br>发送特定消息给编程人员，提醒维护（纳入预期范围内）<br>记录日志 |
-
-```java
-public class SystemException extends RuntimeException {
-    private Integer code;
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public SystemException(Integer code, String message) {
-        super(message);
-        this.code = code;
-    }
-
-    public SystemException(Integer code, String message, Throwable cause) {
-        super(message, cause);
-        this.code = code;
-    }
-
-}
-```
-
-```java
-if(id == 1){
-    throw new BusinessException(Code.BUSINESS_ERR,"业务异常");
-}
-//将可能出现的异常进行包装，转换成自定义异常
-try {
-    int i = 1 / 0;
-} catch (ArithmeticException e) {
-    throw new SystemException(Code.SYSTEM_TIMEOUT_ERR, "服务器访问超时。。。", e);
-}
-```
-
-## 拦截器
-
-- 拦截器（Interceptor）：动态拦截方法调用的机制，在SpringMVC中动态拦截控制器（Controller）方法的执行。
-  - 在指定的方法调用前后执行预先设定的代码。
-  - 阻止原始方法的执行。
-
-| 区别   | 拦截器（Interceptor）    | 过滤器（Filter） |
-| ---- | ------------------- | ----------- |
-| 归属   | SpringMVC           | Servlet     |
-| 拦截内容 | 仅针对SpringMVC的访问进行增强 | 对所有访问进行增强   |
-
-### HandlerInterceptor 拦截器接口
-
-```java
-//com.zjk.controller.interceptor
-@Component
-public class ProjextInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //在方法执行之前进行校验
-        return true;//返回false则终止原始操作
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-    }
-}
-```
-
-#### Object handler参数
-
-- class org.springframework.web.method.HandlerMethod
-
-```java
-public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    HandlerMethod handlerMethod = (HandlerMethod) handler;
-    Method method = handlerMethod.getMethod(); //获得原始执行方法
-    return true;
-}
-```
-
-#### ModelAndView modelAndView参数
-
-- 页面跳转
-
-```java
-public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-}
-```
-
-#### Exception ex参数
-
-- 抛出的异常对象
-
-```java
-public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-}
-```
-
-### WebMvcConfigurer接口
-
-### SpringMvcSuport
-
-```java
-public class SpringMvcSupport extends WebMvcConfigurationSupport {
-    @Autowired
-    private ProjextInterceptor projextInterceptor;
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        //当调用/book请求时，使用拦截器
-        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
-    }
-}
-```
-
-- 侵入式：
-
-```java
-@Configuration
-@ComponentScan("com.zjk.controller")
-@EnableWebMvc
-public class SpringMvcConfig implements WebMvcConfigurer {
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-    }
-
-    @Autowired
-    private ProjextInterceptor projextInterceptor;
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
-    }
-}
-```
-
-### 拦截器链
-
-- 拦截器链的运行顺序按照拦截器的添加顺序先后执行。
-- 当拦截器中出现对原始处理器的拦截，后面的拦截器均终止运行。
-
-## @WebMvcTest 测试
-
-- @WebMvcTest：测试注解，在SpringMVC应用的上下文中执行。
-
-### MockMvc
-
-```java
-mockMvc.perform(MockHttpServletRequestBuilder).andExpect(MockHttpServletRequestBuilder);
-```
-
-- MockHttpServletRequestBuilder：存放模拟请求信息。
-
-## Model
-
-- Model主要用于将数据传递给视图层，以便在视图中渲染数据：Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
+> Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
 
 ```java
 public interface Model {
@@ -4088,6 +3763,152 @@ public String hello(Model model){
     model.addAttribute("name","张三");
     model.addAttribute("age",18);
     return "thymeleafHello";
+}
+```
+
+#### @ModelAttribute
+
+| 注解 | @ModelAttribute |
+| ---- | --------------- |
+| 位置 | 方法、形参      |
+| 方法     | 返回值存入Model的属性。<br />（如果同时被@XxxMapping注解，则返回值不再是视图名，而是Model的一个属性） |
+| 形参     | 数据绑定，该形参的值将由model中取得。<br />如果model中找不到，那么该参数会先被实例化，然后被添加到model中。<br />（在model中存在以后，请求中所有名称匹配的参数都会填充到该参数中） |
+| 属性 | name：添加/匹配到model的属性名称（默认为当前标注的参数名称）。 |
+
+> 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。
+
+```java
+//默认将方法的返回值存入Model
+@ModelAttribute
+public Account addAccount(@RequestParam String number) {
+    return accountManager.findAccount(number);
+}
+
+//通过addAttribute()，向Model中存入多个数据。
+@ModelAttribute
+public void populateModel(@RequestParam String number, Model model) {
+    model.addAttribute(accountManager.findAccount(number));
+    // add more ...
+}
+```
+
+#### @SessionAttributes
+
+| 注解 | @SessionAttributes                                           |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 控制器类                                                     |
+| 作用 | 注解类中存放到Model中的属性在会话中会一直保持。<br />搭配@ModelAttribute使用。 |
+
+## 拦截器
+
+- 拦截器（Interceptor）：动态拦截方法调用的机制，在SpringMVC中动态拦截控制器（Controller）方法的执行。
+  - 在指定的方法调用前后执行预先设定的代码。
+  - 阻止原始方法的执行。
+
+| 区别   | 拦截器（Interceptor）    | 过滤器（Filter） |
+| ---- | ------------------- | ----------- |
+| 归属   | SpringMVC           | Servlet     |
+| 拦截内容 | 仅针对SpringMVC的访问进行增强 | 对所有访问进行增强   |
+
+> **拦截器链**
+>
+> - 拦截器链的运行顺序按照拦截器的添加顺序先后执行。
+> - 当拦截器中出现对原始处理器的拦截，后面的拦截器均终止运行。
+
+### HandlerInterceptor 拦截器接口
+
+```java
+//com.zjk.controller.interceptor
+@Component
+public class ProjectInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { //在方法执行之前进行校验
+        
+        return true;//返回false则终止原始操作
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    }
+}
+```
+
+| 参数                      | 说明                                               |
+| ------------------------- | -------------------------------------------------- |
+| Object handler            | class org.springframework.web.method.HandlerMethod |
+| ModelAndView modelAndView | 页面跳转                                           |
+| Exception ex              | 抛出的异常对象                                     |
+
+```java
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    HandlerMethod handlerMethod = (HandlerMethod) handler;
+    Method method = handlerMethod.getMethod(); //获得原始执行方法
+    return true;
+}
+```
+
+### SpringMvcSuport
+
+#### WebMvcConfigurationSupport
+
+```java
+public class SpringMvcSupport extends WebMvcConfigurationSupport {
+    @Autowired
+    private ProjextInterceptor projextInterceptor;
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        //当调用/book请求时，使用拦截器
+        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
+    }
+}
+```
+
+```java
+@Configuration
+public class SpringMvcSupport extends WebMvcConfigurationSupport {
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //当访问/pages/*时，走/pages目录下的内容
+        registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+        registry.addResourceHandler("/plugins/**").addResourceLocations("/plugins/");
+    }
+}
+```
+
+```java
+public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+    //部分方法
+
+    protected String[] getServletMappings() {
+        return new String[]{"/"}; //拦截路径
+    }
+}
+```
+
+#### WebMvcConfigurer
+
+```java
+@Configuration
+@ComponentScan("com.zjk.controller")
+@EnableWebMvc
+public class SpringMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+    }
+
+    @Autowired
+    private ProjextInterceptor projextInterceptor;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
+    }
 }
 ```
 
@@ -4182,6 +4003,101 @@ public String hello(Model model){
 </table>
 ```
 
+## 异常处理机制
+
+| 抛出异常的常见位置 | 诱因                                                 |
+| ------------------ | ---------------------------------------------------- |
+| 框架内部           | 使用不合规                                           |
+| 数据层             | 外部服务器故障（服务器访问超时）                     |
+| 业务层             | 业务逻辑书写错误（遍历业务书写操作，导致索引异常）   |
+| 表现层             | 数据收集、校验等规则（不匹配的数据类型间导致异常）   |
+| 工具类             | 工具类书写不严谨不够健壮（必要释放的连接长期未释放） |
+
+- 所有的异常均抛出到表现层进行处理。
+- AOP思想进行处理异常。
+
+### @RestControllerAdvice 异常处理器、@ExceptionHandler
+
+| 名称 | @RestControllerAdvice |
+| ---- | --------------------- |
+| 类型 | 类注解                |
+| 位置 | 异常处理器类          |
+| 作用 | 标注异常处理器        |
+
+| 名称 | @ExceptionHandler                                            |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 方法注解                                                     |
+| 位置 | 专用于异常处理的控制器方法上方                               |
+| 作用 | 设置指定异常的处理方案，功能等同于控制器方法，出现异常后终止原始控制器执行，并转入当前方法执行。 |
+
+```java
+@RestControllerAdvice
+public class ProjectExceptionAdvice {
+    @ExceptionHandler(SystemException.class)
+    public Result doSystemException(SystemException ex) {
+        //记录日志
+        //发送消息给运维
+        //发送消息给开发人员
+        return new Result(ex.getCode(), null, ex.getMessage());
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public Result doBusinessException(BusinessException ex) {
+        return new Result(ex.getCode(), null, ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public Result doException(Exception ex) {
+        return new Result(Code.SYSTEM_UNKNOW, null, "安抚客户");
+    }
+}
+```
+
+### 项目异常分类
+
+| 异常                          | 说明                                                       | 处理方案                                                     |
+| ----------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
+| 业务异常（BusinessException） | 规范的用户行为产生的异常<br>不规范的用户行为操作产生的异常 | 发送对应消息传递给用户，提醒规范操作                         |
+| 系统异常（SytemException）    | 项目运行过程中可预计且无法避免的异常                       | 发送固定消息给用户，安抚用户<br>发送特点消息给运维人员，提醒维护<br>记录日志 |
+| 其他异常（Exception）         | 编程人员未预期到的异常                                     | 发送固定消息传递给用户，安抚用户<br>发送特定消息给编程人员，提醒维护（纳入预期范围内）<br>记录日志 |
+
+```java
+public class SystemException extends RuntimeException {
+    private Integer code;
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public SystemException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    public SystemException(Integer code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
+
+}
+```
+
+```java
+if(id == 1){
+    throw new BusinessException(Code.BUSINESS_ERR,"业务异常");
+}
+//将可能出现的异常进行包装，转换成自定义异常
+try {
+    int i = 1 / 0;
+} catch (ArithmeticException e) {
+    throw new SystemException(Code.SYSTEM_TIMEOUT_ERR, "服务器访问超时。。。", e);
+}
+```
+
 # Sping Boot
 
 ```mermaid
@@ -4208,190 +4124,24 @@ SpringBoot --> 单元测试
 
 > Tomcat作为Spring Boot的一部分运行。
 
-## Initializr
+## Spring Boot 基础
 
-- `@SpringBootApplication` SpringBoot启动类：默认所在包为扫描路径。
+### Initializr
 
-- `/static`
+| 组成                     | 说明                                           |
+| ------------------------ | ---------------------------------------------- |
+| `@SpringBootApplication` | SpringBoot启动类。<br />默认所在包为扫描路径。 |
+| `/static`                | 静态资源                                       |
+| `/templates`             | 模板文件                                       |
+| application.properties   | 配置文件                                       |
 
-- `/templates`
-
-- application.properties
-
-### Starter 依赖管理
-
-- Starter：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
+- Starter依赖管理：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
 
 ```xml
 spring-boot-starter
 ```
 
-### SpringBoot参数设置
-
-- `/resources/application.properties`：SpringBoot启动类默认读取该配置文件。
-- 直接在文件修改 或者 `System.setProperty();`
-
-#### 默认配置 DevToolsPropertyDefaultsPostProcessor
-
-```java
-spring.devtools.addproperties=false //关闭默认配置
-```
-
-```java
-package org.springframework.boot.devtools.env;
-
-@Order(Integer.MAX_VALUE)
-public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostProcessor {
-    private static final Log logger = DevToolsLogFactory.getLog(DevToolsPropertyDefaultsPostProcessor.class);
-    private static final String ENABLED = "spring.devtools.add-properties";
-    private static final String WEB_LOGGING = "logging.level.web";
-    private static final String[] WEB_ENVIRONMENT_CLASSES = new String[]{"org.springframework.web.context.ConfigurableWebEnvironment", "org.springframework.boot.web.reactive.context.ConfigurableReactiveWebEnvironment"};
-    private static final Map<String, Object> PROPERTIES;
-
-    public DevToolsPropertyDefaultsPostProcessor() {
-    }
-
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (DevToolsEnablementDeducer.shouldEnable(Thread.currentThread()) && this.isLocalApplication(environment)) {
-            if (this.canAddProperties(environment)) {
-                logger.info(LogMessage.format("Devtools property defaults active! Set '%s' to 'false' to disable", "spring.devtools.add-properties"));
-                environment.getPropertySources().addLast(new MapPropertySource("devtools", PROPERTIES));
-            }
-
-            if (this.isWebApplication(environment) && !environment.containsProperty("logging.level.web")) {
-                logger.info(LogMessage.format("For additional web related logging consider setting the '%s' property to 'DEBUG'", "logging.level.web"));
-            }
-        }
-
-    }
-
-    private boolean isLocalApplication(ConfigurableEnvironment environment) {
-        return environment.getPropertySources().get("remoteUrl") == null;
-    }
-
-    private boolean canAddProperties(Environment environment) {
-        if (!(Boolean)environment.getProperty("spring.devtools.add-properties", Boolean.class, true)) {
-            return false;
-        } else {
-            return this.isRestarterInitialized() || this.isRemoteRestartEnabled(environment);
-        }
-    }
-
-    private boolean isRestarterInitialized() {
-        try {
-            Restarter restarter = Restarter.getInstance();
-            return restarter != null && restarter.getInitialUrls() != null;
-        } catch (Exception var2) {
-            return false;
-        }
-    }
-
-    private boolean isRemoteRestartEnabled(Environment environment) {
-        return environment.containsProperty("spring.devtools.remote.secret");
-    }
-
-    private boolean isWebApplication(Environment environment) {
-        String[] var2 = WEB_ENVIRONMENT_CLASSES;
-        int var3 = var2.length;
-
-        for(int var4 = 0; var4 < var3; ++var4) {
-            String candidate = var2[var4];
-            Class<?> environmentClass = this.resolveClassName(candidate, environment.getClass().getClassLoader());
-            if (environmentClass != null && environmentClass.isInstance(environment)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Class<?> resolveClassName(String candidate, ClassLoader classLoader) {
-        try {
-            return ClassUtils.resolveClassName(candidate, classLoader);
-        } catch (IllegalArgumentException var4) {
-            return null;
-        }
-    }
-
-    private static Map<String, Object> loadDefaultProperties() {
-        Properties properties = new Properties();
-
-        try {
-            InputStream stream = DevToolsPropertyDefaultsPostProcessor.class.getResourceAsStream("devtools-property-defaults.properties");
-
-            try {
-                if (stream == null) {
-                    throw new RuntimeException("Failed to load devtools-property-defaults.properties because it doesn't exist");
-                }
-
-                properties.load(stream);
-            } catch (Throwable var5) {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (Throwable var4) {
-                        var5.addSuppressed(var4);
-                    }
-                }
-
-                throw var5;
-            }
-
-            if (stream != null) {
-                stream.close();
-            }
-        } catch (IOException var6) {
-            throw new RuntimeException("Failed to load devtools-property-defaults.properties", var6);
-        }
-
-        Map<String, Object> map = new HashMap();
-        Iterator var2 = properties.stringPropertyNames().iterator();
-
-        while(var2.hasNext()) {
-            String name = (String)var2.next();
-            map.put(name, properties.getProperty(name));
-        }
-
-        return Collections.unmodifiableMap(map);
-    }
-
-    static {
-        if (NativeDetector.inNativeImage()) {
-            PROPERTIES = Collections.emptyMap();
-        } else {
-            PROPERTIES = loadDefaultProperties();
-        }
-
-    }
-}
-```
-
-#### 自动重启
-
-- spring-boot-devtools监听文件状态：代码修改后项目自动重启。
-
-##### 重启加载项
-
-- Spring Boot通过两个类加载器：base、restart实现快速重启。
-
-| 类加载器    | 属性              | 作用                                                                   |
-| ------- | --------------- | -------------------------------------------------------------------- |
-| base    | restart.exclude | 加载不发生变化的字节码文件                                                        |
-| restart | restart.include | 加载开发中的字节码文件<br>在触发重启后：restart类加载器实例及其加载的内容都会被丢弃，并重新创建一个restart类加载器实例 |
-
-- 默认情况下：IDEA中打开的开发项目中所有的代码都会被restart类加载加载。
-
-##### 参数设置
-
-| 参数                                                          | 说明                                        |
-| ----------------------------------------------------------- | ----------------------------------------- |
-| spring.devtools.restart.log-condition-evaluationdelta=false | 禁用condition evaluation日志                  |
-| spring.devtools.restart.additional-paths=目录                 | 指定触发自动重启的目录<br>默认监控classpath除静态目录之外的文件的变化 |
-| spring.devtools.restart.exclude=剔除的目录                       | 修改默认不触发重启目录配置                             |
-| spring.devtools.restart.enabled=false                       | 禁用自动重启                                    |
-| spring.devtools.restart.trigger-file=类路径文件                  | 指定触发器文件<br>当设置了触发器文件后：只有该触发器文件被修改才会导致重启。  |
-
-## @SpringBootApplication
+### @SpringBootApplication
 
 - `@SpringBootApplication` SpringBoot启动类。
 
@@ -4400,8 +4150,7 @@ public class DevToolsPropertyDefaultsPostProcessor implements EnvironmentPostPro
 public class BootStudyApplication {
 
     public static void main(String[] args) {
-        //启动相应的SpringBoot容器，在之前可以对容器进行一系列的设置
-
+        //启动相应的SpringBoot容器之前可以对容器进行一系列的设置
         //创建Spring应用上下文：配置类、命令行参数。
         SpringApplication.run(BootStudyApplication.class, args);
     }
@@ -4416,7 +4165,7 @@ public class BootStudyApplication {
 
 **自动配置**
 
-- @EnableAutoConfiguration 和@SpringBootApplication
+- @EnableAutoConfiguration 、@SpringBootApplication
 
 ```java
 CONDITIONS EVALUATION REPORT  //debug
@@ -4437,16 +4186,40 @@ Exclusions:
     org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
 ```
 
-## Spring Boot DevTools
+### Spring Boot DevTools
 
 | DevTools特性   | 说明                                                         |
 | -------------- | ------------------------------------------------------------ |
-| 应用自动重启   | DevTools启动时：应用程序加载到JVM的两个独立类加载器中。<br />加载Java代码、属性文件、main路径的类加载器：变更时重新加载。<br />加载依赖的库的类加载器：变更时原封不动。 |
+| 应用自动重启   | DevTools启动时：应用程序加载到JVM的两个独立类加载器中（base、restart）。 |
 | 浏览器自动刷新 |                                                              |
 | 禁用模板缓存   |                                                              |
 | 内置h2控制台   | http://localhost:8080/h2-console                             |
 
 > LiveReload浏览器插件。
+
+| 类加载器 | 属性            | 作用                                                         |
+| -------- | --------------- | ------------------------------------------------------------ |
+| base     | restart.exclude | 加载依赖的库的类加载器，代码变更时原封不动。                 |
+| restart  | restart.include | 加载Java代码、属性文件、main路径<br>代码变更时触发重启：restart类加载器实例及其加载的内容都会被丢弃，并重新创建一个restart类加载器实例。 |
+
+> 默认情况下：IDEA中打开的开发项目中所有的代码都会被restart类加载加载。
+
+>  默认配置 DevToolsPropertyDefaultsPostProcessor。
+
+```java
+spring.devtools.addproperties=false //关闭默认配置
+```
+
+- `/resources/application.properties`：SpringBoot启动类默认读取该配置文件。
+- 直接在文件修改 或者 `System.setProperty();`。
+
+| 参数                                                        | 说明                                                         |
+| ----------------------------------------------------------- | ------------------------------------------------------------ |
+| spring.devtools.restart.log-condition-evaluationdelta=false | 禁用condition evaluation日志                                 |
+| spring.devtools.restart.additional-paths=目录               | 指定触发自动重启的目录<br>默认监控classpath除静态目录之外的文件的变化 |
+| spring.devtools.restart.exclude=剔除的目录                  | 修改默认不触发重启目录配置                                   |
+| spring.devtools.restart.enabled=false                       | 禁用自动重启                                                 |
+| spring.devtools.restart.trigger-file=类路径文件             | 指定触发器文件<br>当设置了触发器文件后：只有该触发器文件被修改才会导致重启。 |
 
 ## Lombok
 
@@ -4479,6 +4252,11 @@ Exclusions:
     </plugins>
 </build>
 ```
+
+| 注解   | 说明                                            |
+| ------ | ----------------------------------------------- |
+| @Data  | 自动为需要构造器、初始化方法...的创建对应方法。 |
+| @Slf4j | 自动生成SLF4J Logger静态属性。                  |
 
 ## Multipart 文件上传
 
@@ -6648,7 +6426,9 @@ public class UserController {
 </ul>
 ```
 
-## SpringBootTest 单元测试
+## Spring Boot测试
+
+### SpringBootTest 单元测试
 
 ```java
 @SpringBootTest
@@ -6666,9 +6446,21 @@ class TacoCloudApplicationTests {
 @ContextConfiguration(classes = SpringConfig.class)
 public class BookServiceTest {
     @Test
-    public void testGetById(){
-
-    }
-
+    public void testGetById(){}
 }
 ```
+
+### @WebMvcTest 测试
+
+- @WebMvcTest：测试注解，在SpringMVC应用的上下文中执行。
+
+```java
+mockMvc.perform(MockHttpServletRequestBuilder).andExpect(MockHttpServletRequestBuilder);
+```
+
+| 类                            | 说明           |
+| ----------------------------- | -------------- |
+| MockMvc                       | 模拟MVC。      |
+| MockHttpServletRequestBuilder | 模拟请求信息。 |
+| MockMvcResultMatchers         |                |
+
