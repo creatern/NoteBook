@@ -4047,6 +4047,14 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 - @WebMvcTest：测试注解，在SpringMVC应用的上下文中执行。
 
+### MockMvc
+
+```java
+mockMvc.perform(MockHttpServletRequestBuilder).andExpect(MockHttpServletRequestBuilder);
+```
+
+- MockHttpServletRequestBuilder：存放模拟请求信息。
+
 ## Model
 
 - Model主要用于将数据传递给视图层，以便在视图中渲染数据：Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
@@ -4197,6 +4205,8 @@ MailMessage --> SimpleMailMessae
 MailMessage --> MimeMailMessage
 SpringBoot --> 单元测试 
 ```
+
+> Tomcat作为Spring Boot的一部分运行。
 
 ## Initializr
 
@@ -4404,7 +4414,7 @@ public class BootStudyApplication {
 | @SpringBootConfiguration | SpringBoot配置类 |
 | @ComponentScan           | 组件扫描          |
 
-### 自动配置
+**自动配置**
 
 - @EnableAutoConfiguration 和@SpringBootApplication
 
@@ -4425,6 +4435,49 @@ public class BootStudyApplication {}
 Exclusions:
 -----------
     org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
+```
+
+## Spring Boot DevTools
+
+| DevTools特性   | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| 应用自动重启   | DevTools启动时：应用程序加载到JVM的两个独立类加载器中。<br />加载Java代码、属性文件、main路径的类加载器：变更时重新加载。<br />加载依赖的库的类加载器：变更时原封不动。 |
+| 浏览器自动刷新 |                                                              |
+| 禁用模板缓存   |                                                              |
+| 内置h2控制台   | http://localhost:8080/h2-console                             |
+
+> LiveReload浏览器插件。
+
+## Lombok
+
+- Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
+
+> IDE中需要安装相应的Lombok插件。
+
+```xml
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+</dependency>
+```
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                    </exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 ```
 
 ## Multipart 文件上传
