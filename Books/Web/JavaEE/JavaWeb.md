@@ -1,281 +1,59 @@
-# 基础知识
-
-## JavaWeb 概述
+# JavaWeb 概述
 
 <img src="../../../pictures/26080321227450.png" width="709"/>  
 
+## C/S、B/S
 
+| 体系结构                    | 说明                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| C/S <br />客户端/服务器结构 | <img src="../../../pictures/Snipaste_2023-03-08_16-34-12.png" width="400"/> |
+| B/S <br />浏览器/服务器结构 | <img src="../../../pictures/Snipaste_2023-03-08_16-34-48.png" width="400"/> |
 
-<img src="../../../pictures/Snipaste_2022-11-17_01-43-35.png" width="600"/>  
-
-## C/S和B/S体系结构
-
-### C/S 客户端/服务器结构
-
-- 在这种结构中，服务器通常采用高性能的PC机或工作站，并采用大型数据库系统，客户端则需要安装专用的客户端软件。可以充分发挥两端硬件环境的优势，将任务合理分配到客户端和服务器，从而降低了系统的通信开销。
-
-<img src="../../../pictures/Snipaste_2023-03-08_16-34-12.png" width="400"/>  
-
-### B/S 浏览器/服务器结构
-
-- 在这种结构中，客户端不需要开发任何用户界面，而统一采用浏览器，通过Web浏览器向Web服务器发送请求，由Web服务器进行处理，并将处理结果逐级传回客户端。通过利用浏览器技术来减少开发成本，成为当今应用软件的首选体系结构。
-
-<img src="../../../pictures/Snipaste_2023-03-08_16-34-48.png" width="400"/>  
-
-### C/S和B/S的比较
-
-**开发和维护成本上：**
-
-- C/S结构的开发和维护成本都比B/S结构高。采用C/S结构时对于不同的客户端要开发不同的应用程序而且软件的安装、调试和升级均需要在所有的客户机上进行。
-- 而B/S结构的软件则不必在客户端进行安装和维护，只需要对服务器进行升级维护即可。
-
-**客户端负载**
-
-- C/S结构充分利用客户端机器的资源，减轻服务器的负荷（一部分安全要求不高的计算任务存储任务放在客户端执行，不需要把所有的计算和存储都在服务器端执行，从而能够减轻服务器的压力，也能够减轻网络负荷)。
-- B/S结构所有的计算和存储任务都是放在服务器端的，服务器的负荷较重；在服务端计算完成，之后把结果再传输给客户端，因此客户端和服务器端会进行非常频繁的数据通信，从而网络负荷较重。
-
-**安全性**
-
-- C/S结构适用于专人使用的系统，经过严格的管理派发软件，安全性高于B/S结构。
+| 比较           | C/S                                                          | B/S                                                          |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 开发和维护成本 | 不同的客户端要开发不同的应用程序而且软件的安装、调试和升级均需要在所有的客户机上进行。 | 不必在客户端进行安装和维护，只需要对服务器进行升级维护即可。 |
+| 客户端负载     | 减轻服务器的压力<br />减轻网络负荷                           | 服务器的负荷较重<br />网络负荷较重                           |
+| 安全性         | 高于B/S                                                      |                                                              |
 
 ## Web应用程序的工作原理
 
-- Web应用程序可以分为静态网站和动态网站。
-
-### 静态网站
-
-- 使用HTML语言编写的，放在Web服务器上，用户使用浏览器通过HTTP协议请求服务器上的Web页面。服务器上的Web服务器将接受到的用户请求处理后，再发送给客户端浏览器，显示给用户。
-
-<img src="../../../pictures/Snipaste_2023-03-08_16-50-52.png" width="500"/>  
-
-### 动态网站
-
-- **根据用户的请求动态地生成页面信息**。通常使用HTML语言和动态脚本语言（JSP、ASP、PHP等）编写，并将编写后的程序部署到Web服务器上，由Web服务器对动态脚本代码进行处理，并转化为浏览器可以解析的HTML代码，返回给客户端浏览器，显示给客户。
-- 并不等同于带有动画效果的网页，而是具有交互功能的网页。
-
-<img src="../../../pictures/Snipaste_2023-03-08_16-51-06.png" width="500"/>  
-
-## MVC模式和三层架构
-
-**MVC 分层开发**
-
-- Model 业务模型 如JavaBean
-- View 视图，界面 如JSP
-- Controller 控制器，处理请求，调用模型和视图 如Servlet
-
-**三层架构**
-
-| 层级       | 说明                                                         | 一般命名                       | 框架              |
-| :--------- | :----------------------------------------------------------- | :----------------------------- | :---------------- |
-| 数据访问层 | 对数据库的CRUD基本操作                                       | com.zjk.dao/com.zjk.mapper     | SpringMVC/Struts2 |
-| 业务逻辑层 | 对业务逻辑进行封装，组合数据访问层中基本功能，形成复杂的业务逻辑功能 | com.zjk.service                | Spring            |
-| 表现层     | 接受请求，封装数据，调用业务逻辑层，响应数据。               | com.zjk.web/com.zjk.controller | MyBatis/Hibername |
-
-<img src="C:/Users/zjk10/OneDrive/NoteBook/pictures/image-20210818165808589.png" alt="image-20210818165808589" style="zoom:60%;" />
-
-# 部署
-
-## Web服务器
-
-### Tomcat安装和配置
-
-**目录结构说明**
-
-<img src="../../../pictures/Snipaste_2022-11-19_00-15-23.png" width="300"/>  
-
-**配置环境变量**
-
-1. 需要配置JAVA_HOME（安装JDK时配置的），否则Tomcat打开一闪而过，
-
-  - 因为Tomcat是用C和Java编写的，需要JRE。 
-  - 需要指向JDK的JAVA_HOME，否则不行。
-
-<img src="../../../pictures/Snipaste_2022-11-19_00-58-11.png" width="400"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_01-00-14.png" width="400"/>  
-
-
-2.  配置Tomcat环境变量
-    1. 新建变量名：CATALINA_HOME，变量值：E:\Tomcat8
-    2. 打开PATH，添加变量值：%CATALINA_HOME%\lib;%CATALINA_HOME%\bin
-    3. 将命令行转入到Tomcat安装Bin目录，例如：E:\tomcat8\bin  ，cmd输入命令：`service.bat install`
-
-**启动Tomcat，访问主页**
-
-- 在Tomcat解压的bin目录中，打开startup.bat
-
-<img src="../../../pictures/Snipaste_2022-11-19_00-24-36.png" width="500"/>  
-
-- 浏览器打开`http://localhost:8080`
-
-#### cmd控制台乱码
-
-- 修改conf/logging.properties的
-
-`java.util.logging.ConsoleHandler.encoding=GBK`
-
-#### 部署项目
-
-- 将项目放入Tomcat的webapps目录下即可
-  - 到Tomcat解压目录的webapps目录中创建文件目录
-  - 并且在该目录下创建文件目录：`WEB-INFO` 
-
-<img src="../../../pictures/Snipaste_2023-03-23_14-08-57.jpg" width="200"/> 
-
-- 打包成war包再放入webapps目录
-
-## IDEA Web部署
-
-先新建一个项目Project，再新建一个Module，然后将Moudle设置为Web
-<img src="../../../pictures/Snipaste_2022-11-19_10-24-42.png" width="300"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_10-27-17.png" width="550"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_10-28-00.png" width="300"/>   
-
-## Maven Web部署
-
-<img src="../../../pictures/Snipaste_2023-03-23_14-17-01.jpg" width="1000"/> 
-
-### 骨架创建
-
-<img src="../../../pictures/Snipaste_2023-03-23_14-19-28.jpg" width="600"/> 
-
-**pom.xml配置**
-
-- 打包方式：web项目默认war
-
-`<packaging>war</packaging>`
-
-### 手工创建
-
-<img src="c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-23_14-27-13.png" width="1000" />
-
-## 配置IDEA的Tomcat设置
-
-### 集成本地Tomcat
-
-<img src="../../../pictures/Snipaste_2022-11-19_10-16-09.png" width="300"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_10-17-22.png" width="300"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_10-19-28.png" width="550"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_10-32-24.png" width="550"/>  
-
-<img src="../../../pictures/Snipaste_2022-11-19_10-39-54.png" width="550"/> 
-
-### Tomcat-Maven插件
-
-**pom.xml 添加 Tomcat插件**
-
-- `<path>`标签用于指定应用在Tomcat中的上下文路径，即访问应用时的URL路径。默认情况下，应用的上下文路径是应用的名称
-  - 如：`<path>/mywebapp</path>`在Tomcat中部署该应用后，访问该应用的URL就是`http://localhost:8080/mywebapp`也就是webapp中的内容前加上这些 
-  - 在Maven项目中，通常将web资源文件放置在src/main/webapp目录下
-
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.tomcat.maven</groupId>
-            <artifactId>tomcat7-maven-plugin</artifactId>
-            <version>2.1</version>
-            <configuration>
-                <port>8080</port>
-                <path>/</path>
-                <url>http://localhost:8080/</url>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
-
-**使用Maven Helper 插件快速启动项目，选中项目，右键 --> Run Maven --> tomcat7:run **
-
-- 如果通过IDEA旁边的浏览器打开网页，启动了IDEA内置的Web服务器，而不是Tomcat服务器。IDEA内置的Web服务器端口号为63342，所以你访问的URL中会带有这个端口号。
-
-
-## 常见问题
-
-### 404和`$END$`
-
-- 修改web.xml中的内容，添加`<welcome-file-list></welcome-file-list>`
-  <img src="../../../pictures/Snipaste_2022-11-24_14-53-50.png" width="550"/>  
-  <img src="../../../pictures/Snipaste_2022-11-24_11-20-55png.png" width="550"/>  
-
-### 405
-
-- 当前请求的方法不支持，如POST必须对应doPost()。
-
-### 空指针 NumberFormatException
-
-- 获取的是null时，却进行了操作。
-
-### 乱码问题
-
-#### 控制台编码
-
-- 修改IDEA中的配置setting
-  <img src="../../../pictures/Snipaste_2022-11-19_11-17-35.png" width="550"/>  
-  <img src="../../../pictures/Snipaste_2022-11-19_11-25-51.png" width="550"/>  
-- 修改IDEA中的VM：
-  - -Dfile.encoding=utf-8
-  - -Dconsole.encoding=utf-8
-
-<img src="../../../pictures/Snipaste_2022-11-19_11-26-57.png" width="550"/>  
-
-- 修改IDEA中Tomcat的配置
-  <img src="../../../pictures/Snipaste_2023-03-05_17-23-02.png" width="550"/>  
-
-- 以及修改Tomcat的"D:\Tomcat8\conf\ **logging.properties**"文件
-  <img src="../../../pictures/Snipaste_2023-03-05_17-19-23.png" width="550"/>  
-
-- 重新启动IDEA即可
-
-### Servlet 输出中文字符
-
-- 设置一个环境变量
-- 变量名JAVA_TOOL_OPTIONS
-- 变量值-Dfile.encoding=UTF-8
-
-### HTTP状态 500 - 内部服务器错误
+| Web应用  | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 静态网站 | HTML语言<br /><img src="../../../pictures/Snipaste_2023-03-08_16-50-52.png" width="500"/> |
+| 动态网站 | HTML语言和动态脚本语言<br />根据用户的请求动态地生成页面信息。  <br />（并不等同于带有动画效果的网页，而是具有交互功能的网页）<br /><img src="../../../pictures/Snipaste_2023-03-08_16-51-06.png" width="500"/> |
+
+## MVC三层架构
+
+| 层级                     | 说明                                             |
+| :----------------------- | :----------------------------------------------- |
+| Model（数据访问层）      | 对数据库的CRUD基本操作。                         |
+| Controller（业务逻辑层） | 对业务逻辑进行封装，组合数据访问层中的基本功能。 |
+| View（表现层）           | 接受请求，封装数据，调用业务逻辑层，响应数据。   |
+
+<img src="../../..//pictures/image-20210818165808589.png" alt="image-20210818165808589" style="zoom:60%;" />
 
 # Servlet
-
-## 依赖导入
-
-### 本地集成Tomcat配置
-
-**所需要的API不在JDK内，需要从Tomcat中导入**
-
-- 方式1
-  - 从路径"E:\Tomcat8\lib\servlet-api.jar"导入
-
-- 方式2
-  - 从IDEA中导入
-    <img src="../../../pictures/Snipaste_2022-11-21_23-17-14.png" width="600"/>  
-
-### Tomcat-Maven插件
-
-**导入Servlet依赖**
 
 ```xml
 <dependency>
     <groupId>javax.servlet</groupId>
     <artifactId>javax.servlet-api</artifactId>
     <version>3.1.0</version>
-    <scope>provided</scope>  provided是为了之后打包成war包后在Tomcat中运行不会报错
+    <scope>provided</scope>  
+    <!--provided是为了之后打包成war包后在Tomcat中运行不会报错-->
 </dependency>
 ```
 
 ## Servlet
 
-### Servlet执行过程
+**Servlet处理Web请求的过程**
 
-**处理Web请求的过程**
+1. 服务器接收从客服端发出的请求。
+2. 服务器将请求信息发送至Servlet。
+3. Servlet经过处理之后，生成响应的内容。
+4. 服务器将响应的内容返回给客服端。  
 
-1. 服务器接收从客服端发出的请求
-2. 服务器将请求信息发送至Servlet
-3. Servlet经过处理之后，生成响应的内容
-4. 服务器将响应的内容返回给客服端
-
-<img src="../../../pictures/Snipaste_2022-11-21_23-49-44.png" width="650"/>  
-
-### Servlet结构体系
+### 体系结构
 
 <img src="../../../pictures/Snipaste_2022-11-23_16-02-35.png" width="600"/>  
 
@@ -283,20 +61,9 @@
 
 <img src="../../../pictures/Snipaste_2023-03-23_15-32-19.png" width="600"/> 
 
-**HttpServlet容器响应Web客户请求流程如下：**
-
 <img src="../../../pictures/Snipaste_2022-11-25_09-43-35.png" width="550"/>  
 
-**HTTP的请求方式包括DELETE,GET,OPTIONS,POST,PUT和TRACE,**
-
-- doDelete(),
-- doGet(),
-- doOptions(),
-- doPost(),
-- doPut()
-- doTrace().
-
-##### doGet()和doPost()
+- HTTP的请求方式包括DELETE,GET,OPTIONS,POST,PUT和TRACE：doDelete()、doGet()、doOptions()、doPost()、doPut()、doTrace()。
 
 - HttpServlet依据请求方式的不同而采用不同的处理方法：请求方式由form表单的method属性确定。
 
@@ -315,42 +82,39 @@ public class HttpServletTest extends HttpServlet {
 }
 ```
 
-#### ServletResponse 接口
+#### ServletResponse、HttpServletResponse
 
-| 方法                             | 说明                                                     |
-| :------------------------------- | :------------------------------------------------------- |
-| PrintWriter getWriter()          | 返回PrintWriter对象，用于向客户端发送文本                |
-| String getCharacterEncoding()    | 返回在响应中发送的正文所使用的字符编码                   |
-| void setCharacterEncoding()      | 设置发送到客户端的响应的字符集编码                       |
-| void setContentType(String type) | 设置发送到客户端的响应的内容类型，此时响应的状态尚未提交 |
+| ServletResponse方法              | 说明                                                         |
+| :------------------------------- | :----------------------------------------------------------- |
+| PrintWriter getWriter()          | 返回PrintWriter对象，用于向客户端发送文本                    |
+| String getCharacterEncoding()    | 返回在响应中发送的正文所使用的字符编码                       |
+| void setCharacterEncoding()      | 设置发送到客户端的响应的字符集编码                           |
+| void setContentType(String type) | 设置发送到客户端的响应的内容类型<br />此时响应的状态尚未提交 |
 
-#### HttpServletResponse 接口
-
-| 增加的方法                                | 说明                                                         |
+| HttpServletResponse增加的方法             | 说明                                                         |
 | :---------------------------------------- | :----------------------------------------------------------- |
-| void addCookie(Cookie cookie)             | 增加一个Cookie到响应，此方法可以多次调用，设置多个Cookie     |
-| void addHeader(String name, String value) | 将一个名称为name，值为value的响应报头添加到响应中            |
-| void sendRedirect(String location)        | 发送一个临时的重定向响应到客户端，以便客户端访问新的URL，抛出一个IOException |
-| void encodeURL(String url)                | 使用SessionID对用于重定向的URL进行编码，以便用于sendRedirect()方法中 |
+| void addCookie(Cookie cookie)             | 增加一个Cookie到响应<br />此方法可以多次调用，设置多个Cookie |
+| void addHeader(String name, String value) | 将响应报头（name,value）添加到响应                           |
+| void sendRedirect(String location)        | 发送临时的重定向响应到客户端<br />抛出IOException            |
+| void encodeURL(String url)                | SessionID对用于重定向的URL进行编码                           |
+
+#### ServletRequest、HttpServletRequest
 
 ### Servlet生命周期
 
-<img src="../../../pictures/Snipaste_2022-11-23_15-52-30.png" width="400"/>  
-
-1. 加载和实例化：默认情况下，**当Servlet第一次被访问时，由容器创建Servlet对象**
-2. 初始化：在Servlet实例化之后，容器将调用Servlet的**init()**方法初始化这个对象，完成一些如加载配置文件、创建连接等初始化的工作。**该方法只调用一次**
-3. 请求处理：**每次请求Servlet时**，Servlet容器都会调用Servlet的**service()**方法对请求进行处理。
-4. 服务终止：当需要**释放内存或者容器关闭时**，容器就会调用Servlet实例的**destroy()**方法完成资源的释放。在destroy()方法调用之后，容器会释放这个Servlet实例，该实例随后会被Java的垃圾收集器所回收
+| 生命周期     | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 加载和实例化 | 默认当Servlet第一次被访问时，由容器创建Servlet对象。         |
+| 初始化       | Servlet实例化之后，容器调用Servlet的**init()**方法初始化该对象。<br />**（init()方法只调用一次）** |
+| 请求处理     | **每次请求Servlet时**，Servlet容器都会调用Servlet的**service()**方法对请求进行处理。 |
+| 服务终止     | **释放内存/容器关闭时**，容器调用Servlet实例的**destroy()**方法。<br />destroy()方法调用之后，容器释放该Servlet实例（随后会被gc）。 |
 
 **Servlet的初始化时机：**
 
-- 默认情况下，第一次请求时，tomcat才会去实例化，初始化。 第一次请求时，耗时较长。如果需要提高系统的启动速度，当前默认情况就是这样。如果需要提高响应速度，我们应该设置Servlet的初始化时机。
-- 我们可以通过`<servlet>`元素中的`<load-on-startup>`来设置servlet启动的先后顺序，数字越小，启动越靠前，最小值0
+- 默认情况下，第一次请求时，tomcat才会去实例化、初始化，耗时较长。
+- `<servlet>`中的`<load-on-startup>`设置servlet启动的先后顺序，数字越小，启动越靠前，最小值0。
 
-**Servlet在容器中是：单例的、线程不安全的**
-
-- 单例：Servlet实例tomcat只会创建一个，所有的请求都是这个实例去响应。
-- 线程不安全：
+**Servlet在容器中是单例的、线程不安全的。**
 
 ### web.xml方式
 
