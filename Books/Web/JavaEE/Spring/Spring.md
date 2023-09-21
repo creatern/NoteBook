@@ -3337,12 +3337,14 @@ public class SpringMvcConfig {}
 | ResponseEntity | ResponseEntity对象包含了HTTP响应的状态码、头部信息和响应体等内容。可以直接控制HTTP响应（包括重定向、返回Json数据等操作）。 |
 | void           | 不需要返回任何数据。<br />可以通过HttpServletResponse对象来手动控制HTTP响应（不推荐）。 |
 
-- String，进行页面跳转：
+**String，进行页面跳转**
 
 ```java
-return "/user/index.html";
-return "redirect:/user/index.html"; //重定向
+return "/user";
+return "redirect:/user"; //重定向
 ```
+
+> @RequestMapping("/home")搭配@XxxMapping("/design")：请求映射为/home/design。
 
 ### 请求：参数传递
 
@@ -3552,8 +3554,6 @@ public String userListParamForJson(@RequestBody List<User> list) {
 | ------ | ----------------------------------------------- |
 | String | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
 | 对象   | 对象转换成JSON响应给前端。                      |
-
-
 
 ### 类型转换
 
