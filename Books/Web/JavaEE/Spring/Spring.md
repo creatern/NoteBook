@@ -1870,16 +1870,15 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 ##### 1.导入mybatis-spring
 
 ```xml
-<dependency>
-    <groupId>org.mybatis</groupId>
-    <artifactId>mybatis-spring</artifactId>
-    <version>2.0.5</version>
-</dependency>
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.2.13.RELEASE</version>
-</dependency>
+<groupId>org.mybatis</groupId>
+<artifactId>mybatis-spring</artifactId>
+<version>2.0.5</version>
+```
+
+```xml
+<groupId>org.springframework</groupId>
+<artifactId>spring-jdbc</artifactId>
+<version>5.2.13.RELEASE</version>
 ```
 
 ##### 2.mapper.xml配置
@@ -4309,6 +4308,8 @@ public class UserController {
 }
 ```
 
+## 会话
+
 ### Model
 
 - Model对象负责控制器和视图之间的数据传递：Model属性中的数据被复制到Servlet Request属性中。
@@ -4379,6 +4380,13 @@ public void populateModel(@RequestParam String number, Model model) {
 | ---- | ------------------------------------------------------------ |
 | 位置 | 控制器类                                                     |
 | 作用 | 注解类中存放到Model中的属性在会话中会一直保持。<br />搭配@ModelAttribute使用。 |
+
+> SessionStatus 接口会话状态
+>
+> ```java
+> //将当前处理程序的会话处理标记为完成，允许清理会话属性。
+> sessionStatus.setComplete();
+> ```
 
 ## 拦截器
 
@@ -4809,10 +4817,8 @@ spring.devtools.addproperties=false //关闭默认配置
 > IDE中需要安装相应的Lombok插件。
 
 ```xml
-<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-</dependency>
+<groupId>org.projectlombok</groupId>
+<artifactId>lombok</artifactId>
 ```
 
 ```xml
@@ -7006,6 +7012,15 @@ public class UserController {
   </li>
 </ul>
 ```
+
+## validation 校验（JSR-303）
+
+```xml
+<groupId>org.springframwork.boot</groupId>
+<artifactId>spring-boot-starter-validation</artifactId>
+```
+
+
 
 ## Spring Boot测试
 

@@ -1,8 +1,6 @@
-# Java
+# [Java](./Books/Java/Java.md)
 
 ## 基础知识
-
-### [简述配置](./Books/Java/基础知识/简述配置.md)
 
 ### [基本语法](./Books/Java/基础知识/基本语法.md)
 
