@@ -74,8 +74,6 @@
 
 # JavaEE
 
-## [JavaWeb](./Books/Web/JavaEE/JavaWeb.md)
-
 ## [Mybatis](./Books/Web/JavaEE/Mybatis.md)
 
 ## [Spring](./Books/Web/JavaEE/Spring/Spring.md)
