@@ -575,37 +575,42 @@ public class UserDaoImpl implements UserDao {
 
 ### DI 依赖注入
 
-> setXxx()方法注入的属性值会覆盖给属性赋值的。
->
-> ```java
-> //最终username属性为tom。
-> @Component
-> public class UserDaoImpl implements UserDao {
->     @Value("zjk")
->     private String username;
->     
->     @Value("tom")
->     public void setUsername(String username) {
->         this.username = username;
->     }
-> }
-> ```
+**注入顺序（后面的覆盖前面的）**：字面量/声明 <-- 属性标注 <-- setXxx()标注。
 
-> 隐式注入：只有一个构造器的，其属性由Spring自动注入。
+#### @Value 普通数据
 
-| 注解       | 数据类型                     | 位置       |
-| ---------- | ---------------------------- | ---------- |
-| @Value     | 普通数据                     | 字段、方法 |
-| @Autowired | 类型（byType）注入<br />缺省 | 字段、方法 |
-| @Qualifier | 名称注入<br />结合@Autowired | 字段、方法 |
-| @Resource  | 类型/名称注入                | 字段、方法 |
+- 普通数据：基本数据类型、String。
 
-#### @Autowired自动装配
+| 注解 | @Value                                                       |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 属性、形参、方法<br />参数列表内对单个参数注解，方法上对所有参数注解。 |
+| 作用 | 对普通数据传值注入                                           |
+
+```java
+//最终username属性为tom。
+@Component
+public class UserDaoImpl implements UserDao {
+ @Value("zjk")
+ private String username;
+
+ @Value("tom")
+ public void setUsername(String username) {
+     this.username = username;
+ }
+}
+```
+
+#### @Autowired 自动装配
 
 | 注解 | @Autowired                                                   |
 | ---- | ------------------------------------------------------------ |
 | 位置 | 属性、形参、方法<br />参数列表内对单个参数注解，方法上对所有参数注解。 |
 | 说明 | 优先根据类型自动装配。<br />从Spring容器中匹配 setXxx()、id注入。 |
+
+> @Autowired用于属性注入：
+>
+> 隐式自动装配：只有一个构造器的，Spring会隐式地通过该构造器的参数应用依赖的自动装配。
+> 若具有多个构造器，可在指定的构造器上标注@Autowired。
 
 | 需要注入的Bean数量 | @Autowired说明                                               |
 | :----------------- | :----------------------------------------------------------- |
@@ -674,7 +679,7 @@ public class UserServiceImpl implements UserService {
 }
 ```
 
-#### @PropertySource
+#### @PropertySource 配置文件资源加载
 
 | 注解 | @PropertySource                |
 | ---- | ------------------------------ |
@@ -2912,11 +2917,46 @@ try {
 }
 ```
 
+# Spring Data
+
+## JdbcTemplate
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-jdbc</artifactId>
+```
+
+| 角色                                        | 类/接口           |
+| ------------------------------------------- | ----------------- |
+| pojo                                        | Xxx               |
+| 存储库接口                                  | XxxRepository     |
+| 存储库实现<br />（@Reposity、JdbcTemplate） | JdbcXxxRepository |
+
+| 方法   | 说明       |
+| ------ | ---------- |
+| query  | 查询       |
+| update | 写入、更新 |
+
+- GeneratedKeyHolder
+
+## JdbcOperations
+
+## H2 DB
+
+- 模式定义：若应用的根路径下存在schema.sql文件（src/main/resources），则应用启动时会基于数据库执行该文件。
+- 预加载数据：data.sql，同上。
+
+```xml
+<groupId>com.h2database</groupId>
+<artifactId>h2</artifactId>
+<scope>runtime</scope>
+```
+
 # Sping Boot
 
-> Tomcat作为Spring Boot的一部分运行。
-
 ## Spring Boot 基础
+
+> Tomcat作为Spring Boot的一部分运行。
 
 ### Initializr
 
@@ -3070,8 +3110,6 @@ spring.devtools.addproperties=false //关闭默认配置
 
 ### Thymeleaf
 
-- Thymeleaf ：
-
 | EL表达式 | 名称                                       |
 | -------- | ------------------------------------------ |
 | `@{}`    | 链接表达式                                 |
@@ -3171,23 +3209,6 @@ spring.devtools.addproperties=false //关闭默认配置
       th:errors="*{ccNumber}">CC Num Error</span>
 <!--显示的错误信息：检验注解的message-->
 ```
-
-## Spring Data
-
-### JdbcTemplate
-
-```xml
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-jdbc</artifactId>
-```
-
-| 角色                                        | 类/接口           |
-| ------------------------------------------- | ----------------- |
-| pojo                                        | Xxx               |
-| 存储库接口                                  | XxxRepository     |
-| 存储库实现<br />（@Reposity、JdbcTemplate） | JdbcXxxRepository |
-
-
 
 ## Spring Boot测试
 
