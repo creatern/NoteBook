@@ -3808,6 +3808,22 @@ public class ContextLoaderListener implements ServletContextListener {
 4. 由/save匹配执行对应的方法save()。
 5. 检测到有@ResponseBody直接将save()方法的返回值作为响应体返回给请求方。
 
+> - @EnableWebMvc：开启SpringMVC注解驱动。
+>
+> ```java
+> @Configuration
+> @ComponentScan("com.zjk.controller")
+> @EnableWebMvc
+> public class SpringMvcConfig {}
+> ```
+>
+> | 名称 | @EnableWebMvc             |
+> | ---- | ------------------------- |
+> | 类型 | 配置类注解                |
+> | 位置 | SpringMVC配置类定义上方   |
+> | 作用 | 开启SpringMVC多项辅助功能 |
+>
+
 ### @Controller 控制器
 
 | 名称  | @Controller           |
@@ -3869,22 +3885,16 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 }
 ```
 
-### @EnableWebMvc MVC配置类
+### WebMvcConfigurer 配置MVC
 
-- @EnableWebMvc：开启SpringMVC注解驱动。
+- WebMvcConfigurer接口：定义了多个Spring MVC的配置方法（默认实现，需要时覆盖）。所有配置类都可以实现该接口并覆盖其方法。
 
 ```java
-@Configuration
-@ComponentScan("com.zjk.controller")
-@EnableWebMvc
-public class SpringMvcConfig {}
+//视图控制器
+public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addViewController("/").setViewName("home");
+}
 ```
-
-| 名称 | @EnableWebMvc             |
-| ---- | ------------------------- |
-| 类型 | 配置类注解                |
-| 位置 | SpringMVC配置类定义上方   |
-| 作用 | 开启SpringMVC多项辅助功能 |
 
 ## 请求和响应
 
@@ -4501,97 +4511,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-## 模板引擎
-
-### Thymeleaf
-
-**Thymeleaf 视图模板技术**
-
-- Thymeleaf是适用于Web和独立环境的现代服务器端Java模板引擎。
-- 默认`/classpath:/templates（src/main/resources/tempaltes）`目录下的.html文件被识别为**模板文件**，由模板引擎解析。
-- Thymeleaf使用`@Controller`注解，不能带有`@ResponseBody`。由Controller方法的返回值（String）进行页面跳转。
-
-#### 表达式
-
-| EL表达式 | 名称                                       |
-| -------- | ------------------------------------------ |
-| `@{}`    | 链接表达式                                 |
-| `${}`    | 变量表达式：对整个上下文                   |
-| `*{}`    | 选择变量表达式：对选定对象                 |
-| `#{}`    | 消息表达（文本外部化）：读取配置文件中数据 |
-
-```html
-<!--@{}链接表达式-->
-<link rel="stylesheet" th:href="@{index.css}">
-<script type="text/javascript" th:src="@{index.js}"></script>
-<a th:href="@{index.html}">url</a>
-```
-
-```html
-<!--${}变量表达式-->
-
-<!--普通字符串-->
-<p th:text="${name}"></p>
-<!--POJO类型 person(name,age)-->
-<p th:text="${person.name}"></p>
-<p th:text="${person['name']}"></p>
-<p th:text="${person.getName()}"></p>
-
-<!--List-->
-<tr th:each="item:${userlist}">
-    <td th:text="${item}"></td>
-</tr>
-
-<!--Map取值-->
-<td th:text="${map.place}"></td>
-<td th:text="${map.['place']}"></td>
-<td th:text="${map.get('place')}"></td>
-
-<!--Map遍历-->
-<tr th:each="item:${map}">
-    <td th:text="${item.key}"></td>
-    <td th:text="${item.value}"></td>
-</tr>
-```
-
-```html
-<!--*{}选择变量表达式-->
-<div th:object="${user}">
-    <p>Name: <span th:text="*{name}">赛</span>.</p>
-    <p>Age: <span th:text="*{age}">18</span>.</p>
-    <p>Detail: <span th:text="*{detail}">好好学习</span>.</p>
-</div>
-```
-
-#### 常用标签
-
-| 标签               | 作用               |
-| ------------------ | ------------------ |
-| th:id              | 替换id             |
-| th:text            | 文本替换           |
-| th:utext           | 支持html的文本替换 |
-| th:src             | 替换资源           |
-| th:href            | 替换超链接         |
-| th:object          | 替换对象           |
-| th:value           | 替换值             |
-| th:if<br>th:unless | 判断               |
-| th:each            | 循环               |
-
-- th:each所在标签的内部都会被循环
-
-```html
-<!--List循环-->
-<td th:each="user:${userList}" th:text="${user}"></td>
-
-<!--Map循环-->
-<table>
-    <tr th:each="person:${personMapper}">
-        <td th:text="${person.key}"></td>
-        <td th:text="${person.value}"></td>
-    </tr>
-</table>
-```
-
 ## 异常处理机制
 
 | 抛出异常的常见位置 | 诱因                                                 |
@@ -4776,6 +4695,8 @@ Exclusions:
 ```
 
 ### Spring Boot DevTools
+
+> 应用部署后DevTools禁用自身。
 
 | DevTools特性   | 说明                                                         |
 | -------------- | ------------------------------------------------------------ |
@@ -7013,6 +6934,101 @@ public class UserController {
 </ul>
 ```
 
+## 视图模板库
+
+- pom.xml中存在对应模板库依赖（Thymeleaf等）时，Spring Boot会探测到对应视图模板库并配置相应的Bean（Thymeleaf Bean等）。在`/classpath:/templates（src/main/resources/tempaltes）`编写模板即可。
+- 控制器不能带有`@ResponseBody、@RestController`，由Controller方法的String返回值（视图名）进行页面跳转。
+
+> @ResponseBody、@RestController（@Controller+@ResponseBody）返回值作为响应内容，而不是视图名。
+
+- 模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。
+
+> Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
+
+| 模板             | 启用/禁用缓存属性（默认ture）<br />application.properties |
+| ---------------- | --------------------------------------------------------- |
+| FreeMarker       | spring.freemarker.cache                                   |
+| Groovy Templates | spring.groovy.template.cache                              |
+| Mustache         | spring.mustache.cache                                     |
+| Thymeleaf        | spring.thymeleaf.cache                                    |
+
+### Thymeleaf
+
+- Thymeleaf ：
+
+| EL表达式 | 名称                                       |
+| -------- | ------------------------------------------ |
+| `@{}`    | 链接表达式                                 |
+| `${}`    | 变量表达式：对整个上下文                   |
+| `*{}`    | 选择变量表达式：对选定对象                 |
+| `#{}`    | 消息表达（文本外部化）：读取配置文件中数据 |
+
+```html
+<!--${}变量表达式-->
+
+<!--普通字符串-->
+<p th:text="${name}"></p>
+<!--POJO类型 person(name,age)-->
+<p th:text="${person.name}"></p>
+<p th:text="${person['name']}"></p>
+<p th:text="${person.getName()}"></p>
+
+<!--List-->
+<tr th:each="item:${userlist}">
+    <td th:text="${item}"></td>
+</tr>
+
+<!--Map取值-->
+<td th:text="${map.place}"></td>
+<td th:text="${map.['place']}"></td>
+<td th:text="${map.get('place')}"></td>
+
+<!--Map遍历-->
+<tr th:each="item:${map}">
+    <td th:text="${item.key}"></td>
+    <td th:text="${item.value}"></td>
+</tr>
+```
+
+```html
+<!--*{}选择变量表达式-->
+<div th:object="${user}">
+    <p>Name: <span th:text="*{name}">赛</span>.</p>
+    <p>Age: <span th:text="*{age}">18</span>.</p>
+    <p>Detail: <span th:text="*{detail}">好好学习</span>.</p>
+</div>
+```
+
+| 替换               | -                      |
+| ------------------ | ---------------------- |
+| th:id              | id                     |
+| th:text            | 文本                   |
+| th:utext           | html文本               |
+| th:src             | 资源                   |
+| th:href            | 超链接                 |
+| th:object          | 对象                   |
+| th:value           | 值                     |
+| **流程控制**       | **-**                  |
+| th:if<br>th:unless | 判断                   |
+| th:each            | 循环                   |
+| **检验**           | **-**                  |
+| th:errors          | 异常（搭配validation） |
+| **取值**           | **-**                  |
+| th:field           | 输入域<br />#fields    |
+
+```html
+<!--List循环-->
+<td th:each="user:${userList}" th:text="${user}"></td>
+
+<!--Map循环-->
+<table>
+    <tr th:each="person:${personMapper}">
+        <td th:text="${person.key}"></td>
+        <td th:text="${person.value}"></td>
+    </tr>
+</table>
+```
+
 ## validation 校验（JSR-303）
 
 ```xml
@@ -7020,7 +7036,25 @@ public class UserController {
 <artifactId>spring-boot-starter-validation</artifactId>
 ```
 
+| 注解              | 位置 | 检验                                                         |
+| ----------------- | ---- | ------------------------------------------------------------ |
+| @Valid            | 形参 | 执行该对象（属性已存在以下检验）的检验。<br />如果检验错误，返回Errors对象到该方法的Errors参数<br />（errors# `Boolean hasErrors()`）。 |
+| @NotNull          | 属性 | 非null                                                       |
+| @NotBlank         | 属性 | 非空""                                                       |
+| @Size             | 属性 | min、max：长度限制<br />message：提示信息                    |
+| @CreditCardNumber | 属性 | 合法的信用卡号                                               |
+| @Pattern          | 属性 | 正则<br />regexp                                             |
+| @Digits           | 属性 | integer：整数位数上限<br />fraction：小数位数上限            |
 
+```html
+<!--Thymeleaf渲染检验信息-->
+<label for="ccNumber">Create Card #: </label>
+<input type="text" th:field="*{ccNumber}"/>
+<span class = "validationError" 
+      th:if="${#fields.hasErrors('ccNumber')}"
+      th:errors="*{ccNumber}">CC Num Error</span>
+<!--显示的错误信息：检验注解的message-->
+```
 
 ## Spring Boot测试
 
