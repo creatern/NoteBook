@@ -44,10 +44,6 @@
 
 ### [JDBC](./Books/Java/高级特性/JDBC.md)
 
-### [Lamda](./Books/Java/高级特性/Lamda.md)
-
-### [Stream](./Books/Java/高级特性/Stream.md)
-
 ### [泛型](./Books/Java/高级特性/泛型.md)
 
 ### [注解](./Books/Java/高级特性/注解.md)
