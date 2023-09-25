@@ -34,8 +34,6 @@
 
 ### [枚举](./Books/Java/高级特性/枚举.md)
 
-### [集合](./Books/Java/高级特性/集合.md)
-
 ### [多线程](./Books/Java/高级特性/多线程.md)
 
 ### [IO](./Books/Java/高级特性/IO.md)
