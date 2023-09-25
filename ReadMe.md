@@ -32,8 +32,6 @@
 
 ## 高级特性
 
-### [枚举](./Books/Java/高级特性/枚举.md)
-
 ### [多线程](./Books/Java/高级特性/多线程.md)
 
 ### [IO](./Books/Java/高级特性/IO.md)
@@ -41,8 +39,6 @@
 ### [NIO](./Books/Java/高级特性/NIO.md)
 
 ### [JDBC](./Books/Java/高级特性/JDBC.md)
-
-### [泛型](./Books/Java/高级特性/泛型.md)
 
 ### [注解](./Books/Java/高级特性/注解.md)
 

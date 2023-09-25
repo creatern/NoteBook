@@ -102,9 +102,205 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
 
 ### 数据类型
 
+## 常用类
+
 # 高级特性
 
-## 集合
+## `<T>` 泛型
+
+- 泛型：允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。类型参数在使用时确定（即传入实际的类型参数，也称为类型实参）。
+- 泛型中的类型必须是类。（基本数据类型则使用包装类）
+
+> 1. 解决元素存储的安全性问题。
+> 2. 解决获取数据元素时，需要类型强制转换的问题。
+>
+> - 泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生`ClassCastException`异常。代码更加简洁、健壮。
+
+### 自定义泛型
+
+- 自定义泛型（结构中使用了泛型的）：泛型类、泛型接口、泛型方法。
+
+1. 泛型的声明：`interface List<T> 和 class GenTest<K,V> ` 。其中，T、K、V不代表值，而是表示类型。（任意字母都可以，常用T（Type）表示）
+2. 泛型的实例化（确定类型）：指明泛型中字母代表的类型。
+
+```java
+//以下的String就是对泛型的实例化。
+List<String> strList = new ArrayList<String>();
+```
+
+> 泛型之间是可以嵌套使用的。
+
+#### 泛型类/接口
+
+| 泛型实例化         | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| 没有指明泛型的类型 | 默认类型为java.lang.Object类型，且编译不检查类型（泛型擦除）。 |
+| 指明泛型的类型     | 编译时检查类型，内部结构使用到泛型的位置，都指定为指明的泛型类型。 |
+
+- 泛型使用时类似于Object，但不等同于Object。
+
+```java
+//泛型擦除，编译不会类型检查
+ArrayList list = new ArrayList();
+//一旦指定Object，编译会类型检查，必须按照Object处理
+ArrayList<Object> list2 = new ArrayList<Object>();
+```
+
+- 类型推断：可以只写一部分的`<>`泛型指明。
+
+```java
+Map<String,Integer> map = new HashMap<>();
+```
+
+- 泛型类可能有多个参数，此时应将多个参数一起放在尖括号内：`<E1,E2,E3>`。
+- 实例化后，操作原来泛型位置的结构必须与指定的泛型类型一致。
+- 泛型不同的引用不能相互赋值。
+
+```java
+ArrayList<String> list1 = null;
+ArrayList<Integer> list2 = null;
+//ArrayList<String>、ArrayList<Integer>是不同的两种类型。
+list1 = list2; //错误
+```
+
+| B extends A  | 关系                                                         |
+| ------------ | ------------------------------------------------------------ |
+| `G<A>、G<B>` | A、B是对G中的泛型的指明。<br />不具备子父类关系。<br />`G<?>`是`G<A>、G<B>`的公共父类。 |
+| `A<G>、B<G>` | A、B是类，而G是对A、B中的泛型的指明。<br />具备子父类关系。  |
+
+```java
+public void show(List<Object> list){}
+public void show1(List list){}
+
+//此时的list1和list2不具备子父类关系，是并列的。
+List<Object> list1 = null;
+List<String> list2 = null;
+list1 = list2; //错误 (泛型不同的引用不能相互赋值。)
+
+test.show(list1);
+//show(List<Object> list) 参数也不能是是list2
+//test.show(list2);
+
+test.show1(list1);
+test.show1(list2);
+
+//此时的list01和list02具备子父类关系
+List<String> list01 = null;
+ArrayList<String> list02 = null;
+list01 = list02;
+```
+
+- 如果泛型结构是一个接口/抽象类，则不可创建泛型类的对象。
+- 在类/接口上声明的泛型，在本类或本接口中即代表某种类型，可以作为非静态属性的类型、非静态方法的参数类型、非静态方法的返回值类型，但在静态方法中不能使用类的泛型。
+- 异常类不能是泛型的。
+
+```java
+E[] arr = new E[10]; //错误
+E[] arr = (E[])new Object[10]; //正确
+```
+
+```java
+public class Order<T> {
+    private String orderName;
+    private int orderId;
+
+    //类的内部结构就可以使用类的泛型
+    T orderT;
+
+    //泛型类的构造器不是：public GenericClass<E>(){}
+    public Order() {}
+
+    //静态方法中不能使用类的泛型
+    //public static void show(T orderT){
+    //    System.out.println(orderT);
+    //}
+
+    public T getOrderT() {return orderT;}
+
+    public void setOrderT(T orderT) {this.orderT = orderT;}
+}
+```
+
+#### 泛型方法
+
+- 泛型方法：普通类/泛型类中的方法都可以被泛型化。
+- 泛型方法中出现泛型结构（`<T>`，不是T）时，泛型的参数与类的泛型参数没有任何关系。
+- 泛型方法可以被static修饰。（在方法调用时指明泛型，而非实例化时），但不能在静态方法中使用类的泛型（类的泛型是在实例化的时候指明的，而静态方法在类中实现）。
+
+```java
+//[访问权限] <泛型> 返回类型 方法名([泛型标识 参数名称]) 抛出的异常
+public static <E> List<E> copyFormArrayToList(E[] arr) {
+    ArrayList<E> list = new ArrayList<>();
+
+    for (E e : arr) {
+        list.add(e);
+    }
+    return list;
+}
+```
+
+### 泛型继承
+
+- 当父类有泛型时，子类除了指定或保留父类的泛型，还可以增加泛型。
+
+```java
+class Father<T1, T2> {
+}
+
+//1. 子类不保留父类的泛型
+
+// 1)没有类型（擦除）等价于class Son1 extends Father<Object,Object>{}
+class Son1 extends Father {}
+// 2)指明具体类型。子类在继承带泛型的父类时：如果指明了泛型类型，则实例化子类对象时，不再需要指明泛型
+class Son2 extends Father<Integer, String> {
+}
+
+//2. 子类保留父类的泛型（泛型子类）
+
+// 1)全部保留
+class Son3<T1, T2> extends Father<T1, T2> {}
+// 2)部分保留
+class Son4<T2> extends Father<Integer, T2> {}
+```
+
+### `<?>` 上/下限
+
+| 限制条件       | 描述       | 说明                                          |
+| -------------- | ---------- | --------------------------------------------- |
+| `? extends 类` | 上限（<=） | 指定的类型必须是(该类的子类)继承某个类/接口。 |
+| `? super 类`   | 下限（>=） | 指定的类型（该类的父类）不能小于操作的类。    |
+
+```java
+//Person继承Object，Student继承Person：Object > Person > Student。
+
+//<? extends Person> 需要小于等于Person
+List<? extends Person> list = new ArrayList<Object>(); //错误
+List<? extends Person> list = new ArrayList<Person>();
+List<? extends Person> list = new ArrayList<Student>();
+
+//<? super Person> 需要大于等于Person
+List<? super Person> list = new ArrayList<Student>(); //错误
+List<? super Person> list = new ArrayList<Person>();
+List<? super Person> list = new ArrayList<Object>();
+```
+
+- `<?>`允许所有泛型的引用调用。
+
+```java
+//读取数据
+Person p1 = list1.get(0);
+//Student s1 = list1.get(0); //编译不通过
+Object o2 = list2.get(0);
+//Person p2 = list2.get(0); //编译不通过
+
+//写入数据
+//list1.add(new Person()); 编译不通过
+//list1.add(new Student()); 编译不通过
+list2.add(new Person());
+list2.add(new Student());
+```
+
+## Collection/Map 集合
 
 ### Collection
 
@@ -623,64 +819,60 @@ static class Entry<K,V> extends HashMap.Node<K,V> {
 
 #### TreeMap
 
-- TreeMap存储 Key-Value 对时，需要根据 key-value 对进行排序，保证所有的 Key-Value 对处于有序状态。
+- TreeMap存储键值对时，需要根据键值对进行排序，保证所有的键值对处于有序状态。
 - TreeMap底层使用红黑树结构存储数据，要求所有的 Key 应该是同一个类的对象，否则将会抛出 ClasssCastException。
 
-**TreeMap 的 Key 的排序：**
+| Key排序  | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 自然排序 | 所有的 Key 必须实现 Comparable 接口。                        |
+| 定制排序 | 创建 TreeMap 时，传入一个Comparator对象负责对TreeMap 中的所有 key 进行排序。<br />此时不需要Key实现Comparable 接口。 |
 
 
-- 自然排序：TreeMap 的所有的 Key 必须实现 Comparable 接口
-- 定制排序：创建 TreeMap 时，传入一个 Comparator 对象，该对象负责对TreeMap 中的所有 key 进行排序。
-  - 此时不需要 Map 的 Key 实现Comparable 接口
-- TreeMap判断两个key相等的标准：两个key通过compareTo()方法或者compare()方法返回0。
+- TreeMap判断两个key相等的标准：两个key通过compareTo()方法、compare()方法返回0。
 
 ```java
-public class TreeMapTest {
-    @Test
-    public void test1() {
-        Person p1 = new Person("Tom", 21);
-        Person p2 = new Person("Jac", 23);
-        Person p3 = new Person("Mac", 19);
+Person p1 = new Person("Tom", 21);
+Person p2 = new Person("Jac", 23);
+Person p3 = new Person("Mac", 19);
 
-        TreeMap map = new TreeMap();
+TreeMap map = new TreeMap();
 
-        map.put(p1, 99);
-        map.put(p2, 98);
-        map.put(p3, 100);
+map.put(p1, 99);
+map.put(p2, 98);
+map.put(p3, 100);
 
-        //自然排序
-        //Person类中重写了Comparable接口的compareTo()方法
-        Set entrySet = map.entrySet();
-        Iterator iterator = entrySet.iterator();
-        while (iterator.hasNext())
-            System.out.println(iterator.next());
+//自然排序
+//Person类中重写了Comparable接口的compareTo()方法
+Set entrySet = map.entrySet();
+Iterator iterator = entrySet.iterator();
+while (iterator.hasNext())
+    System.out.println(iterator.next());
 
-        TreeMap treeMap = new TreeMap(new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1 instanceof Person && o2 instanceof Person) {
-                    Person p1 = (Person) o1;
-                    Person p2 = (Person) o2;
+TreeMap treeMap = new TreeMap(new Comparator() {
+    @Override
+    public int compare(Object o1, Object o2) {
+        if (o1 instanceof Person && o2 instanceof Person) {
+            Person p1 = (Person) o1;
+            Person p2 = (Person) o2;
 
-                    return p1.getAge() - p2.getAge();
-                }
-                throw new RuntimeException("数据类型不一致");
-            }
-        });
-        treeMap.putAll(map);
-
-
-        Set entrySet1 = treeMap.entrySet();
-        Iterator iterator1 = entrySet1.iterator();
-        while (iterator1.hasNext())
-            System.out.println(iterator1.next());
+            return p1.getAge() - p2.getAge();
+        }
+        throw new RuntimeException("数据类型不一致");
     }
+});
+treeMap.putAll(map);
+
+
+Set entrySet1 = treeMap.entrySet();
+Iterator iterator1 = entrySet1.iterator();
+while (iterator1.hasNext())
+    System.out.println(iterator1.next());
 }
 ```
 
 #### Properties
 
-- Properties 类是 HashTable 的子类，该对象用于处理属性文件，由于属性文件里的 key、value 都是字符串类型，所以 Properties 里的 key 和 value 都是字符串类型。
+- Properties 类是 HashTable 的子类，该对象用于处理属性文件。由于属性文件里的 key、value 都是字符串类型，所以 Properties 里的 key 和 value 都是字符串类型。
 
 | 方法                                 | 操作 |
 | ------------------------------------ | ---- |
@@ -703,114 +895,204 @@ fileIn.close();
 
 ### Collections
 
-- Collections 是一个操作 Set、List 和 Map 等集合的工具类
-- Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作，还提供了对集合对象设置不可变、对集合对象实现同步控制等方法
+- Collections 是一个操作 Set、List 和 Map 等集合的工具类。
+- Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作，还提供了对集合对象设置不可变、对集合对象实现同步控制等方法。
 
-**排序操作：（均为static方法）**
+| 方法（static）                                               | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| reverse(List)                                                | 反转                                                         |
+| shuffle(List)                                                | 随机排序                                                     |
+| sort(List)<br />sort(List, Comparator)                       | 根据元素的自然顺序按升序排序<br />根据指定的Comparator排序   |
+| swap(List, int, int)                                         | 指定i处元素和j处元素进行交换                                 |
+| Object max(Collection)<br />Object max(Collection，Comparator)<br />Object min(Collection)<br />Object min(Collection，Comparator) | 查找                                                         |
+| int frequency(Collection，Object)                            |                                                              |
+| void copy(List dest,List src)                                | src中的内容复制到dest中<br />IndexOutOfBoundsException: Source does not fit in dest |
+| boolean replaceAll(List list，Object oldVal，Object newVal)  | 替换                                                         |
 
-- `reverse(List)`：反转 List 中元素的顺序
-- `shuffle(List)`：对 List 集合元素进行随机排序
-- `sort(List)`：根据元素的自然顺序对指定 List 集合元素按升序排序
-- `sort(List, Comparator)`：根据指定的 Comparator 产生的顺序对 List 集合元素进行排序
-- `swap(List, int, int)`：将指定 list 集合中的 i 处元素和 j 处元素进行交换
-
-**查找、替换**
-
-- `Object max(Collection)`：根据元素的自然顺序，返回给定集合中的最大元素
-- `Object max(Collection，Comparator)`：根据 Comparator 指定的顺序，返回给定集合中的最大元素
-- `Object min(Collection)`
-- `Object min(Collection，Comparator)`
-- `int frequency(Collection，Object)`：返回指定集合中指定元素的出现次数
-- `void copy(List dest,List src)`：将src中的内容复制到dest中
-  - 注意dest的长度问题，报错 
-- `boolean replaceAll(List list，Object oldVal，Object newVal)`：使用新值替换List 对象的所有旧值
+- Collections的同步控制：提供多个 synchronizedXxx() 方法，将指定集合包装成线程同步的集合，从而解决多线程并发访问集合时的线程安全问题。
 
 ```java
-public class CollectionsTest {
-    @Test
-    public void test1() {
-        List list = new ArrayList();
-        list.add(123);
-        list.add(456);
-        list.add(11);
-        list.add(789);
+List list = new ArrayList();
+list.add(123);
 
-        System.out.println(list); //[123, 456, 11, 789]
+//Collections.synchronizedXxx() 返回线程安全的
+//返回线程安全的list
+List safeList = Collections.synchronizedList(list);
+```
 
-        //Collections.reverse(list); 反转
-        Collections.reverse(list);
-        System.out.println(list); //[789, 11, 456, 123]
+## enum 枚举
 
-        //Collections.shuffle(list); 随机排序
-        Collections.shuffle(list);
+> - JDK1.5之前需要自定义枚举类
+> - JDK 1.5 新增的 enum 关键字用于定义枚举类
+> - 若枚举只有一个对象, 则可以作为一种单例模式的实现方式。
 
-        //Collections.sort(list) 自然排序
-        Collections.sort(list);
+- 枚举类的实例对象是有限个且确定的（已经在枚举类中定义）。
 
-        //Collections.sort(list,Comparator) 定制排序
-        Comparator comparator = new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1 instanceof Integer && o2 instanceof Integer) {
-                    Integer i1 = (Integer) o1;
-                    Integer i2 = (Integer) o2;
+- 枚举类对象的属性不允许被改动, 使用 private final 修饰。
+- 枚举类的构造器是私有的。若枚举类显式的定义了带参数的构造器, 则在列出枚举值时也必须对应的传入参数。
 
-                    return i1 - i2;
-                }
-                throw new RuntimeException("数据类型不一致");
-            }
-        };
-        Collections.sort(list,comparator);
-        System.out.println(list); //[11, 123, 456, 789]
+> 自定义枚举类
+>
+> 1. 私有化类的构造器，保证不能在类的外部创建其对象。
+> 2. 在枚举类的内部创建枚举类的实例。声明为：public static final。
+> 3. 对象如果有实例变量，应该声明为private final，并在构造器中初始化。
+>
+> ```java
+> class Season {
+>     //    1.声明Season对象的属性
+>     private final String seasonName;
+>     private final String seasonDesc;
+> 
+>     //    2.私有化类的构造器,并为对象属性赋值
+>     private Season(String seasonName, String seasonDesc) {
+>         this.seasonName = seasonName;
+>         this.seasonDesc = seasonDesc;
+>     }
+> 
+> //    3.提供当前枚举类的多个对象 public static final
+>     public static final Season SPRING = new Season("春天","万物复苏");
+>     public static final Season SUMMER = new Season("夏天","赤日炎炎");
+>     public static final Season AUTUMN = new Season("秋天","硕果累累");
+>     public static final Season WINTER = new Season("冬天","天寒地冻");
+> 
+> //    其他诉求：getter获取枚举类对象的属性
+>     public String getSeasonName() {
+>         return seasonName;
+>     }
+> 
+>     public String getSeasonDesc() {
+>         return seasonDesc;
+>     }
+> }
+> ```
 
-        //Collections.swap(list, int x, int y) 交换list集合中的x和y位置的元素
-        Collections.swap(list,1,2);
-        System.out.println(list);
+### enum
 
-        //Collections.frequency(Collection, Object)  出现的频率
-        System.out.println(Collections.frequency(list, 11)); //1
+- enum关键字定义的枚举类默认继承了 java.lang.Enum类。
+
+1. 构造器必须私有。
+2. 所有实例必须在枚举类中显式列出（默认 public static final ）。多个对象之间用 `逗号,` 隔开，最后一个对象以`分号 ;`结束。
+3. 必须在枚举类的第一行声明枚举类对象（枚举类的对象要移到最前面）。
+
+```java
+enum Season{
+
+//    1.提供当前枚举类的对象,
+    SPRING("春天","万物复苏"),
+    SUMMER("夏天","赤日炎炎"),
+    AUTUMN("秋天","硕果累累"),
+    WINTER("冬天","天寒地冻");
+
+//    2.声明Season对象的属性
+    private final String seasonName;
+    private final String seasonDesc;
+
+//    3.私有化类的构造器,并为对象属性赋值
+    private Season(String seasonName, String seasonDesc) {
+        this.seasonName = seasonName;
+        this.seasonDesc = seasonDesc;
+    }
+    
+    //其他诉求：
+
+    // getter获取枚举类对象的属性
+    public String getSeasonName() {
+        return seasonName;
     }
 
-    @Test
-    public void test2(){
-        List list = new ArrayList();
-        list.add(123);
-        list.add(456);
-        list.add(11);
-        list.add(789);
+    public String getSeasonDesc() {
+        return seasonDesc;
+    }
 
-        //Collections.copy(toList,fromList) 复制
-
-        //报异常: IndexOutOfBoundsException: Source does not fit in dest
-        //List copyToList = new ArrayList();
-        //Collections.copy(list,copyToList);
-
-        List toList = Arrays.asList(new Object[list.size()]);
-        //System.out.println(toList); //[null, null, null, null]
-        Collections.copy(toList,list);
-        System.out.println(toList);
+    //toString() Enum类中已经重写，默认只打印当前对象名
+    @Override
+    public String toString() {
+        return "Season{" +
+                "seasonName='" + seasonName + '\'' +
+                ", seasonDesc='" + seasonDesc + '\'' +
+                '}';
     }
 }
 ```
 
-#### 同步控制
+#### 选择实现其他接口
 
-- Collections 类中提供了多个 synchronizedXxx() 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题
+| 选择                           | 说明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| 枚举类中实现接口的方法         | 每个枚举值在调用实现的接口方法呈现相同的行为方式。           |
+| 枚举类的实例分别实现接口的方法 | 每个枚举值在调用实现的接口方法呈现不同的行为方式。<br />哪怕只有一个枚举类对象实现也可实现该接口，不会报异常。 |
+
+- 以上两种选择可同时存在。除非每个枚举值都实现了接口的方法，否则选择1必须存在，作为枚举值默认的实现。
 
 ```java
-@Test
-public void test3() {
-    List list = new ArrayList();
-    list.add(123);
-    list.add(456);
-    list.add(11);
-    list.add(789);
+public class SeasonTest {
+    public static void main(String[] args) {
+        Season season = Season.SPRING;
+        season.show();
+    }
+}
 
-    //Collections.synchronizedXxx() 返回线程安全的
-    //返回线程安全的list
-    List list1 = Collections.synchronizedList(list);
+interface Info{
+    void show();
+}
+
+enum Season implements Info{
+
+//    情况二：枚举类的对象分别实现接口中的方法
+    SPRING("春天","万物复苏"){
+    },
+    SUMMER("夏天","赤日炎炎"){
+        @Override
+        public void show() {
+            System.out.println("夏天");
+        }
+    },
+    AUTUMN("秋天","硕果累累"){
+        @Override
+        public void show() {
+            System.out.println("秋天");
+        }
+    },
+    WINTER("冬天","天寒地冻"){
+        @Override
+        public void show() {
+            System.out.println("冬天");
+        }
+    };
+    
+    private final String seasonName;
+    private final String seasonDesc;
+
+    private Season(String seasonName, String seasonDesc) {
+        this.seasonName = seasonName;
+        this.seasonDesc = seasonDesc;
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public String getSeasonDesc() {
+        return seasonDesc;
+    }
+
+    @Override
+    public String toString() {
+        return "Season{" +
+                "seasonName='" + seasonName + '\'' +
+                ", seasonDesc='" + seasonDesc + '\'' +
+                '}';
+    }
+
+//    情况一：实现接口，在枚举类中实现抽象方法
+    @Override
+    public void show() {
+        System.out.println("季节");
+    }
 }
 ```
+
+### Enum
 
 ## Lambda
 
