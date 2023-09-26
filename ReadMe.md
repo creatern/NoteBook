@@ -12,8 +12,6 @@
 
 ### 常用类
 
-#### [Object](./Books/Java/基础知识/常用类/Object.md)
-
 #### [包装类](./Books/Java/基础知识/常用类/包装类.md)
 
 #### [String](./Books/Java/基础知识/常用类/String.md)
@@ -32,19 +30,11 @@
 
 ## 高级特性
 
-### [多线程](./Books/Java/高级特性/多线程.md)
-
 ### [IO](./Books/Java/高级特性/IO.md)
 
 ### [NIO](./Books/Java/高级特性/NIO.md)
 
 ### [JDBC](./Books/Java/高级特性/JDBC.md)
-
-### [注解](./Books/Java/高级特性/注解.md)
-
-### [反射](./Books/Java/高级特性/反射.md)
-
-### [网络](./Books/Java/高级特性/网络.md)
 
 ## [JDK演进](./Books/Java/JDK演进.md)
 
