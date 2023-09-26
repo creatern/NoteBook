@@ -2917,41 +2917,6 @@ try {
 }
 ```
 
-# Spring Data
-
-## JdbcTemplate
-
-```xml
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-jdbc</artifactId>
-```
-
-| 角色                                        | 类/接口           |
-| ------------------------------------------- | ----------------- |
-| pojo                                        | Xxx               |
-| 存储库接口                                  | XxxRepository     |
-| 存储库实现<br />（@Reposity、JdbcTemplate） | JdbcXxxRepository |
-
-| 方法   | 说明       |
-| ------ | ---------- |
-| query  | 查询       |
-| update | 写入、更新 |
-
-- GeneratedKeyHolder
-
-## JdbcOperations
-
-## H2 DB
-
-- 模式定义：若应用的根路径下存在schema.sql文件（src/main/resources），则应用启动时会基于数据库执行该文件。
-- 预加载数据：data.sql，同上。
-
-```xml
-<groupId>com.h2database</groupId>
-<artifactId>h2</artifactId>
-<scope>runtime</scope>
-```
-
 # Sping Boot
 
 ## Spring Boot 基础
@@ -3055,6 +3020,23 @@ spring.devtools.addproperties=false //关闭默认配置
 | spring.devtools.restart.enabled=false                       | 禁用自动重启                                                 |
 | spring.devtools.restart.trigger-file=类路径文件             | 指定触发器文件<br>当设置了触发器文件后：只有该触发器文件被修改才会导致重启。 |
 
+### CommandLineRunner、ApplicationRunner 预加载
+
+- CommandLineRunner、ApplicationRunner：函数式接口。应用启动时，应用上下文中实现了这两个接口的bean都会执行其run()方法（应用上下文和所有bean装配完毕之后、所有其他功能执行之前）。
+
+| 接口              | 区别：传递给run()的参数                                      |
+| ----------------- | ------------------------------------------------------------ |
+| CommandLineRunner | String类型的可变长度参数                                     |
+| ApplicationRunner | ApplicationArguments参数<br />（提供访问已解析命令行参数的方法） |
+
+```java
+//通常在配置类中定义
+@Bean
+public CommandLineRunner testMethod() {
+    return args -> {};
+}
+```
+
 ## Lombok
 
 - Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
@@ -3085,10 +3067,12 @@ spring.devtools.addproperties=false //关闭默认配置
 </build>
 ```
 
-| 注解   | 说明                                            |
-| ------ | ----------------------------------------------- |
-| @Data  | 自动为需要构造器、初始化方法...的创建对应方法。 |
-| @Slf4j | 自动生成SLF4J Logger静态属性。                  |
+| 注解                              | 说明                                                         |
+| --------------------------------- | ------------------------------------------------------------ |
+| @Data                             | 自动为需要构造器、初始化方法...的创建对应方法。              |
+| @Slf4j                            | 自动生成SLF4J Logger静态属性。                               |
+| @AllArgsConstructor               | 所有属性的构造器                                             |
+| @NoArgsConstructor(access, force) | 空参构造器<br /><br />access：权限修饰<br />force：设置默认值（final属性需要） |
 
 ## 视图模板库
 
@@ -3248,3 +3232,104 @@ mockMvc.perform(MockHttpServletRequestBuilder).andExpect(MockHttpServletRequestB
 | MockHttpServletRequestBuilder | 模拟请求信息。 |
 | MockMvcResultMatchers         |                |
 
+# Spring Data
+
+> H2 DB
+>
+> ```xml
+> <groupId>com.h2database</groupId>
+> <artifactId>h2</artifactId>
+> <scope>runtime</scope>
+> ```
+
+## JdbcTemplate
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-jdbc</artifactId>
+```
+
+- 模式定义：若应用的根路径下存在schema.sql文件（src/main/resources），则应用启动时会基于数据库执行该文件。
+- data.sql预加载数据：同上，在数据源bean初始化时执行，适用于任何关系型数据库。
+
+| 角色                                        | 类/接口           |
+| ------------------------------------------- | ----------------- |
+| pojo                                        | Xxx               |
+| 存储库接口                                  | XxxRepository     |
+| 存储库实现<br />（@Reposity、JdbcTemplate） | JdbcXxxRepository |
+
+| 方法   | 说明       |
+| ------ | ---------- |
+| query  | 查询       |
+| update | 写入、更新 |
+
+- GeneratedKeyHolder
+
+### JdbcOperations
+
+## Repository 存储库
+
+- 基于存储库规范接口自动创建存储库，而不需要编写其实现类。
+
+```java
+Xxx extends Repository<持久化对象类型,持久化对象ID类型>{}
+```
+
+- CrudRepository：为存储库规范接口提供一些常用的操作。
+
+> 持久化对象对应的类（领域类）。
+
+> 数据预加载：CommandLineRunner、ApplicationRunner接口，对关系型、非关系型数据库均有效。
+
+### 自定义查询
+
+- Spring Data在生成存储库实现时，检查存储库接口的所有方法，解析方法的名称，并基于被持久化的对象来试图推测方法的目的（DSL 领域特定语言）。持久化的细节都是通过存储库方法的签名实现的。
+
+> Spring Data会忽略大多数的主题单词。
+
+```java
+public Interface TacoOrder extends CrudRepository{
+    //动词+[主题]+关键词By+断言
+    findByDeliveryZip(String deliveryZip);//动词find、主题暗含TacoOrder、关键词By、断言DeliveryZip。
+}
+```
+
+| 方法签名的操作符 | 说明 |
+| ---------------- | ---- |
+|                  |      |
+
+| 注解 | @Query                                         |
+| ---- | ---------------------------------------------- |
+| 位置 | 查询方法                                       |
+| 作用 | 指明方法调用时执行的查询，而不是根据方法签名。 |
+| 参数 | SQL查询语句<br />（JPA中可以使用JPA查询）      |
+
+## Spring Data JDBC
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-jdbc</artifactId>
+```
+
+| 领域类注解 | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| @Id        | 对象的唯一标识属性。<br />若没有唯一标识字段则不用设置。     |
+| @Table     | 可选，默认基于领域类的名称映射到数据库的表（TacoOrder--Taco_Order）。<br />可显式指定表名（类）。 |
+| @Column    | 可选，默认根据属性名自动映射到数据库的列（ccCVV--cc_cvv）。<br />可显式指定字段名。 |
+
+### Persistable
+
+## Spring Data JPA
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+```
+
+| 领域类注解                | 说明                                                         |
+| ------------------------- | ------------------------------------------------------------ |
+| @Entity                   | 声明JPA实体（类）。<br />（JPA需要实体带有空参构造器）       |
+| @Id                       | 对象的唯一标识属性。<br />（javax.persistence，而不是org.springframwork.data.annotation） |
+| @GeneratedValue(strategy) | 生成ID值。<br />strategy：生成策略。                         |
+| @ManyToMany()             | 该属性（对应的类型）和类是多对多的关系。                     |
+| @OneToMany(cascade)       | 所有的该属性（对应的类型）都属于该类（一对多）。<br />cascade：级联范围。 |
