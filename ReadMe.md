@@ -4,21 +4,11 @@
 
 [Applet](./Books/Java/基础知识/Applet.md)
 
-[IO](./Books/Java/高级特性/IO.md)
-
 # [JVM](./Books/Java/JVM.md)
-
-## [内存](./Books/Java/JVM/内存.md)
-
-## [GC](./Books/Java/JVM/GC.md)
-
-## [字节码与类的加载](./Books/Java/JVM/字节码和类的加载.md)
-
-## [性能监控和调优](./Books/Java/JVM/性能监控和调优.md)
 
 # JavaEE
 
-## [Mybatis](./Books/Web/JavaEE/Mybatis.md)
+## [MyBatis](./Books/Web/JavaEE/MyBatis.md)
 
 ## [Spring](./Books/Web/JavaEE/Spring/Spring.md)
 
@@ -202,8 +192,6 @@
 
 # 软件设计
 
-## [软件工程](./Books/软件设计/软件工程.md)
-
 ## [UML](./Books/软件设计/UML.md)
 
 ## [设计模式](./Books/软件设计/设计模式.md)
@@ -211,13 +199,3 @@
 # 信息系统管理
 
 ## [MIS](./Books/信息系统/MIS.md)
-
-# 数学
-
-## [微积分](./Books/数学/微积分.md)
-
-## [线性代数](./Books/数学/线性代数.md)
-
-## [概率统计](./Books/数学/概率统计.md)
-
-## [离散数学](./Books/数学/离散数学.md)
