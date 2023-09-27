@@ -4140,7 +4140,475 @@ bar((DoubleFunction<String>) String::valueOf());
 |                        | `T orElseGet(Supplier<? extends T> other)`               | 如果有值，将其返回<br />否则返回由Supplier接口实现提供的对象 |
 |                        | `T orElseThrow(Supplier<? extends X> exceptionSupplier)` | 如果有值，将其返回<br />否则抛出Supplier接口实现提供的异常   |
 
-# IO、NIO
+
+# IO 流
+
+- java.io：流式IO是一种顺序存取方式，流中的字节依据先进先出的规则。
+
+## 流的分类
+
+> finally处释放流资源：防止流资源泄漏。
+
+### 输入流、输出流
+
+| 基本流             | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| 输入流<br />（读） | 打开一个从某种数据源（文件、内存等）到程序的一个流，从这个流中读取数据。<br />只能从输入流读入，而不能向它写数据 。 |
+| 输出流<br />（写） | 打开到外界某种目的地的流，把数据按顺序写到该流中，以保存在外界。<br />只能向输出流写，而不能从该流中读取数据。 |
+
+| 抽象基类 |    字节流    | 字符流 |
+| :------: | :----------: | :----: |
+|  输入流  | InputStream  | Reader |
+|  输出流  | OutputStream | Writer |
+
+<img src="../../pictures/207913315221148.png" width="500"/> 
+
+| 类型       | 字节输入流           | 字节输出流            | 字符输入流        | 字符输出流         |
+| ---------- | -------------------- | --------------------- | ----------------- | ------------------ |
+| 抽象基类   | InputStream          | OutputStream          | Reader            | Writer             |
+| 访问文件   | FileInputStream      | FileOutputStream      | FileReader        | FileWriter         |
+| 访问数组   | ByteArrayInputStream | ByteArrayOutputStream | CharArrayReader   | CharArrayWriter    |
+| 访问管道   | PipedInputStream     | PipedOutputStream     | PipedReader       | PipedWriter        |
+| 访问字符串 |                      |                       | StringReader      | StringWriter       |
+| 缓冲流     | BufferedInputStream  | BufferedOutputStream  | BufferedReader    | BufferedWriter     |
+| 转换流     |                      |                       | InputStreamReader | OutputStreamWriter |
+| 对象流     | ObjectInputStream    | ObjectOutputStream    |                   |                    |
+| 过滤流     | FilterInputStream    | FilterOutputStream    | FilterReader      | FilterWriter       |
+| 打印流     |                      | PrintStream           |                   | PrintWriter        |
+| 推回输入流 | PushbackInputStream  |                       | PushbackReader    |                    |
+| 特殊流     | DataInputStream      | DataOutputStream      |                   |                    |
+
+### 节点流、过滤流
+
+- 根据流相对于程序的另一个端点的不同：节点流(Node Stream)、过滤流(Filter Stream)。
+
+| 类型          | 说明                                                         |
+| ------------- | ------------------------------------------------------------ |
+| 节点流        | 最基本的流：以特定源如磁盘文件、内存某区域或线程之间的管道为端点构造的输入/输出流。<br />真正完成读写 |
+| 过滤流/处理流 | 以其他已经存在的流为端点构造的输入/输出流，要对与其相连的另一个流进行某种转换，提高读写操作的某一方面的性能。<br />必须依附于某个节点流。 |
+
+| 节点流          | 说明                       | 流                                                           |
+| --------------- | -------------------------- | ------------------------------------------------------------ |
+| Memory(内存I/O) | 从/向内存数组读写数据      | ByteArrayInputStream<br />ByteArrayOutputStream<br />CharArrayReader<br />CharArrayWriter |
+|                 | 从/向内存字符串读写数据    | StringBufferInputStream<br />StringReader<br />StringWriter  |
+| Pipe(管道I/O)   | 实现管道的输入和输出       | PipedInputStream<br />PipedOutoutStream<br />PipedReader<br />PipedWriter |
+| File(文件I/O)   | 文件流，对文件进行读写操作 | FileInputStream<br />FileOutputStream<br />FileReader<br />FileWriter |
+
+| 过滤流（处理流）                                         | 说明                                                         | 流                                                           |
+| -------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Object Serialization(对象I/O)                            | 实现对象的输入/输出                                          | ObjectInputStream<br />ObjectOutputStream                    |
+| Data Conversion(数据转换)                                | 按基本数据类型读写数据                                       | DataInputStream<br />DataOutputStream                        |
+| Printing（打印流）                                       | 方便的打印方法，是最简单的输出流                             | PrintStream<br />PrinterWriter                               |
+| Buffering（缓存I/O）                                     | 读入或写出时，对数据进行缓存，以减少I/O的次数。<br />缓存流一般比相类似的非缓存流效率高，并且常与其他流一起使用。<br />Buffer，缓存区（内存），专用于解决高速设备和低速设备的匹配。 | BufferedInputStream<br />BufferedOutputStream<br />BufferedReader<br />BufferedWriter |
+| Filtering（过滤流）                                      | 抽象类，定义了过滤流的通用方法，在数据读写时进行过滤         | FilterInputStream<br />FilterOutputStream<br />FilterReader<br />FilterWriter |
+| Concatenation（流连接）                                  | 将多个输入流连接成一个输入流                                 | SequenceInputStream                                          |
+| Counting（流数据计数）                                   | 在读入数据时对行计数                                         | LineNumberReader<br />LineNumberInputStream                  |
+| Peeking Ahead（流预读）                                  | 提供缓存机制，进行预读                                       | PushbackInputStream<br />PushbackReader                      |
+| Convering between Bytes and Characters（字节与字符转换） | 按照一定的编码/解码标准将InputStream中的字节转换为字符       | InputStreamReader                                            |
+|                                                          | 反向转换，即把字符转换为字节                                 | OutputStreamWriter                                           |
+
+### 字节流、字符流
+
+- 根据流中的数据单位不同：字节流、字符流。
+
+| 类型   | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| 字节流 | 流中的数据以8位字节为单位进行读写<br />基础类：InputStream、OutputStream<br />主要用于访问非文本 |
+| 字符流 | 流中的数据以16位字符为单位进行读写<br />基础类：Reader、Writer<br />访问文本：ASCII码或Unicode码字符组成的文件、文本文件 |
+
+## 流的套接
+
+- 流链：过滤流将多个流套接在一起，利用各种流的特性共同处理数据。
+
+<img src="../../pictures/207913315221148.png" width="500"/> 
+
+- 先关闭外层的流，再关闭内层的流：在关闭外层流的同时，内层流也会自动进行关闭。
+
+> 1. 一个文件流为了提高效率套接了缓存流，最后套接了数据流以实现按基本数据类型的读取。<img src="../../pictures/232134814221067.png" width="591"/>   
+> 2. 一个输出流，程序中的数据按数据类型写到数据输出流，再经过缓存最后由文件流写到外存的文件中。    <img src="../../pictures/289645014239493.png" width="633"/>
+
+
+## System 标准输入/输出
+
+- Java的标准输入是键盘，标准输出是显示器屏幕（加载Java程序的命令窗口)。
+- Java程序使用字符界面与系统标准输入/输出间进行数据通信。
+
+**System是Java中一个功能强大的类，利用它可以获得Java运行时的系统信息。**
+
+- System类的所有变量和方法都是static修饰。
+
+| 静态变量   |                                       | 说明                                                         |
+| ---------- | ------------------------------------- | ------------------------------------------------------------ |
+| System.in  | `public static final InputStream in`  | 标准输入流，在程序运行时一直打开并准备好提供输入数据<br />默认从键盘输入 |
+| System.out | `public static final PrintStream out` | 标准输出流，在程序运行时一直打开并准备好接收输出的数据<br />默认从控制台输出 |
+| System.err | `public static final PrintStream err` | 标准错误输出流,  在程序运行时一直打开并准备好接收输出的数据。 <br />一般对应于屏幕并且用来显示错误消息或其他能够马上引起用户注意的信息 |
+
+### 输入/输出重定向
+
+| 输入/输出重定向         | 说明           |
+| ----------------------- | -------------- |
+| setIn(InpuStream in)    | 重新指定输入流 |
+| setOut(PrintStream out) | 重新指定输出流 |
+
+### System.in 标准输入
+
+- Java的标准输入System.in：字节输入流InputStream类的对象。
+
+**System.in.read()**
+
+- 必须使用`try catch`对System.in.read()可能抛出的`IOException`类型的异常进行处理。
+- 执行System.in.read()方法将从键盘缓冲区读入一个字节的数据：返回 **16位的整型值** ，该整型值只有低位字节是真正输人的数据，高位字节全部是零。
+- System.in.read()的执行将使整个程序被挂起，直到用户从键盘输人数据才继续运行。
+
+### System.out 标准输出
+
+- Java的标准输出System.out：打印输出流PrintStream类的对象。
+
+### PrintStream/PrintWriter 打印流
+
+- 打印流：PrintStream、PrintWriter提供了一系列重载的print()和println()方法，用于多种数据类型的输出。不会抛出IOException异常、自动flush()。
+
+- 字符集：
+
+  - PrintStream：打印的所有字符都使用平台的默认字符编码转换为字节。
+
+  - PrintWriter：字符。
+
+
+- PrintStream是一种过滤流，其中定义了在屏幕上显示不同类型数据的方法print()和println()。
+
+| 方法      | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| println() | 向屏幕输出其参数指定的变量或对象，然后再换行，光标停留在屏幕下一行第一个字符的位置。<br />如果该方法的参数为空，则输出一个空行。<br />可以在屏幕上输出所有类的对象、属性：基本数据类型、字符数组、Object对象（包括子类）。 |
+| print()   | 输出后不换行，下次输出时将显示在同一行中<br />可以在屏幕上输出所有类的对象、属性。 |
+
+- Juint单元测试不支持标准输入在控制台的输入：read-only。
+
+```java
+BufferedReader bfr = null;
+try {
+    //方法1 使用Scanner类,调用next()返回一个字符串
+
+    //方法2 System.in实现System.in --> 转换流 --> BufferedReader.readLine()
+    InputStreamReader isr = new InputStreamReader(System.in);
+    bfr = new BufferedReader(isr);
+
+    while (true) {
+        System.out.println("请输入");
+        String data = bfr.readLine();
+        if ("e".equals(data.toLowerCase()) || "exit".equals(data.toLowerCase())) {
+            System.out.println("程序结束");
+            break;
+        }
+
+        String upperCase = data.toUpperCase();
+        System.out.println(upperCase);
+    }
+} catch (IOException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        bfr.close();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+```java
+String s;
+//节点流InputStreamReader和过滤流BufferedReader的套接
+BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+//System.in和System.out类似，是System类的一个对象，表示键盘
+
+System.out.println("Please input : ");
+
+try {
+    s = in.readLine();
+    while (!s.equals("exit")) {
+        System.out.println("  read: " + s);
+        s = in.readLine();
+    }
+    System.out.println("End of Inputting.");
+    in.close();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+```java
+PrintStream ps = null;
+try {
+    FileOutputStream fos = new FileOutputStream(new File("G:\\JavaIOTest\\o.txt"));
+    //创建打印输出流,设置为自动刷新模式(写入换行符或字节 '\n' 时都会刷新输出缓冲区)
+    ps = new PrintStream(fos, true);
+    if (ps != null) {//把标准输出流(控制台输出)改成文件
+        System.setOut(ps);
+    }
+    for (int i = 0; i <= 255; i++) { // 输出ASCII字符
+        System.out.print((char) i);
+        if (i % 50 == 0) { // 每50个数据一行
+            System.out.println(); // 换行
+        }
+    }
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+} finally {
+    if (ps != null) {
+        ps.close();
+    }
+}
+```
+
+## Serializable 序列化
+
+- 序列化：将Java程序（内存）中的对象、数据保存在外存中，可以把Java中的对象写入到数据源中，也能把对象从数据源中还原回来。
+
+| 操作     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 序列化   | ObjectOutputStream、DataInputStream<br />保存基本类型数据或对象的机制 |
+| 反序列化 | ObjectInputStream、DataOutputStream<br />读取基本类型数据或对象的机制 |
+
+- 对象序列化机制：允许把内存中的Java对象转换成平台无关的二进制流，从而允许把这种二进制流持久地保存在磁盘上或通过网络将这种二进制流传输到另一个网络节点。当其它程序获取了这种二进制流，就可以恢复成原来的Java对象。可将任何实现了**Serializable**接口的对象转化为字节数据，使其在保存和传输时可被还原。
+
+> 序列化是 RMI过程（Remote Method Invoke 远程方法调用）的参数和返回值都必须实现的机制，而 RMI 是 JavaEE 的基础。
+
+| 关键字    | 不能序列化static和transient修饰的成员变量 |
+| --------- | ----------------------------------------- |
+| static    | 类成员，反序列化时会被变成默认值          |
+| transient | 瞬态，不允许序列化                        |
+
+### transient 瞬态
+
+1. 变量被transient修饰，变量将不会被序列化
+2. transient关键字只能修饰变量，而不能修饰方法和类。
+3. 被static关键字修饰的变量不参与序列化，一个静态static变量不管是否被transient修饰，均不能被序列化。
+4. final变量值参与序列化。如果final transient同时修饰变量，final不会影响transient，一样不会参与序列化。
+
+### 数据流
+
+- 数据流：基本数据类型、String（底层存储）的串行化，读取或写出基本数据类型的变量/字符串。
+
+| 数据流           | 套接目标             |
+| ---------------- | -------------------- |
+| DataInputStream  | InputStream子类的流  |
+| DataOutputStream | OutputStream子类的流 |
+
+| DataInputStream提供的读取数据               | DataOutputStream相对应的写方法                   |
+| :------------------------------------------ | :----------------------------------------------- |
+| byte readByte()                             | void writeByte(int v)                            |
+| boolean readBoolean()                       | void writeBoolean(Boolean v)                     |
+| char readChar()                             | void writeChar(int v)                            |
+| double readDouble()                         | void writeDouble(double v)                       |
+| float readFloat()                           | void writeFloat(float v)                         |
+| int readInt()                               | void writeInt (int v)                            |
+| long readLong()                             | void writeLong(long v)                           |
+| short readshort()                           | void writeshort(int v)                           |
+| String readUTF()  读取以UTF格式保存的字符串 | void writeUTF(String str)  将字符串以UTF格式写出 |
+| -                                           | void writeBytes(String s)                        |
+| -                                           | void writeChars(String s)                        |
+
+- 读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同：否则可能报错、数据顺序出错。
+
+```java
+public class DataStreamTest {
+    //将内存的字符串\基本数据类型的变量写到文件中
+    @Test
+    public void test() {
+        DataOutputStream dataOutputStream = null;
+        try {
+            dataOutputStream = new DataOutputStream(new FileOutputStream("data.txt"));
+            dataOutputStream.writeUTF("小明");
+            dataOutputStream.flush(); //刷新操作，将内存中的数据写入文件
+            dataOutputStream.writeBoolean(true);
+            dataOutputStream.flush();
+            dataOutputStream.writeInt(23);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                dataOutputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    //将文件中存储的基本数据类型变量和字符串读取到内存中，保存在变量中。
+    @Test
+    public void test2() {
+        DataInputStream dataInputStream = null;
+        try {
+            dataInputStream = new DataInputStream(new FileInputStream("data.txt"));
+
+            //读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同
+            String name = dataInputStream.readUTF();
+            boolean sex = dataInputStream.readBoolean();
+            int age = dataInputStream.readInt();
+
+            System.out.println(name + ": " + age + ": " + sex);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                dataInputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+}
+```
+
+```java
+import java.io.*;
+
+public class DataIOTest {
+
+    public static void main(String[] args) throws IOException {
+
+        // 创建数据输出流，前端套接文件流并以invoice1.txt为输出目的地。
+        DataOutputStream out = new DataOutputStream(new FileOutputStream("invoice1.txt"));
+//        数据流作为过滤流，可以实现基本数据类型读写数据
+
+        //定义要保存的数据数组。
+        double[] prices = {19.99, 9.99, 15.99, 3.99, 4.99};
+        int[] units = {12, 8, 13, 29, 50};
+        String[] descs = {"Java T-shirt", "Java Mug", "Duke Juggling Dolls", "Java Pin", "Java Key Chain"};
+
+        //将prices,unites以及descs中的数据以Tab键为分割符保存在文件中。
+        for (int i = 0; i < prices.length; i++) {
+            out.writeDouble(prices[i]);
+            out.writeChar('\t');
+            out.writeInt(units[i]);
+            out.writeChar('\t');
+            out.writeUTF(descs[i]);
+            out.writeChar('\t');
+        }
+        out.close();
+
+        // 创建数据输入流，将上面保存的文件再次打开并读取。
+        DataInputStream in = new DataInputStream(new FileInputStream("invoice1.txt"));
+
+        double price;
+        int unit;
+        String desc;
+        double total = 0.0;
+
+        for (int i = 0; i < prices.length; i++) {
+            price = in.readDouble();
+            in.readChar();       // 扔掉tab键
+            unit = in.readInt();
+            in.readChar();       // 扔掉tab键
+            desc = in.readUTF();
+            in.readChar();   // 扔掉tab键
+
+            System.out.println("You've ordered " + unit + " units of " + desc + " at $" + price);
+            total = total + unit * price;
+        }
+
+        System.out.println("For a TOTAL of: $" + total);
+        in.close();
+    }
+}
+```
+
+### 对象流 （Serializable 标识接口）
+
+- 对象流：ObjectInputStream、ObjectOutputStream，存储和读取基本数据类型数据或对象的处理流。
+
+- 可序列化：如果需要让某个对象支持序列化机制（Serializable、Externalizable接口），则必须让对象所属的类及其内部的成员属性是可序列化的，否则NotSerializableException。
+
+```java
+//实现Serializable接口
+public class Person implements Serializable {
+    public static final long serialVersionUID = 1054860443L;
+}
+```
+
+- serialVersionUID（序列化版本标识符）：表明类的不同版本间的兼容性。对序列化对象进行版本控制，有关各版本反序列化时是否兼容。如果没有显示定义serialVersionUID ，则其值是Java运行时环境根据类的内部细节自动生成的，此时若类的实例变量做了修改，serialVersionUID 可能发生变化，在反序列化时很可能出错。
+
+- 版本一致性：运行时判断类的serialVersionUID来验证版本一致性。在进行反序列化时，JVM会把传来的字节流中的serialVersionUID与本地相应实体类的serialVersionUID进行比较，如果相同就认为是一致的，可以进行反序列化，否则就会出现序列化版本不一致的异常(InvalidCastException)。
+
+<img src="../../pictures/482332600239578.png" width="540"/>   
+
+**序列化、反序列化**
+
+- 序列化 ObjectOutputStream：若某个类实现了 Serializable 接口，该类的对象就是可序列化的。
+
+```java
+//1. 创建ObjectOutputStream对象。
+//2. ObjectOutputStream#writeObject()：输出可序列化对象，搭配flush()。
+
+ObjectOutputStream oos = null;
+try {
+    oos = new ObjectOutputStream(new FileOutputStream("Person01.person"));
+    oos.writeObject(new Person("Jac", 20));
+    oos.flush();
+} catch (IOException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        oos.close();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+- 反序列化 ObjectInputStream：将磁盘文件中的对象还原为内存的一个对象 。
+
+```java
+//1. 创建一个 ObjectInputStream对象。
+//2. readObject()：读取流中的对象。
+
+ObjectInputStream ois = null;
+try {
+    ois = new ObjectInputStream(new FileInputStream("Person01.person"));
+    Person p1 = (Person) ois.readObject();
+    System.out.println(p1);
+} catch (IOException e) {
+    throw new RuntimeException(e);
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        ois.close();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+# NIO （Non-Blocking IO）
+
+- Java NIO (New IO、Non-Blocking IO)：支持面向缓冲区的、基于通道的IO操作。
+
+> IO是面向流的。
+
+| 对比 |       IO       |   NIO   |
+| ---- | :------------: | :-----: |
+| 数据 | byte[] /char[] | Buffer  |
+| 面向 |     Stream     | Channel |
+
+<img src="../../pictures/Snipaste_2023-05-29_10-13-31.png" width="1300"/> 
+
+> java.nio.channels.Channel
+>
+> | 类型            | 类/接口                                                    |
+> | --------------- | ---------------------------------------------------------- |
+> | 标准输入输出NIO | FileChannel                                                |
+> | 网络编程NIO     | SocketChannel<br />ServerSocketCannel<br />DatagramChannel |
+
+## Path
+
+- Path接口：代表一个平台无关的平台路径，描述了目录结构中文件的位置，实际引用的资源可以不存在。
+
+## Files
+
+- java.nio.file.Files：操作文件或目录的工具类。
 
 # 多线程
 
@@ -4829,6 +5297,491 @@ while(守护条件){
 > 2. 返回值通知。
 
 ### Producer-Consumer
+
+# JDBC
+
+- Java数据库连接：实质是一个Java API，可以为多种关系数据库提供统一访问，它由一组用Java语言编写的类和接口组成。
+- JDBC是一套标准的操作数据的规则，即接口；而由数据库厂商来实现这套接口，即数据库驱动jar包。
+- JDBC驱动管理器：JVM的一个组成部分，负责针对各种类型DBMS的JDBC驱动程序，也负责和用户的应用程序交互，为Java建立数据库连接。Java应用程序通过JBDC API向JDBC驱动管理器发出请求，指定要安装的JDBC驱动程序类型和数据源。驱动管理器根据这些要求装载合适的JDBC驱动程序并使该驱动连通相应的数据源。一旦连接成功，该JDBC驱动就负责Java应用与该数据源的一切交互。
+
+<img src="../../pictures/jdbc体系.svg" width="600"/> 
+
+```java
+//1.注册驱动 在JDBC4.0之后可以省略
+Class.forName("com.mysql.jdbc.Driver");
+//2.获取连接
+Connection conn = DriverManager.getConnnection(url,user,passwd);
+//3.获取执行sql对象
+Statement statement = conn.createStatement();
+//4.SQL语句 需要空格来表示换行
+String sql = "sql语句";
+//5.执行sql
+statement.executeXxx(sql);
+//6.对结果集操作 如果是statement.executeQuery(sql)
+ResultSet resultSet = statement.executeQuery(sql);
+//7.释放资源
+statement.close();
+conn.close();
+```
+
+```java
+try {
+    //1.获取驱动
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+}
+
+Connection connection = null;
+Statement statement = null;
+try {
+    //2.建立连接
+    //Oracle的url jdbc:oracle:thin:@localhost:1521:ORCL
+    String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
+    connection = DriverManager.getConnection(url, "scott", "tiger");
+    statement = connection.createStatement();
+
+    //3.执行SQL语句
+    //查询
+    String selectSQL = "SELECT employee_id,department_id,last_name " +
+        "FROM employees " +
+        "WHERE department_id = 80";
+    ResultSet resultSet = statement.executeQuery(selectSQL);
+    //4.处理结果集
+    int emp_id;
+    int dep_id;
+    String emp_name;
+    while (resultSet.next()) {
+        emp_id = resultSet.getInt(1);
+        dep_id = resultSet.getInt(2);
+        emp_name = resultSet.getString("last_name");
+        System.out.println(emp_id + " : " + dep_id + " : " + emp_name);
+    }
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        //5.关闭连接
+        statement.close();
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+## DriverManager JDBC驱动
+
+### 驱动类型
+
+#### Oracle
+
+<img src="../../pictures/87841222239581.png" width="1400"/>   
+
+- Oracle驱动：`oracle.jdbc.driver.OracleDriver`。
+
+#### MySql
+
+### 加载驱动
+
+- DriverManager：加载相应数据库驱动（DriverManager）的实例并注册到驱动管理器 。
+- JDBC4.0之后可省略：DriverManager.getConnection()自动在程序的CLASSPATH中找到驱动。
+
+```java
+Class.forName("驱动");
+```
+
+## Connection接口
+
+### 创建连接 
+
+- Connection：数据库连接。
+
+```java
+Connection conn = DriverManager.getConnection(String url, String user, String passwd);
+```
+
+- url : 指定使用的数据库访问协议和数据源。
+
+````
+jdbc:数据库访问协议:数据源
+````
+
+```java
+//oracle
+jdbc:oracle:thin:@localhost:1521:ORCL
+//mysql
+jdbc:mysql://127.0.0.1:3306/db1
+```
+
+> jdbc:oracle:thin:@localhost:1521:ORCL
+> 协议(jdbc):子协议(oracle:thin):数据源标识(@localhost:1521:ORCL)
+>
+> - oracle:thin 指出连接的是oracle数据库以及连接方式
+>   - 瘦方式：thin，不需要客户端。
+>   - 胖方式：cli，需要安装客户端。 
+> - @localhost:1521:orcl
+>   -  localhost：Oracle数据库的地址（IP地址）。
+>   - 1521：Orcal数据库的监听端口。
+>   - orcl：Orcal数据库的SID。
+
+### 事务管理 
+
+| 方法                     | 说明                 |
+| ------------------------ | -------------------- |
+| setAutoCommit(boolean b) | 默认打开，自动提交   |
+| commit()                 | 显示调用提交COMMIT   |
+| rollback()               | 显示调用回滚ROLLBACK |
+
+```java
+Connection connection = null;
+Statement statement = null;
+try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:ORCL", "scott", "tiger");
+
+    connection.setAutoCommit(true);
+
+    statement = connection.createStatement();
+
+    ResultSet resultSet = statement.executeQuery("SELECT * FROM jdbc_table");
+
+    while (resultSet.next()) {
+        System.out.println(resultSet.getInt("id") + " : " + resultSet.getString("name") + " : " + resultSet.getString("sex"));
+    }
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        statement.close();
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+## Statement 执行SQL语句
+
+### 基本执行
+
+- 创建Statement对象：
+
+```java
+Statement statement = conn.createStatement();
+```
+
+| 执行                               | 说明                                         |
+| ---------------------------------- | -------------------------------------------- |
+| ResultSet executeQuery(String sql) | 查询时<br />返回结果集                       |
+| int executeUpdate(String sql)      | 插入、删除、更新操作时<br />返回受影响的行数 |
+| boolean execute(String sql)        | 既有查询、又有更新时，<br />返回执行是否成功 |
+
+- SQL语句的空格不能忽略：即使字符串换行了，也必须留有空格。
+- SQL语句结尾不能有分号 `;`。
+- SQL语句中的字符类、时间类等需要单引号`''`。
+
+- 释放资源：
+  1. 先关闭Statement对象：statement.close()。
+  2. 再关闭连接：conn.close()。
+
+```java
+statement = connection.createStatement();
+ResultSet resultSet = statement.executeQuery("SELECT * FROM jdbc_table");
+```
+
+### 批量更新
+
+- JDBC4.0之后，Statement支持对数据库的批量操作。
+
+| 方法                 | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| addBatch(Stirng sql) | 向列表中添加SQL语句，将列表中的SQL语句作为一个单元发送到DBMS进行批量执行操作。 |
+| executeBatch()       | 执行批量操作                                                 |
+
+```java
+Connection connection = null;
+Statement statement = null;
+try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:ORCL", "scott", "tiger");
+
+    connection.setAutoCommit(true);
+
+    statement = connection.createStatement();
+
+    statement.addBatch("INSERT INTO jdbc_table VALUES(1001,'Jac','男')");
+    statement.addBatch("INSERT INTO jdbc_table VALUES(1003,'Tom','男')");
+    statement.addBatch("INSERT INTO jdbc_table VALUES(1004,'Ju','女')");
+
+    statement.executeBatch();
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        statement.close();
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+## ResultSet 处理查询结果集
+
+### 获取、处理
+
+- ResultSet结果集：通过游标控制具体记录的访问，游标指向结果集中的当前记录。
+
+| 游标   | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| next() | 将游标移到下一行，并将该行作为用户操作的当前行，如果没有下一行，则返回false。<br />初始为空白，需要进行第一次next()将游标指向第一行，并将该行作为用户操作的当前行，然后再操作之后的。 |
+| last() | 将游标定位到最后一行                                         |
+
+| 获取                    | 获取值方式                                           |
+| ----------------------- | ---------------------------------------------------- |
+| getXxx(String  colName) | 列名，获取指定列的值                                 |
+| getXxx(int columnIndex) | 结果集中列的序号（以1开始，而不是0），获取指定的值。 |
+
+| getXxx    | 返回值类型 | 对应数据库中的数据类型 |
+| :-------- | :--------- | :--------------------- |
+| getInt    | int        | INT                    |
+| getDouble | double     | DOUBLE                 |
+| getString | String     | VARCHAR                |
+
+- 在实体类中，基本数据类型尽量换成包装类；避免基本数据类型的初始值对空值的影响。
+
+### 直接更新
+
+- createStatement(ResultSet.TYPE_SCROILL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)：设置返回的结果集X/ 
+- updateXxx(String colName, Xxx x)：根据指定的列名colName来更新相应的数据（Xxx数据类型的x）。
+  - 指定的列名必须是在JDBC的SQL语句中出现的(不包括`*`)，否则：java.sql.SQLException: 对只读结果集的无效操作
+- updateRow()：使更新操作生效。
+
+```java
+Connection connection = null;
+Statement statement = null;
+try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:ORCL", "scott", "tiger");
+
+    connection.setAutoCommit(true);
+
+    statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+    ResultSet resultSet = statement.executeQuery("SELECT id,name,sex FROM jdbc_table");
+
+    resultSet.last();
+    resultSet.updateString("name", "小均");
+    resultSet.updateRow();
+
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        statement.close();
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+## PraparedStatement 预编译语句 
+
+- 防止SQL注入：即在输入SQL语句获取结果时，将一些语句当成SQL语句来执行。
+- PraparedStatement接口继承了Statement接口。
+
+**开启预编译功能useServerPrepStmts=true**
+
+- 在使用预编译语句之前需要在url加上?useSSL=false&useServerPrepStmts=true
+
+```java
+Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/db1?useSSL=false&useServerPrepStmts=true?)
+```
+
+**对比**
+
+- 在创建Statement对象时，并未指定和执行SQL语句，在执行SQL语句时，需要将SQL语句发送给DBMS，再由DBMS进行编译后执行。
+- 在创建PreparedStatement对象时，就指定了SQL语句并立刻发送给DBMS进行编译，当该PraparedStatement对象执行SQL语句时，DBMS只需要执行已经编译好的语句即可。
+
+**创建预编译语句**
+
+- prepareStatement(String sql)
+  - 创建PreparedStatement对象
+  - 使用`参数表示符 ? `来表示SQL语句中的参数
+
+**设置预编译语句中的SQL语句参数 (即?的内容)**
+
+- setXxx(int paramIndex, Xxx x)
+  - 通过在SQL语句中参数的序号paramIndex（从1开始），设置相应数据类型Xxx的参数值x。
+  - 在设置的过程中，会对传入的参数内容中的**敏感字符转义操作**，避免SQL注入。会自动为相应数据类型的参数补上单引号。
+  - 预编译语句中的SQL语句参数经过设置后，会一直保留，直到被设为新值或调用了clearParameters()方法
+- clearParameters()
+  - 清除预编译语句的SQL语句的所有参数设置。 
+
+```java
+public void prepareStatementSelect(int id, String name) throws Exception {
+    Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/db1?useSSL=false&useServerPrepStms=true");
+    String sql = "SELECT * FROM test WHERE id = ? AND name = ?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    preparedStatement.setInt(1,id);
+    preparedStatement.setString(2,name);
+    ResultSet resultSet = preparedStatement.executeQuery();
+    while(resultSet.next()){
+        System.out.println(resultSet.getInt("id") + ": " + resultSet.getString("name"));
+    }
+}
+```
+
+```java
+import java.sql.*;
+
+public class JDBCTest2 {
+    public static void main(String[] args) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
+            connection = DriverManager.getConnection(url, "scott", "tiger");
+
+            //创建预编译语句
+            String sql = "SELECT employee_id,department_id,last_name " +
+                    "FROM employees " +
+                    "WHERE department_id = ? " +
+                    "  AND salary < ?";
+            preparedStatement = connection.prepareStatement(sql);
+
+            //设置预编译语句SQL语句的参数
+            preparedStatement.setInt(1, 10);
+            preparedStatement.setInt(2, 10000);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt("employee_id") + " : " + resultSet.getInt("department_id") + " : " + resultSet.getString("last_name"));
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+```
+
+## CallableStatement 存储过程调用 
+
+- CallableStatement继承自PreparedStatement接口。
+- 创建CallableStatement对象：
+
+```java
+connection.prepareCall("{call 存储过程名}");
+```
+
+| 执行                               | 说明                                         |
+| ---------------------------------- | -------------------------------------------- |
+| ResultSet executeQuery(String sql) | 查询时<br />返回结果集                       |
+| int executeUpdate(String sql)      | 插入、删除、更新操作时<br />返回受影响的行数 |
+| boolean execute(String sql)        | 既有查询、又有更新时，<br />返回执行是否成功 |
+
+```java
+Connection connection = null;
+CallableStatement callableStatement = null;
+try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+
+    connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:ORCL","scott","tiger");
+    String callSQL = "{call emp_id_sal(1002,'小红','女')}";
+    callableStatement = connection.prepareCall(callSQL);
+    connection.setAutoCommit(true);
+
+    callableStatement.executeUpdate();
+} catch (ClassNotFoundException e) {
+    throw new RuntimeException(e);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+} finally {
+    try {
+        callableStatement.close();
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+```
+
+## DataSource 数据库连接池
+
+- 数据库连接池是个容器，负责分配、管理数据库连接。
+- 允许应用程序重复使用一个现有的数据库连接，而不是重新建立一个。
+- 释放空闲时间超过最大空闲时间的数据库连接来避免由于没有释放数据库连接而引起的数据库连接遗漏。
+
+1. 资源重用。
+2. 提升系统响应速度。
+3. 避免数据库连接遗漏。
+
+- 标准接口 DataSource接口，具体实现：DBCP、C3P0、Druid。
+
+
+
+### Druid
+
+1. 导入jar包
+2. 定义配置文件druid.properties
+3. 加载配置文件
+4. 获取连接池对象
+
+#### druid.properties
+
+```properties
+driverClassName=com.mysql.jdbc.Driver
+url=jdbc:mysql://127.0.0.1:3306/db1?useSSL=false&useServerPrepStmts=true
+username=root
+password=tiger  
+# 初始化连接数
+initialSize=5
+# 最大连接数
+maxActive=10
+# 最大等待时间
+maxWait=3000
+```
+
+#### DruidDataSourceFactory
+
+```java
+//1.加载配置文件
+Properties prop = new Properties();
+//注意路径
+prop.load(new FileInputStream("E:\\IdeaProjects\\MavenProject\\JavaWeb01\\src\\main\\resources\\druid.properties"));
+//2.获取连接池对象
+DataSource dataSource = DruidDataSourceFactory.createDataSource(prop);
+//3.获取数据库连接
+Connection conn = dataSource.getConnection();
+System.out.println(conn);
+```
+
 
 # 网络
 

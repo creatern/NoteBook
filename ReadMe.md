@@ -4,19 +4,9 @@
 
 [Applet](./Books/Java/基础知识/Applet.md)
 
-## 高级特性
+[IO](./Books/Java/高级特性/IO.md)
 
-### [IO](./Books/Java/高级特性/IO.md)
-
-### [NIO](./Books/Java/高级特性/NIO.md)
-
-### [JDBC](./Books/Java/高级特性/JDBC.md)
-
-## [JDK演进](./Books/Java/JDK演进.md)
-
-# JVM
-
-## [JVM概述](./Books/Java/JVM/JVM概述.md)
+# [JVM](./Books/Java/JVM.md)
 
 ## [内存](./Books/Java/JVM/内存.md)
 
