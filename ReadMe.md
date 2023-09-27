@@ -1,32 +1,8 @@
 # [Java](./Books/Java/Java.md)
 
-## 基础知识
+[GUI](./Books/Java/基础知识/GUI.md)
 
-### [基本语法](./Books/Java/基础知识/基本语法.md)
-
-### [数组](./Books/Java/基础知识/数组.md)
-
-### [OOP](./Books/Java/基础知识/OOP.md)
-
-### [异常处理](./Books/Java/基础知识/异常处理.md)
-
-### 常用类
-
-#### [包装类](./Books/Java/基础知识/常用类/包装类.md)
-
-#### [String](./Books/Java/基础知识/常用类/String.md)
-
-#### [日期时间](./Books/Java/基础知识/常用类/日期时间.md)
-
-#### [比较器](./Books/Java/基础知识/常用类/比较器.md)
-
-#### [System](./Books/Java/基础知识/常用类/System.md)
-
-#### [Math](./Books/Java/基础知识/常用类/Math.md)
-
-### [GUI](./Books/Java/基础知识/GUI.md)
-
-### [Applet](./Books/Java/基础知识/Applet.md)
+[Applet](./Books/Java/基础知识/Applet.md)
 
 ## 高级特性
 

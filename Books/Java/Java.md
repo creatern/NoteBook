@@ -93,7 +93,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
 
 1. Java每个变量必须先声明，后使用。
 2. 使用变量名来访问这块区域的数据。
-3. 变量的作用域：其定义所在的一对`{}`（函数体）内，变量只有在其作用域内才有效。
+3. 变量的作用域：其定义所在的一对`{}`（函数体）内，变量只有在其作用域内才有效。由于变量被定义出来后，只是暂存在内存中，等到程序执行到某一个点后，该变量会被释放掉，也就是说变量有它的生命周期。因此变量的有效范围是指程序代码能够访问该变量的区域，若超出该区域访问变量则编译时会出现错误。在程序中，一般会根据变量的有效范围，将变量分为“成员变量”和“局部变量”。
 4. 同一个作用域内，不能定义重名的变量。
 
 - 系统的内存可大略的分为3个区域：系统区（OS）、程序区（Program）、数据区（Data）。当程序执行时，程序代码会加载到内存中的程序区，数据暂时存储在数据区中。
@@ -157,6 +157,8 @@ char c4 = '\u0043';
 >
 > Java语言表达所操作的boolean值，在编译之后都使用JVM中的int数据类型来代替：true用1表示，false用0表示。
 
+- 默认初始化值：整数类型和char都是0、小数都是0.0、boolean是false。 （long、float需要带上标识符）
+
 #### 类型转换
 
 - boolean类型不可以转换为其它的数据类型，也不能与其它数据类型运算。
@@ -183,7 +185,49 @@ int i4 = 2000;
 byte b3 = (byte)i4; //-48 
 ```
 
-##### + 加号与连接符
+#### int 进制
+
+```java
+int num1 = 0b110;
+int num2 = 110;
+int num3 = 0127;
+int num4 = 0x110A;
+```
+
+### 运算符
+
+| 运算方向 | 优先级从高到低         |
+| -------- | ---------------------- |
+|          | `. () {} ; ,`          |
+| R->L     | `++ -- ~ !(type)`      |
+| L->R     | `* / %`                |
+| L->R     | `+ -`                  |
+| L->R     | `<< >> >>>`            |
+| L->R     | `< > <= >= instanceof` |
+| L->R     | `== !=`                |
+| L->R     | `&`                    |
+| L->R     | `^`                    |
+| L->R     | `|`                    |
+| L->R     | `&&`                   |
+| L->R     | `||`                   |
+| R->L     | `?:`                   |
+| R->L     | `= *= /= %=`           |
+| R->L     | `+= -= <<= >>=`        |
+| R->L     | `>>>= &= ^= |=`        |
+
+- % ：如果对负数取模，忽略模数负号，取正值计算。
+- /：整数之间做除法时，只保留整数部分而舍弃小数部分。
+- 只有单目运算符、三元运算符、赋值运算符是从右向左运算的。
+- 赋值运算符支持连续赋值。
+
+```java
+int a,b;
+a = b = 1;
+```
+
+- `==`比较基本数据类型的大小、引用类型的地址值。
+
+#### + 加号与连接符
 
 | +      | 说明                                                         |
 | ------ | ------------------------------------------------------------ |
@@ -196,18 +240,80 @@ System.out.println("" + 1 + 2); //12
 System.out.println(1 + 2 + ""); //3
 ```
 
-#### int 进制
+#### i++、++i
+
+| 自增/自减 | 说明                                |
+| --------- | ----------------------------------- |
+| i++、i--  | 先返回值，再进行自增/自减。         |
+| ++i、--i  | 先进行自增/自减，再返回计算后的值。 |
 
 ```java
-int num1 = 0b110;
-int num2 = 110;
-int num3 = 0127;
-int num4 = 0x110A;
+//++、-- 不会改变数据类型
+byte b1 = 127;
+b1++; //-128
 ```
 
-### 运算符
+```java
+(num++)++ //错误
+```
+
+#### `?:` 三元运算符
+
+```java
+条件表达式 ? 表达式1 ：表达式2；
+```
+
+- `?:`要求返回一个结果。 条件表达式为boolean类型，true则返回表达式1，false则返回表达式2。  表达式1和表达式2为要求是同种类型,或者可自动转换（自动将类型转换为最高的一个） 。
+
+#### 逻辑运算
+
+<img src="../../pictures/331722510239086.png" width="608"/>  
+
+- `&` 左边无论真假，右边都进行运算。
+- `&&`（短路）如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。
+
+#### 位运算
+
+<img src="../../pictures/257723710239788.png" width="602"/>   
 
 ### 数组
+
+- 数组（Array）：多个相同类型数据按一定顺序排列的集合，并使用一个名字命名，并通过编号的方式对这些数据进行统一管理。
+
+- 数组本身是引用数据类型，而数组中的元素可以是任何数据类型。创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是这块连续空间的首地址，故数组的长度一旦确定就不能修改。
+
+- 数组从维度、数据类型来区别。
+
+```java
+int[] arr1;
+//int 数据类型
+//[] 维度
+```
+
+```java
+//一维数组
+int[] arr; //还未分配空间
+//静态初始化
+int[] arr = new int[]{1,2,3};
+//动态初始化
+int[] arr = new int[3]; //对数组默认初始化
+
+//多维数组（以二维为例）相当于数组内保存对其他数组的引用。
+int[][] arr; //还未分配空间
+int[][] arr = new int[3][]; //3xn
+int[][] arr = new int[3][3]; //3X3
+int[][] arr = {
+    {1,2},
+    {1,2,3}
+};
+```
+
+- 数组索引调用 0开始，-1结尾。ArrayIndexOutofBoundsExcetion、NullPointerException。
+
+```java
+arr[0];
+arr[-1];
+```
 
 ### 流程控制
 
@@ -291,10 +397,8 @@ for (①初始化部分; ②循环条件部分; ④迭代部分){
 }
 ```
 
-- 循环条件在循环失败时也执行了一次。
-- 循环条件部分为boolean类型表达式，当值为false时，退出循环。
-- 初始化部分和循环条件部分可以声明/更新多个变量，但必须是同一个类型，用逗号分隔。
-- 初始化部分若声明变量，则该变量只在该循环中有效。
+- 循环条件部分为boolean类型表达式，当值为false时，退出循环。在每次开始循环前执行检查（在循环失败时也执行了一次）。
+- 初始化部分和循环条件部分可以声明/更新多个变量，但必须是同一个类型，用逗号分隔。初始化部分若声明变量，则该变量只在该循环中有效，且只在第一次循环开始前声明。循环条件部分声明的变量在每次循环开始前都会再次声明。
 
 > for循环中的①-②-③-④均可以省略。
 >
@@ -400,7 +504,571 @@ label3:         { ……
         }
 ```
 
-## OOP
+## OOP 面向对象程序设计
+
+- 面向对象：封装性、继承性、多态性、（抽象性）。
+
+| 思想                          | 说明                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| POP<br />（面向过程程序设计） | 强调功能行为。<br />以函数为最小单位，考虑怎么做。           |
+| OOP<br />（面向对象程序设计） | 强调具备功能的对象。<br />以类/对象为最小单位，考虑谁来做 。 |
+
+- 类：对一类事物的描述，是抽象的，概念上的定义。
+- 对象（实例）：实际存在的该类事物的每个个体。如果创建了一个类的多个对象，则每个对象都独立的拥有一套类的实例属性（非static的）。
+- 匿名对象：不定义对象的句柄（创建的变量没有显式的赋给一个变量名），而直接调用这个对象的方法，调用之后就等待垃圾回收。对一个对象只需要进行一次方法调用、将匿名对象作为实参传递给一个方法调用。
+
+```java
+new Person().say(); 
+```
+
+### OOP三大特性
+
+#### 封装性（隐藏）
+
+>  **高内聚低耦合**
+>
+> - 高内聚 ：类的内部数据操作细节自己完成，不允许外部干涉。
+> - 低耦合 ：仅对外暴露少量的方法用于使用。
+
+- 封装性：隐藏一个类中不需要对外提供的实现细节，只对外公开简单的接口，便于外界调用，从而提高系统的可扩展性、可维护性。属性是封装的最小单位。
+
+> 通常将成员声明为私有的，再提供公共的方法：getXxx()、setXxx()。
+
+**访问权限修饰符**
+
+<img src="../../pictures/Snipaste_2023-05-31_14-50-43.png" width="400"/> 
+
+- 权限修饰类的内部结构：属性、方法、构造器、内部类。
+
+- 对于class的权限修饰只可以用public和default（缺省）。
+  - public类可以在任意地方被访问。
+  - default类只可以被同一个包内部的类访问。   
+
+#### 继承性
+
+- Java只支持单继承和多层继承，不允许多重继承：一个子类只能有一个父类，一个父类可以派生出多个子类。
+
+> 接口允许多重继承。  
+
+- 继承使类与类之间产生关系，提供了多态的前提。
+- 继承不改变类成员的访问权限 ：如果父类的成员是公有的、被保护的或默认的，子类仍具有相应的这些特性，并且子类不能获得父类的构造方法。
+- 封装性：子类不能直接访问父类中私有的(private)的成员变量和方法 。
+- final修饰的类表示最终类，不能被继承。
+
+##### extends 继承
+
+- 子类继承父类的方法和属性：获取了直接父类和所有间接父类中声明的属性和方法。
+
+<img src="../../pictures/Snipaste_2023-04-17_01-54-34.png" width="1000"/>   
+
+| 关系                 | 说明                                             |
+| -------------------- | ------------------------------------------------ |
+| 父类（基类）（超类） | 将多个类中相同的属性和方法抽象出来形成的一般类。 |
+| 子类（派生类）       | 继承了父类，具有特殊的属性和方法。               |
+
+```java
+class Subclass extends SuperClass{ }  
+```
+
+##### @Override 重写
+
+- 方法重写（重置、覆盖）：在程序执行时，子类重写的方法将覆盖父类原有的方法。
+
+1. 子类重写的方法必须和父类被重写的方法具有相同的方法名称、参数列表。
+2. 子类重写的方法的返回值类型不能大于父类被重写的方法的返回值类型。
+   - 父类被重写的方法的返回值是void，则子类重写的方法的返回值类型只能是void
+   - 父类被重写的方法的返回值是A类型，则子类重写的方法的返回值类型可以是A类或A类的子类
+   - 父类被重写的方法的返回值是基本数据类型，则子类重写的方法的返回值类型必须是相同的基本数据类型(父类double则子类只能是double)。
+3. 子类重写的方法使用的访问权限不能小于父类被重写的方法的访问权限。子类不能重写父类中声明为private权限的方法。
+4. 子类重写的方法抛出的异常不能大于父类被重写方法抛出的异常。
+
+> static：静态方法是属于类的，不能被重写。
+
+> 重载：允许存在多个同名方法，而这些方法的参数不同。编译器根据方法不同的参数表，对同名方法的名称做修饰。对于编译器而言，这些同名方法就成了不同的方法。它们的调用地址在编译期就绑定了。
+>
+> - Java的重载是可以包括父类和子类的，即子类可以重载父类的同名不同参数的方法。
+>
+
+##### this 当前对象
+
+| this位置   | 说明                     |
+| ---------- | ------------------------ |
+| 方法内部   | 该方法所属对象的引用     |
+| 构造器内部 | 该构造器正在初始化的对象 |
+
+1. 任意方法或构造器内，如果使用当前类的成员变量、成员方法可以在其前面添加this（默认存在）。
+2. 区分成员变量和局部变量：当形参与成员变量同名时，如果在方法内或构造器内需要使用成员变量，必须添加this来表明该变量是类的成员变量。
+3. this访问属性和方法时，如果在本类中未找到，会从父类中查找。
+4. this可以调用类的属性、方法和构造器，可作为一个类中构造器相互调用的特殊格式。
+
+##### super 父类对象
+
+- super：调用父类中的指定操作、表明调用的是父类中的成员，追溯不仅限于直接父类。
+
+| 使用            | 说明                                                     |
+| :-------------- | :------------------------------------------------------- |
+| super.属性      | 访问父类中定义的属性                                     |
+| supere.方法     | 调用父类中定义的成员方法<br>在子类中调用父类被重写的方法 |
+| super(形参列表) | 在子类构造器中调用父类的构造器                           |
+
+- this代表本类对象的引用，super代表父类的内存空间的标识
+
+| 比较       | this                                                       | super                                    |
+| ---------- | ---------------------------------------------------------- | ---------------------------------------- |
+| 访问属性   | 访问本类中的属性，如果本类中没有该属性，则从父类中继续查找 | 直接访问父类中的属性                     |
+| 调用方法   | 访问本类中的方法，如果本类中没有该方法，则从父类中继续查找 | 直接访问父类中的方法                     |
+| 调用构造器 | 调用本类构造器，必须放在本类构造器的首行                   | 调用父类构造器，必须放在子类构造器的首行 |
+
+#### 多态性
+
+##### 对象的多态性
+
+- 对象的多态性：编译时类型和运行时类型不一致，父类的引用指向子类的对象。内存中实际加载了子类特有的属性和方法，但是由于变量声明为父类类型，导致编译时，只能调用父类中声明的属性和方法，子类特有成员不能被调用。若子类重写了父类方法，则系统不可以把父类被重写的方法转移到子类中，故编译时是父类方法，而运行时是子类重写的方法。
+- 对象的多态性不适用于属性（属性的编译和运行都由引用决定）， 父类的属性不会被子类中相同的属性覆盖（编译和运行时都是根据引用的属性，而不是实例的属性）。
+
+| 类型       | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| 编译时类型 | 由声明该变量时使用的类型（引用）决定<br />编译期，只能调用父类中声明的方法 |
+| 运行时类型 | 由实际赋给该变量的对象（实例）决定<br />运行期，实际执行的是子类重写父类的方法 |
+
+```java
+Person p = new Student(); 
+p.getSchool(); //非法：Person类没有getSchool()成员
+```
+
+##### 虚拟方法调用
+
+- 虚拟方法：子类重写了父类的方法，则在对象的多态中，引用（父类）的方法被称为虚拟方法。
+
+| 绑定                     | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| 早绑定<br />（静态绑定） | 对于重载而言，在方法调用之前，编译器就已经确定了所要调用的方法。 |
+| 晚绑定<br />（动态绑定） | 父类根据赋给它的不同子类对象，动态调用属于子类的该方法，在运行时才确定方法的调用。 |
+
+```java
+//假设Student重写了Person的say()
+Person p = new Student(); 
+//虚拟方法调用
+p.say(); //实际运行的是Student中重写后的say()。
+```
+
+##### 对象类型转换
+
+- 造型：引用数据类型的强制转换，无继承关系的引用类型间的转换是非法的。
+
+- instanceof（类型检验符）：（x instanceof A）检验x是否为类A的对象，如果类A是x对象所属类的父类/祖先，则返回true。
+
+<img src="../../pictures/Java-父类和子类的造型.svg" width="600"/> 
+
+```java
+Person p = new Student(); //向上转型
+Stundent s = (Stundent) new Person(); //向下转型
+```
+
+### class 类结构
+
+```java
+package com.zjk; //包
+
+//导入
+import com.zjk.tools.MyTool;
+import static com.zjk.tools.MyUse.staticSetName;
+
+//类
+public class Person{
+    //属性（成员变量）
+    private String name;
+    private boolean isMarried;
+
+    //代码块
+    {
+
+    }
+
+    //构造器d
+    public Person(){
+        name = "Mac";
+        isMarried = true;
+    }
+
+    public Person(String name, boolean isMarried){
+        this.name = name;
+        this.isMarried = isMarried;
+    }
+
+    //方法
+    public void walk(){
+        System.out.println("走路");
+    }
+
+    public String display(){
+        return "名字：" + name;
+    }
+
+    //内部类
+    class Pet{
+        String name;
+        double weight;
+    }
+
+} 
+```
+
+
+
+#### field 属性
+
+<img src="../../pictures/328105822227247.png" width="497"/> 
+
+```
+修饰符 数据类型 属性名 = 初始化值 ;
+```
+
+- 属性权限修饰符：private、缺省、protected、public。
+
+| 比较                 | 成员变量       | 局部变量                                     |
+| -------------------- | -------------- | -------------------------------------------- |
+| 声明位置<br />作用域 | 类内部         | 方法形参、方法内部<br />代码块内、构造器内等 |
+| 修饰符               | 基本都能使用   | 不能使用权限修饰符，<br />可使用final修饰。  |
+| 初始化值             | 有默认初始化值 | 没有默认初始化值                             |
+| 内存加载             | 堆、静态域     | 栈                                           |
+
+> 零值初始化：一个对象被创建时，会对其中各种类型的成员变量自动进行初始化赋值。
+
+#### method 方法
+
+```
+权限修饰符 返回值类型 方法名(形参列表){
+        方法体;    
+}
+```
+
+> 不能在方法的内部再次声明方法、使用权限修饰符。
+
+##### return 返回
+
+- return：返回所需的值或void、并结束当前方法。
+
+| 返回值   | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 有返回值 | 如果方法有返回值，则必须在方法声明时，指定返回值的类型。 <br />并使用return关键字来返回指定类型的变量或常量。 |
+| 没返回值 | 方法声明时，使用void来表示 <br />不使用return 或 `return;`结束此方法。 |
+
+##### 参数列表
+
+- 方法的参数列表允许直接定义能和多个实参相匹配的形参（个数可变）。
+
+1. 可变参数的参数个数是可变的（0、1、n）。
+2. 方法的参数部分的可变形参需要放在形参声明的最后，且最多只能声明一个可变个数形参。
+
+> - JDK 5.0以前：数组形参，传入多个同一类型变量。 （可变形参一定程度上相当于数组形参 ）
+>
+> ```java
+> public static void test(int a, String[] books){};
+> ```
+>
+> - JDK5.0之后：可变个数形参，传入多个同一类型变量。
+>
+> ```java
+> public static void test(int a, String… books){};
+> ```
+
+##### 方法重载
+
+- 重载：同一个类中允许存在一个以上的同名方法，只要参数列表不同（个数、类型）即可，与返回值类型无关。调用时，根据方法参数列表的不同来区别。
+- 可变个数形参的方法与本类中同名的方法之间，彼此构成重载，但可变参数方法的使用与方法参数部分使用数组是一致的不能构成重载（不能共存）。
+
+##### 值传递机制
+
+> Java里方法的参数传递方式只有值传递。 
+
+| 数据类型                         | 赋值   | 说明                                                         |
+| -------------------------------- | ------ | ------------------------------------------------------------ |
+| 基本数据类型                     | 数据值 | 内容的改变对实参没有任何影响。                               |
+| 引用数据类型<br />（包括String） | 地址值 | 对象的内容可以在方法中改变，对象的引用不会改变。 <br />但String具有不可变性。 |
+
+#### 构造器 new
+
+- 构造器：创建对象、给对象进行初始化。每个类都至少有一个构造器，一个类可以创建多个重载的构造器，构造器具有与类相同的名称。
+
+- 构造器不是类的方法。不能有return语句返回值、不声明返回值类型、不能被static、final、synchronized、abstract、native修饰、父类的构造器不可被子类继承。
+
+```
+权限修饰符 类名 (参数列表) {
+    初始化语句；
+} 
+```
+
+| 构造器                               | 说明                                                         |
+| ------------------------------------ | ------------------------------------------------------------ |
+| 隐式空参构造器<br />（系统默认提供） | 若没有显式的定义类的构造器的话，则系统默认提供一个空参的构造器。<br />默认构造器的修饰符与所属类的修饰符一致。 |
+| 显式定义构造器<br />（无参、有参）   | 一旦显式定义了构造器，则系统不再提供默认构造器（空参）。     |
+
+- 子类中所有的构造器默认都会访问父类中空参数的构造器（子类至少有一个构造器调用了父类的构造器 ）：this/super必须在类的构造器的首行，且一个构造器中最多只能存在一个this/super。构造器中使用this调用本类中重载的其他的构造器，但不能通过this调用自身。如果一个类中声明了n个构造器，则最多有 n - 1个构造器中使用了this。如果子类构造器没有在首行显式调用父类或本类的构造器，且父类中又没有无参的构造器，则编译出错。父类中没有空参数的构造器时，子类必须通过this(参数列表) 或 super(参数列表)在构造器的首行指定调用本类/父类中相应的构造器，且只能选择其中一种构造器。
+
+```java
+class Person{
+    private String name;
+    private int age;
+
+    public Person() {
+        //this(); //错误 构造器中不能通过this调用自身。
+        this(age) //错误 与Person(int age)[有this()]形成一个死循环
+    }
+
+    public Person(String name) {
+        this();  //调用Person()
+        this.name = name;
+    }
+}
+```
+
+- 从过程上来看，当通过子类的构造器创建子类对象时，一定会直接/间接的调用其父类的构造器，继而调用其父类的父类的构造器，直到调用了java.lang.Obeject类中空参的构造器为止。无论哪个构造器创建子类对象，必须保证先初始化父类。子类继承父类中所有的属性和方法，因此子类有必要知道父类如何为对象进行初始化。正因为加载过所有父类的构造器，所以才可以看到内存中有父类中的结构，子类对象才可以考虑进行调用。虽然在创建子类对象时，调用了父类的构造器，但就只创建了一个对象，即为new的子类对象。
+
+
+<img src="../../pictures/Java-super构造器调用.svg" width="1400"/>      
+
+#### 代码块（初始化块）
+
+- 代码块：对Java类或对象进行初始化。代码块有且只能使用static修饰（静态代码块） 用于初始化static的属性。
+
+```java
+class Person {
+    public static int total;
+
+    static {
+        total = 100;//为total赋初值
+    }
+    …… //其它属性或方法声明
+}
+```
+
+<img src="../../pictures/Java-赋值顺序流程.svg" width="1200"/>
+
+
+
+| 比较     | 非静态代码块                                                 | 静态代码块（static）                                         |
+| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 相同     | 可以有输出语句                                               | 可以有输出语句                                               |
+| 初始化   | 可以对非静态的属性初始化。<br />                             | 可以对静态属性、类的声明进行初始化操作。<br />不可以对非静态的属性初始化。 |
+| 调用     | 除了调用非静态的结构外，还可以调用静态的变量或方法。         | 不可以调用非静态的属性和方法。                               |
+| 执行顺序 | 每次创建对象的时候，都会执行一次。且先于构造器执行。  <br />若有多个非静态的代码块，那么按照从上到下的顺序依次执行。 | 若有多个静态的代码块，那么按照从上到下的顺序依次执行。 <br />静态代码块的执行要先于非静态代码块<br />静态代码块随着类的加载而加载，且只执行一次。 |
+
+#### package 包
+
+- Java中包是相关类与接口的一个集合，它提供了类的命名空间的管理和访问保护。以包为单位的独立命名空间，位于不同包中的类即使同名也不会冲突，解决了命名冲突的问题。 
+- 包具有特定的访问控制权限，同一个包中的类之间拥有特定的访问权限（缺省）。
+- 包对应于文件系统的目录（路径），package语句中，用 “.” 来指明包(目录)的层次；通常用小写单词标识。通常使用所在公司域名的倒置：com.atguigu.xxx。
+
+| 常见包    | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| java.lang | Java语言的核心类，如String、Math、Integer、 System和Thread，提供常用功能。 |
+| java.net  | 执行与网络相关的操作的类和接口                               |
+| java.io   | 能提供多种输入/输出功能的类                                  |
+| java.util | 一些实用工具类，如定义系统特性、接口的集合框架类、使用与日期日历相关的函数。 |
+| java.text | 一些java格式化相关的类                                       |
+| java.sql  | JDBC数据库编程的相关类/接口                                  |
+| java.awt  | 构成抽象窗口工具集（abstract window toolkits）的多个类，这些类被用来构建和管理应用程序的图形用户界面(GUI) |
+
+- package：指定一个源文件中的类属于一个特定的包。在每个Java源程序中只能有一条，且必须在程序的第一行，该行前可以有空格或注释行。一个类只能属于一个包。如果源文件中没有package语句，则指定为无名包。无名包没有路径，一般情况下，会把源文件中的类存储在当前目录（即存放Java源文件的目录）下。
+- 包中的成员是指包中的类和接口：只有public类型的成员才能被包外的类访问。先引入包成员/整个包，之后使用短名(short name,类名或接口名)引用包成员。
+
+```java
+package pkg1[.pkg2[.pkg3...]];
+```
+
+```java
+package graphics;
+//Circle类成为graphics包中的一个public成员，并存放在classPath\graphics目录中。
+public class Circle extends Graphic implements Draggable{
+    ...
+}
+```
+
+#### import 引入
+
+```java
+import [static] pkgl[.pkg2[.pkg3.].(classname|*)；
+//pkgl[.pkg2[.pkg3…]表明包的层次，与package语句相同，它对应于文件目录，classname则指明所要引入的类。
+```
+
+> java.lang包：如果导入的类/接口是该包的，或者是当前包下的，则可以省略此import语句。
+
+1. import必须在源程序所有类声明之前，在package语句之后，显式的导入指定包下的类或接口。已经导入的包，如果需要使用其子包的成员，则还需要导入该子包。
+2. import static：调用指定类/接口下的静态的属性/方法。
+3. 通配符(`*`)(`java.util.*`)，一次性导入util包下所有的类或接口。
+4. 不同包下的同名的类：需要使用类的全限定名指明调用的是哪个类。
+
+> java.util.Date、java.sql.Date。
+
+### 内部类
+
+- 在Java中，允许一个类的定义位于另一个类的内部，前者称为内部类，后者称为外部类。
+- 内部类一般用在定义它的类或语句块之内，在外部引用它时必须给出完整的名称。内部类的名字不能与包含它的外部类类名相同。
+- 成员内部类和局部内部类仍然是一个独立的类，在编译以后都会生成字节码文件。
+
+| 内部类     | 字节码文件                    | 组成                                       |
+| ---------- | ----------------------------- | ------------------------------------------ |
+| 成员内部类 | `外部类$内部类名.class`       | static成员内部类<br />非static成员内部类   |
+| 局部内部类 | `外部类$数字 内部类名.class ` | 方法内，代码块内，构造器内<br />匿名内部类 |
+
+#### 成员内部类
+
+- 成员内部类作为外部类的成员：
+
+1. 权限修饰：private、protected、缺省、public。
+2. 成员内部类可以直接使用外部类的所有成员，包括私有的数据。
+3. 若被static修饰，则不能再使用外层类的非静态成员。非static的成员内部类中的成员不能声明为static的，只有在外部类或static的成员内部类中才可声明static成员。
+
+- 成员内部类作为一个类：
+
+1. 可在内部定义属性、方法、构造器等结构。外部类访问成员内部类的成员：需要“内部类.成员”、“内部类对象.成员”的方式。
+2. 可被abstract、final修饰。
+
+```java
+class 外部类{
+    
+    class 成员内部类{
+        
+    }
+}
+```
+
+#### 局部内部类
+
+- 局部内部类：只能在声明它的方法或代码块中使用，而且是先声明后使用，除此之外的任何地方都不能使用该类。但是它的对象可以通过外部方法的返回值返回使用，返回值类型只能是局部内部类的父类或父接口类型。
+- 局部内部类可以使用外部类的成员，包括私有的。
+- 局部内部类可以使用外部方法的final局部变量（由局部内部类和局部变量的生命周期不同所致）。
+
+> - JDK7之前，要求此变量显式声明为final
+> - JDK8之后，可以省略final的声明(自动补上)
+
+- 局部内部类和局部变量地位类似：不能使用权限修饰符、不能被static修饰、不能包含static成员。
+
+```java
+class 外部类{
+    
+    方法(){
+        class 局部内部类{}
+    }
+    
+    {
+        class 局部内部类{}
+    }
+}
+```
+
+```java
+public class InnerClassTest {
+
+    public void method() {
+        //局部变量
+        final int num = 10;
+        //局部内部类可以使用外部方法的局部变量，但是必须是final的。
+        class AA {
+            public void show() {
+                System.out.println(num);
+            }
+        }
+    }
+}
+```
+
+
+
+#### 匿名内部类
+
+- 匿名内部类不能定义任何静态成员、方法和类，只能创建匿名内部类的一个实例（在父类构造器隐含实现一个接口或实现一个类）。
+
+```
+new 父类构造器（实参列表）|实现接口(){
+    //匿名内部类的类体部分
+}
+```
+
+- 匿名内部类必须继承父类或实现接口、只能有一个对象、 只能使用多态形式引用。
+
+### interface 接口
+
+- 接口（interface）：规范、定义的是一组规则，体现了现实世界中“如果你是/要...则必须能...”的思想。
+
+> 继承是一个"是不是"的关系，而接口实现则是 "能不能"的关系。
+>
+> 接口的本质是契约、标准、规范。
+
+- 接口：抽象方法和常量值定义的集合、接口和类是并列关系、接口中没有构造器（不能实例化）。
+- 实现类（实现接口的类）必须提供接口中所有方法的具体实现内容（重写接口中的所有抽象方法）， 才可实例化。否则，必须作为抽象类。
+- 接口采用多继承机制：一个类可以实现（implements）多个接口，也可以继承（extends）多个接口（接口是多继承的，而类是单继承的）。
+
+```java
+interface SubInterface extends SuperClass1,SuperClass2 
+    implements InterfaceA,InterfaceB{
+    ...
+}
+```
+
+| 接口成员          | 修饰                | 方法体 |
+| ----------------- | ------------------- | ------ |
+| 全局常量 （默认） | public static final |        |
+| 抽象方法 （默认） | public abstract     | 无     |
+| 静态方法          | static              | 有     |
+| 默认方法          | deafult             | 有     |
+
+- 默认方法：只能通过实现类对象来调用，如果实现类重写了接口中的默认方法，则调用重写后的方法。实现类可以不重写默认方法，而是使用接口中定义的默认方法。
+
+> - JDK7之前：只能定义全局常量和抽象方法。
+> - JDK8之后：除了定义JDK7之前的，还可以定义静态方法pulic static、默认方法。
+
+- 接口冲突：若一个接口中定义了一个默认方法，而另一个接口中也定义了一个同名同参数的方法（与是否是默认方法无关），在实现类同时实现了这两个接口时。实现类必须重写接口中同名同参数的方法，来解决冲突。
+- 类优先原则：若一个接口中定义了一个默认方法，而父类中也定义了一个同名同参数的非抽象方法，则不会出现冲突问题。子类在没有重写此方法的情况下，默认调用父类同名同参的方法，接口中具有相同名称和参数的默认方法会被忽略。
+
+| 继承/实现 | 调用父类/接口方法 |
+| --------- | ----------------- |
+| 父类      | super.方法()      |
+| 接口      | 接口.super.方法() |
+
+<img src="../../pictures/58533111239472.png" width="1200"/>
+
+
+
+### static 静态成员
+
+- static修饰的属性、方法、代码块、内部类作为静态成员。
+- 静态成员（类成员）：随着类的加载而加载、优先于对象存在、被该类的所有对象所共享、可直接被类调用。
+- 由于类只加载一次，则静态变量在内存中也只会存在一份，存在方法区的静态域中。
+
+| 对比   | 实例变量                                                     | 静态变量（静态属性）（类变量）                               |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 所有权 | 归某个对象所有。<br />每个对象都独立的拥有一套类中的非静态属性。 | 归类所有。<br />类的多个对象共享同一个静态变量。             |
+| 修改   | 修改其中一个对象中的非静态属性时，不会导致其他对象中同样的属性值的修改。 | 某一个对象修改静态变量时，其他对象也将使用修改后的静态变量。 |
+
+- 静态方法中只能调用静态的方法或属性（生命周期：非静态成员比静态成员晚加载），非静态方法中既可以调用静态的也可以调用非静态的方法或属性。
+
+- 静态方法内不能使用this或super关键字、不能被重写。
+
+### final 终值
+
+- final标记的类不能被继承、标记的方法不能被子类重写、标记的变量（成员变量、局部变量）名称大写且只能被赋值一次。
+- final标记的成员变量必须要么在声明时赋值，要么在**每个**构造器/代码块显式赋值。
+
+> 如果在构造器中为final赋值，则每个构造器中都应该要为final赋值。
+
+```java
+public void addOne(final Other o) {
+    // o = new Other(); //o的地址值不能改变
+    o.i++; //但是o的地址值中的内容可以改变 
+}
+```
+
+### abstract 抽象
+
+| 修饰     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 抽象类   | 抽象类不能被实例化，可以被继承，可以使用多态。<br />抽象类中一定有构造器，便于子类实例化时调用。<br />提供抽象类的子类，让子类对象实例化，完成相关操作。 |
+| 抽象方法 | 抽象方法只有方法的声明，没有方法的实现，以分号结束，没有代码块{}。<br />含有抽象方法的类必须被声明为抽象类，而抽象类中不一定拥有抽象方法，可以有普通的方法。<br />抽象类的子类必须重写父类以及祖先的抽象方法，并提供方法体，才可以进行实例化。<br />子类若没有重写全部的抽象方法，仍为抽象类，使用abstract修饰，不能进行实例化。 |
+
+1. 不能用abstract修饰变量、代码块、构造器；
+2. 不能用abstract修饰私有方法private、静态方法static、final方法、final类。
 
 ## 常用类
 
@@ -492,7 +1160,1151 @@ int[] arr1 = new int[] { 1, 2, 3 };
 System.out.println(arr1); //[I@37d31475
 ```
 
+### 包装类
+
+| 基本类型 | 包装类    |
+| :------- | :-------- |
+| boolean  | Boolean   |
+| byte     | Byte      |
+| short    | Short     |
+| int      | Integer   |
+| long     | Long      |
+| float    | Float     |
+| double   | Double    |
+| char     | Character |
+
+- 自动装箱/拆箱：在包装类和基本数据类型之间自动调用以下两个方法进行转换。
+
+| 方法                     | 说明 |
+| :----------------------- | :--- |
+| 包装类.valueOf(基本类型) | 装箱 |
+| 包装类对象.xxxValue()    | 拆箱 |
+
+```java
+Integer a = 1; //自动装箱：Integer a = Integer.valueOf(1)
+int b = a; //自动拆箱：int b = a.intValue();
+```
+
+<img src="../../pictures/521452623244208.png" width="800"/>
+
+> new获取包装类对象的方式已经过时。new每次都会创建新的对象，而包装类（除了Float和Double）都缓存了包装类对象，通过valueOf()的方式可以减少对象的创建。
+>
+> ```java
+> Integer a = new Integer(1);
+> ```
+
+### String 字符串
+
+- String（字符串）：Java 程序中的所有字符串字面值都作为此类的实例实现。
+- String是一个final类，代表不可变的字符序列，实现Serializable接口、Comparable接口。
+- 字符串（双引号）是常量，值在创建之后不能更改。String内部定义了final char[] value用于存储字符串数据。
+- 字符串常量池中是不会存储相同内容（String#equals()==true）的字符串的。
+
+#### 不可变性
+
+1. 当字符串重新赋值时，需要重新指定内存区域赋值，不能使用原有的value进行赋值。
+2. 当对现有的字符串进行连接操作时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值。
+3. 当调用String的replace()方法修改指定的字符或字符串时，也需要重新指定内存区域赋值，不能使用原有的value进行赋值。
+
+<img src="../../pictures/245100421227353.png" width="562"/>    
+<img src="../../../../pictures/11970921247519.png" width="564"/>    
+
+<img src="../../pictures/185481721240188.png" width="551"/>    
+
+```java
+public class StringTest {
+    String str = new String("good");
+    char[] ch = {'t', 'e', 's', 't'};
+
+    public void change(String str, char ch[]) {
+        str = "test ok";
+        ch[0] = 'b';
+    }
+
+    public static void main(String[] args) {
+        StringTest ex = new StringTest();
+        ex.change(ex.str, ex.ch);
+        System.out.println(ex.str);//good
+        //String的不可变性
+        System.out.println(ex.ch);//best
+    }
+}
+```
+
+#### 实例化
+
+**String s = new String("abc")；方式创建对象，在内存中创建了几个对象？**
+
+- 两个：一个堆空间中的new结构，一个char[]对应的常量池中的数据"abc"。
+
+<img src="../../pictures/377974621232497.png" width="560"/>    
+<img src="../../../../pictures/350640322245483.png" width="549"/>    
+<img src="../../pictures/207800822226724.png" width="556"/>    
+
+```java
+//通过字面量定义的方式：此时的s1和s2的数据javaEE声明在方法区中的字符串常量池中。
+String s1 = "javaEE";
+String s2 = "javaEE";
+//通过new + 构造器的方式：此时的s3和s4保存的地址值，是数据在堆空间开辟空间以后对应的地址值。
+String s3 = new String("javaEE");
+String s4 = new String("javaEE");
+
+System.out.println(s1 == s2);//true
+System.out.println(s1 == s3);//false
+System.out.println(s1 == s4);//false
+System.out.println(s3 == s4);//false
+
+Person p1 = new Person("Tom",12);
+Person p2 = new Person("Tom",12);
+System.out.println(p1.name == p2.name);//true
+Person p3 = new Person(new String("Tom"),12);
+Person p4 = new Person(new String("Tom"),12);
+System.out.println(p1.name == p3.name);//false
+System.out.println(p3.name == p4.name);//false
+```
+
+#### String常量池
+
+`intern()方法`
+
+```java
+String s1 = "javaEE";
+String s2 = "hadoop";
+
+//字面量：s3,s4都在常量池内
+String s3 = "javaEEhadoop";
+String s4 = "javaEE" + "hadoop";
+//变量：堆空间中开辟
+String s5 = s1 + "hadoop";
+String s6 = "javaEE" + s2;
+String s7 = s1 + s2;
+
+System.out.println(s3 == s4); //true
+System.out.println(s3 == s5); //false
+System.out.println(s3 == s6); //false
+System.out.println(s3 == s7); //false
+
+System.out.println(s4 == s5); //false
+System.out.println(s4 == s6); //false
+System.out.println(s4 == s7); //false
+
+System.out.println(s5 == s6); //false
+System.out.println(s5 == s7); //false
+
+System.out.println(s6 == s7); //false
+
+String s8 = s5.intern();
+//返回值得到的s8是使用常量池中已经存在的"javaEEhadoop"
+System.out.println(s3 == s8); //true
+```
+
+- `String s1 = "a"; `：在字符串常量池中创建了一个字面量为"a"的字符串。
+- `s1 = s1 + "b"; `：实际上原来的“a”字符串对象已经丢弃了，现在在堆空间中产生了一个字符串s1+"b"（也就是"ab")。如果多次执行这些改变串内容的操作，会导致大量副本字符串对象存留在内存中，降低效率。如果这样的操作放到循环中，会极大影响程序的性能。
+- `String s2 = "ab";`：直接在字符串常量池中创建一个字面量为"ab"的字符串。
+- `String s3 = "a" + "b";`：s3指向字符串常量池中已经创建的"ab"的字符串。
+- `String s4 = s1.intern();`：堆空间的s1对象在调用intern()之后，会将常量池中已经存在的"ab"字符串赋值给s4。
+
+#### String类型转换
+
+##### String、基本数据类型/包装类
+
+```java
+//parseXxx() String-->基本数据类型/包装类
+基本数据类型/包装类 变量 = 包装类.parseXxx(String str);
+
+//基本数据类型/包装类-->String 
+String 变量 = String.valueOf(基本数据类型/包装类); //调用String类重载的valueOf()。
+String 变量 = 基本数据类型/包装类 + ""; //+连接符 
+```
+
+##### String、char[]
+
+```java
+//String-->char[]
+
+//String#getChars()：将指定索引范围内的字符串存放到char[]。
+public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin){...};
+  
+//String#toCharArray()
+String str1 = "abc123";
+char[] chars = str1.toCharArray();
+for(int i =0; i < chars.length; i++){
+    System.out.println(chars[i]);
+}
+```
+
+```java
+//char[]-->String new String(char[] chars)
+char chars[] = new char[]{'h','e','l','l','o'};
+String str = new String(chars);
+```
+
+##### String、byte[]
+
+- 编码: 字符串-->字节（二进制数据）。
+- 解码: 字节-->字符串（编码的逆过程）。 解码时使用的字符集必须与编码时使用的字符集相一致，否则乱码。
+
+```java
+//Sting-->byte[] 编码
+//String#getBytes("指定编码集")：throws UnsupportedEncodingException。
+byte[] bytes = "str".getBytes("utf-8");
+```
+
+```java
+//byte[]-->String 解码
+//String 字符串 = new String(字节数组,"指定编码集");
+String str = new String(bytes,"utf-8");
+```
+
+```java
+String str = "abc123中国";
+
+//编码 使用默认的字符集UTF-8，进行转换，byte[]内为ASCII码。
+byte[] utf8s = str.getBytes(); //[97, 98, 99, 49, 50, 51, -28, -72, -83, -27, -101, -67] 
+//getBytes("gbk") 使用指定的gbk字符集编码
+byte[] gbks = str.getBytes("gbk");
+System.out.println(Arrays.toString(gbks));//[97, 98, 99, 49, 50, 51, -42, -48, -71, -6]
+
+//默认的字符集utf-8解码
+String str2 = new String(utf8s); //abc123中国
+String str2 = new String(gbks);  //abc123�й� gbk和utf-8编码不一样，出现乱码
+//指定解码的gbk字符集
+String str4 = new String(gbks, "gbk"); //abc123中国
+```
+
+#### StringBuffer、StringBuilder
+
+| 比较       | String   | StringBuffer                     | StringBuilder        |
+| ---------- | -------- | -------------------------------- | -------------------- |
+| 不可变性   | 不可变性 | 可变                             | 可变                 |
+| 底层存储   | char[]   | char[]                           | char[]               |
+| 安全、效率 | 效率最低 | 线程安全（sychronized)，效率较低 | 线程不安全，效率较高 |
+
+```java
+StringBuffer sb1 = new StringBuffer("abc");
+sb1.setCharAt(0,'m');
+System.out.println(sb1); //mbc StringBuffer可变性
+```
+
+  - `StringBuffer(int capacity) 或 StringBuilder(int capacity);`指定额外的数组长度（默认16）。
+  - 底层数组扩容：默认情况下扩容为原来的2倍+2，同时将原有数组中的元素复制到新的数组中，如果还是不满足，则直接将该数组作为新的数组。
+
+```java
+String str = new String(); //new char[0];
+String str1 = new String("abc"); //new char[3]{'a','b','c'};
+
+StringBuffer sb1 = new StringBuffer(); //char[] value = new char[16];
+System.out.println(sb1.length()); //0 而不是16
+sb1.append('a'); //value[0] = 'a';
+sb1.append('b'); //value[1] = 'b';
+
+//此时，字符串常量池中已经存在"abc"
+StringBuffer sb2 = new StringBuffer("abc"); // char[] value = new char["abc".length() + 16];
+System.out.println(sb2.length()); //3 而不是19
+```
+
+### System 系统
+
+- java.lang.System：代表系统，系统级的很多属性和控制方法都放置在该类的内部。
+
+- System的构造器都是private的，而内部的成员变量和成员方法都是static的。
+
+| System成员变量 | 说明           |
+| -------------- | -------------- |
+| in             | 标准输入流     |
+| out            | 标准输出流     |
+| err            | 标准错误输出流 |
+
+| System成员方法                  | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| native long currentTimeMillis() | 返回当前的计算机时间（时间戳）<br />当前计算机时间和GMT时间1970年1月1号0时0分0秒所差的毫秒数。 |
+| void exit(int status)           | 退出程序<br />status的值为0代表正常退出，非零代表异常退出    |
+| void gc()                       | 请求系统进行垃圾回收                                         |
+| String getProperty(String key)  | 获得系统中属性名为key的属性对应的值                          |
+
+<img src="../../pictures/89133321239495.png" width="600"/>    
+
+
+```java
+String javaVersion = System.getProperty("java.version");
+System.out.println("java的version:" + javaVersion);
+
+String javaHome = System.getProperty("java.home");
+System.out.println("java的home:" + javaHome);
+
+String osName = System.getProperty("os.name");
+System.out.println("os的name:" + osName);
+
+String osVersion = System.getProperty("os.version");
+System.out.println("os的version:" + osVersion);
+
+String userName = System.getProperty("user.name");
+System.out.println("user的name:" + userName);
+
+String userHome = System.getProperty("user.home");
+System.out.println("user的home:" + userHome);
+
+String userDir = System.getProperty("user.dir");
+System.out.println("user的dir:" + userDir);
+```
+
+### 日期时间
+
+> 1. jdk 1.0 Date类。
+> 2. jdk 1.1 Calendar类，一定程度上替换Date类。
+> 3. jdk 1.8 提出一套新的API：
+>    - java.time – 包含值对象的基础包
+>    - java.time.chrono – 提供对不同的日历系统的访问
+>    - java.time.format – 格式化和解析时间和日期
+>    - java.time.temporal – 包括底层框架和扩展特性
+>    - java.time.zone – 包含时区支持的类
+>
+> **前两代的问题**
+>
+> - 可变性：像日期和时间这样的类应该是不可变的。
+> - 偏移性：Date中的年份是从1900开始的，而月份都从0开始。
+> - 格式化：格式化只对Date有用，Calendar则不行。
+> - 线程不安全；不能处理闰秒等。
+
+> **计算世界时间的主要标准有：**
+>
+> - UTC（Coordinated Universal Time）
+> - GMT（Greenwich Mean Time）
+> - CST（Central Standard Time）
+
+#### java.lang.System
+
+- System#currentTimeMillis()：时间戳，返回当前时间与1970年1月1日0时0分0秒之间以毫秒为单位的时间差。
+
+````java
+public static long currentTimeMillis(){..}
+````
+
+#### java.util.Date
+
+- java.util.Date：表示特定的瞬间，精确到毫秒。
+
+| 构造器          | 说明               |
+| --------------- | ------------------ |
+| Date()          | 获取本地当前时间   |
+| Date(long date) | 通过时间戳获取时间 |
+
+| 方法       | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| getTime()  | 返回自 1970 年 1 月 1 日 00:00:00 GMT 以来，此Date 对象表示的毫秒数 |
+| toString() | 将此 Date 对象转换为以下形式的 String：<br /><img src="../../pictures/166405516247526.png" width="300"/> |
+
+```java
+//空参构造器：创建当前时间的Date对象
+Date date1 = new Date();
+System.out.println(date1); //toString()
+//Wed Oct 26 16:51:02 CST 2022
+//星期 月 日  时间   时间标准 年
+
+//时间戳
+System.out.println(date1.getTime());
+//1666774415833
+
+//指定时间的构造器
+Date date2 = new Date(1666774415833L);
+System.out.println(date2);
+//Wed Oct 26 16:53:35 CST 2022
+```
+
+#### java.sql.Date
+
+- java.sql.Date：对应数据库中的日期类型的变量，继承自java.util.Date。
+
+```java
+//创建java.sql.Date的对象
+java.sql.Date date = new java.sql.Date(174242344342L);
+System.out.println(date); //1975-07-11
+```
+
+- java.util.Date、java.sql.Date转换：
+
+```java
+//import java.util.Date：因此java.sql.Date需要使用全限定名来区分
+
+//java.sql.Date --> java.util.Date
+Date date1 = new java.sql.Date(13819381293819L);
+java.sql.Date date2 = (java.sql.Date)date1;
+
+//java.util.Date --> java.sql.Date
+Date date3 = new Date();
+//java.sql.Date date4 = (java.sql.Date)date3; 报错
+java.sql.Date date4 = new java.sql.Date(date.getTime());
+```
+
+#### java.text.SimpleDateFormat
+
+- java.text.SimpleDateFormat：不与语言环境有关的方式来格式化和解析日期的具体类。
+
+| 构造器                           | 说明                                                       |
+| -------------------------------- | ---------------------------------------------------------- |
+| new SimpleDateFormat()           | 默认格式                                                   |
+| new SimpleDateFormat("具体格式") | 指定方式格式化和解析<br />如：yyyyy.MMMMM.dd GGG hh:mm aaa |
+
+- format()：格式化，日期-->字符串。
+
+```
+SimpleDateFormat对象.format(Date对象);
+```
+
+- parse()：解析，字符串-->日期  (格式化的逆过程)。
+  - throws ParseException。
+
+```
+SimpleDateFormat对象.parse("识别的格式");
+```
+
+```java
+@Test
+public void testSimpleDateFormat() throws ParseException {
+    //实例化SimpleDateFormat 使用默认的构造器
+    SimpleDateFormat sdf = new SimpleDateFormat();
+
+    Date date = new Date();
+    System.out.println(date);
+    //Thu Oct 27 22:11:08 CST 2022
+
+    //格式化：日期-->字符串
+    String format = sdf.format(date);
+    System.out.println(format);
+    //2022/10/27 下午10:11
+
+    //解析
+    String str = "2022/10/23 上午10:10";
+    //格式要求默认："yyyy/MM/dd aaa hh:mm:ss " 不同版本不一样
+    Date date1 = sdf.parse(str);
+    System.out.println(date1);
+    //Sun Oct 23 10:10:00 CST 2022
+
+    //指定方式格式化和解析 调用带参的构造器
+    //SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyy.MMMMM.dd GGG hh:mm aaa");
+    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    //格式化
+    String format1 = sdf1.format(date);
+    System.out.println(format1);
+    //02022.十月.27 公元 10:20 下午
+    //2022-23-27 10:23:55
+    //解析: 要求字符串必须符合SimpleDateFormat识别的格式（通过构造器参数实现)
+    //否则报错
+    Date date2 = sdf1.parse("1999-12-31 23:59:59");
+    System.out.println(date2);
+    //Sun Jan 31 23:59:59 CST 1999
+}
+```
+
+#### java.util.Calendar（日历）
+
+- Calendar：抽象基类，主用用于完成日期字段之间相互操作的功能。
+
+| 实例化                        | 说明 |
+| ----------------------------- | ---- |
+| Calendar.getInstance()        |      |
+| 子类GregorianCalendar的构造器 |      |
+
+- Calendar实例：系统时间的抽象表示，`get(int field)`取得想要的时间信息，如：YEAR、MONTH、DAY_OF_WEEK、HOUR_OF_DAY 、MINUTE、SECOND。
+
+| 方法                                  | 说明                    |
+| ------------------------------------- | ----------------------- |
+| public int get(int field)             | 获取日历                |
+| public void set(int field,int value)  | 设置时间                |
+| public void add(int field,int amount) | 增加或减少时间 , 负数减 |
+| public final Date getTime()           | 日历类-->Date类         |
+| public final void setTime(Date date)  | Date类-->日历类         |
+
+- 获取月份时：一月是0，二月是1，... ，12月是11
+- 获取星期时：周日是1，周二是2 ... 周六是7
+
+```java
+//1.实例化
+//方式一：创建子类GregorianCalendar的对象
+//方式二：调用其静态方法getInstance()
+Calendar calendar = Calendar.getInstance();
+//System.out.println(calendar.getClass());
+//class java.util.GregorianCalendar 仍然来自于其子类
+
+//get()
+int days = calendar.get(Calendar.DAY_OF_MONTH);
+//get(Calendar.该类内部的静态属性)  具体查看API
+System.out.println(days); //返回本个月的第几天
+System.out.println(calendar.get(Calendar.DATE)); //返回-日
+
+//set()
+calendar.set(Calendar.DAY_OF_MONTH,22);
+//修改calendar对象内的属性 //Calendar类的属性不变：不可变性
+days = calendar.get(Calendar.DAY_OF_MONTH);
+System.out.println(days); //22 返回修改后的日期
+
+//add()
+calendar.add(Calendar.DAY_OF_MONTH,3); //负数则减
+//增加3天
+days = calendar.get(Calendar.DAY_OF_MONTH);
+System.out.println(days); //25 返回增加后的日期
+calendar.add(Calendar.DAY_OF_MONTH,-1); //负数则减
+//减1天
+days = calendar.get(Calendar.DAY_OF_MONTH);
+System.out.println(days); //24 返回减后的日期
+
+//getTime() 日历类-->Date类
+Date time = calendar.getTime();
+System.out.println(time);
+//Mon Oct 24 23:29:51 CST 2022
+
+//setTime() Date类-->日历类
+Date date = new Date();
+calendar.setTime(date);
+System.out.println(calendar.get(Calendar.DAY_OF_MONTH));//27
+```
+
+#### LocalDate、LocalTime、LocalDateTime
+
+- LocalDate、LocalTime、LocalDateTime：不可变性，分别表示使用 ISO-8601日历系统的日期、时间、日期和时间，提供了简单的本地日期或时间，并不包含当前的时间信息，也不包含与时区相关的信息。
+
+| 类            | 说明                        |
+| ------------- | --------------------------- |
+| LocalDate     | IOS格式（yyyy-MM-dd）的日期 |
+| LocalTime     | 时间                        |
+| LocalDateTime | 日期和时间                  |
+
+| 方法                                                         | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| now() <br />now(ZoneId zone)                                 | 静态方法，根据当前时间创建对象/指定时区的对象                |
+| of()                                                         | 静态方法，根据指定日期/时间创建对象                          |
+| getDayOfMonth()<br />getDayOfYear()                          | 获得月份天数(1-31) <br />获得年份天数(1-366)                 |
+| getDayOfWeek()                                               | 获得星期几，返回一个 DayOfWeek 枚举值                        |
+| getMonth()                                                   | 获得月份，返回一个 Month 枚举值                              |
+| getMonthValue() <br />getYear()                              | 获得月份(1-12) <br />获得年份                                |
+| getHour()<br />getMinute()<br />getSecond()                  | 获得当前对象对应的小时、分钟、秒                             |
+| withDayOfMonth()<br />withDayOfYear()<br />withMonth()<br />withYear() | 将月份天数、年份天数、月份、年份修改为指定的值并返回新的对象 |
+| plusDays()<br />plusWeeks()<br />plusMonths()<br />plusYears()<br />plusHours() | 向当前对象添加几天、几周、几个月、几年、几小时               |
+| minusMonths() <br />minusWeeks()<br />minusDays()<br />minusYears()<br />minusHours() | 从当前对象减去几月、几周、几天、几年、几小时                 |
+
+```java
+@Test
+public void test1(){
+    //now() 获取当前时间
+    LocalDate localDate = LocalDate.now();
+    LocalTime localTime = LocalTime.now();
+    LocalDateTime localDateTime = LocalDateTime.now();
+
+    System.out.println(localDate);
+    System.out.println(localTime);
+    System.out.println(localDateTime);
+    //2022-10-28
+    //15:54:10.480256600
+    //2022-10-28T15:54:10.480256600
+
+    //of() 设置指定的年月日时分秒时，没有偏移量
+    LocalDateTime localDateTime1 = LocalDateTime.of(2020, 10, 6, 13, 23, 13);
+    System.out.println(localDateTime1);
+    //2020-10-06T13:23:13
+
+    //getXxx() 获取日期属性
+    System.out.println(localDateTime.getDayOfMonth());
+    System.out.println(localDateTime.getDayOfWeek());
+    System.out.println(localDateTime.getDayOfYear());
+    System.out.println(localDateTime.getMinute());
+    //28
+    //FRIDAY
+    //301
+    //28
+
+//体现不可变性
+    //withXxx() 修改
+    LocalDate localDate1 = localDate.withDayOfMonth(22);
+    System.out.println(localDate);
+    System.out.println(localDate1);
+    //2022-10-28
+    //2022-10-22
+
+    LocalDateTime localDateTime2 = localDateTime.withHour(4);
+    System.out.println(localDateTime);
+    System.out.println(localDateTime2);
+    //2022-10-28T16:34:05.769278400
+    //2022-10-28T04:34:05.769278400
+
+    //plusXxx() 添加
+    LocalDateTime localDateTime3 = localDateTime.plusYears(3);
+    System.out.println(localDateTime);
+    System.out.println(localDateTime3);
+    //2022-10-28T16:35:34.425305800
+    //2025-10-28T16:35:34.425305800
+}
+```
+
+#### java.time.Instant
+
+- Instant：时间线上的一个瞬时点，可能被用来记录应用程序中的事件时间戳。
+
+- java.time包通过值类型Instant提供机器视图。Instant表示时间线上的一点，而不需要任何上下文信息：
+  - 例如，时区。概念上讲，它只是简单的表示自1970年1月1日0时0分0秒（UTC）开始的秒数。
+- java.time包是基于纳秒计算的：Instant的精度可以达到纳秒级。 
+
+> $$
+> 1 ns = 10^{-9} s \\
+> 
+> 1s = 1000 ms = 10^6 us =10^9ns
+> $$
+
+| 方法                          | 说明                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| now()                         | 静态方法，返回默认UTC时区的Instant类的对象                   |
+| ofEpochMilli(long epochMilli) | 静态方法，返回在1970-01-01 00:00:00基础上加上指定毫秒数之后的Instant类的对象 |
+| atOffset(ZoneOffset offset)   | 结合即时的偏移来创建一个 OffsetDateTime                      |
+| toEpochMilli()                | 返回1970-01-01 00:00:00到当前时间的毫秒数，即为时间戳        |
+
+```java
+Instant instant = Instant.now();
+System.out.println(instant);
+//2022-10-28T08:40:37.774837200Z
+
+//添加时间的偏移
+OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.ofHours(8));
+System.out.println(offsetDateTime);
+//2022-10-28T16:42:42.421531800+08:00
+
+//toEpochMilli() 获取自1970年1月1日0时0分0秒（UTC）开始的毫秒数
+long milli = instant.toEpochMilli();
+System.out.println(milli);
+//1666946757201
+
+//ofEpochmilli() 通过给定的毫秒数
+Instant instant1 = instant.ofEpochMilli(12312312312L);
+System.out.println(instant1);
+//1970-05-23T12:05:12.312Z
+```
+
+#### java.time.format.DateTimeFormatter
+
+- java.time.format.DateTimeFormatter：格式化与解析日期或时间
+
+1. 预定义的标准格式：
+   - ISO_LOCAL_DATE_TIME
+   - ISO_LOCAL_DATE
+   - ISO_LOCAL_TIME
+2. 本地化相关的格式：如 ofLocalizedDateTime(FormatStyle.LONG)。
+3. 自定义的格式：如 ofPattern(“yyyy-MM-dd hh:mm:ss”)。
+
+| 方法                                        | 说明                                     |
+| ------------------------------------------- | ---------------------------------------- |
+| ofPattern(String pattern)                   | 静态方法 ， 返回一个指定字符串格式的     |
+| DateTimeFormatterformat(TemporalAccessor t) | 格式化一个日期、时间，返回字符串         |
+| parse(CharSequence text)                    | 将指定格式的字符序列解析为一个日期、时间 |
+
+```java
+@Test
+public void test3(){
+//方式1预定义的标准格式。
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+      //格式化 日期-->字符串
+    LocalDateTime localDateTime = LocalDateTime.now();
+    String str1 = dateTimeFormatter.format(localDateTime);
+    dateTimeFormatter.format(localDateTime);
+    System.out.println(str1);
+    System.out.println(localDateTime);
+      //2022-10-28T17:00:23.5674663
+      //2022-10-28T17:00:23.567466300
+      //解析 字符串-->日期
+    TemporalAccessor parse = dateTimeFormatter.parse("2019-02-18T17:00:23.22222");
+    System.out.println(parse);
+       //{},ISO resolved to 2019-02-18T17:00:23.222220
+//方式2本地化相关的格式。
+    DateTimeFormatter dateTimeFormatter1 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+    //格式化
+    String format = dateTimeFormatter1.format(localDateTime);
+    System.out.println(format);
+    //2022/10/28 下午5:04
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
+    //格式化
+    String format1 = formatter.format(LocalDate.now());
+    System.out.println(format1);
+    //2022年10月28日星期五
+
+//方式3自定义的格式。
+    DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+    //格式化
+    String str = dateTimeFormatter2.format(LocalDateTime.now());
+    System.out.println(str);
+    //2022-10-28 05:10:10
+
+    //解析
+    TemporalAccessor parse1 = dateTimeFormatter2.parse("2019-10-23 12:12:23");
+    System.out.println(parse1);
+    //{MilliOfSecond=0, HourOfAmPm=0, NanoOfSecond=0, SecondOfMinute=23, MinuteOfHour=12, MicroOfSecond=0},ISO resolved to 2019-10-23
+}
+```
+
+#### 其它API
+
+| API               | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| ZoneId            | 包含了所有的时区信息，一个时区的ID<br />如 Europe/Paris。    |
+| ZonedDateTime     | 一个在ISO-8601日历系统时区的日期时间<br />如 2007-12-03T10:15:30+01:00 Europe/Paris。<br />其中每个时区都对应着ID，地区ID都为`“{区域}/{城市}”`的格式<br />例如：Asia/Shanghai等 |
+| Clock             | 使用时区提供对当前即时、日期和时间的访问的时钟。<br />持续时间：Duration，用于计算两个“时间”间隔 <br />日期间隔：Period，用于计算两个“日期”间隔 |
+| TemporalAdjuster  | 时间校正器                                                   |
+| TemporalAdjusters | 静态方法（`firstDayOfXxx()/lastDayOfXxx()/nextXxx()`）提供了大量的常用TemporalAdjuster 的实现。 |
+
+### Math
+
+- java.lang.Math提供了一系列静态方法用于科学计算，其方法的参数和返回值类型一般为double型。
+
+| 方法                                                | 说明                                  |
+| --------------------------------------------------- | ------------------------------------- |
+| abs                                                 | 绝对值                                |
+| acos<br />asin<br />atan<br />cos<br />sin<br />tan | 三角函数                              |
+| sqrt                                                | 平方根                                |
+| pow(double a,doble b)                               | a的b次幂                              |
+| log                                                 | 自然对数                              |
+| exp                                                 | e为底指数                             |
+| max(double a,double b)                              |                                       |
+| min(double a,double b)                              |                                       |
+| random()                                            | 返回0.0到1.0的随机数                  |
+| long round(double a)                                | double型数据a转换为long型（四舍五入） |
+| toDegrees(double angrad)                            | 弧度—>角度                            |
+| toRadians(double angdeg)                            | 角度—>弧度                            |
+
+### BigInteger、BigDecimal
+
+- java.math.BigInteger：不可变的任意精度的整数，提供所有 Java 的基本整数操作符的对应物，并提供 java.lang.Math 的所有相关方法。BigInteger还提供以下运算：模算术、GCD 计算、质数测试、素数生成、位操作以及一些其他操作。
+
+> Integer类作为int的包装类，能存储的最大整型值为2^31-1，Long类也是有限的，最大为2^63-1。如果要表示再大的整数，不管是基本数据类型还是他们的包装类都无能为力。
+
+- BigDecimal：支持不可变的、任意精度的有符号十进制定点数。一般的Float类和Double类可以用来做科学计算或工程计算，但在商业计算中，要求数字精度比较高，故用到java.math.BigDecimal类。
+
+```java
+BigInteger bi = new BigInteger("2313123232323312223123122222222");
+BigDecimal bd = new BigDecimal("1213123.12312312312");
+BigDecimal bd2 = new BigDecimal("23");
+System.out.println(bd.divide(bd2, BigDecimal.ROUND_HALF_DOWN));
+//52744.48361404883
+System.out.println(bd.divide(bd2, 15, BigDecimal.ROUND_HALF_UP));
+//52744.483614048831304
+```
+
+## 比较器
+
+- Java中的对象在正常情况下，只能使用`== 或  !=`比较，而不能使用` > 或 < `比较。
+
+| 接口       | 比较器   | 说明                                 |
+| ---------- | -------- | ------------------------------------ |
+| Comparable | 自然排序 | 实现类的对象在任何位置都可以比较大小 |
+| Comparator | 定制排序 | 临时性的比较，定制排序大于自然排序。 |
+
+### Comparable 自然排序
+
+> String、包装类等实现了Comparable接口，重写了compareTo()方法，给出了比较两个对象大小的方法。
+
+- 自然排序：自定义类实现Comparable接口，重写comparaTo()指明如何排序。
+
+- 重写compareTo()的规则：
+
+1. 如果当前对象this大于形参对象obj，则返回正整数，
+2. 如果当前对象this小于形参对象obj，则返回负整数，
+3. 如果当前对象this等于形参对象obj，则返回零。
+
+```java
+Goods[] arr = new Goods[4];
+arr[0] = new Goods("联想",199);
+arr[1] = new Goods("华硕",100);
+arr[2] = new Goods("星际",100);
+arr[3] = new Goods("盛大",2321);
+
+Arrays.sort(arr);
+
+System.out.println(Arrays.toString(arr));//[Goods{name='星际', price=99.0}, Goods{name='华硕', price=100.0}, Goods{name='联想', price=199.0}, Goods{name='盛大', price=2321.0}]
+```
+
+```java
+public class Goods implements Comparable {
+    private String name;
+    private double price;
+
+    //指明Goods的排序，按价格从低到高排序，再按照产品名称从高到低排序
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Goods) {
+            Goods goods = (Goods) o;
+            //方式一
+            if (this.price > goods.price) {
+                return 1;
+            } else if (this.price < goods.price) {
+                return -1;
+
+            } else {
+                //return 0;
+                //使用String类重写的compareTo()方法排序
+                //注意负号 从高到低
+                return -this.name.compareTo(goods.name);
+            }
+            //方式二
+            //return  Double.compare(this.price,goods.price);
+        }
+
+        throw new RuntimeException("数据类型不一致");
+    }
+}
+```
+
+### Comparator 定制排序
+
+- Comparator对象强行对多个对象进行整体排序的比较：没有实现java.lang.Comparable接口、 实现了java.lang.Comparable接口的排序规则不适合当前的操作。定制排序大于自然排序，如果存在自然排序，则被定制排序覆盖。
+
+- 重写compare(Object o1,Object o2)规则：
+
+1. 返回正整数，则表示o1大于o2；
+2. 返回0，表示相等；
+3. 返回负整数，表示o1小于o2。
+
+```java
+Goods[] arr = new Goods[5];
+arr[0] = new Goods("联想", 199);
+arr[1] = new Goods("华硕", 100);
+arr[2] = new Goods("星际", 100);
+arr[3] = new Goods("盛大", 2321);
+arr[4] = new Goods("盛大", 221);
+
+Arrays.sort(arr, new Comparator() {
+    @Override
+    public int compare(Object o1, Object o2) {
+        if (o1 instanceof Goods && o2 instanceof Goods) {
+            Goods g1 = (Goods)o1;
+            Goods g2 = (Goods)o2;
+
+            if(g1.getName().equals(g2.getName())){
+                return -Double.compare(g1.getPrice(),g2.getPrice());
+            }else{
+                return g1.getName().compareTo(g2.getName());
+            }
+        }
+        throw new RuntimeException("数据类型不一致");
+    }
+});
+
+System.out.println(Arrays.toString(arr));//[Goods{name='星际', price=99.0}, Goods{name='华硕', price=100.0}, Goods{name='联想', price=199.0}, Goods{name='盛大', price=2321.0}]
+```
+
 ## Exception 异常
+
+- 异常又称为例外(Exception)，是一个在程序执行期间发生的事件，中断正在执行程序的正常指令流。
+
+**异常产生主要有如下三种原因：**
+
+1. Java 内部错误发生异常，Java 虚拟机产生的异常。
+2. 编写的程序代码中的错误所产生的异常，例如空指针异常、数组越界异常等。
+3. 通过 throw 语句手动生成的异常，一般用来告知该方法的调用者一些必要信息。
+
+**Java程序在执行过程中所发生的异常事件可分为两类：**
+
+- Error：定义了在通常环境下不希望被程序捕获的异常。Java虚拟机无法解决的严重问题。Error 错误是任何处理技术都无法恢复的情况，肯定会导致程序非正常终止。并且 Error 错误属于未检查类型，大多数发生在运行时。如：JVM系统内部错误、资源耗尽等严重情况。比如：栈溢出: java.lang.StackOverflowError和堆溢出: java.lang.OutOfMemoryError。
+- Exception: 其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。Exception 又分为可检查（checked）异常和不检查（unchecked）异常。
+  - 可检查异常在源码里必须显示的进行捕获处理，这里是编译期检查的一部分
+  - 不检查异常就是所谓的运行时异常，通常是可以编码避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译器强制要求。
+
+- 程序员通常只能处理Exception，而**对Error无能为力**。
+
+**异常体系结构**
+
+
+- 所有异常类型都是内置类 **java.lang.Throwable** 类的子类，即 Throwable 位于异常类层次结构的顶层。Error（错误）和 Exception（异常）都是 java.lang.Throwable 类的子类，在 Java 代码中只有继承了 Throwable 类的实例才能被 throw 或者catch。
+
+| Exception                                          | 说明                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| 运行时异常<br />（不检查异常 Unchecked Exception） | 编译器不要求强制处置的异常。一般是指编程时的逻辑错误，是程序员应该积极避免其出现的异常。对于这类异常，可以不作处理，因为这类异常很普遍，若全处理可能会对程序的可读性和运行效率产生影响。<br />java.lang.RuntimeException类及它的子类都是运行时异常。 |
+| 编译时异常<br />（检查异常 Checked Exception）     | 编译器要求必须处置的异常。即程序在运行时由于外界因素造成的一般性异常。编译器要求Java程序必须捕获或声明所有编译时异常。如果程序不处理，可能会带来意想不到的结果。<br />java.io.IOExeption、java.lang.ClassNotFoundException、java.lang.InterruptedException、java.io.FileNotFoundException、java.sql.SQLException... |
+
+**常见异常**
+
+1. 运行时异常（RuntimeException）：
+
+<img src="../../pictures/218961211240179.png" width="483"/> 
+
+2. 编译时异常：
+
+<img src="../../pictures/222711311236734.png" width="324"/>
+
+3. 错误（Error）：
+
+- NoClassDefFoundError：找不到 class 定义异常
+- StackOverflowError：深递归导致栈被耗尽而抛出的异常
+- OutOfMemoryError：内存溢出异常
+
+### 异常处理机制
+
+> Java采用的异常处理机制是将异常处理的程序代码集中在一起，与正常的程序代码分开。
+
+**异常处理的抓抛模型**
+
+- Java通过面向对象的方法来处理异常。在一个方法的运行过程中，如果发生了异常，则这个方法会产生代表该异常的一个对象，并把它交给运行时的系统，运行时系统寻找相应的代码来处理这一异常。
+- 拋出异常：生成异常对象并把它提交给运行时系统的过程。程序在正常执行的过程中，一旦出现异常，就会在异常代码处生成一个对应异常类的对象，并将此对象抛出。一旦抛出异常对象，其他的代码就不执行。
+- 捕获异常：运行时系统在方法的调用栈中查找，直到找到能够处理该类型异常的对象。如果一个方法内抛出异常，该异常对象会被抛给调用者方法中处理。如果异常没有在调用者方法中处理，它继续被抛给这个调用方法的上层方法，这个过程将一直继续下去，直到异常被处理。如果一个异常回到main()方法，并且main()也不处理，则程序运行终止。
+
+<img src="../../pictures/150934310227344.png" width="600"/> 
+
+**异常对象的生成**
+
+- 虚拟机自动生成：程序运行过程中，虚拟机检测到程序发生了问题，如果在当前代码中没有找到相应的处理程序，就会在后台自动创建一个对应的异常对象并抛出。
+
+- 手动创建：Exception exception。
+
+### try-catch-finally  
+
+```java
+try{
+    //可能出现异常的代码
+}catch(异常类型1 变量名1){
+    //处理异常的方式1
+}catch(异常类型2 变量名2){
+    //处理异常的方式2
+}finally{
+    //一定会执行的代码
+}
+```
+
+- catch 块和 finally 块都是可选的，但 catch 块和 finally 块至少出现其中之一，也可以同时出现。多个 catch 块必须位于 try 块之后，finally 块必须位于所有的 catch 块之后。 
+
+1. try将可能出现异常的代码块包装起来，一旦出现异常，就会生成一个对应异常类的对象，根据此对象的类型去catch中进行匹配。
+2. 如果try中的异常对象匹配到某一个catch时，就进入catch中进行异常处理。一旦处理完成，就跳出当前的try-catch结构（在没有finally的情况下），继续执行try-catch-finally 代码块之后的代码（跳出try包围的代码块，执行之外的代码）。
+3. 如果 try 代码块中拋出的异常没有被任何 catch 子句捕捉到、或所有匹配的catch处理完成，那么将执行 finally 代码块中的语句，并把该异常传递给该方法的调用者。**finally不管有没有捕获异常都会执行。**
+
+- catch中的异常类型如果满足子父类关系，则要求子类一定声明在父类的上面，否则报错。catch中的异常类型如果没有子父类关系，则谁先声明无所谓。
+- try结构中声明定义的对象在出了try结构后，不能被调用（超过作用域），可以在try结构外面先对改变量进行声明初始化 。
+- try-catch-finally结构可以相互嵌套。
+
+| 异常对象处理方式  | 说明                                                 |
+| ----------------- | ---------------------------------------------------- |
+| getMessage()      | 获取异常信息，返回字符串。                           |
+| printStackTrace() | 打印异常类名和异常信息，以及异常出现在程序中的位置。 |
+
+```java
+String str = "abc";
+int num = 0;
+
+try {
+    //抛出异常,一旦处理完成，就跳出当前的try-catch结构，没有执行下面的语句。
+    num = Integer.parseInt(str); //异常：NumberFormatException
+
+    System.out.println("1");
+    //异常类型如果满足子父类关系，则要求子类一定声明在父类的上面
+} catch (NumberFormatException e) {
+    System.out.println(e.getMessage());
+    e.printStackTrace();
+} catch (NullPointerException e) {
+    System.out.println("出现空指针异常");
+} catch (Exception e) {
+    System.out.println("出现异常");
+}
+```
+
+
+
+#### finally
+
+- finally代码块（可选的）为异常处理提供一个统一的出口，使得在控制流转到程序的其它部分前，能够对程序的状态作统一的管理。通常在finally代码块中编写资源释放语句。
+- finally中的代码一定会被执行。
+
+> 即使catch中又出现异常了、try/catch中有return语句等情况也执行。
+>
+> 除非在 try 块、catch 块中调用了退出虚拟机的方法`System.exit(int status)`，否则不管在 try 块或者 catch 块中执行怎样的代码，出现怎样的情况，异常处理的 finally 块总会执行。
+
+<img src="../../pictures/176842210221051.png" width="421"/>   
+
+```java
+File file;
+FileInputStream fis;
+
+try {
+    file = new File("hello.txt");
+    fis = new FileInputStream(file);
+
+    int data = fis.read();
+    while (data != -1) {
+        System.out.println((char) data);
+        data = fis.read();
+    }
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+} catch (IOException e) {
+    e.printStackTrace();
+}finally{
+    try{
+        //资源释放
+        fis.close();
+    }catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+#### 带资源的 try 语句
+
+- 自动资源管理（Automatic Resource Management）（带资源的 try 语句）：Java7之后，当 try 代码块结束时，自动释放资源，不再需要显式的调用 close() 方法。
+
+```java
+try (声明或初始化资源语句) {
+    // 可能会生成异常语句
+} catch(Throwable e1){
+    // 处理异常e1
+} catch(Throwable e2){
+    // 处理异常e1
+} catch(Throwable eN){
+    // 处理异常eN
+}
+```
+
+- try 语句中声明的资源被隐式声明为 final，资源的作用局限于带资源的 try 语句。可以在一条 try 语句中声明或初始化多个资源，每个资源以分号隔开即可。需要关闭的资源必须实现了AutoCloseable或Closeable接口。
+- 带资源的try语句相当于自带finally代码块，因此可以不使用catch。
+
+> Closeable 是 AutoCloseable 的子接口，Closeable 接口里的 close() 方法声明抛出了 IOException，因此它的实现类在实现 close() 方法时只能声明抛出 IOException 或其子类；AutoCloseable 接口里的 close() 方法声明抛出了 Exception，因此它的实现类在实现 close() 方法时可以声明抛出任何异常。
+>
+> Java 7 几乎把所有的“资源类”（包括文件 IO 的各种类、JDBC 编程的 Connection 和 Statement 等接口）进行了改写，改写后的资源类都实现了 AutoCloseable 或 Closeable 接口。
+
+```java
+try (
+    BufferedReader br = new BufferedReader(new FileReader("AutoCloseTest.java"));
+    PrintStream ps = new PrintStream(new FileOutputStream("a.txt"))
+) {
+    System.out.println(br.readLine());
+    ps.println("C语言中文网");
+}//带资源的try语句相当于自带finally代码块。
+```
+
+- Java 9 不要求在 try 后的圆括号内声明并创建资源，只需要自动关闭的资源有 final 修饰或者是有效的 final (effectively final)，允许将资源变量放在 try 后的圆括号内。
+
+```java
+//有final修饰的资源
+final BufferedReader br = new BufferedReader(new FileReader("AutoCloseTest.java"));
+// 没有显式使用final修饰，但只要不对该变量重新赋值，该变量就是有效的
+PrintStream ps = new PrintStream(new FileOutputStream("a. txt"));
+try (br; ps) { // 只要将两个资源放在try后的圆括号内即可
+    System.out.println(br.readLine());
+    ps.println("C语言中文网");
+}
+```
+
+#### catch多异常捕获
+
+> Java 7之后：catch可以多异常捕获。
+
+- 捕获多种类型的异常时，多种异常类型之间用竖线`|`隔开，捕获的异常变量有隐式的 final 修饰，不能对异常变量重新赋值。（捕获一种类型的异常时，异常变量没有final修饰）
+
+```java
+try {
+    int a = Integer.parseInt(args[0]);
+    int b = Integer.parseInt(args[1]);
+    int c = a / b;
+    System.out.println("您输入的两个数相除的结果是：" + c);
+} catch (IndexOutOfBoundsException | NumberFormatException | ArithmeticException e) {
+    System.out.println("程序发生了数组越界、数字格式异常、算术异常之一");
+    
+    e = new ArithmeticException("test"); //错误 捕获多异常时，异常变量默认有final修饰
+} catch (Exception e) {
+    System.out.println("未知异常");
+
+    e = new RuntimeException("test"); //正确 捕获一种类型的异常时，异常变量没有final修饰
+}
+```
+
+### throws 声明抛出异常
+
+- `throws 异常类型`（声明抛出异常）写在方法的声明处，声明一个方法可能抛出的所有异常信息，表示出现异常的一种可能性，但并不一定会发生这些异常。当方法体执行出现异常时，仍然会在异常代码处生成一个异常类的对象，若符合throws声明异常类型，则抛出，异常代码后续的代码就不再执行。
+- throws并没有处理异常，而是将异常交给上一级的调用者处理。
+
+<img src="../pictures/162353610239477.png" width="436"/>   
+
+```java
+//满足throws后异常类型时，就会被抛出。异常代码后续的代码就不再执行。
+public static void method1() throws FileNotFoundException, IOException {}
+```
+
+- 子类重写父类的方法，throws声明抛出的异常不能大于父类抛出的异常。如果父类没有抛出异常，子类也不能抛出。
+
+### throw 抛出异常 
+
+- throw语句执行时，抛出一个指定的异常对象（Throwable或其子类对象）。它后面的语句将不执行，此时程序转向调用者程序，寻找与之相匹配的 catch 语句，执行相应的异常处理程序。如果没有找到相匹配的 catch 语句，则再转向上一层的调用程序。这样逐层向上，直到最外层的异常处理程序终止程序并打印出调用栈情况。
+
+```java
+public void regist(int id) throws Exception {
+    if (id > 0) {
+        this.id = id;
+    } else {
+        throw new Exception("输入数据非法");
+    }
+}
+```
+
+### 用户自定义异常类
+
+- 自定义异常类需要继承 Exception 类或其子类，如果自定义运行时异常类需继承 RuntimeException 类或其子类
+- 自定义异常类通常需要编写几个重载的构造器、提供serialVersionUID、通过throw抛出、应当可以根据名字判断异常类型。一般将自定义异常类的类名命名为XXXException，其中 XXX 用来代表该异常的作用。
+
+- 自定义异常类一般包含两个构造方法：无参的构造方法、以字符串的形式接收一个定制的异常消息并将该消息传递给超类的构造方法。
+
+```java
+public class MyException extends Exception {
+    static final long serialVersionUID = 1L; 
+
+    public IntegerRangeException() {
+        super();
+    }
+    public IntegerRangeException(String message) {
+        super(message);
+    }
+}
+```
+
+### assert 断言
+
+- java中提供了专门的assert语句，为java程序提供了一种错误检查机制。
+- 断言语句运行时，默认不执行，需要手动打开。
+
+```shell
+# 如果在-ea或-da选项后面无参数，则将对程序中除了系统类之外的所有其他类都打开/关闭断言检查。
+
+#打开断言检查
+java -ea 类/包
+java -enableassertions 类/包
+
+# 关闭断言检查
+java -da 类/包
+java -disableassertions 类/包
+```
+
+- 每个断言都包含了一个boolean表达式。如果程序没有错误，则运行assert语句时，该表达式的值应该为true；如果该表达式的值为false，则系统将抛出一个错误。
+
+> 断言是发现程序错误最快最有效的方法之一，相当于程序内部处理的文档，增强了程序的可维护性。
+
+```java
+assert boolean表达式;
+```
+
+- 当系统运行时，将求出该boolean表达式的值。如果是false，说明系统处于不正确的状态，将抛出一个没有任何详细信息的AssertionError类型的错误，并且退出；如果是true，进行执行。
+
+```java
+assert boolean表达式1 : 表达式2;
+```
+
+- 表达式2可以是：boolean、char、double、float、int、long类型的值 或 引用类型对象（如：描述错误的字符串）。
+- 当系统运行时，且boolean表达式1的值为false时，则系统计算出表达式2的值，然后以表达式2的值为参数调用AssertionError类的构造方法，创建一个包含详细描述信息的AssetError对象抛出并退出。
+
+```java
+public class AssertDemo {
+    public static void main(String[] args) {
+        AssertDemo assertDemo = new AssertDemo();
+        assert (assertDemo.printX() >= 0) : "不能小于0";
+    }
+
+    public int printX() {
+        Scanner scan = new Scanner(System.in);
+        int x = scan.nextInt();
+
+        return x;
+    }
+}
+```
 
 ## Collection/Map 集合
 
