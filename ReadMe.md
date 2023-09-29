@@ -1,8 +1,6 @@
 # [Java](./Books/Java/Java.md)
 
-[GUI](./Books/Java/基础知识/GUI.md)
-
-[Applet](./Books/Java/基础知识/Applet.md)
+## [单元测试](./Books/Java/单元测试.md)
 
 # [JVM](./Books/Java/JVM.md)
 
@@ -18,9 +16,9 @@
 
 ## [Tomcat](./Books/Web/JavaEE/Tomcat.md)
 
-# 前端
+## [Maven](./Books/Java/Maven.md)
 
-## [JSON](./Books/Web/JSON.md)
+# 前端
 
 ## [CSS](./Books/Web/前端/CSS.md)
 
@@ -32,41 +30,15 @@
 
 # [Android](./Books/Android/Android.md)
 
+## [Gradle](./Books/Android/Gradle.md)
+
 # 工具
-
-## [Gradle](./Books/其他/Gradle.md)
-
-## [Maven](./Books/其他/Maven.md)
 
 ## [Git](./Books/其他/Git.md)
 
 ## [Markdown](./Books/其他/Markdown.md)
 
-## [Properties](./Books/其他/Properties.md)
-
-## [YAML](./Books/其他/YAML.md)
-
-## [XML](./Books/其他/XML.md)
-
-# 测试
-
-## [单元测试](./Books/测试/单元测试.md)
-
-# 算法与数据结构
-
-[习题](./Books/算法与数据结构/习题.md)
-
-## 数据结构
-
-### [线性表](./Books/算法与数据结构/数据结构/线性表.md)
-
-### [栈和队列](./Books/算法与数据结构/数据结构/栈和队列.md)
-
-### [字符串和数组](./Books/算法与数据结构/数据结构/字符串和数组.md)
-
-### [树](./Books/算法与数据结构/数据结构/树.md)
-
-### [图](./Books/算法与数据结构/数据结构/图.md)
+# [数据结构](./Books/数据结构.md)
 
 ## 算法
 
@@ -142,19 +114,9 @@
 
 # Linux
 
-## 基础
+## [Linux基础](./Books/Linux/Linux基础.md)
 
-### [安装配置](./Books/Linux/基础/安装配置.md)
-
-### [vim](./Books/Linux/基础/vim.md)
-
-### [基础命令](./Books/Linux/基础/基础命令.md)
-
-### [文件管理](./Books/Linux/基础/文件管理.md)
-
-### [应用程序管理](./Books/Linux/基础/应用程序管理.md)
-
-### [用户管理](./Books/Linux/基础/用户管理.md)
+### [vim](./Books/Linux/vim.md)
 
 ### [系统管理](./Books/Linux/基础/系统管理.md)
 

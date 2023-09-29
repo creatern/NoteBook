@@ -8,7 +8,7 @@
 
 # 常用命令
 
-<img src="../../../pictures/Snipaste_2022-11-28_09-22-52.png" width="900"/> 
+<img src="../pictures/Snipaste_2022-11-28_09-22-52.png" width="900"/> 
 
 # 光标移动命令
 
