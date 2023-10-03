@@ -263,7 +263,7 @@ declare 变量名=变量值
 
 - declare命令 用于声明和显示已存在的shell变量。当不提供变量名参数时显示所有shell变量。declare命令若不带任何参数选项，则会显示所有shell变量及其值。declare的功能与typeset命令的功能是相同的。
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-10-06.png" width="400"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-10-06.png" width="400"/> 
 
 #### set 赋值
 
@@ -271,14 +271,14 @@ declare 变量名=变量值
 - 使用set更改shell特性时，符号“+”和“-”的作用分别是打开和关闭指定的模式。
 - set命令**不能够定义新的shell变量**。如果要定义新的变量，可以使用declare命令以变量名=值的格式进行定义即可。
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-14-12.png" width="500"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-14-12.png" width="500"/> 
 
 ### unset 撤销变量
 
 - unset命令 用于删除已定义的shell变量（包括环境变量）和shell函数。
 - unset命令不能够删除具有只读属性的shell变量和环境变量
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-03-41.png" width="300"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-03-41.png" width="300"/> 
 
 ```shell
 unset 变量
@@ -290,7 +290,7 @@ unset 变量
 
 语法
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-05-03.png" width="300"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-05-03.png" width="300"/> 
 
 ```shell
 readonly 变量名=变量值
@@ -302,7 +302,7 @@ readonly 变量名=变量值
 - 一个变量创建时，它不会自动地为在它之后创建的shell进程所知。而命令export可以向后面的shell传递变量的值。当一个shell脚本调用并执 行时，它不会自动得到原为脚本（调用者）里定义的变量的访问权，除非这些变量已经被显式地设置为可用。export命令可以用于传递一个或多个变量的值到任何后继脚本。
 - 修改子shell中全局变量的值，不会影响到父shell中该全局变量的值，只会影响该子shell创建的子shell的全局变量的值。
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-07-19.png" width="450"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-07-19.png" width="450"/> 
 
 ```shell
 export 变量名
@@ -419,7 +419,7 @@ echo $变量
 
 - read命令 从键盘读取变量的值，通常用在shell脚本中与用户进行交互的场合。该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开。在read命令后面，如果没有指定变量名，读取的数据将被自动赋值给特定的变量REPLY
 
-<img src="../../../pictures/Snipaste_2022-12-17_16-10-32.png" width="250"/> 
+<img src="../../pictures/Snipaste_2022-12-17_16-10-32.png" width="250"/> 
 
 ```shell
 #!/bin/bash
@@ -432,7 +432,7 @@ echo "输出：$value1"
 
 - 如果使用env命令在新环境中执行指令时，会因为没有定义环境变量“PATH”而提示错误信息“such file or directory”。此时，用户可以重新定义一个新的“PATH”或者使用绝对路径。
 
-<img src="../../../pictures/Snipaste_2022-12-17_17-13-00.png" width="500"/> 
+<img src="../../pictures/Snipaste_2022-12-17_17-13-00.png" width="500"/> 
 
 #### env、printenv、set的区别
 
@@ -536,7 +536,7 @@ $[运算式]
 
 ## let
 
-<img src="../../../pictures/Snipaste_2022-12-31_22-38-04.png" width="600"/> 
+<img src="../../pictures/Snipaste_2022-12-31_22-38-04.png" width="600"/> 
 
 ```shell
 [root@www Test]# let A=1+2
@@ -549,7 +549,7 @@ $[运算式]
 - bc命令 是一种支持任意精度的交互执行的计算器语言。
 - bash内置了对整数四则运算的支持，但是并不支持浮点运算。
 
-<img src="../../../pictures/Snipaste_2022-12-31_22-42-49.png" width="300"/> 
+<img src="../../pictures/Snipaste_2022-12-31_22-42-49.png" width="300"/> 
 
 ```shell
 [root@www Test]# echo $[ 9.9 * 9 ]
@@ -579,7 +579,7 @@ echo "sqrt(100)" | bc
 
 ### [] 和 test
 
-<img src="../../../pictures/Snipaste_2022-12-19_16-17-55.png" width="600"/> 
+<img src="../../pictures/Snipaste_2022-12-19_16-17-55.png" width="600"/> 
 
 - -z 或 -n 判断字符串是否为空，最好使用"$变量"的方式判断，因为空格也被看作不为空。
 - -x 判断文件存在且当前用户拥有执行权限
@@ -636,7 +636,7 @@ Y
 
 ### if
 
-<img src="../../../pictures/Snipaste_2022-12-19_16-44-15.png" width="650"/> 
+<img src="../../pictures/Snipaste_2022-12-19_16-44-15.png" width="650"/> 
 
 ```shell
 #!/bin/bash
@@ -654,7 +654,7 @@ fi
 
 ### case
 
-<img src="../../../pictures/Snipaste_2022-12-19_16-54-28.png" width="650"/> 
+<img src="../../pictures/Snipaste_2022-12-19_16-54-28.png" width="650"/> 
 
 ```shell
 #!/bin/bash
@@ -676,8 +676,8 @@ esac
 
 ### for
 
-<img src="../../../pictures/Snipaste_2022-12-19_16-58-12.png" width="700"/> 
-<img src="../../../pictures/Snipaste_2022-12-19_17-00-18.png" width="700"/> 
+<img src="../../pictures/Snipaste_2022-12-19_16-58-12.png" width="700"/> 
+<img src="../../pictures/Snipaste_2022-12-19_17-00-18.png" width="700"/> 
 
 ```shell
 #!/bin/bash
@@ -695,7 +695,7 @@ done
 
 ### while
 
-<img src="../../../pictures/Snipaste_2022-12-19_17-12-31.png" width="700"/> 
+<img src="../../pictures/Snipaste_2022-12-19_17-12-31.png" width="700"/> 
 
 ```shell
 #!/bin/bash

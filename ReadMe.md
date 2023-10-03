@@ -6,17 +6,17 @@
 
 # JavaEE
 
-## [MyBatis](./Books/Web/JavaEE/MyBatis.md)
+## [MyBatis](./Books/Java/JavaEE/MyBatis.md)
 
-## [Spring](./Books/Web/JavaEE/Spring/Spring.md)
+## [Spring](./Books/Java/JavaEE/Spring/Spring.md)
 
-[Spring基础xml](./Books/Web/JavaEE/Spring/Spring基础xml.md)
+[Spring基础xml](./Books/Java/JavaEE/Spring/Spring基础xml.md)
 
-## [Redis](./Books/Web/JavaEE/Redis.md)
+## [Redis](./Books/Java/JavaEE/Redis.md)
 
-## [Tomcat](./Books/Web/JavaEE/Tomcat.md)
+## [Tomcat](./Books/Java/JavaEE/Tomcat.md)
 
-## [Maven](./Books/Java/Maven.md)
+## [Maven](./Books/Java/JavaEE/Maven.md)
 
 # 前端
 
@@ -70,12 +70,6 @@
 
 # 数据库
 
-## [数据库系统概论](./Books/数据库/数据库系统概论.md)
-
-## [数据挖掘](./Books/数据库/数据挖掘.md)
-
-## [数据仓库](./Books/数据库/数据仓库.md)
-
 ## Oracle
 
 ### SQL
@@ -116,25 +110,9 @@
 
 ## [Linux基础](./Books/Linux/Linux基础.md)
 
-### [vim](./Books/Linux/vim.md)
+### [Vim](./Books/Linux/vim.md)
 
-### [系统管理](./Books/Linux/基础/系统管理.md)
-
-### [日志系统](./Books/Linux/基础/日志系统.md)
-
-### [防火墙管理](./Books/Linux/基础/防火墙管理.md)
-
-### [网络管理](./Books/Linux/基础/网络管理.md)
-
-### [网络共享](./Books/Linux/基础/网络共享.md)
-
-### [磁盘管理](./Books/Linux/基础/磁盘管理.md)
-
-### [服务安装配置](./Books/Linux/基础/服务安装配置.md)
-
-### [Shell](./Books/Linux/基础/Shell.md)
-
-## [内核](./Books/Linux/Linux内核.md)
+### [Shell](./Books/Linux/Shell.md)
 
 # 计算机
 

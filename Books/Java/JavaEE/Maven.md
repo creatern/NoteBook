@@ -4,7 +4,7 @@
 
 - 项目管理工具（项目对象模型）：POM。
 
-<img src="../../pictures/Snipaste_2023-03-16_20-33-31.jpg" width="800"/>  
+<img src="../../../pictures/Snipaste_2023-03-16_20-33-31.jpg" width="800"/>  
 
 1. 项目构建。
 2. 依赖管理。
@@ -44,7 +44,7 @@
 | version     | 当前项目版本号                            |
 | packaging   | 该项目的打包方式                           |
 
-<img src="../../pictures/Snipaste_2023-03-16_21-09-16.jpg" width="800"/>  
+<img src="../../../pictures/Snipaste_2023-03-16_21-09-16.jpg" width="800"/>  
 
 # 仓库配置
 
@@ -182,23 +182,23 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 
 1. 创建、配置Maven项目：
 
-<img src="../../pictures/Snipaste_2023-03-17_10-54-50.jpg" width="600"/> 
+<img src="../../../pictures/Snipaste_2023-03-17_10-54-50.jpg" width="600"/> 
 
 2. 创建Maven的Module：
 
-<img src="../../pictures/Snipaste_2023-03-17_10-58-29.jpg" width="600"/> 
+<img src="../../../pictures/Snipaste_2023-03-17_10-58-29.jpg" width="600"/> 
 
 3. 为相应的文件设置属性，通常已经设置好：
 
-<img src="../../pictures/Snipaste_2023-03-17_11-00-52.jpg" width="600"/>  
+<img src="../../../pictures/Snipaste_2023-03-17_11-00-52.jpg" width="600"/>  
 
 ### 管理Maven
 
-<img src="../../pictures/Snipaste_2023-03-17_11-06-04.jpg" width="400"/>  
+<img src="../../../pictures/Snipaste_2023-03-17_11-06-04.jpg" width="400"/>  
 
 - 配置快捷命令：
 
-<img src="../../pictures/Snipaste_2023-03-17_11-17-02.jpg" width="1000"/>  
+<img src="../../../pictures/Snipaste_2023-03-17_11-17-02.jpg" width="1000"/>  
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -239,7 +239,7 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 </project>
 ```
 
-<img src="../../pictures/Snipaste_2023-03-17_12-12-47.jpg" width="800"/>    
+<img src="../../../pictures/Snipaste_2023-03-17_12-12-47.jpg" width="800"/>    
 
 ### 导入Maven项目
 
@@ -251,7 +251,7 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 
 ## 导入依赖 dependency
 
-<img src="../../pictures/Snipaste_2023-03-17_11-10-46.jpg" width="1000"/>
+<img src="../../../pictures/Snipaste_2023-03-17_11-10-46.jpg" width="1000"/>
 
 | 依赖分类       | 说明                                                        |
 | ---------- | --------------------------------------------------------- |
@@ -343,7 +343,7 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 
 # 生命周期
 
-<img src="../../pictures/Maven-生命周期.drawio.svg" width="600"/> 
+<img src="../../../pictures/Maven-生命周期.drawio.svg" width="600"/> 
 
 - 对于生命周期，如果要执行一个命令，则在其生命周期之前的命令也全部会被执行。
 
@@ -404,7 +404,7 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 </build>
 ```
 
-<img src="../../pictures/Snipaste_2023-03-17_12-37-00.jpg" width="1200"/>  
+<img src="../../../pictures/Snipaste_2023-03-17_12-37-00.jpg" width="1200"/>  
 
 # 分模块开发与设计
 

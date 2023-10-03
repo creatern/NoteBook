@@ -4,19 +4,23 @@
 
 ### Tomcat安装和配置
 
-**目录结构说明**
+| 目录结构 | 说明           |
+| -------- | -------------- |
+| bin      | 可执行文件目录 |
+| conf     | 配置文件目录   |
+| lib      | 存放lib目录    |
+| logs     | 日志文件目录   |
+| temp     | 临时目录       |
+| webapps  | 项目部署目录   |
+| work     | 工作目录       |
 
-<img src="../../../pictures/Snipaste_2022-11-19_00-15-23.png" width="300"/>  
+> 其他文件：BUILDING.txt、CONTRIBUTING.md、LICENSE、NOTICE、README.md、RELEASE-NOTES、RUNNING.txt。
 
 **配置环境变量**
 
 1. 需要配置JAVA_HOME（安装JDK时配置的），否则Tomcat打开一闪而过，
 
-  - 因为Tomcat是用C和Java编写的，需要JRE。 
-  - 需要指向JDK的JAVA_HOME，否则不行。
-
-<img src="../../../pictures/Snipaste_2022-11-19_00-58-11.png" width="400"/>  
-<img src="../../../pictures/Snipaste_2022-11-19_01-00-14.png" width="400"/>  
+> Tomcat是用C和Java编写的，需要JRE。 
 
 
 2.  配置Tomcat环境变量
@@ -32,25 +36,22 @@
 
 - 浏览器打开`http://localhost:8080`
 
-#### cmd控制台乱码
+> **cmd控制台乱码**
+>
+> - 修改conf/logging.properties的
+>
+> ````
+> java.util.logging.ConsoleHandler.encoding=GBK
+> ````
 
-- 修改conf/logging.properties的
-
-`java.util.logging.ConsoleHandler.encoding=GBK`
-
-#### 部署项目
-
-- 将项目放入Tomcat的webapps目录下即可
-  - 到Tomcat解压目录的webapps目录中创建文件目录
-  - 并且在该目录下创建文件目录：`WEB-INFO` 
-
-<img src="../../../pictures/Snipaste_2023-03-23_14-08-57.jpg" width="200"/> 
-
-- 打包成war包再放入webapps目录
+> **部署项目**
+>
+> 将项目放入Tomcat的webapps目录下即可。到Tomcat解压目录的webapps目录中创建文件目录，并且在该目录下创建文件目录：`WEB-INFO`。 打包成war包再放入webapps目录
 
 ## IDEA Web部署
 
-先新建一个项目Project，再新建一个Module，然后将Moudle设置为Web
+- 先新建一个项目Project，再新建一个Module，然后将Moudle设置为Web
+
 <img src="../../../pictures/Snipaste_2022-11-19_10-24-42.png" width="300"/>  
 <img src="../../../pictures/Snipaste_2022-11-19_10-27-17.png" width="550"/>  
 <img src="../../../pictures/Snipaste_2022-11-19_10-28-00.png" width="300"/>   
@@ -71,7 +72,7 @@
 
 ### 手工创建
 
-<img src="c:/users/zjk10/onedrive/notebook/pictures/Snipaste_2023-03-23_14-27-13.png" width="1000" />
+<img src="../../../pictures/Snipaste_2023-03-23_14-27-13.png" width="1000" />
 
 ## 配置IDEA的Tomcat设置
 
