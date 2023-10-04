@@ -2,6 +2,8 @@
 
 ## [单元测试](./Books/Java/单元测试.md)
 
+## [设计模式](./Books/Java/设计模式.md)
+
 # [JVM](./Books/Java/JVM.md)
 
 # JavaEE
@@ -28,15 +30,13 @@
 
 ## [HTML](./Books/Web/前端/HTML.md)
 
-# [Android](./Books/Android/Android.md)
-
-## [Gradle](./Books/Android/Gradle.md)
-
 # 工具
 
 ## [Git](./Books/其他/Git.md)
 
 ## [Markdown](./Books/其他/Markdown.md)
+
+### [UML](./Books/其他/UML.md)
 
 # [数据结构](./Books/数据结构.md)
 
@@ -70,41 +70,13 @@
 
 # 数据库
 
-## Oracle
+## [SQL](./Books/数据库/SQL/SQL.md)
 
-### SQL
+## NoSQL
 
-#### [SQL_PLUS](./Books/数据库/oracle/SQL/SQL_PLUS.md)
+### [MongoDB](./Books/数据库/NoSQL/MongoDB.md)
 
-#### [标准SQL](./Books/数据库/oracle/SQL/标准SQL.md)
-
-#### [高级SQL](./Books/数据库/oracle/SQL/高级SQL.md)
-
-#### [PL/SQL](./Books/数据库/oracle/SQL/PL_SQL.md)
-
-### 数据库管理
-
-#### [安装配置](./Books/数据库/oracle/数据库管理/安装配置.md)
-
-#### [Oracle基础结构](./Books/数据库/oracle/数据库管理/Oracle基础结构.md)
-
-#### [数据库工具](./Books/数据库/oracle/数据库管理/数据库工具.md)
-
-#### [ASM](./Books/数据库/oracle/数据库管理/ASM.md)
-
-#### [RMAN](./Books/数据库/oracle/数据库管理/RMAN.md)
-
-#### [RAC](./Books/数据库/oracle/数据库管理/RAC.md)
-
-#### [错误日志](./Books/数据库/oracle/数据库管理/错误日志.md)
-
-### [性能优化](./Books/数据库/oracle/性能优化.md)
-
-## MySql
-
-### [SQL](./Books/数据库/mysql/SQL.md)
-
-## [MongoDB](./Books/数据库/MongoDB.md)
+### [Cassandra](./Books/数据库/NoSQL/Cassandra.md)
 
 # Linux
 
@@ -114,28 +86,6 @@
 
 ### [Shell](./Books/Linux/Shell.md)
 
-# 计算机
+# [Android](./Books/Android/Android.md)
 
-## [网络](./Books/计算机/网络.md)
-
-### TCP/IP
-
-## [体系结构](./Books/计算机/体系结构.md)
-
-## [组成原理](./Books/计算机/组成原理.md)
-
-## [操作系统](./Books/计算机/操作系统.md)
-
-## [编译原理](./Books/计算机/编译原理.md)
-
-## [汇编语言](./Books/计算机/汇编语言.md)
-
-# 软件设计
-
-## [UML](./Books/软件设计/UML.md)
-
-## [设计模式](./Books/软件设计/设计模式.md)
-
-# 信息系统管理
-
-## [MIS](./Books/信息系统/MIS.md)
+## [Gradle](./Books/Android/Gradle.md)

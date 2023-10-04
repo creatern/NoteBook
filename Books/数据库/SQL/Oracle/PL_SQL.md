@@ -5837,5 +5837,3 @@ dropjava -user sys/sys@orcl 类名
 ```
 
 3. 通过创建的函数来调用Java程序
-
- 

@@ -843,6 +843,15 @@ sudo apt install <软件名>
 sudo apt search <keyword>
 ```
 
+- apt-get update 换源
+
+```shell
+# Ubutun apt源
+sudo vim /etc/apt/sources.list
+```
+
+> [清华大学镜像](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/?spm=a2c6h.12873639.article-detail.7.4d0a3d66Nzz2jp)
+
 ### dpkg
 
 ```shell

@@ -3094,12 +3094,19 @@ public CommandLineRunner testMethod() {
 
 ### Thymeleaf
 
-| EL表达式 | 名称                                       |
-| -------- | ------------------------------------------ |
-| `@{}`    | 链接表达式                                 |
-| `${}`    | 变量表达式：对整个上下文                   |
-| `*{}`    | 选择变量表达式：对选定对象                 |
-| `#{}`    | 消息表达（文本外部化）：读取配置文件中数据 |
+```html>
+<!--html头部声明和使用Thymeleaf-->
+<html xmlns:th="http://www.thymeleaf.org">
+```
+
+#### EL表达式
+
+| EL表达式 | 表达式                                                       |
+| -------- | ------------------------------------------------------------ |
+| `@{}`    | 链接资源<br />默认根目录为static                             |
+| `${}`    | （Model中的）变量                                            |
+| `*{}`    | 选定对象（th:object）而不是整个上下文评估表达式<br />若没有选定对象，则等同于`${}`。 |
+| `#{}`    | 消息表达（文本外部化）：读取配置文件                         |
 
 ```html
 <!--${}变量表达式-->
@@ -3137,22 +3144,31 @@ public CommandLineRunner testMethod() {
 </div>
 ```
 
-| 替换               | -                      |
-| ------------------ | ---------------------- |
-| th:id              | id                     |
-| th:text            | 文本                   |
-| th:utext           | html文本               |
-| th:src             | 资源                   |
-| th:href            | 超链接                 |
-| th:object          | 对象                   |
-| th:value           | 值                     |
-| **流程控制**       | **-**                  |
-| th:if<br>th:unless | 判断                   |
-| th:each            | 循环                   |
-| **检验**           | **-**                  |
-| th:errors          | 异常（搭配validation） |
-| **取值**           | **-**                  |
-| th:field           | 输入域<br />#fields    |
+```html
+<!--#{}消息表达-->
+<!--配置文件：/resources/test.properties-->
+<!--application.properties中加入：test，直接使用配置文件中的键值对-->
+<span th:text="#{tom.name}"></span>
+```
+
+#### th标签
+
+| 替换               | -                         |
+| ------------------ | ------------------------- |
+| th:id              | id                        |
+| th:text            | 文本                      |
+| th:utext           | html文本                  |
+| th:src             | 资源                      |
+| th:href            | 超链接                    |
+| th:object          | 选定对象（搭配`*{}`使用） |
+| th:value           | 值                        |
+| **流程控制**       | **-**                     |
+| th:if<br>th:unless | 判断                      |
+| th:each            | 循环                      |
+| **检验**           | **-**                     |
+| th:errors          | 异常（搭配validation）    |
+| **取值**           | **-**                     |
+| th:field           | 输入域<br />#fields       |
 
 ```html
 <!--List循环-->
@@ -3304,7 +3320,7 @@ public Interface TacoOrder extends CrudRepository{
 | 作用 | 指明方法调用时执行的查询，而不是根据方法签名。 |
 | 参数 | SQL查询语句<br />（JPA中可以使用JPA查询）      |
 
-## Spring Data JDBC
+## JDBC
 
 ```xml
 <groupId>org.springframework.boot</groupId>
@@ -3319,7 +3335,7 @@ public Interface TacoOrder extends CrudRepository{
 
 ### Persistable
 
-## Spring Data JPA
+## JPA
 
 ```xml
 <groupId>org.springframework.boot</groupId>
@@ -3333,3 +3349,31 @@ public Interface TacoOrder extends CrudRepository{
 | @GeneratedValue(strategy) | 生成ID值。<br />strategy：生成策略。                         |
 | @ManyToMany()             | 该属性（对应的类型）和类是多对多的关系。                     |
 | @OneToMany(cascade)       | 所有的该属性（对应的类型）都属于该类（一对多）。<br />cascade：级联范围。 |
+
+## Cassandra
+
+- Cassandra：分布式、高性能、始终可用、最终一致、列分区存储的NoSQL数据库。Cassandra处理写入表中的数据行，这些数据被分区到一对多的分布式节点。
+
+```xml
+<!--非反应式-->
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-cassandra</artifactId>
+```
+
+| spring.data.cassandra设置 | 选项                                                         |
+| ------------------------- | ------------------------------------------------------------ |
+| schema-action             | none：默认，不采取任何措施。<br />recreate：应用启动时，所有表和用户定义类型都被废弃并重建。 |
+| local-datacenter          | 本地数据中心名称，以设置负载均衡策略。<br />单节点：datacenter1。 |
+| contact-points            | 默认设置为localhost。<br />设置主机列表，则尝试每个联系点，直到有一个连接成功。 |
+| port                      | 默认监听9042端口。                                           |
+| username<br />password    | 用户名<br />密码                                             |
+
+| 注解             | 说明                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| @Table           | 表映射                                                       |
+| @Column          | 列映射                                                       |
+| @PrimaryKey      | 分区键、默认排序的集群键                                     |
+| @PrimaryColumn   | PrimaryKeyType.PARTITION：分区键<br />PrimaryKeyType.CLUSTERED：集群键（搭配ordering） |
+| @UserDefinedType | 用户自定义类型                                               |
+
+## MongoDB
