@@ -3737,8 +3737,9 @@ DEPTNO AVG(SAL)OVER(ORDERBYSALDESCROW
 
 ## 旋转
 
-
 # PL/SQL
+
+## PL/SQL语句块
 
 ```sql
 -- 打开屏幕输出
@@ -3776,6 +3777,57 @@ begin
    end;
  ';
 end;
+```
+
+### 字符分隔符 q'
+
+- `q'`操作符声明一个定界符。可以指定任何字符作为定界符，只要这个字符没有出现在字符串中。
+
+> 定界符：用来在字符串中使用特殊字符（如：'）,在两个定界符中可以当作普通字符使用。
+>
+> | 简单定界符 |    含义    |
+> | :--------: | :--------: |
+> |     +      | 加法运算符 |
+> |     -      | 减法运算符 |
+> |     *      | 乘法运算符 |
+> |     /      | 除法运算符 |
+> |     =      | 相等操作符 |
+> |     ;      | 语句结束符 |
+> |     @      | 远程访问符 |
+>
+> | 组合定界符 |      含义      |
+> | :--------: | :------------: |
+> |    `||`    |   连接操作符   |
+> |     :=     |   赋值操作符   |
+> |     !=     |   不等运算符   |
+> |     <>     |   不等运算符   |
+> |     /*     | 开始注释定界符 |
+> |     */     | 结束注释定界符 |
+> |     --     |   单行注释符   |
+
+```plsql
+declare
+ v_special_day varchar2(250);
+begin
+  -- q'将!作为定界符
+  v_special_day := q'!Happy Woman's Day on 8th March!';
+  dbms_output.put_line(v_special_day);
+  
+  -- q' 将[]作为定界符
+  v_special_day := q'[TO many People,"today']'; 
+  dbms_output.put_line(v_special_day);
+  
+  -- ''逃逸符号
+  v_special_day := '你好''呀';
+  dbms_output.put_line(v_special_day);
+end;
+
+/******************
+Happy Woman's Day on 8th March
+TO many People,"today'
+你好'呀
+PL/SQL procedure successfully completed
+*/
 ```
 
 ## 变量
@@ -3855,33 +3907,15 @@ begin
 end;
 ```
 
-#### 绑定变量（bind variable）
+### 绑定变量（bind variable）
 
-- 在oracle 中，对于一个提交的sql语句,存在两种可选的解析过程, 一种叫做硬解析,一种叫做软解析.
-
-一个硬解析需要经解析,制定执行路径,优化访问计划等许多的步骤.硬解释不仅仅耗费大量的cpu，更重要的是会占据重要的们闩（latch）资源，严重的影响系统的规模的扩大（即限制了系统的并发行）， 而且引起的问题不能通过增加内存条和cpu的数量来解决。之所以这样是因为门闩是为了顺序访问以及修改一些内存区域而设置的，这些内存区域是不能被同时修改。当一个sql语句提交后，oracle会首先检查一下共享缓冲池（shared pool）里有没有与之完全相同的语句，如果有的话只须执行软分析即可，否则就得进行硬分析。
-
-而唯一使得oracle 能够重复利用执行计划的方法就是采用绑定变量。绑定变量的实质就是用于替代sql语句中的常量的替代变量。绑定变量能够使得每次提交的sql语句都完全一样。
-
-- 普通sql语句：
+- 绑定变量（`:变量`）：重复利用执行计划，使得每次提交的sql语句都完全一样。
 
 ```plsql
-select fname, lname, pcode from cust where id = 674;
-select fname, lname, pcode from cust where id = 234;
-select fname, lname, pcode from cust where id = 332;
-```
-
-- 含绑定变量的sql 语句：
-
-```plsql
-select fname
-     ,lname
-     ,pcode 
+select fname, lname, pcode 
 from cust 
 where id = :cust_no;
 ```
-
-- Sql*plus 中使用绑定变量：
 
 ```plsql
 sql> variable x number;
@@ -3889,128 +3923,38 @@ sql> exec :x := 123;
 sql> select fname, lname, pcode from cust where id =:x;
 ```
 
-- pl/sql很多时候都会自动绑定变量而无需编程人员操心，即很多你写得sql语句都会自动利用绑定变量，如下例所示：
+> 在pl/sql中，引用变量（p_empno）即是引用绑定变量。
+>
+> ```plsql
+> create or replace procedure dsal(p_empno in number)
+> as
+>   begin
+>     update emp
+>     set sal=sal*2
+>     where empno = p_empno;
+>     commit;
+>   end;
+> ```
 
-```plsql
-create or replace procedure dsal(p_empno in number)
-as
-  begin
-    update emp
-    set sal=sal*2
-    where empno = p_empno;
-    commit;
-  end;
-/
-```
+### 数据类型
 
-- 也许此时你会想要利用绑定变量来替代p_empno,但是这是完全没有必要的，
-    - 因为在pl/sql中，引用变量即是引用绑定变量。但是在pl/sql中动态sql并不是这样。
-- 在vb，java以及其他应用程序中都得显式地利用绑定变量。对于绑定变量的支持不仅仅限于oracle,其他RDBMS如SQLserver也支持这一特性。
+| 数据类型  | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| 标量      | 只保持一个单一的值，而这个值依赖与变量的数据类型。<br />SQL中的数据类型。 |
+| 组合      | 组合数据类型包括内部元素（结构），而这些元素既可以是标量数据类型也可以是组合数据类型。<br />record（记录）、PL/SQL table。 |
+| 引用      | 引用数据类型保持指向一个存储位置的指针值。                   |
+| 大对象LOB | 大对象数据类型保持被称为定位器（指针）的值，这个定位器声明在表之外的大对象（声音，图形）的位置（地址）。<br />在数据库中，表中的列可以是LOB数据类型（CLOB, BLOB等）。<br />LOB数据类型可以在数据库中存储大量的无结构数据块（正文，图形，声音和影像信息），存储量最多可达128T（数据量的大小取决于数据块的大小）。<br /> LOB数据类型允许高效，随机和分段的访问大量的无结构数据。 |
 
-- 但是并不是任何情况下都需要使用绑定变量，　下面是两种例外情况：
-1. 对于隔相当一段时间才执行一次的SQL语句，这是利用绑定变量的好处会被不能有效利用优化器而抵消
-2. 数据仓库的情况下。
+| LOB      | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| CLOB     | 存储单字节的大数据对象，如演讲稿、说明书、简历等。           |
+| BLOB     | 存储大的二级制对象，如图片、幻灯片等。<br />从数据库中提取这样的数据、向数据库中插入这样的数据时，数据库并不解释这些数据，使用这些数据的外部应用程序必须自己解释这些数据。 |
+| DBMS_LOB | 对于CLOB和BLOB数据类型的列，许多操作是不能直接使用Oracle的数据库命令来完成的。<br />维护LOB数据类型的列。 |
+| BFILE    | 在数据库外的操作系统文件中存储大的二级制对象，如电影胶片等。<br />与其他LOB数据类型不同，BFILE数据类型是外部数据类型。<br />BFILE类型的数据是存储在数据库之外的，他们可能是操作系统文件。实际上，数据库中只存储了BFILE的一个指针，因此定义为BFILE数据类型的列是不能通过Oracle的数据库命令来操作的，这些列只能通过操作系统命令或者第三方软件来维护。 |
+| NCLOB    | 存储NCHAR类型的单字节或定长字节的Unicode大数据对象。         |
 
-### 字符分隔符 q'操作符
-
-- `q'`操作符声明一个定界符
-    - 可以指定任何字符作为定界符，只要这个字符没有出现在字符串中
-    - 定界符：用来在字符串中使用特殊字符（如：'）,在两个定界符中可以当作普通字符使用
-- 如果没有使用q'操作符定义定界符，就必须重复字符串中的单引号。此时，第一个单引号实际上是逃逸符号（即去掉紧随其后的一个单引号的特殊含义，而作为一个普通字符处理）
-
-#### 例1
-
-```plsql
-declare
- v_special_day varchar2(250);
-begin
-  v_special_day := q'!Happy Woman's Day on 8th March!';
-  --q'将!作为定界符
-  dbms_output.put_line(v_special_day);
-  
-  v_special_day := q'[TO many People,"today']'; 
-  --q' 将[]作为定界符
-  dbms_output.put_line(v_special_day);
-  
-  v_special_day := '你好''呀';
-  --''逃逸符号
-  dbms_output.put_line(v_special_day);
-end;
-
-******************
-Happy Woman's Day on 8th March
-TO many People,"today'
-你好'呀
-PL/SQL procedure successfully completed
-```
-
-#### 定界符
-
-**简单定界符**
-
-| 操作符 |    含义    |
-| :----: | :-------: |
-|   +    | 加法运算符 |
-|   -    | 减法运算符 |
-|   *    | 乘法运算符 |
-|   /    | 除法运算符 |
-|   =    | 相等操作符 |
-|   ;    | 语句结束符 |
-|   @    | 远程访问符 |
-
-**组合定界符**
-
-| 操作符 |     含义      |
-| :----: | :-----------: |
-|  `||`  |   连接操作符   |
-|   :=   |   赋值操作符   |
-|   !=   |   不等运算符   |
-|   <>   |   不等运算符   |
-|   /*   | 开始注释定界符 |
-|   */   | 结束注释定界符 |
-|   --   |   单行注释符   |
-
-### 变量的数据类型
-
-#### 标量
-- 只保持一个单一的值，而这个值依赖与变量的数据类型
-- 即：
-    - SQL中的数据类型
-#### 组合
-- 组合数据类型包括内部元素（结构），而这些元素既可以是标量数据类型也可以是组合数据类型。
-- RECORD（记录）和PL/SQL TABLE就属于组合数据类型
-#### 引用
-- 引用数据类型保持指向一个存储位置的指针值
-
-#### 大对象LOB
-
-- 大对象数据类型保持被称为定位器（指针）的值，这个定位器声明在表之外的大对象（声音，图形）的位置（地址）
-- 在数据库中，表中的列可以是LOB数据类型（CLOB, BLOB等)
-- LOB数据类型，可以在数据库中存储大量的无结构数据块（正文，图形，声音和影像信息）
-- 存储量最多可达128T（数据量的大小取决于数据块的大小）
-- LOB数据类型允许高效，随机和分段的访问大量的无结构数据
-
-##### CLOB
-- 用于在数据库中存储单字节的大数据对象，如演讲稿，说明书或简历等
-
-##### BLOB
-- 用于在数据库中存储大的二级制对象，如图片或幻灯片等。当从数据库中提取这样的数据或向数据库中插入这样的数据时，数据库并不解释这些数据。使用这些数据的外部应用程序必须自己解释这些数据。
-
-##### DBMS_LOB
-
-- 对于CLOB和BLOB数据类型的列，许多操作是不能直接使用Oracle的数据库命令来完成的，因此，Oracle提供了一个叫DBMS_LOB的PL/SQL软件包来维护LOB数据类型的列
-
-##### BFILE
-
-- 用于在数据库外的操作系统文件中存储大的二级制对象，如电影胶片等。
-- 与其他LOB数据类型不同，BFILE数据类型是外部数据类型。
-- BFILE类型的数据是存储在数据库之外的，他们可能是操作系统文件。实际上，数据库中只存储了BFILE的一个指针，因此定义为BFILE数据类型的列是不能通过Oracle的数据库命令来操作的，这些列只能通过操作系统命令或者第三方软件来维护。
-
-##### NCLOB
-用于在数据库中存储NCHAR类型的单字节或定长字节的Unicode大数据对象。
-#### (全局变量)宿主变量（主机变量）(替代变量和绑定变量)
-- 在PL/SQL中使用非PL/SQL的变量
-- 宿主变量是在调用PL/SQL程序的环境中声明的
+### （全局变量）宿主变量（主机变量）（替代变量和绑定变量）
+- 宿主变量：在调用PL/SQL程序的环境中声明、在PL/SQL中使用非PL/SQL的变量。
 
 **替代变量和绑定变量**
 
@@ -4328,14 +4272,6 @@ begin
 end;
 ```
 
-### 常量 constant
-
-- PL/SQL中使用
-
-```
-常量名 constant 数据类型 [初始化];
-```
-
 ## 流程控制语句
 
 ### 条件判断
@@ -4603,7 +4539,7 @@ end;
 ```plsql
 --使用循环语句往表中插入数据
 
-CREATE TABLE emp_p1
+CREATE table emp_p1
 (
  emp_no NUMBER(10)
 ,hire_date DATE
@@ -4714,7 +4650,7 @@ end LOOP;
 ```
 
 ```plsql
-CREATE TABLE dept_p1
+CREATE table dept_p1
 (
  dept_no NUMBER(10)
 ,loc varchar(50)
@@ -4902,7 +4838,7 @@ end;
    - 而不能在用户的表中定义INDEX BY表类型的列
 
 
-### 记录类型RECORD
+### 记录类型record
 
 一个记录即一组存储在若干字段中的相关联的数据，而记录中的每个字段都具有各自的名字和数据类型。
 
@@ -4920,7 +4856,7 @@ end;
 
 ```plsql
 declare
-  TYPE 要定义的记录数据类型名称 is RECORD(
+  TYPE 要定义的记录数据类型名称 is record(
     --字段声明
     变量1 数据类型 [约束],
     ... 
@@ -4937,7 +4873,7 @@ end;
 ```plsql
 declare
   --定义一个记录类型
-  TYPE customer_type is RECORD(
+  TYPE customer_type is record(
     v_cust_name varchar2(20),
     v_cust_id NUMBER(10)
   );
@@ -4952,12 +4888,12 @@ end;
 
 ```plsql
 declare 
- TYPE person is RECORD(
+ TYPE person is record(
    name varchar2(20)
   ,age NUMBER(3)
   );
 
- TYPE student is RECORD(
+ TYPE student is record(
    name varchar2(20)
   ,age NUMBER(3)
   );
@@ -4984,7 +4920,7 @@ end;
 ```plsql
 declare
   --定义一个记录类型
-  TYPE emp_record is RECORD(
+  TYPE emp_record is record(
     v_name varchar2(25),
     v_email varchar2(25),
     v_salary NUMBER(8, 2),
@@ -5007,7 +4943,7 @@ end;
 ```plsql
 declare
   --定义一个记录类型
-  TYPE emp_record is RECORD(
+  TYPE emp_record is record(
     v_name employees.last_name%TYPE,
     v_email employees.email%TYPE,
     v_salary employees.salary%TYPE,
@@ -5174,7 +5110,7 @@ end;
 
 - INDEX BY表由两个组件（两列）所组成
    - 数据类型为BINARY_INTEGER或PLS_INTEGER的主键
-   - 标量或记录(RECORD)数据类型的列
+   - 标量或记录(record)数据类型的列
 - INDEX BY表没有界限，大小可以动态的
 
 **说明:**
@@ -5190,7 +5126,7 @@ end;
 
 ```plsql
 declare
- TYPE 数据类型名 is TABLE OF 列数据类型|变量%TYPE|表%ROWTYPE
+ TYPE 数据类型名 is table OF 列数据类型|变量%TYPE|表%ROWTYPE
      [INDEX BY PLS_INTEGER|BINARY_INTEGER|varchar2(20)];
 
  变量名 数据类型名；
@@ -5211,10 +5147,10 @@ end;
 
 ```plsql
 declare
- TYPE name_table_type is TABLE OF employees.last_name%TYPE
+ TYPE name_table_type is table OF employees.last_name%TYPE
       INDEX BY PLS_INTEGER;
       
- TYPE hire_date_table_type is TABLE OF employees.hire_date%TYPE
+ TYPE hire_date_table_type is table OF employees.hire_date%TYPE
       INDEX BY BINARY_INTEGER;
   
  name_table name_table_type;
@@ -5254,7 +5190,7 @@ end;
 
 ```plsql
 declare
- TYPE emp_num_type is TABLE OF NUMBER
+ TYPE emp_num_type is table OF NUMBER
       INDEX BY varchar(20);
  
  total_employees emp_num_type;
@@ -5335,7 +5271,7 @@ PL/SQL procedure successfully completed
 
 ```
 declare
- TYPE dept_table_type is TABLE OF departments%ROWTYPE
+ TYPE dept_table_type is table OF departments%ROWTYPE
       INDEX BY PLS_INTEGER;
  dept_table dept_table_type;
  v_count NUMBER := 5;
@@ -5610,7 +5546,7 @@ declare
  
  emp_rec emp_cursor%ROWTYPE;
  
- TYPE emp_table_type is TABLE OF employees%ROWTYPE
+ TYPE emp_table_type is table OF employees%ROWTYPE
       INDEX BY PLS_INTEGER;
  
  v_emp_rec emp_table_type;
@@ -6421,14 +6357,14 @@ create or replace TRIGGER check_salary
  when (NEW.job_id <> 'AA')
  COMPOUND TRIGGER
  
- TYPE sal_type is TABLE OF copy_emp.salary%TYPE;
+ TYPE sal_type is table OF copy_emp.salary%TYPE;
  min_sal sal_type;
  max_sal sal_type;
  
- TYPE dept_id_type is TABLE OF copy_emp.department_id%TYPE;
+ TYPE dept_id_type is table OF copy_emp.department_id%TYPE;
  dept_id_list dept_id_type;
  
- TYPE dept_sal_type is TABLE OF copy_emp.salary%TYPE
+ TYPE dept_sal_type is table OF copy_emp.salary%TYPE
    INDEX BY varchar2(38);
  dept_min_sal dept_sal_type;
  dept_max_sal dept_sal_type;
@@ -6527,7 +6463,7 @@ CREATE SEQUENCE log_onoff_seq
  CYCLE;
 
 --存放用户登入登出信息
-CREATE TABLE log_onoff_table
+CREATE table log_onoff_table
 (
  log_id NUMBER(3)
 ,user_id varchar2(38)
@@ -6536,7 +6472,7 @@ CREATE TABLE log_onoff_table
 );
 
 --存放用户错误信息
-CREATE TABLE error_table
+CREATE table error_table
 (
  user_name VACHAR2(20)
 ,error_time DATE
@@ -6582,7 +6518,7 @@ AFTER SERVERERROR on SCHEMA
 GRANT ADMINisTER DATABASE TRIGGER TO scott;
 
 --存放用户登入登出信息
-CREATE TABLE system_log_onoff_table
+CREATE table system_log_onoff_table
 (
  user_id varchar2(38)
 ,log_date DATE
@@ -6702,7 +6638,7 @@ create or replace TRIGGER update_sal_trigger
 1. ENABLE: 如果发出了一个触发语句并且该触发器的限制（如果有的话）评估（测试）为TRUE(默认)，那么触发器运行它的触发器操作(PL/SQL程序代码)。
 2. DisABLE: 触发器不运行它的触发器操作(PL/SQL程序代码)，即使发出了一个触发语句并且该触发器的限制（如果有的话）评估为TRUE也不运行。
 
-当一个触发器被首次创建时，它的状态默认是ENABLED。Oracle服务器对激活的触发器要检查所定义的完整性约束并保证这些触发器不会违反任何定义的完整性约束。另外，Oracle服务器还为查询和约束提供读取一致性的视图、管理依赖关系，并且如果一个触发器是修改分布数据库中远程的表,   Oracle服务器还提供一种两阶段的提交处理过程。即可以利用ALTER TRIGGER语句控制指定的触发器的状态，也可以利用ALTER TABLE语句控制指定表上所有触发器的状态。
+当一个触发器被首次创建时，它的状态默认是ENABLED。Oracle服务器对激活的触发器要检查所定义的完整性约束并保证这些触发器不会违反任何定义的完整性约束。另外，Oracle服务器还为查询和约束提供读取一致性的视图、管理依赖关系，并且如果一个触发器是修改分布数据库中远程的表,   Oracle服务器还提供一种两阶段的提交处理过程。即可以利用ALTER TRIGGER语句控制指定的触发器的状态，也可以利用ALTER table语句控制指定表上所有触发器的状态。
 
 - 关闭（禁止）或重新开启（激活）一个数据库触发器的命令如下：
 
@@ -6713,7 +6649,7 @@ ALTER TRIGGER 触发器名 DisABLE|ENABLE;
 - 关闭（禁止）或重新开启（激活）一个表上的所有触发器的命令则为：
 
 ```
-ALTER TABLE 表名 DisABLE|ENABLE ALL TRIGGERS;
+ALTER table 表名 DisABLE|ENABLE ALL TRIGGERS;
 ```
 
 - 如果由于某种原因，一个触发器变成了无效的(invalid)，应该使用ALTER TRIGGER显式地重新编译这个触发器（的PL/SQL程序代码），重新编译一个表上的一个触发器的命令如下：
@@ -6773,7 +6709,7 @@ from USER_TRIGGERS;
 - 创建触发器的权限 需要：
     1. `CREATE TRIGGER` CREATE ANY TRIGGER
     2. 拥有在触发语句中所指定的表，
-    3. 且有对这个表的ALTER权限。或ALTER ANY TABLE权限
+    3. 且有对这个表的ALTER权限。或ALTER ANY table权限
 
 - 如果用户的触发器引用了如何不在用户模式中的对象，那么创建该触发器的用户必须在引用的过程，函数和软件包上具有执行权限，且该执行权限不是通过角色授予的。
 
@@ -7182,7 +7118,7 @@ end update_employee;
 - 要操作的表
 
 ```plsql
-CREATE TABLE test
+CREATE table test
 (
  use_name varchar2(25) UNIQUE
 ,use_date DATE
@@ -7514,7 +7450,7 @@ from employees;
   1. 所有的参数必须使用位置表示法，而不能使用名字表示法。
   2. 必须拥有所调用的函数或者在所调用的函数上有执行(execute)权限。
 - 在用户定义的PL/SQL函数上还有一些额外的限制，它们包括：
-   - 不能在CREATE TABLE或ALTER TABLE 语句的CHECK约束子句中调用这样的函数
+   - 不能在CREATE table或ALTER table 语句的CHECK约束子句中调用这样的函数
    - 不能使用这样的函数为一个列说明默认值
 - 需要指出的是：在一个SQL表达式中只能调用存储函数，而不能调用存储过程，除非这个过程是从一个函数中调用的并且满足以上所列的要求。
 - 要执行一个调用存储函数的SQL语句，Oracle服务器就必须确定所调用的函数是不是没有一些特定的副作用，因为这些副作用可能会对数据库中的表产生无法接受的更改。为此，当在一个SQL语句的表达式中调用一个函数时，Oracle需加上以下一些附加的限制：
@@ -7836,7 +7772,7 @@ end;
 
 ```plsql
 --先建一个表来存储错误信息
-CREATE TABLE errors
+CREATE table errors
 (
  user_name varchar2(255)
 ,error_date DATE
@@ -8617,7 +8553,7 @@ end emp_pkg;
 
 ```
 create or replace PACKAGE emp_dog is
- TYPE emp_table_type is TABLE OF employees%ROWTYPE
+ TYPE emp_table_type is table OF employees%ROWTYPE
       INDEX BY PLS_INTEGER;
  
  procedure get_emp(p_emp OUT emp_table_type);
@@ -8713,7 +8649,7 @@ create or replace procedure my_raise_sal
  p_percent NUMBER
 ) 
 is
-  TYPE idlist_type is TABLE OF NUMBER
+  TYPE idlist_type is table OF NUMBER
     INDEX BY PLS_INTEGER;
     
   v_emp_id idlist_type;
@@ -8740,7 +8676,7 @@ end;
 
 ```
 declare 
-  TYPE name_list_type is TABLE OF varchar2(20)
+  TYPE name_list_type is table OF varchar2(20)
     INDEX BY BINARY_INTEGER;
   
   v_name_list name_list_type;
@@ -8826,9 +8762,9 @@ create or replace procedure bulk_raise_sal
  p_percent NUMBER
 )
 is
- TYPE emp_id_list_type is TABLE OF NUMBER
+ TYPE emp_id_list_type is table OF NUMBER
   INDEX BY PLS_INTEGER;
- TYPE sal_list_type is TABLE OF copy_emp.salary%TYPE
+ TYPE sal_list_type is table OF copy_emp.salary%TYPE
   INDEX BY BINARY_INTEGER;
  
  v_emp_id_list emp_id_list_type;
@@ -8856,7 +8792,7 @@ end;
 - 可以在一个FORALL语句中使用VALUES OF子句来处理批量的DML操作
 
 ```
-CREATE TABLE ins_emp
+CREATE table ins_emp
 AS 
 select *
 from emp
@@ -8865,10 +8801,10 @@ where 1=2;
 ```
 create or replace procedure insert_ins_emp
 AS
- TYPE emp_tab_type is TABLE OF emp%ROWTYPE;
+ TYPE emp_tab_type is table OF emp%ROWTYPE;
  v_emp emp_tab_type;
  
- TYPE values_of_tab_type is TABLE OF PLS_INTEGER
+ TYPE values_of_tab_type is table OF PLS_INTEGER
    INDEX BY PLS_INTEGER;
  v_number values_of_tab_type;
  
@@ -8893,7 +8829,7 @@ end;
 ##### 为什么VALUES子句带括号和不带括号: ORA-00947: 没有足够的值
 
 ```
-CREATE TABLE test_table1
+CREATE table test_table1
 (
  id NUMBER
 ,name varchar2(20)
@@ -8906,7 +8842,7 @@ VALUES(102,'二号');
 INSERT into test_table1
 VALUES(103,'三号');
 
-CREATE TABLE copy_test_table1
+CREATE table copy_test_table1
 AS
 select *
 from test_table1
@@ -8947,7 +8883,7 @@ create or replace procedure bulk_get_emps
 p_dept_id NUMBER
 )
 is
- TYPE emp_tab_type is TABLE OF copy_emp%ROWTYPE;
+ TYPE emp_tab_type is table OF copy_emp%ROWTYPE;
  v_emp_list emp_tab_type;
 
 begin
@@ -8988,7 +8924,7 @@ create or replace procedure bulk_get_emps2
  p_dept_id NUMBER
 )
 is
- TYPE emp_tab_list_type is TABLE OF copy_emp%ROWTYPE;
+ TYPE emp_tab_list_type is table OF copy_emp%ROWTYPE;
  
  v_emp_list emp_tab_list_type;
  
