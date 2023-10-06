@@ -874,179 +874,58 @@ sudo snap install <app>
 
 # 用户管理
 
+## 用户
+
 | 类型     | 说明                                                         |
 | :------- | :----------------------------------------------------------- |
-| 超级用户 | root 或 UID为0 的用户                                        |
-| 系统用户 | 正常运行时系统使用的用户，每个进程在系统中都有一个相应的属主。系统用户不能用来登录（bin、daemon、mail等） |
+| 超级用户 | root<br />UID: 0                                             |
+| 系统用户 | 正常运行时，系统使用的用户，每个进程在系统中都有一个相应的属主。<br />系统用户不能用来登录（bin、daemon、mail等） |
 | 普通用户 | user                                                         |
 
-## 用户管理机制
+| 用户管理文件 | 用户管理机制                                                 |
+| :----------- | :----------------------------------------------------------- |
+| /etc/passswd | 用户账号文件。<br /><img src="../../pictures/Snipaste_2022-11-30_14-12-25.png" width="800"/><br />普通用户的UID默认1000之后。 |
+| /etc/shadow  | 用户密码文件<br /><img src="../../pictures/Snipaste_2022-11-30_16-35-15.png" width="1000"/> |
+| /etc/group   | 用户组文件<br /><img src="../../pictures/Snipaste_2022-11-30_18-52-02.png" width="180"/><br />用户登录时默认的组放在/etc/passwd中 |
 
-| 文件         | 说明         |
-| :----------- | :----------- |
-| /etc/passswd | 用户账号文件 |
-| /etc/shadow  | 用户密码文件 |
-| /etc/group   | 用户组文件   |
-
-### /etc/passwd
-
-<img src="../../pictures/Snipaste_2022-11-30_13-43-52.png" width="500"/> 
-
-<img src="../../pictures/Snipaste_2022-11-30_14-12-25.png" width="800"/> 
-
-- 普通用户的UID默认1000以上的数字
-
-### /etc/shadow
-
-<img src="../../pictures/Snipaste_2022-11-30_16-21-03.png" width="800"/> 
-
-<img src="../../pictures/Snipaste_2022-11-30_16-35-15.png" width="1000"/> 
-
-### /etc/group
-
-- 用户登录时默认的组放在/etc/passwd中
-
-<img src="../../pictures/Snipaste_2022-11-30_18-46-41.png" width="200"/> 
-
-<img src="../../pictures/Snipaste_2022-11-30_18-52-02.png" width="280"/> 
-
-## 用户管理命令
-
-### useradd 添加用户
+| 用户管理命令 | 作用     | 说明                                                         |
+| ------------ | -------- | ------------------------------------------------------------ |
+| useradd      | 添加用户 |                                                              |
+| usermod      | 修改用户 | 不允许改变正在线上的使用者帐号名称。<br />改变user id时必须确认该用户没在电脑上执行任何程序。 |
+| userdel      | 删除用户 | -r：同时删除该用户的相关任务和文件。                         |
+| passwd       | 用户密码 | 设置用户的认证信息，包括用户密码、密码过期时间等。<br />只有管理者可以指定用户名称，一般用户只能变更自己的密码。 |
+| id           | 用户信息 | 显示真实有效的用户ID（UID）、组ID（GID）。                   |
 
 ```shell
-[root@bogon ~]# useradd user1
-[root@bogon ~]# cat /etc/passwd | grep user1
-user1:x:1001:1001::/home/user1:/bin/bash
-[root@bogon ~]# cat /etc/shadow | grep user1
-user1:!!:19326:0:99999:7:::
-[root@bogon ~]# cat /etc/group | grep user1
-user1:x:1001:
+# 指代当前用户
+$USER
 ```
 
-### usermod 修改用户
+### su 切换用户、sudo 他人执行
 
-- usermod 命令不允许你改变正在线上的使用者帐号名称。当 usermod 命令用来改变user id，必须确认这名user没在电脑上执行任何程序。你需手动更改使用者的 crontab 档。也需手动更改使用者的 at 工作档。采用 NIS server 须在server上更动相关的NIS设定。
-
-```shell
-[root@bogon ~]# usermod -l newuser user1 
-[root@bogon ~]# cat /etc/passwd | grep newuser
-newuser:x:1001:1001::/home/user1:/bin/bash
-[root@bogon ~]# cat /etc/passwd | grep user1
-newuser:x:1001:1001::/home/user1:/bin/bash
-```
-
-### userdel 删除用户
-
-```shell
-# 删除用户，（-r）包含该用户的相关任务和文件
-[root@bogon ~]# userdel -r newuser
-```
-
-### passwd 用户密码
-
-- 用于设置用户的认证信息，包括用户密码、密码过期时间等。
-- 系统管理者则能用它管理系统用户的密码。只有管理者可以指定用户名称，一般用户只能变更自己的密码。
-
-```shell
-[root@bogon ~]# passwd
-Changing password for user root.
-New password: 
-BAD PASSWORD: The password is shorter than 8 characters
-Retype new password: 
-passwd: all authentication tokens updated successfully.
-[root@bogon ~]# passwd zjk
-Changing password for user zjk.
-New password: 
-BAD PASSWORD: The password is shorter than 8 characters
-Retype new password: 
-passwd: all authentication tokens updated successfully.
-```
-
-### su 切换用户
-
-| 组合            | 说明                                             |
-| :-------------- | :----------------------------------------------- |
-| su 用户         | 切换用户，不改变环境变量（不指定用户则默认root） |
-| su - 用户       | 切换用户，改变环境变量（不指定用户则默认root）   |
-| su -c 命令 用户 | 切换用户执行命令之后，回原来用户                 |
-
-```shell
-[root@bogon ~]# su
-[root@bogon ~]# su zjk
-[zjk@bogon root]$ pwd
-/root
-[root@bogon ~]# su - zjk
-Last login: Wed Nov 30 19:16:03 CST 2022 on pts/0
-[zjk@bogon ~]$ pwd
-/home/zjk
-[zjk@bogon ~]$ su -c ls root
-Password: 
-Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
-```
-
-### sudo 普通用户获取超级权限
-
-- sudo用来以其他身份来执行命令，预设的身份为root。/etc/sudoers中设置了可执行sudo指令的用户。若其未经授权的用户企图使用sudo，则会发出警告的邮件给管理员。用户使用sudo时，必须先输入密码，之后有5分钟的有效期限，超过期限则必须重新输入密码。
-
-### id 查看用户信息
-
-- id：可以显示真实有效的用户ID(UID)和组ID(GID)。
-
-```shell
-[root@bogon ~]# id
-uid=0(root) gid=0(root) groups=0(root) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
-[root@bogon ~]# id root
-uid=0(root) gid=0(root) groups=0(root)
-```
+| su指令          | 切换用户（不指定用户则默认root）                             |
+| :-------------- | :----------------------------------------------------------- |
+| su 用户         | 不改变环境变量                                               |
+| su - 用户       | 改变环境变量                                                 |
+| su -c 命令 用户 | 切换用户执行命令之后，返回原用户                             |
+| **sudo指令**    | **普通用户获取超级权限**<br />以其他身份来执行命令，预设的身份为root。 |
+| /etc/sudoers    | 设置可执行sudo指令的用户                                     |
 
 ## 用户组
 
 - 每个用户都有一个用户组，一个用户可以属于多个用户组，一个用户组可以有多个用户。系统对一个用户组的用户集中管理，赋予用户组的权限可以被该用户获取。用户的权限为所在的所有用户组的权限之和。
-- /etc/passwd定义的用户组为基本组，其他的为附加组、/etc/group文件的更新实现对用户组的操作
 
-### groupadd 添加用户组
+| 用户组文件  | 说明                                 |
+| ----------- | ------------------------------------ |
+| /etc/passwd | 定义的用户组为基本组，其他的为附加组 |
+| /etc/group  | 用户组的操作基于对该文件的更新       |
 
-```shell
-[root@bogon ~]# groupadd group1 -p tiger
-[root@bogon ~]# cat /etc/group | grep group1
-group1:x:1002:
-```
-
-### groupdel 删除用户组
-
-- 命令要修改的系统文件包括/ect/group和/ect/shadow。
-- 若该群组中仍包括某些用户，则必须先删除这些用户后，方能删除群组。
-
-```shell
-[root@bogon ~]# groupadd group1 -p tiger
-[root@bogon ~]# useradd user1 -g group1
-[root@bogon ~]# groupdel group1
-groupdel: cannot remove the primary group of user 'user1'
-[root@bogon ~]# userdel -r user1
-[root@bogon ~]# groupdel group1
-```
-
-### groupmod 修改用户组
-
-```shell
-[root@bogon ~]# groupadd group0
-[root@bogon ~]# groupmod -g 1033 group0
-[root@bogon ~]# groupmod -n group2 group0
-[root@bogon ~]# cat /etc/group | grep group2
-group2:x:1033:
-[root@bogon ~]# cat /etc/group | grep group0
-[root@bogon ~]# groupdel group2
-```
-
-### groups 查看用户所在用户组
-
-```shell
-[root@bogon ~]# groups zjk
-zjk : zjk wheel
-[root@bogon ~]# groups root
-root : root
-```
+| 用户组命令 | 作用               | 说明                                                         |
+| ---------- | ------------------ | ------------------------------------------------------------ |
+| groupadd   | 添加用户组         |                                                              |
+| groupdel   | 删除用户组         | 修改的系统文件包括/ect/group和/ect/shadow。<br />若该群组中仍包括某些用户，则必须先删除这些用户后，方能删除群组。 |
+| groupmod   | 修改用户组         |                                                              |
+| groups     | 查看用户所在用户组 |                                                              |
 
 # 系统管理
 

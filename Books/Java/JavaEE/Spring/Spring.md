@@ -3378,6 +3378,10 @@ public Interface TacoOrder extends CrudRepository{
 
 ## MongoDB
 
+[SQL to MongoDB Mapping Chart](https://www.mongodb.com/docs/manual/reference/sql-comparison/)
+
+[MongoDB概述](../../../../attach/Docs/了解 MongoDB 看这一篇就够了 - 美码师 - 博客园.html)
+
 ```xml
 <!--非反应式-->
 <groupId>org.springframework.boot</groupId>
@@ -3411,3 +3415,44 @@ docker run -p 27017:27017 -d mongo:latest
 - 聚合根需要@Document、@Id标注；聚合成员（子文档）则不需要。
 
 # Spring Security
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-security</artifactId>
+```
+
+> Spring Security提供的默认登陆页（user：日志 Using generated security password）。
+
+## PasswordEncoder 密码转码器
+
+- 数据库中的（已编码的）密码永远不会被解码，用户登录时输入的密码会使用以下算法转码，并与数据库中的密码对比（`PasswordEncoder#matches()`）。
+
+| PasswordEncoder         | 加密                                |
+| ----------------------- | ----------------------------------- |
+| BCryptPasswordEncoder   | bcrypt强哈希                        |
+| NoOpPasswordEncoder     | 不使用任何转码<br />（开发中使用）  |
+| Pbkdf2PasswordEncoder   | PBKDF2                              |
+| SCryptPasswordEncoder   | Scrypt哈希                          |
+| StandardPasswordEncoder | SHA-256哈希<br />（不安全，已废弃） |
+
+## UserDetails 用户实体
+
+
+
+## UserDetailsService 用户详情服务
+
+| UserDetailsService         | 基于Xxx的用户详情服务 |
+| -------------------------- | --------------------- |
+| InMemoryUserDetailsManager | 内存                  |
+|                            | JDBC                  |
+|                            | LDAP                  |
+
+```java
+public interface UserDetailsService {
+    /**
+    * 根据用户名来查找UserDetails对象，找不到则UsernameNo tFoundException。 
+    * @param var1 用户名
+    */
+    UserDetails loadUserByUsername(String var1) throws UsernameNotFoundException;
+}
+```
