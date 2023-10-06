@@ -3,97 +3,16 @@
 ### MultipartProperties 参数设置
 
 - MultipartAutoConfiguration中自动文件上传的自动配置：Spring MVC默认开启。
-
 - 文件上传参数：MultipartProperties。
 
-```properties
-spring.servlet.multipart.enabled=true
-spring.servlet.multipart.file-size-threshold=0B
-spring.servlet.multipart.location=
-spring.servlet.multipart.max-file-size=1MB
-spring.servlet.multipart.max-request-size=10MB
-spring.servlet.multipart.resolve-lazily=false
-```
-
-```java
-public class MultipartProperties {
-    private boolean enabled = true; //是否开启分段上传
-    private String location; //上传文件的临时目录
-    private DataSize maxFileSize = DataSize.ofMegabytes(1L); //上传文件最大大小
-    private DataSize maxRequestSize = DataSize.ofMegabytes(10L); //文件请求最大大小
-    private DataSize fileSizeThreshold = DataSize.ofBytes(0L); //文件写入磁盘的阈值
-    private boolean resolveLazily = false; //是否在文件或产生访问时延迟解析大部分请求
-
-    public MultipartProperties() {
-    }
-
-    public boolean getEnabled() {
-        return this.enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public DataSize getMaxFileSize() {
-        return this.maxFileSize;
-    }
-
-    public void setMaxFileSize(DataSize maxFileSize) {
-        this.maxFileSize = maxFileSize;
-    }
-
-    public DataSize getMaxRequestSize() {
-        return this.maxRequestSize;
-    }
-
-    public void setMaxRequestSize(DataSize maxRequestSize) {
-        this.maxRequestSize = maxRequestSize;
-    }
-
-    public DataSize getFileSizeThreshold() {
-        return this.fileSizeThreshold;
-    }
-
-    public void setFileSizeThreshold(DataSize fileSizeThreshold) {
-        this.fileSizeThreshold = fileSizeThreshold;
-    }
-
-    public boolean isResolveLazily() {
-        return this.resolveLazily;
-    }
-
-    public void setResolveLazily(boolean resolveLazily) {
-        this.resolveLazily = resolveLazily;
-    }
-
-    public MultipartConfigElement createMultipartConfig() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-        PropertyMapper.Source var10000 = map.from(this.fileSizeThreshold);
-        Objects.requireNonNull(factory);
-        var10000.to(factory::setFileSizeThreshold);
-        var10000 = map.from(this.location).whenHasText();
-        Objects.requireNonNull(factory);
-        var10000.to(factory::setLocation);
-        var10000 = map.from(this.maxRequestSize);
-        Objects.requireNonNull(factory);
-        var10000.to(factory::setMaxRequestSize);
-        var10000 = map.from(this.maxFileSize);
-        Objects.requireNonNull(factory);
-        var10000.to(factory::setMaxFileSize);
-        return factory.createMultipartConfig();
-    }
-}
-```
+| spring.servlet.multipart | MultipartProperties                        | 说明                                   | 默认值 |
+| ------------------------ | ------------------------------------------ | -------------------------------------- | ------ |
+| enabled                  | enabled                                    | 是否开启分段上传                       | true   |
+| file-size-threshold      | fileSizeThreshold = DataSize.ofBytes(0L)   | 文件写入磁盘的阈值                     | 0B     |
+| location                 | location                                   | 上传文件的临时目录                     | -      |
+| max-file-size            | maxFileSize = DataSize.ofMegabytes(1L)     | 上传文件最大大小                       | 1MB    |
+| max-request-size         | maxRequestSize = DataSize.ofMegabytes(10L) | 文件请求最大大小                       | 10MB   |
+| resolve-lazily           | resolveLazily                              | 是否在文件产生访问时延迟解析大部分请求 | false  |
 
 ### 文件上传处理 MultipartFile
 
@@ -142,7 +61,7 @@ public String upload(@RequestParam("file") MultipartFile file) throws IOExceptio
 
 #### MultipartFile
 
-- 由StandardMultipartHttpServletRequest的内部类：StandardMultipartFile实现。
+- MultipartFile接口由StandardMultipartHttpServletRequest的内部类StandardMultipartFile实现。
 
 ```java
 public interface MultipartFile extends InputStreamSource {
@@ -178,58 +97,6 @@ public interface MultipartFile extends InputStreamSource {
 }
 ```
 
-```java
-private static class StandardMultipartFile implements MultipartFile, Serializable {
-    private final Part part;
-    private final String filename;
-
-    public StandardMultipartFile(Part part, String filename) {
-        this.part = part;
-        this.filename = filename;
-    }
-
-    public String getName() {
-        return this.part.getName();
-    }
-
-    public String getOriginalFilename() {
-        return this.filename;
-    }
-
-    public String getContentType() {
-        return this.part.getContentType();
-    }
-
-    public boolean isEmpty() {
-        return this.part.getSize() == 0L;
-    }
-
-    public long getSize() {
-        return this.part.getSize();
-    }
-
-    public byte[] getBytes() throws IOException {
-        return FileCopyUtils.copyToByteArray(this.part.getInputStream());
-    }
-
-    public InputStream getInputStream() throws IOException {
-        return this.part.getInputStream();
-    }
-
-    public void transferTo(File dest) throws IOException, IllegalStateException {
-        this.part.write(dest.getPath());
-        if (dest.isAbsolute() && !dest.exists()) {
-            FileCopyUtils.copy(this.part.getInputStream(), Files.newOutputStream(dest.toPath()));
-        }
-
-    }
-
-    public void transferTo(Path dest) throws IOException, IllegalStateException {
-        FileCopyUtils.copy(this.part.getInputStream(), Files.newOutputStream(dest));
-    }
-}
-```
-
 ## Quartz 任务调度
 
 - QuartzAutoConfiguration开启Quartz的自动配置。
@@ -237,18 +104,20 @@ private static class StandardMultipartFile implements MultipartFile, Serializabl
 
 ### QuartzProperties 参数设置
 
-| 参数                                               | 默认值                                                       | 说明                                                         |
-| -------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| spring.quartz.auto-startup                         | true                                                         | 初始化之后是否启动调度器                                     |
-| spring.quartz.jdbc.comment-prefix                  | `[#,--]`                                                     | 初始化sql脚本中的单行注释符号                                |
-| spring.quartz.jdbc.initialize-schema               | embedded                                                     | 启动时进行存储初始<br>默认只在使用内存数据库时在启动时进行初始化 |
-| spring.quartz.jdbc.schema                          | `classpath:org/quartz/impl/jdbcjobstore/tables_@@platform@@.sql` | 初始化数据库的SQL文件路径                                    |
-| spring.quartz.job-store-type                       | memory                                                       | Quartz job存储类型：<br>mempry内存存储<br>jdbc数据库存储     |
-| spring.quartz.overwrtite-existing-jobs             | false                                                        | 由配置文件创建的任务是否覆盖持久化存储中定义的任务           |
-| spring.quartz.properties.*                         |                                                              | Quartz定时器的其他属性                                       |
-| spring.quartz.sheduler-name                        | quartzScheduler                                              | 调度器在容器中的name                                         |
-| spring.quartz.startup-delay                        | 0s                                                           | 初始化之后，调度程序启动的延时                               |
-| spring.quartz.wait-for-jobs-to-comlete-on-shutdown | false                                                        | 在关闭程序时是否等待正在运行任务执行完成                     |
+| spring.quartz                         | 默认值          | 说明                                                         |
+| ------------------------------------- | --------------- | ------------------------------------------------------------ |
+| auto-startup                          | true            | 初始化之后是否启动调度器                                     |
+| jdbc.comment-prefix                   | `[#,--]`        | 初始化sql脚本中的单行注释符号                                |
+| jdbc.initialize-schema                | embedded        | 启动时进行存储初始<br>默认只在使用内存数据库时在启动时进行初始化 |
+| job-store-type                        | memory          | Quartz job存储类型：<br>mempry内存存储<br>jdbc数据库存储     |
+| overwrtite-existing-jobs              | false           | 由配置文件创建的任务是否覆盖持久化存储中定义的任务           |
+| properties.*                          |                 | Quartz定时器的其他属性                                       |
+| sheduler-name                         | quartzScheduler | 调度器在容器中的name                                         |
+| startup-delay                         | 0s              | 初始化之后，调度程序启动的延时                               |
+| swait-for-jobs-to-comlete-on-shutdown | false           | 在关闭程序时是否等待正在运行任务执行完成                     |
+| jdbc.schema                           |                 | 初始化数据库的SQL文件路径                                    |
+
+> spring.quartz.jdbc.schema的默认值：`classpath:org/quartz/impl/jdbcjobstore/tables_@@platform@@.sql`
 
 ```java
 @ConfigurationProperties("spring.quartz")
@@ -261,117 +130,7 @@ public class QuartzProperties {
     private boolean overwriteExistingJobs; //由配置文件创建的任务是否覆盖持久化存储中定义的任务
     private final Map<String, String> properties; //Quartz定时器的其他属性
     private final Jdbc jdbc;
-
-    public QuartzProperties() {
-        this.jobStoreType = JobStoreType.MEMORY;
-        this.autoStartup = true;
-        this.startupDelay = Duration.ofSeconds(0L);
-        this.waitForJobsToCompleteOnShutdown = false;
-        this.overwriteExistingJobs = false;
-        this.properties = new HashMap();
-        this.jdbc = new Jdbc();
-    }
-
-    public JobStoreType getJobStoreType() {
-        return this.jobStoreType;
-    }
-
-    public void setJobStoreType(JobStoreType jobStoreType) {
-        this.jobStoreType = jobStoreType;
-    }
-
-    public String getSchedulerName() {
-        return this.schedulerName;
-    }
-
-    public void setSchedulerName(String schedulerName) {
-        this.schedulerName = schedulerName;
-    }
-
-    public boolean isAutoStartup() {
-        return this.autoStartup;
-    }
-
-    public void setAutoStartup(boolean autoStartup) {
-        this.autoStartup = autoStartup;
-    }
-
-    public Duration getStartupDelay() {
-        return this.startupDelay;
-    }
-
-    public void setStartupDelay(Duration startupDelay) {
-        this.startupDelay = startupDelay;
-    }
-
-    public boolean isWaitForJobsToCompleteOnShutdown() {
-        return this.waitForJobsToCompleteOnShutdown;
-    }
-
-    public void setWaitForJobsToCompleteOnShutdown(boolean waitForJobsToCompleteOnShutdown) {
-        this.waitForJobsToCompleteOnShutdown = waitForJobsToCompleteOnShutdown;
-    }
-
-    public boolean isOverwriteExistingJobs() {
-        return this.overwriteExistingJobs;
-    }
-
-    public void setOverwriteExistingJobs(boolean overwriteExistingJobs) {
-        this.overwriteExistingJobs = overwriteExistingJobs;
-    }
-
-    public Map<String, String> getProperties() {
-        return this.properties;
-    }
-
-    public Jdbc getJdbc() {
-        return this.jdbc;
-    }
-
-    public static class Jdbc {
-        private static final String DEFAULT_SCHEMA_LOCATION = "classpath:org/quartz/impl/jdbcjobstore/tables_@@platform@@.sql";
-        private String schema = "classpath:org/quartz/impl/jdbcjobstore/tables_@@platform@@.sql";
-        private String platform;
-        private DatabaseInitializationMode initializeSchema;
-        private List<String> commentPrefix;
-
-        public Jdbc() {
-            this.initializeSchema = DatabaseInitializationMode.EMBEDDED;
-            this.commentPrefix = new ArrayList(Arrays.asList("#", "--"));
-        }
-
-        public String getSchema() {
-            return this.schema;
-        }
-
-        public void setSchema(String schema) {
-            this.schema = schema;
-        }
-
-        public String getPlatform() {
-            return this.platform;
-        }
-
-        public void setPlatform(String platform) {
-            this.platform = platform;
-        }
-
-        public DatabaseInitializationMode getInitializeSchema() {
-            return this.initializeSchema;
-        }
-
-        public void setInitializeSchema(DatabaseInitializationMode initializeSchema) {
-            this.initializeSchema = initializeSchema;
-        }
-
-        public List<String> getCommentPrefix() {
-            return this.commentPrefix;
-        }
-
-        public void setCommentPrefix(List<String> commentPrefix) {
-            this.commentPrefix = commentPrefix;
-        }
-    }
+    ...
 }
 ```
 
@@ -477,196 +236,7 @@ public class JobDetailImpl implements Cloneable, Serializable, JobDetail {
     //如果为true，则在Quartz实例被重新启动时，尝试恢复丢失的Triggers。
     private transient JobKey key;//由作业名称name和作业组名group组成，唯一标识Job任务实例
     //JobKey jobKey = new JobKey("job1", "group1");
-
-    public JobDetailImpl() {
-        this.group = "DEFAULT";
-        this.durability = false;
-        this.shouldRecover = false;
-        this.key = null;
-    }
-
-    /** @deprecated */
-    public JobDetailImpl(String name, Class<? extends Job> jobClass) {
-        this(name, (String)null, jobClass);
-    }
-
-    /** @deprecated */
-    public JobDetailImpl(String name, String group, Class<? extends Job> jobClass) {
-        this.group = "DEFAULT";
-        this.durability = false;
-        this.shouldRecover = false;
-        this.key = null;
-        this.setName(name);
-        this.setGroup(group);
-        this.setJobClass(jobClass);
-    }
-
-    /** @deprecated */
-    public JobDetailImpl(String name, String group, Class<? extends Job> jobClass, boolean durability, boolean recover) {
-        this.group = "DEFAULT";
-        this.durability = false;
-        this.shouldRecover = false;
-        this.key = null;
-        this.setName(name);
-        this.setGroup(group);
-        this.setJobClass(jobClass);
-        this.setDurability(durability);
-        this.setRequestsRecovery(recover);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        if (name != null && name.trim().length() != 0) {
-            this.name = name;
-            this.key = null;
-        } else {
-            throw new IllegalArgumentException("Job name cannot be empty.");
-        }
-    }
-
-    public String getGroup() {
-        return this.group;
-    }
-
-    public void setGroup(String group) {
-        if (group != null && group.trim().length() == 0) {
-            throw new IllegalArgumentException("Group name cannot be empty.");
-        } else {
-            if (group == null) {
-                group = "DEFAULT";
-            }
-
-            this.group = group;
-            this.key = null;
-        }
-    }
-
-    public String getFullName() {
-        return this.group + "." + this.name;
-    }
-
-    public JobKey getKey() {
-        if (this.key == null) {
-            if (this.getName() == null) {
-                return null;
-            }
-
-            this.key = new JobKey(this.getName(), this.getGroup());
-        }
-
-        return this.key;
-    }
-
-    public void setKey(JobKey key) {
-        if (key == null) {
-            throw new IllegalArgumentException("Key cannot be null!");
-        } else {
-            this.setName(key.getName());
-            this.setGroup(key.getGroup());
-            this.key = key;
-        }
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Class<? extends Job> getJobClass() {
-        return this.jobClass;
-    }
-
-    public void setJobClass(Class<? extends Job> jobClass) {
-        if (jobClass == null) {
-            throw new IllegalArgumentException("Job class cannot be null.");
-        } else if (!Job.class.isAssignableFrom(jobClass)) {
-            throw new IllegalArgumentException("Job class must implement the Job interface.");
-        } else {
-            this.jobClass = jobClass;
-        }
-    }
-
-    public JobDataMap getJobDataMap() {
-        if (this.jobDataMap == null) {
-            this.jobDataMap = new JobDataMap();
-        }
-
-        return this.jobDataMap;
-    }
-
-    public void setJobDataMap(JobDataMap jobDataMap) {
-        this.jobDataMap = jobDataMap;
-    }
-
-    public void setDurability(boolean durability) {
-        this.durability = durability;
-    }
-
-    public void setRequestsRecovery(boolean shouldRecover) {
-        this.shouldRecover = shouldRecover;
-    }
-
-    public boolean isDurable() {
-        return this.durability;
-    }
-
-    public boolean isPersistJobDataAfterExecution() {
-        return ClassUtils.isAnnotationPresent(this.jobClass, PersistJobDataAfterExecution.class);
-    }
-
-    public boolean isConcurrentExectionDisallowed() {
-        return ClassUtils.isAnnotationPresent(this.jobClass, DisallowConcurrentExecution.class);
-    }
-
-    public boolean requestsRecovery() {
-        return this.shouldRecover;
-    }
-
-    public String toString() {
-        return "JobDetail '" + this.getFullName() + "':  jobClass: '" + (this.getJobClass() == null ? null : this.getJobClass().getName()) + " concurrentExectionDisallowed: " + this.isConcurrentExectionDisallowed() + " persistJobDataAfterExecution: " + this.isPersistJobDataAfterExecution() + " isDurable: " + this.isDurable() + " requestsRecovers: " + this.requestsRecovery();
-    }
-
-    public boolean equals(Object obj) {
-        if (!(obj instanceof JobDetail)) {
-            return false;
-        } else {
-            JobDetail other = (JobDetail)obj;
-            if (other.getKey() != null && this.getKey() != null) {
-                return other.getKey().equals(this.getKey());
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public int hashCode() {
-        JobKey key = this.getKey();
-        return key == null ? 0 : this.getKey().hashCode();
-    }
-
-    public Object clone() {
-        try {
-            JobDetailImpl copy = (JobDetailImpl)super.clone();
-            if (this.jobDataMap != null) {
-                copy.jobDataMap = (JobDataMap)this.jobDataMap.clone();
-            }
-
-            return copy;
-        } catch (CloneNotSupportedException var3) {
-            throw new IncompatibleClassChangeError("Not Cloneable.");
-        }
-    }
-
-    public JobBuilder getJobBuilder() {
-        JobBuilder b = JobBuilder.newJob().ofType(this.getJobClass()).requestRecovery(this.requestsRecovery()).storeDurably(this.isDurable()).usingJobData(this.getJobDataMap()).withDescription(this.getDescription()).withIdentity(this.getKey());
-        return b;
-    }
+    ...
 }
 ```
 
@@ -691,19 +261,6 @@ public class JobBuilder {
     private boolean durability; //storeDurably()
     private boolean shouldRecover; //requestRecovery()
     private JobDataMap jobDataMap = new JobDataMap(); 
-
-    protected JobBuilder() {
-    }
-
-    public static JobBuilder newJob() {
-        return new JobBuilder();
-    }
-
-    public static JobBuilder newJob(Class<? extends Job> jobClass) {
-        JobBuilder b = new JobBuilder();
-        b.ofType(jobClass);
-        return b;
-    }
 
     //创建任务实例：JobDetailImpl
     public JobDetail build() {
@@ -761,55 +318,7 @@ public class JobBuilder {
         return this;
     }
 
-    //
-    public JobBuilder storeDurably() {
-        return this.storeDurably(true);
-    }
-
-    public JobBuilder storeDurably(boolean jobDurability) {
-        this.durability = jobDurability;
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, String value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, Integer value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, Long value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, Float value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, Double value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(String dataKey, Boolean value) {
-        this.jobDataMap.put(dataKey, value);
-        return this;
-    }
-
-    public JobBuilder usingJobData(JobDataMap newJobDataMap) {
-        this.jobDataMap.putAll(newJobDataMap);
-        return this;
-    }
-
-    public JobBuilder setJobData(JobDataMap newJobDataMap) {
-        this.jobDataMap = newJobDataMap;
-        return this;
-    }
+    ...
 }
 ```
 
@@ -2166,5 +1675,3 @@ public class UserController {
   </li>
 </ul>
 ```
-
-## 
