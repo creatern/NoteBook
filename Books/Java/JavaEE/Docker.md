@@ -112,5 +112,21 @@ CMD echo "---Tomcat OK---" && pwd
 
 [阿里云-镜像仓库文档](https://cr.console.aliyun.com/repository/cn-shenzhen/zhengjk/zhengjk-repo/details)
 
-# Docker0网络
+# Docker网络 network
+
+> docker run --link 在hosts中配置连接到的容器ip地址（单向的）。不建议使用。
+
+Docker0
+
+| 网络模式  | 说明             |
+| --------- | ---------------- |
+| bridge    | 默认，桥接       |
+| none      | 不配置网络       |
+| host      | 和宿主机共享网络 |
+| container | 容器网络连通     |
+
+```shell
+# docker run 默认--net bridge
+--net {bridge | networkName}
+```
 
