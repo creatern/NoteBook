@@ -9,3 +9,64 @@
 <img title="" src="../../pictures/Android-AndroidProjectStruct.drawio.svg" alt="" width="655">
 
 # 界面编程
+
+## 布局
+
+### Constraint Layout
+
+| 约束   | 说明                                       |
+| :----- | :----------------------------------------- |
+| `<<<`  | wrap content，容器跟内容的宽度变化而变化。 |
+| `---`  | 固定的宽度或高度值                         |
+| `-^v-` | match constraint                           |
+
+## 控件
+
+### 标签属性
+
+| android属性                                       | 说明 |
+| :------------------------------------------------ | :--- |
+| id                                                |      |
+| layout_width<br />layout_height                   |      |
+| background                                        |      |
+| adjustViewBounds                                  |      |
+| ellipsize                                         |      |
+| gravity                                           |      |
+| singleLine                                        |      |
+| text<br />textColor<br />textSize<br /> textStyle |      |
+
+| app属性                                                      | 说明 |
+| :----------------------------------------------------------- | :--- |
+| layout_constraintEnd_toEndOf<br />layout_constraintStart_toStartOf<br />layout_constraintTop_toBottomOf<br />layout_constraintTop_toTopOf<br />layout_constraintHorizontal_bias |      |
+| layout_constraintVertical_bias                               |      |
+| srcCompa                                                     |      |
+|                                                              |      |
+
+### 基本控件
+
+| 控件          | 说明 |
+| :------------ | :--- |
+| TextView      |      |
+| ImageView     |      |
+| Drawable      |      |
+| MoveTextView  |      |
+| ImageTextView |      |
+| Button        |      |
+| ImageButton   |      |
+
+- 标签变量绑定： R（代表res目录的类）。
+
+> R.id.myTextView：返回res目录下id为myTextView的控件id。
+
+```java
+findViewById(int id); //不需要强转，自动匹配控件类型。
+```
+
+### 复选框
+
+### 单选组
+
+## 事件监听
+
+
+
