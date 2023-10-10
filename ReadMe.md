@@ -20,6 +20,8 @@
 
 ## [Docker](./Books/Java/JavaEE/Docker.md)
 
+# [算法](./Books/算法.md)
+
 # 前端
 
 ## [CSS](./Books/Web/前端/CSS.md)
@@ -37,8 +39,6 @@
 ## [Markdown](./Books/其他/Markdown.md)
 
 ## [UML](./Books/其他/UML.md)
-
-# [算法](./Books/算法.md)
 
 # 数据库
 
