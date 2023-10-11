@@ -22,26 +22,6 @@
 
 ## 控件
 
-### 标签属性
-
-| android属性                                       | 说明 |
-| :------------------------------------------------ | :--- |
-| id                                                |      |
-| layout_width<br />layout_height                   |      |
-| background                                        |      |
-| adjustViewBounds                                  |      |
-| ellipsize                                         |      |
-| gravity                                           |      |
-| singleLine                                        |      |
-| text<br />textColor<br />textSize<br /> textStyle |      |
-
-| app属性                                                      | 说明 |
-| :----------------------------------------------------------- | :--- |
-| layout_constraintEnd_toEndOf<br />layout_constraintStart_toStartOf<br />layout_constraintTop_toBottomOf<br />layout_constraintTop_toTopOf<br />layout_constraintHorizontal_bias |      |
-| layout_constraintVertical_bias                               |      |
-| srcCompa                                                     |      |
-|                                                              |      |
-
 ### 基本控件
 
 | 控件          | 说明 |
@@ -62,7 +42,9 @@
 findViewById(int id); //不需要强转，自动匹配控件类型。
 ```
 
-### 复选框
+### CheckBox 复选框
+
+- CheckBox（复选框）：单独设置一个.xml界面文件，
 
 ### 单选组
 
