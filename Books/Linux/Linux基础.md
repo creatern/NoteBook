@@ -776,18 +776,7 @@ sda1              0.00     0.00    0.18    0.00     0.56     0.20     8.34     0
 
 ## 运行级别
 
-> **Linux启动**
->
-> 1. 开机自检。
-> 2. 从硬盘的MBR中读取引导程序GRUB。
-> 3. 引导程序根据配置文件显示引导菜单。
-> 4. 若选择进入Linux系统，则此时引导程序加载Linux内核文件。
-> 5. 当内核全部载入内存后，GRUB的任务完成，此时全部控制权交给Linux。CPU开始执行Linux内核代码。
-> 6. 内核代码执行完后，开始执行Linux系统的第一个进程（systemd 1）。之后由systemd进程完成。
-> 7. systemd使用“target”处理引导以及服务管理过程。
-> 8. 
-
-<img src="../../pictures/Snipaste_2022-12-01_16-10-41.png" width="700"/> 
+<img src="../../pictures/Linux-Linux启动运行级别202310121316.drawio.svg" width="600"/> 
 
 <img src="../../pictures/Snipaste_2022-12-01_16-13-01.png" width="700"/> 
 
@@ -795,111 +784,52 @@ sda1              0.00     0.00    0.18    0.00     0.56     0.20     8.34     0
 
 > 紧急模式 systemctl rescue
 
-### runlevel 查看当前用户运行级别
-
-<img src="../../pictures/Snipaste_2022-12-01_16-22-29.png" width="300"/> 
-
-### init 改变系统运行级别
-
-- init进程是所有Linux进程的父进程，它的进程号为1。init命令是Linux操作系统中不可缺少的程序之一，init进程是Linux内核引导运行的，是系统中的第一个进程。
-
-```shell
-init [选项] 运行级别
-```
-
-<img src="../../pictures/Snipaste_2022-12-01_16-23-31.png" width="300"/> 
+| 命令     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| runlevel | 查看当前用户运行级别<br /><img src="../../pictures/Snipaste_2022-12-01_16-22-29.png" width="300"/> |
+| init     | 改变系统运行级别<br />init进程是所有Linux进程的父进程，它的进程号为1。 |
 
 ### /etc/inittab init配置文件
-
-### systemctl rescue 紧急模式
-
-### systemctl set-default 指向 更改默认运行级别
-
-- 实际上是修改 /etc/systemd/ssytem/default.target 的指向
-- 重启后生效
-
-| 参数                | 指向                                        | 运行级别 |
-|:----------------- |:----------------------------------------- |:---- |
-| default.target    | /etc/systemd/system/default.target        | -    |
-| multi-user.target | /usr/lib/systemd/system/multi-user.target | 3    |
-| graphical.target  | /usr/lib/systemd/system/graphical.target  | 5    |
-
-- 查看可选的指向： `ll /usr/lib/systemd/system | grep .target`
-
-```shell
-## 查看指向
-[root@bogon ~]# ll /etc/systemd/system/default.target
-lrwxrwxrwx. 1 root root 36 Nov 13 21:20 /etc/systemd/system/default.target -> /lib/systemd/system/graphical.target
-## 更改指向
-[root@bogon ~]# systemctl set-default multi-user.target
-Removed symlink /etc/systemd/system/default.target.
-Created symlink from /etc/systemd/system/default.target to /usr/lib/systemd/system/multi-user.target.
-```
 
 ## systemctl/systemd 服务单元控制
 
 <img src="../../pictures/Snipaste_2022-12-01_16-33-29.png" width="750"/> 
 
-- systemctl命令 是系统服务管理器指令，它实际上将 service 和 chkconfig 这两个命令组合到一起。
+> <img src="../../pictures/Snipaste_2022-12-01_16-30-36.png" width="1100"/> 
 
-<img src="../../pictures/Snipaste_2022-12-01_16-30-36.png" width="1100"/> 
+| **运行级别**                                               | **说明**                                                     |
+| ---------------------------------------------------------- | ------------------------------------------------------------ |
+| systemctl set-default                                      | 更改默认运行级别，重启后生效<br />（/etc/systemd/ssytem/default.target 的指向） |
+| systemctl rescue                                           | 紧急模式                                                     |
+| **服务单元**                                               | **说明**                                                     |
+| systemctl start<br />systemctl restart<br />systemctl stop | 启动服务<br />重新启动服务<br />停止服务                     |
+| systemctl enable<br />systemctl disable                    | 设置开机自启动<br />禁止开机自启动                           |
+| systemctl status                                           | 查看服务当前状态                                             |
+| **电源控制**                                               | **说明**                                                     |
+| systemctl poweroff                                         | 关机                                                         |
+| systemctl reboot                                           | 重启                                                         |
+| systemctl suspend                                          | 待机                                                         |
 
-### 对服务单元操作
-
-```shell
-systemctl start nfs-server.service . # 启动nfs服务
-systemctl restart nfs-server.service # 重新启动某服务
-systemctl stop firewalld.service # 停止某服务
-systemctl enable nfs-server.service # 设置开机自启动
-systemctl disable nfs-server.service # 停止开机自启动
-systemctl status nfs-server.service # 查看服务当前状态
-
-## 以上等效于：systemctl firewalld stop 
-## 或 systemctl status firewalld
-
-systemctl list-units --type=service # 查看所有已启动的服务
-systemctl list-units-files # 查看系统中安装的服务
-```
-
-### 电源控制
-
-```shell
-systemctl poweroff # 关机
-systemctl reboot # 重启
-systemctl suspend # 待机
-
-## 以上等效于 poweroff
-```
+> | systemctl set-default参数 | 指向                                      | 运行级别 |
+> | :------------------------ | :---------------------------------------- | :------- |
+> | default.target            | /etc/systemd/system/default.target        | -        |
+> | multi-user.target         | /usr/lib/systemd/system/multi-user.target | 3        |
+> | graphical.target          | /usr/lib/systemd/system/graphical.target  | 5        |
 
 ### 单元配置文件
 
-**存放位置**
+| 存放位置                | 说明                             |
+| ----------------------- | -------------------------------- |
+| /usr/lib/systemd/system | 软件包安装的单元                 |
+| /etc/systemd/system     | 系统管理员安装的与系统密切的单元 |
 
-|                   |                          |
-| ----------------- | ------------------------ |
-| 存放软件包安装的单元        | /usr/lib/systemd/system/ |
-| 由系统管理员安装的与系统密切的单元 | /etc/systemd/system      |
-
-**分为三个小节**
-
-| 小节      | 说明                                    |
-|:------- |:------------------------------------- |
-| Unit    | 主要是单元的描述和依赖                           |
-| Service | 单元的最主要内容，主要定义了服务的类型、启动、停止的命令、杀死服务的信号等 |
-| Install | 安装单元                                  |
-
-- 以vmtoolsd.service为例
-
-```shell
-[root@bogon ~]# cat /usr/lib/systemd/system/vmtoolsd.service
-```
+| 小节    | 说明                                                         |
+| :------ | :----------------------------------------------------------- |
+| Unit    | 主要是单元的描述和依赖。                                     |
+| Service | 单元的最主要内容。<br />主要定义了服务的类型、启动、停止的命令、杀死服务的信号等。 |
+| Install | 安装单元                                                     |
 
 <img src="../../pictures/Snipaste_2022-12-02_17-45-08.png" width="900"/> 
-
-#### 添加单元配置文件
-
-1. 将单元配置文件放入相应的目录位置
-2. 执行`systemctl daemon-relod`
 
 ## 进程管理
 
@@ -919,74 +849,21 @@ systemctl suspend # 待机
 | 进程所连接的终端名 |                                 |
 | 进程资源占用       |                                 |
 
-### ps 进程监视
-
-- ps用于报告当前系统的进程状态（非动态），可以搭配kill指令随时中断、删除不必要的程序。
-
-```shell
-ps axo pid,comm,pcpu # 查看进程的PID、名称以及CPU 占用率
-ps aux | sort -rnk 4 # 按内存资源的使用量对进程进行排序
-ps aux | sort -nk 3  # 按 CPU 资源的使用量对进程进行排序
-ps -A # 显示所有进程信息
-ps -u root # 显示指定用户信息
-ps -efL # 查看线程数
-ps -e -o "%C : %p :%z : %a"|sort -k5 -nr # 查看进程并按内存使用大小排列
-ps -ef # 显示所有进程信息，连同命令行
-ps -ef | grep ssh # ps 与grep 常用组合用法，查找特定进程
-ps -C nginx # 通过名字或命令搜索进程
-ps aux --sort=-pcpu,+pmem # CPU或者内存进行排序,-降序，+升序
-ps -f --forest -C nginx # 用树的风格显示进程的层次关系
-ps -o pid,uname,comm -C nginx # 显示一个父进程的子进程
-ps -e -o pid,uname=USERNAME,pcpu=CPU_USAGE,pmem,comm # 重定义标签
-ps -e -o pid,comm,etime # 显示进程运行的时间
-ps -aux | grep named # 查看named进程详细信息
-ps -o command -p 91730 | sed -n 2p # 通过进程id获取服务名称
-```
-
-<img src="../../pictures/Snipaste_2022-12-03_14-55-49.png" width="1100"/> 
-
-<img src="../../pictures/Snipaste_2022-12-03_14-57-52.png" width="700"/> 
+<img src="../../pictures/Snipaste_2022-12-03_14-57-52.png" width="700"/>
 
 > 僵尸进程是指进程完成了，但父进程没有响应。
 
-```shell
-[root@bogon ~]# ps aux | head -2
-USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root          1  0.0  0.0 191700  4760 ?        Ss   13:15   0:04 /usr/lib/systemd/systemd --switched-root --system --deserialize 21
-```
-
-### top 系统实时状态监视
-
-- top：动态交互命令，默认每5秒刷新一次。
-
-<img src="../../pictures/Snipaste_2022-12-03_15-20-11.png" width="1000"/> 
-
-- 应用程序实际占用的内存：MemTotal - MemFree - Buffer - Cached (KB)而不是MemUsed
-
-```shell
-top -n 1 # 显示一次结果就退出
-top -p 5 # 显示指定PID的进程当前状态
-top -u oracle # 显示某一用户的进程信息
-```
+| 命令 | 说明                                                         |
+| ---- | ------------------------------------------------------------ |
+| ps   | 进程监视，报告当前系统的进程状态（非动态）。<br /><img src="../../pictures/Snipaste_2022-12-03_14-55-49.png" width="1100"/> |
+| top  | 系统实时状态监视，动态交互命令，默认每5秒刷新一次。<br /><img src="../../pictures/Snipaste_2022-12-03_15-20-11.png" width="1000"/><br />应用程序实际占用的内存：MemTotal - MemFree - Buffer - Cached (KB)而不是MemUsed |
 
 ### 前台进程、后台进程
 
-- 前台进程会占用终端窗口，后台进程不会
-- 启动前台进程：正常启动即可；启动后台进程：在启动命令后加上`$`
-
-```shell
-[root@bogon ~]# ps -ef $
-error: garbage option
-
-Usage:
- ps [options]
-
- Try 'ps --help <simple|list|output|threads|misc|all>'
-  or 'ps --help <s|l|o|t|m|a>'
- for additional help text.
-
-For more details see ps(1).
-```
+| 进程     | 前台     | 后台            |
+| -------- | -------- | --------------- |
+| 终端窗口 | 占用     | 不占用          |
+| 启动     | 正常启动 | 启动命令加上`$` |
 
 #### bg  从前台进程切换到后台
 

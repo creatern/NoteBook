@@ -1,4 +1,4 @@
-# 规范
+# Shell基础
 
 ```shell
 #!/bin/bash
@@ -15,71 +15,28 @@ echo "Hello World"
 
 # shell
 
-## /bin/bash和/bin/sh
+| shell     | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| /bin/bash | 用户默认shell，用户登录某个虚拟控制台终端或在GUI中运行终端仿真器时启动。 |
+| /bin/sh   | 系统默认shell，启动时需要使用的系统shell脚本。               |
 
-**shell有默认的交互shell（通常是/bin/bash）和默认的系统shell（/bin/sh）**
-
-- 用户默认shell：默认的交互shell会在用户登录某个虚拟控制台终端或在GUI中运行终端仿真器时启动。
-- 系统默认shell sh：需要在启动时使用的系统shell脚本。
+- shell也是进程，可以使用ps、kill等指令操作。
 
 ## shell的父子关系
 
-- 用于登录某个虚拟控制器终端或在GUI中运行终端仿真器时所启动的默认交互shell是一个父shell.
-- 当输入/bin/bash或其他的bash命令时，会创建一个新的子shell。此时该父shell就是这个子shell的父进程。**可以通过ps -f来查看进程中的shell。shell也是一个进程。**
-- **使用exit可以退出当前的子shell，在父shell中使用exit则是退出终端**
-- **还可以使用kill来杀死子shell**
-- **通过ps -l来查看当前shell的进程号**
-- 创建子shell的代价较高，还需要为该子shell创建出新的环境。
+- 在用户默认shell中，输入/bin/bash、其他的bash命令时，会创建一个新的子shell。此时该用户默认shell就是这个子shell的父进程。
+- 创建子shell的代价较高，需要为该子shell创建新的环境。
 
 ```shell
-[root@bogon test_dir]# /bin/bash
-[root@bogon test_dir]# ps -f
-UID          PID    PPID  C STIME TTY          TIME CMD
-root        5888    5887  0 13:03 pts/0    00:00:00 -bash
-root        6043    5888  1 13:47 pts/0    00:00:00 /bin/bash
-root        6062    6043  0 13:47 pts/0    00:00:00 ps -f
+# 查看当前shell的子shell数量
+echo $BASH_SUBSHELL
 ```
 
-## ; 命令列表
+- `( ; ; ) `生成一个子shell将按括号内的命令依次执行，执行完成之后，该子shell自动被杀死。
 
-- 将命令按分号依次执行，不生成子shell
-
-```shell
-
-```
-
-### ( ; ; ) 进程列表
-
-- 生成了一个子shell来将命令按括号内的分号依次执行。在执行之后，该子shell自动被杀死。
-- 在括号内的命令都是子shelll执行的。
-
-```shell
-[root@bogon ~]# ( ps;ll;ifconfig;echo $BASH_SUBSHELL )
-
-# ..省略..
-
-1 # 表示有一个子shell生成
-```
-
-```shell
-[root@bogon ~]# (ll;echo $BASH_SUBSHELL;(ll; echo $BASH_SUBSHELL);echo $BASH_SUBSHELL)
-total 0
-drwxr-xr-x 2 root root 23 Mar  7 11:25 download
-drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
-1
-total 0
-drwxr-xr-x 2 root root 23 Mar  7 11:25 download
-drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
-2
-1
-```
-
-### $BASH_SUBSHELL查看命令是否产生子shell
-
-- `echo $BASH_SUBSHELL` ，如果返回0则没有子shell产生，如果是1或更大的，则有子shell产生。
-
-
-### {;}
+> `;` 命令列表
+>
+> `{;}`
 
 
 ## 3种执行方式
@@ -89,10 +46,12 @@ drwxr-xr-x 3 root root 66 Mar  8 15:09 shellTest
 # 在当前shell中打开一个子shell来执行脚本内容，当脚本内容结束，则子shell关闭，回到父shell中
 chmod +x test.sh
 ./test.sh
+
 # 2.使用解释器 不需要执行权限 
 # 在当前shell中打开一个子shell来执行脚本内容，当脚本内容结束，则子shell关闭，回到父shell中
 bash test.sh
 sh test.sh
+
 # 3.使用 . 或 source的方式 
 # 使脚本内容在当前shell里执行，而无需打开子shell
 . test.sh
