@@ -4048,21 +4048,8 @@ bar((DoubleFunction<String>) String::valueOf());
 - Stream是数据渠道，用于操作数据源（集合、数组等）所生成的元素序列。
 
 1. Stream 不持有值，不存储元素。
-2. Stream 不会改变源对象。相反，会返回一个持有结果的新Stream。
-3. 延迟计算：Stream只有进行了终止操作才会开始计算结果。
-4. 串行处理、并行处理。
-
-| 类型       | 说明                                             |
-| ---------- | ------------------------------------------------ |
-| Collection | 静态的内存数据结构，主要面向内存，存储在内存中。 |
-| Stream     | 有关计算的，主要面向 CPU，通过 CPU 实现计算。    |
-
-| 对比               | Stream                         | Iterator                   |
-| ------------------ | ------------------------------ | -------------------------- |
-| 处理值             | 无序                           | 有序                       |
-| 可操作性           | 中间操作                       | 逐个进行                   |
-| 保留值             | 保留值本身、关于源的属性的信息 | 只保留值本身               |
-| null（无元素处理） | 友好的处理                     | hasNext()返回false，易出错 |
+2. Stream 不会改变源对象，而是返回一个持有结果的新Stream。
+3. 惰性执行：Stream只有进行了终止操作才会开始计算结果。
 
 <img src="../../pictures/Snipaste_2022-11-19_13-07-50.png" width="700"/>
 
@@ -4070,86 +4057,143 @@ bar((DoubleFunction<String>) String::valueOf());
 2. 管道：中间操作链，对数据源的数据进行处理。
 3. 终止流：一旦执行终止操作，就执行中间操作链，并产生结果，之后流被耗尽，不能被再次使用。
 
-### 数据源
+### 流的创建
 
-| 数据源              | 方法                                                         | 类型       |
-| ------------------- | ------------------------------------------------------------ | ---------- |
-| 集合 Collection接口 | `default Stream<E> stream()`                                 | 顺序流     |
-|                     | `default Stream<E> parallelStream()`                         | 并行流     |
-| 数组                | `static <T> Stream<T> stream(T[] array)`                     | 流         |
-| Stream#of()         | `public static<T> Stream<T> of(T... values)`                 | 返回一个流 |
-| 无限流              | `public static<T> Stream<T> iterate(final T seed,final UnaryOperator<T> f)` | 迭代       |
-|                     | `public static<T> Stream<T> generate(Supplier<T> s)`         | 生成       |
+| 方法                                  | 返回的流                  |
+| ------------------------------------- | ------------------------- |
+| Collect#stream()<br />Arrays#stream() | StreamSupport构造的各种流 |
+| Stream#of()                           | 元素为给定值的流          |
+| Stream#empty()                        | 空的流                    |
+| Files#lines()                         | 包含文件中所有行的流      |
+| Pattern#splitAsStream()               | 界定分割字符串的流        |
+
+```java
+Files.lines(Path.of("/home/zjk/Desktop/temp01.md"), StandardCharsets.UTF_8)
+    .toList()
+```
+
+```java
+Pattern.compile("\\PL+").splitAsStream("t e s t")
+    .toList()
+```
+
+#### 无限流
+
+| 无限流                                | 说明                                              |
+| ------------------------------------- | ------------------------------------------------- |
+| `iterate(T seed, UnaryOperator<T> f)` | 迭代。<br />seed：种子（初始值）<br />f：增长函数 |
+| `generate(Suppulier<T> s)`            | 生成。<br />反复调用函数s                         |
+
+```java
+Stream.iterate(1, f -> f * 2)
+    .limit(10)
+    .max(Integer::compareTo)
+```
+
+```java
+Stream.generate(() -> "Echo")
+    .limit(10)
+    .toList()
+```
+
+#### 原生流
 
 - 原生流：避免基本数据类型和包装类之间频繁的自动装箱和自动拆箱。
 
-| 原生流       | 对应类型          | 流类型转换                   | 装箱    | 拆箱       |
-| ------------ | ----------------- | ---------------------------- | ------- | ---------- |
-| IntStream    | char、short、byte | asLongStream、asDoubleStream | boxed() | mapToInt() |
-| LongStream   | long              | asDoubleStream               | boxed() |            |
-| DoubleStream | float、double     |                              | boxed() |            |
+| 原生流       | 对应类型          | 流类型转换                       | 装箱    | 拆箱       |
+| ------------ | ----------------- | -------------------------------- | ------- | ---------- |
+| IntStream    | char、short、byte | asLongStream<br />asDoubleStream | boxed() | mapToInt() |
+| LongStream   | long              | asDoubleStream                   | boxed() |            |
+| DoubleStream | float、double     |                                  | boxed() |            |
 
-### 管道（中间操作）
+### 管道（转换流）
 
-- 惰性求值：多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理，而在终止操作时一次性全部处理。
+- 流的转换会产生新的流，其元素派生自另一个流的元素。
+- 转换流可以相互嵌套、不断转换。
 
-| 操作       | 方法                           | 说明                                                         |
-| ---------- | ------------------------------ | ------------------------------------------------------------ |
-| 筛选与切片 | filter(Predicate p)            | 接受Lambda，从流中排除某些元素                               |
-|            | distinct()                     | 筛选，通过流所生成元素的hashCode()和equals()去除重复元素     |
-|            | limit(long maxSize)            | 截断流，使其元素不超过给定数量                               |
-|            | skip(long n)                   | 跳过元素，返回一个丢弃了前n个元素的流<br />若流中元素不足n个，则返回一个空流。<br />与limit(n)互补 |
-| 映射       | map(Function f)                | 接收一个函数作为参数，该函数应用到每个元素上<br />并将其映射为一个新的元素。 |
-|            | mapToDouble(ToDoubleFuntion f) | 接收一个函数作为参数，该函数应用到每个元素上<br />产生一个新的DoubleStream |
-|            | mapToInt(ToIntFuntion f)       | 接收一个函数作为参数，该函数应用到每个元素上<br />产生一个新的IntStream |
-|            | mapToLong(ToLongFuntion f)     | 接收一个函数作为参数，该函数应用到每个元素上<br />产生一个新的LongStream |
-|            | flatMap(Function f)            | 接收一个函数作为参数，将流中的每个只都换成另一个流，然后把所有的流连接成一个流。 |
-| 排序       | sorted()                       | 产生一个新流，其中按自然顺序排序                             |
-|            | sorted(Conparator com)         | 产生一个新流，其中按比较器顺序排序                           |
+| 过滤、映射 | 返回的流                                                     |
+| ---------- | ------------------------------------------------------------ |
+| filter()   | 满足过滤条件的流                                             |
+| map()      | 将函数应用到所有元素后所产生结果的流                         |
+| flatMap()  | 将函数应用到所有元素后所产生结果连接到一起的流<br />每个结果都是一个流 |
 
-### 终止流
+```java
+Stream.of("t e s t".split("\\PL+"))
+    .filter(v -> v.equals("t"))
+    .toList()
+```
 
-- 终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是 void 。
-- 流进行了终止操作后，不能再次使用。
+```java
+Stream.of("t e s t".split("\\PL+"))
+    .map(String::toUpperCase)
+    .toList()
+```
 
-| 操作       | 方法                             | 说明                                                         |
-| ---------- | -------------------------------- | ------------------------------------------------------------ |
-| 匹配与查找 | allMatch(Predicate p)            | 检查是否匹配所有元素                                         |
-|            | anyMatch(Predicate p)            | 检查是否至少匹配一个元素                                     |
-|            | noneMatch(Predicate p)           | 检查是否没有匹配所有元素                                     |
-|            | findeFirst()                     | 返回第一个元素                                               |
-|            | findAny()                        | 返回当前流中的任意元素                                       |
-|            | count()                          | 返回流中元素总数                                             |
-|            | max(Comparator c)                | 返回流中最大值                                               |
-|            | min(Comparator c)                | 返回流中最小值                                               |
-|            | forEach(Consumer c)              | 内部迭代：Stream<br />外部迭代：Collection接口               |
-| 归约       | reduce(T iden,BinaryOperrator b) | 将流中元素反复结合，得到新的值，返回T                        |
-|            | reduce(BinaryOperrator b)        | 将流中元素反复结合，得到新的值，返回`Optional<T>`            |
-| 收集       | collect(Collector c)             | 将流转为其他形式。<br />接收一个Collector接口的实现，用于给Stream中元素做汇总的方法。<br />Collector 接口中方法的实现决定了如何对流执行收集的操作(如收集到 List、Set、Map) |
+| 抽取     | 返回的流          |
+| -------- | ----------------- |
+| limit()  | 包含前n个元素的流 |
+| skip()   | 跳过前n个元素的流 |
+| concat() |                   |
 
-### Collectors 收集器
+| 去重       | 返回的流                                             |
+| ---------- | ---------------------------------------------------- |
+| distinct() | 去重的流                                             |
+| **排序**   | **返回的流**                                         |
+| sorted()   | 排序的流<br />Comparator指定排序                     |
+| **查看**   | **返回的流**                                         |
+| peek()     | 每获取一个元素就传递给函数<br />该函数并不会改变元素 |
 
-### Optional 容器
+```java
+Stream.iterate(1, f -> f * 2)
+    .peek(System.out::println)
+    .limit(10)
+    .toList()
+```
 
-- `Optional<T> `
-  - 保存类型T的值，代表这个值存在：`isPresent()`返回true，调用`get()`方法会返回该对象。
-  - 保存null，表示这个值不存在，可以避免空指针异常。
+### 终结操作
+
+#### 约简
+
+- 约简：将流约简为可使用的非流值。 
+
+| 约简                                        | 返回long                                                     |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| count()                                     | 流中元素的数量                                               |
+| **约简**                                    | **返回Optional**                                             |
+| max()<br />min()                            | 最大值、最小值<br />Comparator指定比较规则                   |
+| findFirst()<br />findAny()                  | 第一个元素<br />任意一个元素                                 |
+| anyMatch()<br />allMatch()<br />noneMatch() | 任意元素匹配时，断言true。<br />所有元素匹配时，断言true。<br />没有元素匹配时，断言true。 |
+
+##### Optional
+
+- `Optinal<T>`包装器对象，对于null有两种处理策略来避免空指针。
+
+1. 值不存在时会产生一个可替代物，而不是null。
+2. 只有在值存在的情况下才可以消费该值。
+
+| 策略                         | 若Optinal为空（`"" != 空`）                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| orElse()                     | 产生指定的值                                                 |
+| orElseGet()                  | 产生函数的结果                                               |
+| orElseThrow()                | 抛出函数的异常                                               |
+| isPresent()<br />isPresent() | 无操作<br />若Optinal不为空，则返回true                      |
+| get()                        | 抛出NoSuchElementException                                   |
+| map()                        | 若Optinal为空，产生空Optional<br />否则，产生该Optional的值传递给函数的结果 |
+| flatMap()                    | 若Optinal为空，产生空Optional<br />否则，产生该Optional的值传递给函数的结果<br />每个结果都是一个Optional |
+
+| Optional     | 产生的Optional                                               |
+| ------------ | ------------------------------------------------------------ |
+| of()         | 给定值的Optional<br />若值为null，则抛出NoSuchElementException |
+| empty()      | 空的Optional                                                 |
+| ofNullable() | 给定值的Optional<br /><br />若值为null，则产生空的Optional   |
+
+#### 收集
+
+##### Collectors
 
 
-| 操作                   | 方法                                                     | 说明                                                         |
-| ---------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
-| 创建Optional实例       | Optional.of(T t)                                         | 创建一个Optional实例<br />t必须非null                        |
-|                        | Optional.empty()                                         | 创建一个空的Optional实例                                     |
-|                        | Optional.ofNullable(T t)                                 | 创建一个Optional实例<br />t可以为null                        |
-| 判断容器是否包含对象   | boolean isPresent()                                      | 是否包含对象                                                 |
-|                        | `void ifPresent(Consumer<? super T> consumer)`           | 如果有值，执行Consumer接口的实现代码，并且该值作为参数传递给它 |
-| 获取Optional容器的对象 | T get()                                                  | 如果调用对象包含值，返回该值，<br />否则抛出NoSuchElementException，不安全。 |
-|                        | T orElse(T other)                                        | 如果有值，则将其返回<br />否则返回指定的other对象            |
-|                        | `T orElseGet(Supplier<? extends T> other)`               | 如果有值，将其返回<br />否则返回由Supplier接口实现提供的对象 |
-|                        | `T orElseThrow(Supplier<? extends X> exceptionSupplier)` | 如果有值，将其返回<br />否则抛出Supplier接口实现提供的异常   |
 
-
-# IO 流
+# IO
 
 - java.io：流式IO是一种顺序存取方式，流中的字节依据先进先出的规则。
 
