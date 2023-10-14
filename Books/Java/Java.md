@@ -4057,6 +4057,14 @@ bar((DoubleFunction<String>) String::valueOf());
 2. 管道：中间操作链，对数据源的数据进行处理。
 3. 终止流：一旦执行终止操作，就执行中间操作链，并产生结果，之后流被耗尽，不能被再次使用。
 
+```java
+//流的惰性执行：只有执行终止操作时，流才对内部的元素处理。
+List<Integer> il = new ArrayList<>();
+Stream<Integer> is = il.stream();
+il.add(1);
+System.out.println(is.count());
+```
+
 ### 流的创建
 
 | 方法                                  | 返回的流                  |
@@ -4096,15 +4104,30 @@ Stream.generate(() -> "Echo")
     .toList()
 ```
 
-#### 原生流
+#### 原生流（基本流）
 
 - 原生流：避免基本数据类型和包装类之间频繁的自动装箱和自动拆箱。
 
-| 原生流       | 对应类型          | 流类型转换                       | 装箱    | 拆箱       |
-| ------------ | ----------------- | -------------------------------- | ------- | ---------- |
-| IntStream    | char、short、byte | asLongStream<br />asDoubleStream | boxed() | mapToInt() |
-| LongStream   | long              | asDoubleStream                   | boxed() |            |
-| DoubleStream | float、double     |                                  | boxed() |            |
+| 基本流       | 对应类型                  | 流类型转换                       | 装箱（对象流） | 拆箱       |
+| ------------ | ------------------------- | -------------------------------- | -------------- | ---------- |
+| IntStream    | char<br />short<br />byte | asLongStream<br />asDoubleStream | boxed()        | mapToInt() |
+| LongStream   | long                      | asDoubleStream                   | boxed()        |            |
+| DoubleStream | float<br />double         |                                  | boxed()        |            |
+
+#### 并行流
+
+| 并行流                                             | 产生的流                   |
+| -------------------------------------------------- | -------------------------- |
+| Stream#parallel()<br />Collection#parallelStream() | 与当前流中元素相同的并行流 |
+| Stream#unordered()                                 | 与当前流中元素相同的无序流 |
+
+- 只要在终结方法执行时，流处于并行模式，则所有的中间流操作都将被并行化。并行流中的操作应当可以以任意顺序执行，且要确保能安全地执行。
+
+> 并行流使用fork-join池来操作流的各个部分。
+
+```java
+
+```
 
 ### 管道（转换流）
 
@@ -4189,6 +4212,22 @@ Stream.iterate(1, f -> f * 2)
 | empty()      | 空的Optional                                                 |
 | ofNullable() | 给定值的Optional<br /><br />若值为null，则产生空的Optional   |
 
+##### reduce()
+
+| reduce()                                  | 返回组合之后的值                                             |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| `U identity`                              | 幺元值，若流为空，则返回该幺元值。<br />若不设置且流为空，则返回空Optional。 |
+| `BiFunction<U, ? super T, U> accumulator` | 累积器，约简操作。<br />应当是可结合的（组合可不按顺序），提供并行的解决。 |
+| `BinaryOperator<U> combiner`              | 组合器，将分别累积的部分汇总。                               |
+
+```java
+Stream.iterate(1,f->f*2)
+    .limit(10)
+    .reduce(0,Integer::sum,Integer::sum)
+```
+
+> Rcollect()
+
 #### 收集
 
 | 遍历      | 说明                                           |
@@ -4242,7 +4281,7 @@ Stream.iterate(1, f -> f * 2)
 
 ###### toMap() 映射表
 
-| 函数引元                                       | 说明                                                         |
+| toMap() 函数引元                               | 说明                                                         |
 | ---------------------------------------------- | ------------------------------------------------------------ |
 | `Function<? super T, ? extends K> keyMapper`   | key                                                          |
 | `Function<? super T, ? extends U> valueMapper` | value                                                        |
@@ -4289,11 +4328,20 @@ Stream.of(Locale.getAvailableLocales())
 
 - 下流收集器应该搭配群组和分区一起使用，处理下流映射表中的值。
 
-| Collectors                                           | 返回值                         |
-| ---------------------------------------------------- | ------------------------------ |
-| summingInt()<br />summingLong()<br />summingDouble() | 函数应用于每个元素后计算总和。 |
+| Collectors                                           | 返回值                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| summingInt()<br />summingLong()<br />summingDouble() | 函数应用于每个元素后计算总和。                               |
+| maxBy()<br />minBy()                                 | 返回Optional：元素的最大值、最小值<br />Comparator指定排序。 |
+| mapping()                                            | 函数应用于每个元素的结果作为key<br />指定收集器来收集相同key的元素。 |
 
-
+```java
+Stream.of(Locale.getAvailableLocales())
+    .collect(Collectors.groupingBy(
+        Locale::getCountry,
+        Collectors.mapping(Locale::getDisplayLanguage,
+                           Collectors.maxBy(String::compareTo))))
+    .forEach((k, v) -> System.out.println(k + ":" + v.orElse("none")));
+```
 
 # IO
 
