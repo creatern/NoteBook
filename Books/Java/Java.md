@@ -4163,6 +4163,8 @@ Stream.iterate(1, f -> f * 2)
 | max()<br />min()                            | 最大值、最小值<br />Comparator指定比较规则                   |
 | findFirst()<br />findAny()                  | 第一个元素<br />任意一个元素                                 |
 | anyMatch()<br />allMatch()<br />noneMatch() | 任意元素匹配时，断言true。<br />所有元素匹配时，断言true。<br />没有元素匹配时，断言true。 |
+| 迭代                                        | 返回Iterator                                                 |
+| iterator()                                  | 当前流元素的迭代器                                           |
 
 ##### Optional
 
@@ -4189,7 +4191,107 @@ Stream.iterate(1, f -> f * 2)
 
 #### 收集
 
+| 遍历      | 说明                                           |
+| --------- | ---------------------------------------------- |
+| forEach() | 流的每个元素都调用函数                         |
+| **收集**  | **说明**                                       |
+| collect() | 给定的收集器（Collectors）来收集流中的元素     |
+| toArray() | 产生一个对象数组<br />引用构造器来指定数组类型 |
+
+```java
+Stream.iterate(1, f -> f * 2)
+    .limit(10)
+    .toArray(Integer[]::new);
+```
+
 ##### Collectors
+
+| Collectors                                                   | 生成的收集器                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| toCollection()<br />toList()、toSet()                        | 将元素收集到指定集合的收集器                                 |
+| joining()                                                    | 连接字符串<br />指定字符串之间的分隔符<br />                 |
+| summarizingInt()<br />summarizingLong()<br />summarizingDouble() | (Int/Long/Double)SummaryStatistics对象的收集器<br />需要指定数值的转换函数 |
+
+```java
+Stream.iterate(1, f -> f * 2)
+    .limit(10)
+    .collect(Collectors.toCollection(ArrayList<Integer>::new))
+    .forEach(System.out::println); //ArrayList的forEach
+```
+
+```java
+Stream.of(new String[]{"abc","def"})
+    .collect(Collectors.joining(", ","pre-[","]-suf"))
+```
+
+###### SummaryStatistics
+
+| XxxSummaryStatistics   | 产生的值                                                     |
+| ---------------------- | ------------------------------------------------------------ |
+| getCount()             | 汇总后的元素的个数                                           |
+| getSum()               | 汇总后的元素的总和<br />没有元素时，返回0                    |
+| getAverage()           | 汇总后的元素的平均值<br />没有元素时，返回0                  |
+| getMax()<br />getMin() | 汇总后的元素的最大值、最小值<br />没有元素时，返回Xxx.MaxValue、Xxx.MinValue |
+
+```java
+Stream.iterate(1, f -> f * 2)
+    .limit(10)
+    .collect(Collectors.summarizingInt(Integer::valueOf))
+    .getAverage()
+```
+
+###### toMap() 映射表
+
+| 函数引元                                       | 说明                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| `Function<? super T, ? extends K> keyMapper`   | key                                                          |
+| `Function<? super T, ? extends U> valueMapper` | value                                                        |
+| `BinaryOperator<U> mergeFunction`              | 若存入的键值对的key已经存在，采取的策略<br />否则IllegalStateException |
+| `Supplier<M> mapFactory`                       | Map的具体类型                                                |
+
+```java
+Stream.of(Locale.getAvailableLocales())
+        .collect(
+                Collectors.toMap(
+                        Locale::getDisplayLanguage,
+                        Function.identity(),
+                        (existingValue, newValue) -> existingValue,
+                        TreeMap::new
+                ))
+        .forEach((k, v) -> System.out.println(k + ":" + v)); //Map的forEach
+```
+
+> toConcurrentMap()：并发映射表。
+
+###### 群组、分区
+
+| 群组             | 产生的映射表                                        |
+| ---------------- | --------------------------------------------------- |
+| groupingBy()     | 函数应用于每个元素的结果，相同key的value组成列表。  |
+| **分区**         | **产生的映射表**                                    |
+| partitioningBy() | key是true/false，由满足条件与否的元素分别组成列表。 |
+
+```java
+Stream.of(Locale.getAvailableLocales())
+    .collect(Collectors.groupingBy(Locale::getCountry))
+    .forEach((k, v) -> System.out.println(k + ":" + v));
+```
+
+```java
+Stream.of(Locale.getAvailableLocales())
+    .collect(Collectors.partitioningBy(l -> l.getLanguage().equals("en")))
+    .forEach((k, v) -> System.out.println(k + ":" + v));
+```
+
+> groupingByConcurrent()：并行流组装的并行映射表。
+
+###### 下流收集器
+
+- 下流收集器应该搭配群组和分区一起使用，处理下流映射表中的值。
+
+| Collectors                                           | 返回值                         |
+| ---------------------------------------------------- | ------------------------------ |
+| summingInt()<br />summingLong()<br />summingDouble() | 函数应用于每个元素后计算总和。 |
 
 
 
@@ -7392,4 +7494,3 @@ public class URLtest1 {
     }
 }
 ```
-
