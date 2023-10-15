@@ -1,12 +1,281 @@
-# JavaScript介绍
+# HTML
+
+- HTML（超文本标记语言）是解释型的标记语言，标签不区分大小写，且浏览器是容错的。后缀.html、.htm。
+
+> **W3C标准** 网页主要由以下三个部分：
+>
+> 1. 结构：HTML
+> 2. 表现：CSS
+> 3. 行为：Javascript
+
+| HTML的基本元素    | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `<!DOCTYPE html>` | 文档类型                                                     |
+| `<html></html>`   | 根元素                                                       |
+| `<head>`          | 信息容器  <br>包含所有想包含在 HTML 页面中但不在 HTML 页面中显示的内容 |
+| `<body>`          | 页面内容                                                     |
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+
+    </body>
+</html>
+```
+
+| 原义字符  | 等价字符引用 |
+| :-------- | :----------- |
+| `<`       | `&lt;`       |
+| `>`       | `&gt;`       |
+| `"`       | `&gt;`       |
+| `'`       | `&apos;`     |
+| `&`       | `&amp;`      |
+| `>=`      | `&ge;`       |
+| `<=`      | `&le;`       |
+| 注册商标® | `&reg;`      |
+| 版权符号© | `&copy;`     |
+| 空格      | `&nbsp;`     |
+
+## 普通元素
+
+| 普通元素                                   | 作用                                 |
+| :----------------------------------------- | :----------------------------------- |
+| `<br>`                                     | 换行                                 |
+| `<p></p>`                                  | 段落<br />段前和段后各添加一个空行。 |
+| `<h1></h1>`                                | 标题<br />`<h1>~<h6>`                |
+| `<span></span>`                            | 无语义                               |
+| `<b></b>`  <br/>`<i></i>`  <br/>`<u></u> ` | 字体加粗<br />字体倾斜<br />下划线   |
+| `<center></center>`                        | 居中显示                             |
+| `<sub></sub>` <br/> `<sup></sup> `         | 下标<br />上标                       |
+| `<hr>`                                     | 水平分割线                           |
+| `<button>`                                 | 按钮                                 |
+
+### `<li></li>` 列表
+
+| 列表        | 说明     |
+| ----------- | -------- |
+| `<li></li>` | 列表选项 |
+| `<ol></ol>` | 有序列表 |
+| `<ul></ul>` | 无序列表 |
+
+```html
+<ul>
+  <li>豆浆</li>
+  <li>油条</li>
+</ul>
+```
+
+### `<a></a>` 超链接
+
+| `<a></a>` | 锚点（超链接）                                               |
+| :-------- | :----------------------------------------------------------- |
+| href      | 链接url                                                      |
+| title     | 链接提示信息                                                 |
+| target    | 窗口打开方式<br />`_self` 默认在本窗口打开<br/>`_blank` 打开一个新的标签页<br/>`_parent` 在父窗口打开<br/>`_top` 在顶层窗口打开 |
+
+- 块级链接：任何内容（包括块级内容）都可以是链接资源。
+
+```html
+<a href="https://developer.mozilla.org/zh-CN/">
+  <img src="mdn_logo.svg" alt="MDN Web 文档主页" />
+</a>
+```
+
+| 多媒体嵌入        | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `<img/>`          | 图片<br />src：url<br>alt：提示<br>title：标题               |
+| `<audio></audio>` | 音频支持MP3、WAV、OGG<br>src：url<br>controls：播放控件<br>标签内容：提示 |
+| `<video></video>` | 视频支持MP4、WebM、OGG<br>src：url<br/>controls：播放控件<br/>标签内容：提示 |
+
+### `<div></div>` 盒子
+
+### `<table></table>` 表格
+
+| 表格                | 名称                                            |
+| --------------------- | ----------------------------------------------- |
+| `<table></table>`     | 表格（可嵌套）                                  |
+| `<caption></caption>` | 标题                                            |
+| `<th></th>`           | 表头<br />scope表头类型：col 、row              |
+| `<tr></tr>`           | 行                                              |
+| `<td></td>`           | 列<br />rowspan：跨行合并<br/>colspan：跨列合并 |
+
+````html
+<table>
+    <th>
+    	<td></td>
+    </th>
+	<tr>
+		<td></td>
+	</tr>
+</table>
+````
+
+## 网站布局
+
+| 典型布局            | 名称                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| `<header></header>` | 页眉：简介形式的内容。<br>作为`<body>`子元素：网站的全局页眉<br>作为`<section>`、`<article>`子元素：部分的页眉 |
+| `<nav></nav>`       | 导航栏                                                       |
+| `<main></main>`     | 主内容，存放每个页面独有的内容。每个页面上只能用一次。       |
+| `<aside></aside>`   | 侧边栏：间接信息（术语条目、作者简介、相关链接，等等）       |
+| `<footer></footer>` | 页脚                                                         |
+
+## `<form></form>`  表单
+
+| form属性 | 说明                                             |
+| -------- | ------------------------------------------------ |
+| action   | 服务器响应url。                                  |
+| name     | 表单名称<br />name指定后服务器才能收到表单内容。 |
+| value    | 发送给服务器的值。                               |
+| method   | 请求类型。<br />get、post...                     |
+
+### `<input/>` 输入
+
+| type属性 | 类型                                                         |
+| :------- | :----------------------------------------------------------- |
+| text     | 文本框                                                       |
+| password | 密码域                                                       |
+| file     | 文件域                                                       |
+| radio    | 单选按钮<br />单选组的name必须一致                           |
+| checkbox | 复选框                                                       |
+| submit   | 提交按钮                                                     |
+| reset    | 重置按钮<br />恢复到默认状态（不等于清空）                   |
+| button   | 普通按钮                                                     |
+| hidden   | 隐藏域<br />隐藏域不会在页面显示，但提交表单时会一起被提交。 |
+| image    | 图像域                                                       |
+
+```html
+<form action="demo04.html">
+    昵称：<input type="text" name="nicName"/><br/><br/>
+    密码：<input type="password" name="pwd"/><br><br/>
+    性别：<input type="radio" name="gender" value="male"/> 男
+         <input type="radio" name="gender" value="female" checked/> 女<br/><br/>
+    爱好：<input type="checkbox" name="hobby" value="basketball"/> 篮球
+         <input type="checkbox" name="hobby" value="football"/> 足球
+          <input type="checkbox" name="hobby" value="ping-pong"/> 乒乓球 <br/><br/>
+    星座：<select name="start">
+              <option value="1">据星</option>
+              <option value="2" selected>明星</option>
+              <option value="3">后星</option>
+              </select><br/><br/>
+    备注：<textarea name="remark" rows="4" cols="50"></textarea><br/><br/>
+    <input type="submit" value="注册"/>
+    <input type="reset" value="重置"/>
+    <input type="button" value="普通按钮"/>
+</form>
+```
+
+<form action="demo04.html">
+    昵称：<input type="text" name="nicName"/><br/><br/>
+    密码：<input type="password" name="pwd"/><br><br/>
+    性别：<input type="radio" name="gender" value="male"/> 男
+         <input type="radio" name="gender" value="female" checked/> 女<br/><br/>
+    爱好：<input type="checkbox" name="hobby" value="basketball"/> 篮球
+         <input type="checkbox" name="hobby" value="football"/> 足球
+          <input type="checkbox" name="hobby" value="ping-pong"/> 乒乓球 <br/><br/>
+    星座：<select name="start">
+              <option value="1">据星</option>
+              <option value="2" selected>明星</option>
+              <option value="3">后星</option>
+              </select><br/><br/>
+    备注：<textarea name="remark" rows="4" cols="50"></textarea><br/><br/>
+    <input type="submit" value="注册"/>
+    <input type="reset" value="重置"/>
+    <input type="button" value="普通按钮"/>
+</form>
+
+### `<textarea></textarea>` 多行文本框
+
+### `<label></label>` 标签
+
+# CSS
+
+ <img src="../../pictures/rendering.svg" width="600"/>
+
+| 类型       | 网页导入                                                     |
+| ---------- | ------------------------------------------------------------ |
+| 外部样式表 | `<link rel="stylesheet" href="css文件路径">`                 |
+| 内部样式表 | `<style>css代码</style>`                                     |
+| 内联样式表 | HTML元素的style属性：`<span style="font-size:60px";>HELLO</span>` |
+
+## 样式表
+
+- 浏览器解析CSS规则时，若遇到无法解析的属性/值，则忽略并继续解析之后的CSS规则。当遇到无法解析的选择器的时候，会直接忽略整个选择器规则并解析下一个CSS选择器。
+
+| 专一性   | 说明                                               |
+| -------- | -------------------------------------------------- |
+| 级联规则 | 相同的选择器，后面的样式会覆盖之前相同属性的样式。 |
+| 专用规则 | id选择器 &gt; 类选择器 &gt; 类型选择器。           |
+
+- CSS由声明和选择器组成。声明放在声明块`{}`内，并且声明可以是多条，区分大小写。每条声明由一对属性和值组成，属性和值之间用冒号`:`分开，每条声明以分号`;`结尾。
+
+```css
+body h1 + p .special {
+  color: yellow;
+  background-color: black;
+  padding: 5px;
+}
+```
+
+### 选择器
+
+| 选择器       | 说明                                    |
+| :----------- | :-------------------------------------- |
+| HTML元素     | 标签选择器                              |
+| `.class属性` | 类选择器                                |
+| `#id属性`    | ID选择器                                |
+| `*`          | 全局选择器<br />文档/父元素中的所有内容 |
+
+#### 属性选择器
+
+| 存否和值选择器 | 元素匹配                                                     |
+| :------------- | :----------------------------------------------------------- |
+| `[属性]`       | 带有某属性的元素<br />`a[title]`                             |
+| `[属性=值]`    | 带有某属性和值的元素<br />`a[href="https://example.com"]`    |
+| `[属性~=值]`   | 带有某属性和值的元素，该属性的值至少有1个和该值匹配。<br>在一列中的好几个值，是用空格隔开的。<br />`p[class~="special"]` |
+| `[属性|=值]`   | 带有某属性和值的元素、或其中的值开头为该值。<br />`div[lang|="zh"]` |
+
+| 子字符串匹配选择器 | 匹配的元素                                      |
+| :----------------- | :---------------------------------------------- |
+| `[attr^=value]`    | `li[class^="a"]`：任何值开头为`a`的。           |
+| `[attr$=value]`    | `li[class$="a"]`：任何值结尾为`a`的。           |
+| `[attr*=value]`    | `li[class*="a"]`：任何值中出现`a`的。           |
+| i                  | `li[class^="a" i] `：以大小写不敏感的方式匹配。 |
+
+#### 关系选择器
+
+| 选择器 | 关系选择器                                                   | 示例 |
+| ------ | :----------------------------------------------------------- | ---- |
+| ` `    | 后代选择器<br />`ul li`                                      |      |
+| `>`    | 子代关系选择器<br />`ul > li`                                |      |
+| `+`    | 邻接兄弟选择器<br />`p + img`                                |      |
+| `~`    | 通用兄弟关系选择器<br />`p ~ img`：选中所有的`p元素后任何地方的img元素 |      |
+
+#### 伪类、伪元素
+
+| 选择器 | 说明                                   |
+| ------ | -------------------------------------- |
+| 伪类   | 选择处于特定状态的元素。<br />`:focus` |
+| 伪元素 | `::after`                              |
+
+## 盒子模型
+
+## 定位
+
+# JavaScript
 
 | JS                 | 说明                                                         |
 | ------------------ | ------------------------------------------------------------ |
 | 解释型的脚本语言   | 不会产生编译出来的字节码文件，而是在程序的运行过程中对源文件逐行进行解释。 |
-| 基于对象           | 基于对象的脚本语，能够实现封装，可以模拟继承，不支持多态     |
+| 基于对象           | 基于对象的脚本语，能够实现封装，可以模拟继承，不支持多态。   |
 | 弱类型语言         | 变量的数据类型由所赋的值决定<br />有明确的数据类型，但声明一个变量后它可以接收任何类型的数据，并且会在程序执行过程中根据上下文自动转换类型。 |
-| 事件驱动的脚本语言 | 不需要经过Web服务器就可以对用户的输入做出响应                |
-| 跨平台             | 不依赖于操作系统，仅需要浏览器的支持                         |
+| 事件驱动的脚本语言 | 不需要经过Web服务器就可以对用户的输入做出响应。              |
+| 跨平台             | 不依赖于操作系统，仅需要浏览器的支持。                       |
 
 | JavaScript                                                   | Java                                                         |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
@@ -18,19 +287,7 @@
 
 ```html
 <!--向页面添加JavaScript-->
-
 <script src="/js/demo01.js" async></script>
-
-<html>
-    <head>
-        <script>
-            //书写内部JavaScript
-        </script>
-    </head>
-    <body>
-        
-    </body>
-</html>
 ```
 
 | 属性  | 脚本调用策略                                     |
@@ -38,37 +295,13 @@
 | async | 异步，js和html一同加载；但无法控制脚本的运行次序 |
 | defer | 按上下顺序控制脚本的运行次序                     |
 
-> Web控制台
->
-> **单行模式**
->
-> ```javascript
-> console.log()
-> ```
->
-> **多行模式**
->
-> ```javascript
-> (function(){
->     "use strict";
-> 
->     function greetMe(yourName) {
->         alert('Hello ' + yourName);
->     }
-> 
->     greetMe('World');
-> 
-> })();
-> ```
->
+## 基础语法
 
-# 基础语法
+### 变量
 
-## 变量
+#### 变量声明
 
-### 变量声明
-
-- JavaScript 是区分大小写的，并使用 Unicode 字符集。
+- JavaScript区分大小写，并使用Unicode字符集。
 
 | 变量  | 说明                                                         |
 | :---- | :----------------------------------------------------------- |
@@ -77,7 +310,7 @@
 | const | 声明一个块作用域的只读常量，不允许重新赋值 ，声明的时候必须赋值（初始化） |
 
 - 如果访问一个未声明的变量会导致抛出一个引用错误（ReferenceError）异常。
-- 只声明而没有初始化的变量：值为undefined。
+- 只声明而没有初始化的变量值为：undefined。
 
 | 变量     | 作用域                                                     |
 | -------- | ---------------------------------------------------------- |
@@ -94,7 +327,7 @@ let number = 1;
 alert(number); //33 全局变量number被更改
 ```
 
-### var 变量提升
+#### var 变量提升
 
 | 变量      | 说明                                                         |
 | --------- | ------------------------------------------------------------ |
@@ -111,9 +344,9 @@ let y = 3;
 
 - 一个函数中所有的var语句应尽可能地放在接近函数顶部的地方，避免变量提升。
 
-**函数提升**
+##### 函数提升
 
-- 只有函数声明会被提升到顶部，而函数表达式不会被提升。
+- 函数提升：只有函数声明会被提升到顶部，而函数表达式不会被提升。
 
 ```javascript
 /* 函数声明 */
@@ -134,20 +367,19 @@ var baz = function() {
 };
 ```
 
-### 解构赋值
+#### 解构赋值
 
-- 对于数组等可迭代的对象：
+| 目标               | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| 可迭代对象（数组） | 如果等号左边的参数少于右边，右边多出的会被忽略。<br />如果等号左边的参数多于右边：左边多出的参数值为undifind。 |
+| 对象属性           | 只有名称相对应的参数会被赋值，不匹配的参数值为undifind。     |
 
 ```javascript
 let [x,y] = [1,2]
 //x,y分别被赋值1,2
 ```
 
-- 如果等号左边的参数少于右边：右边多出的会被忽略。
-- 如果等号左边的参数多于右边：左边多出的参数值为undifind。
-- 对于对象属性：只有名称相对应的参数会被赋值，不匹配的参数值为undifind。
-
-## 基本数据类型
+### 基本数据类型
 
 | 类型      | 名称   | 说明                                                         |
 | :-------- | :----- | :----------------------------------------------------------- |
@@ -157,13 +389,11 @@ let [x,y] = [1,2]
 | null      | 空     | number: 0 <br>boolean：false<br>typeof()返回object类型       |
 | undefined | 未定义 | 变量未初始化时的默认为undefined                              |
 
-- typeof(变量) 返回变量数据类型
+- typeof(变量)：返回变量数据类型。
 
-### 类型转化
+#### 类型转化
 
-**自动转换**
-
-| 类型       | 值               | boolean | String              | number |
+| 自动转换   | 值               | boolean | String              | number |
 | :-------- | :-------------- | :------ | :------------------ | :----- |
 | number    | 0<br>NaN        | false   | "0"<br>"NaN"        |        |
 |           | Infinity<br>123 | true    | "Infinity"<br>"123" |        |
@@ -173,16 +403,13 @@ let [x,y] = [1,2]
 | null      |                 | false   | "null"              | NaN    |
 | undefined |                 | false   | "undefined          | 0      |
 
-**强制转换**
-
-| 转换          | 方法                        |
+| 强制转换目标    | 方法                        |
 | :----------- | :------------------------- |
-| 转换为String  | String()                   |
+| String  | String()                   |
 |               | toString()                 |
-| 转换为number  | Number()                   |
+| number  | Number()                   |
 |               | parseInt()<br>parseFloat() |
-| 转换为boolean | Boolean()                  |
-|               |                            |
+| boolean | Boolean()                  |
 
 - string 按照字符串的字面值，转为数字；不是数字则转为NaN
   - `var number = +"123"; `  **+转为数字**
@@ -190,20 +417,16 @@ let [x,y] = [1,2]
 - boolean  true转为1，false转为0
   - `var number = +true;` 
 
-### 堆栈空间分配
+### 运算符
 
-<img src="../../../pictures/Snipaste_2023-04-22_20-12-20.png" width="600"/>  
+| 运算符 | 说明                                     | 示例              |
+| :----- | :--------------------------------------- | ----------------- |
+| `==`   | 等于，只根据表面值判断，不考虑数据类型   | "17"==17 //true   |
+| `!=`   | 不等于，只根据表面值判断，不考虑数据类型 | "17"!=17 //false  |
+| `===`  | 绝对等于，根据表面值和数据类型考虑       | "17"===17 //false |
+| `!==`  | 绝对不等于，根据表面值和数据类型考虑     | "17"!==17 //true  |
 
-## 运算符
-
-| 运算符 | 说明                                       | 实例              |
-| :----- | :----------------------------------------- | ----------------- |
-| ==     | 等于，只根据表面的值判断，不考虑数据类型   | "17"==17 //true   |
-| ===    | 绝对等于，根据表面值和数据类型考虑         | "17"===17 //false |
-| !=     | 不等于，只根据表面的值判断，不考虑数据类型 | "17"!=17 //false  |
-| !==    | 绝对不等于，根据表面值和数据类型考虑       | "17"!==17 //true  |
-
-## 操作符
+### 操作符
 
 | 操作符      | 说明                                                         | 示例                                                         |
 | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -214,14 +437,12 @@ let [x,y] = [1,2]
 | ??          | 先定义：如果左侧为null/undefined，则返回右侧的值             | `null ?? 1`//返回1                                           |
 | typeof      | 显示类型<br>null --> object<br>符号--> symbol                | `typeof 123`//"number"                                       |
 | delete      | 删除                                                         | `delete person.name;`//删除person对象的name属性<br>`delete arr[0];`//删除arr数组的第1个元素 |
-| await       |                                                              |                                                              |
-| void        |                                                              |                                                              |
 
-## 流程控制
+### 流程控制
 
-### 条件语句
+#### 条件语句
 
-#### if..else
+##### if..else
 
 - 如果需要在条件表达式中使用赋值，通常在赋值语句前后额外添加一对括号
 
@@ -231,7 +452,7 @@ if ((x = y)) {
 }
 ```
 
-#### switch
+##### switch
 
 ```javascript
 switch (expression) {
@@ -248,9 +469,9 @@ switch (expression) {
 }
 ```
 
-### 循环
+#### 循环
 
-#### for
+##### for
 
 ```javascript
 for ([initialExpression]; [condition]; [incrementExpression]){
@@ -258,7 +479,7 @@ for ([initialExpression]; [condition]; [incrementExpression]){
 }
 ```
 
-#### for..of和for..in
+##### for..of和for..in
 
 - for..in循环一个指定的变量来循环一个对象所有可枚举的属性 。
 
@@ -293,7 +514,7 @@ for (let i of arr) {
 // 注意 for...of 的输出没有出现 "hello"
 ```
 
-#### do..while
+##### do..while
 
 - statement在检查条件之前会执行一次。
 
@@ -303,7 +524,7 @@ do{
 }while (condition);
 ```
 
-#### while
+##### while
 
 ```javascript
 while (condition){
@@ -311,7 +532,7 @@ while (condition){
 }
 ```
 
-#### continue
+##### continue
 
 ```javascript
 var num = 0;
@@ -329,7 +550,7 @@ for (var i = 0 ; i < 10 ; i++){
 alert(num); // 输出 55
 ```
 
-#### break
+##### break
 
 - 当使用不带 label 的 break时，它会立即终止当前所在的 `while`，`do-while`，`for`，或者 `switch` 并把控制权交回这些结构后面的语句。
 - 当使用带 label 的 break时，它会终止指定的带标记（label）的语句。
@@ -338,7 +559,7 @@ alert(num); // 输出 55
 break [label];
 ```
 
-#### label
+##### label
 
 - 当使用不带 label 的 `continue` 时，它终止当前 `while`，`do-while`，或者 for 语句到结尾的这次的循环并且继续执行下一次循环。
 - 当使用带 label 的 `continue` 时，它会应用被 label 标识的循环语句。
@@ -347,15 +568,15 @@ break [label];
 continue [label];
 ```
 
-## 异常处理
+### 异常处理
 
-### throw
+#### throw
 
 ```javascript
 throw new UserException("Value too high");
 ```
 
-### try-catch-finally
+#### try-catch-finally
 
 ```javascript
 openMyFile();
@@ -370,9 +591,7 @@ try {
 }
 ```
 
-### Error对象
-
-**属性**
+#### Error对象
 
 |Error属性|说明|
 |:--|:--|
@@ -383,9 +602,9 @@ try {
 throw (new Error('The message'));
 ```
 
-## 函数
+### 函数
 
-### 定义函数
+#### 定义函数
 
 - 形参不需要数据类型
 - 返回值也不需要定义类型，如果需要返回值，直接return相应的数据即可。
@@ -401,13 +620,11 @@ var 变量 =  function (参数列表) {
 }
 ```
 
-### 调用函数
+#### 调用函数
 
 - 调用时，函数调用可以传递任意个数的参数，可以没有参数也可以超过列表中的参数。
 - 如果参数超过参数列表的个数：多余的参数被传递，但不接收
 - 如果参数低于参数列表的个数：其没有接收到传递值的参数会转为undifined
-
-**调用方式**
 
 ```javascript
 //绑定函数变量
@@ -428,7 +645,7 @@ alert(add(1,2,3)); //3 多余的参数不接收
 alert(add(1)); //NaN
 ```
 
-### 匿名函数
+#### 匿名函数
 
 - 声明一个函数，相当于创建了一个函数对象，将这个对象的引用赋值给变量。
 
@@ -439,7 +656,7 @@ var 变量 = function(参数1, 参数2) {
 };
 ```
 
-### 立即函数
+#### 立即函数
 
 - 立刻调用执行
 
@@ -449,25 +666,12 @@ var 变量 = function(参数1, 参数2) {
 })(1, 2);
 ```
 
-# 事件
+## 事件
 
-- 侦听事件发生的结构称为**事件监听器**（Event Listener）
-- 响应事件触发而运行的代码块被称为**事件处理器**（Event Handler）
-
-## 常见事件
-
-[HTML 事件参考手册 (w3school.com.cn)](https://www.w3school.com.cn/tags/html_ref_eventattributes.asp)
-
-## 事件绑定
-
-- 事件传递
-
-**事件绑定方式：**
-
-1. 通过HTML标签中的事件属性进行绑定
-   - `<标签 事件="函数()">`
-2. 通过DOM的Element属性进行绑定
-   - `document.getElementById("id属性").事件 = 函数()`
+| 事件绑定方式                                      | 说明                         |
+| ------------------------------------------------- | ---------------------------- |
+| `<标签 事件="函数()">`                            | HTML标签中的事件属性进行绑定 |
+| `document.getElementById("id属性").事件 = 函数()` | DOM的Element属性进行绑定     |
 
 ```javascript
 document.getElementById("H1").onclick = function (){
@@ -475,14 +679,14 @@ document.getElementById("H1").onclick = function (){
 }
 ```
 
-# 对象
+## 对象
 
-## 自定义对象
+### 自定义对象
 
-### 声明对象
+- 属性/方法会被之后的同名属性/方法覆盖。
 
 ```javascript
-//通过new构造对象
+//new构造对象
 obj = new Object();
 
 //声明对象
@@ -513,17 +717,14 @@ let students = [
 ]
 ```
 
-- 同名的属性/方法会被后来的覆盖。
-- 使用delete操作符删除对象的属性/方法。
-
-### 属性/方法访问
+#### 属性/方法访问
 
  ```javascript
  person.name;
  person["name"];
  ```
 
-#### ?. 条件访问/调用
+##### ?. 条件访问/调用
 
 ```javascript
 //当属性（右侧）为null或undefined时，不访问该属性，直接返回undefined
@@ -533,165 +734,72 @@ person?.[name];
 person?.(eat("apple"));
 ```
 
-### this关键字
+#### this
 
-| this位置   | 指向                                 |
-| ---------- | ------------------------------------ |
-| 在函数外面 | 指向window对象（代表当前浏览器窗口） |
-| 在函数里面 | 指向调用函数的对象                   |
+| this位置   | 指向                         |
+| ---------- | ---------------------------- |
+| 在函数外面 | window对象（当前浏览器窗口） |
+| 在函数里面 | 调用函数的对象               |
 
-## 系统对象
+### 系统对象
 
-| 对象   | 说明             |
-| :----- | :--------------- |
-| Date   | 日期时间处理     |
-| Array  | 数组处理         |
-| String | 字符串处理       |
-| Math   | 数学处理         |
-| Number | number对应的对象 |
+| 对象   | 说明         |
+| :----- | :----------- |
+| Date   | 日期时间处理 |
+| Array  | 数组处理     |
+| String | 字符串处理   |
+| Math   | 数学处理     |
+| Number | number       |
 
-### Math对象
+#### Array 数组
 
-| 方法     | 说明              |
-| -------- | ----------------- |
-| random() | 返回0~1的随机小数 |
-| floor()  | 地板数            |
-| ceil()   | 天花板数          |
+- Array数组是变长变类型的，下标从0开始。
 
-```js
-Math.floor(Math.random() * 10); //0~9
-```
-
-### Date对象
-
-**创建**
-
-1. 指定日期时间
-
-```javascript
-var 日期实例 = new Date("MM DD,YYYY,hh:mm:ss);
-```
-
-2. 当前日期时间
-
-```javascript
-var 日期实例 = new Date();
-```
-
-**常用方法**
-
-| 方法              | 说明                                                 |
-| :---------------- | :--------------------------------------------------- |
-| getDate()         | 返回月中的第几天（从 1 到 31）。                     |
-| getDay()          | 返回星期几（0-6）。                                  |
-| getFullYear()     | 返回年份。                                           |
-| getHours()        | 返回小时（从 0-23）。                                |
-| getMilliseconds() | 返回毫秒（0-999）。                                  |
-| getMinutes()      | 返回分钟（从 0-59）。                                |
-| getMonth()        | 返回月份（从 0-11）。                                |
-| getSeconds()      | 返回秒数（从 0-59）。                                |
-| getTime()         | 返回自 1970 年 1 月 1 日午夜以来与指定日期的毫秒数。 |
-
-### Array 数组
-
-#### 创建数组
-
-- 该数组是变长变类型的；数组的长度不固定；数组存放的各元素的数据类型可以不一样。
+> 数组的长度不固定。
+> 数组存放的各元素的数据类型可以不一样。
 
 ```javascript
 var 数组名 = new Array(元素列表);
 var 数组名 = [元素列表];
 ```
 
-**添加和访问：**
-
-- `arr[下标] = 值;` `arr[下标];`
-- 下标从0开始
+| 方法                       | 说明                                             |
+| :------------------------- | :----------------------------------------------- |
+| push(value)                | 向数组中压入value值                              |
+| splice(index,count,item..) | 删除元素并返回被删除元素。                       |
+| reverse()                  | 数组元素反序                                     |
+| join("分隔符")             | 数组元素拼接成字符串，每个元素之间以分隔符连接   |
+| split("分隔符")            | 以分隔符将字符串拆分为数组                       |
+| pop()                      | 弹出（删除）数组中的最后一个元素，同时返回该元素 |
 
 ```javascript
 // 1.创建数组对象
 var arr01 = new Array(1,2,3);
 alert(arr01); //1,2,3
+
 var arr = ["cat","dog","tiger"];
 alert(arr); //cat,dog,tiger
 alert(arr[0]); //cat
+
 //数组的长度不固定
 alert(arr.length); //3
+
 //数组存放的各元素的数据类型可以不一样。
 alert(arr[10] = "ten"); //ten
 alert(arr.length); //11
 alert(arr[9]); //undefined
 ```
 
-#### 数组方法
-
-| 方法                       | 说明                                             |
-| :------------------------- | :----------------------------------------------- |
-| push(value)                | 向数组中压入value值                              |
-| splice(index,count,item..) | 删除元素，且返回被删除元素。                     |
-| reverse()                  | 数组元素反序                                     |
-| join("分隔符")             | 数组元素拼接成字符串，每个元素之间以分隔符连接   |
-| split("分隔符")            | 以分隔符将字符串拆分为数组                       |
-| pop()                      | 弹出（删除）数组中的最后一个元素，同时返回该元素 |
-
-#### 数组删除
-
 ##### delete操作符
 
-- delete 方法用于删除对象的某个属性，也可以用来删除数组中某个元素。
-- 不会改变数组的长度，即删除后数组的元素个数不会改变， 数组中删除的元素的位置会被设置为 undefined，并且它的位置不会被重新分配，因此被删除的元素将占用内存空间。
+- delete删除对象的某个属性。delete不会改变数组的元素个数， 数组中删除的元素的位置会被设置为 undefined，并且它的位置不会被重新分配（delete删除的元素仍然占用内存空间）。
 
-```javascript
-const arr = [0, 1, 2, 3, 4];
-delete arr[2];
-console.log(arr); // [0, 1, <1 empty item>, 3, 4]
-```
-
-##### splice()
-
-- splice 方法用于删除数组中的元素且可以改变数组的长度。
-
-```javascript
-array.splice(start, deleteCount, item1, item2, ...)
-```
-
-- start: 表示开始位置的索引，必填；
-
-- deleteCount: 表示要删除的元素数量，如果为0，则不删除元素，如果不指定，则从start位置开始，将数组中从该位置开始到数组结尾的所有元素都删除；
-
-- item1, item2, ...: 表示要插入的元素，如果没有要插入的元素，则可以省略。
-
-
-```javascript
-//删除了从索引2开始的1个元素（即2），并返回已删除的元素。
-//同时，原数组被改变，从而变成[0, 1, 3, 4]。
-const arr = [0, 1, 2, 3, 4];
-arr.splice(2, 1);
-console.log(arr); // [0, 1, 3, 4] 
-```
-
-### String 字符串
+#### String 字符串
 
 ```javascript
 var 变量 = new String(""); 
 var 变量 = ""
 ```
-
-**模板字符串**
-
-- 字符串使用反引号\`\`
-- \$\{\}内为引用的变量
-
-```js
-let name = "Tom";
-let str = `hello ${name}`; //hello Tom
-```
-
-**属性**
-
-- length
-
-**方法**
 
 | 方法      | 说明                                             |
 | :-------- | :----------------------------------------------- |
@@ -699,7 +807,14 @@ let str = `hello ${name}`; //hello Tom
 | indexOf() | 检索字符串，返回第一个找到的下标，找不到则返回-1 |
 | trim()    | 去除字符串前后两端的空白字符                     |
 
-### RegExp 正则表达式 
+- 模板字符串：字符串使用反引号\`\`， \$\{\}内为引用的变量。
+
+```js
+let name = "Tom";
+let str = `hello ${name}`; //hello Tom
+```
+
+#### RegExp 正则表达式 
 
 **正则表达式对象**
 
@@ -732,7 +847,7 @@ var reg = new RegExp("正则")
 | {m,}  | 至少m个          |
 | {m,n} | 至少m个，最多n个 |
 
-#### 表单验证
+##### 表单验证
 
 - 当输入框失去焦点时，验证输入内容是否符号要求
 - 当点击注册按钮时，判断所有输入框的内容是否都符合要求，如果不符合则阻止表单提交。
@@ -800,12 +915,12 @@ regForm.onsubmit = function () {
 }
 ```
 
-## BOM 浏览器对象模型
+### BOM 浏览器对象模型
 
 - Browser Object Model
 - JavaScript将浏览器的各个组成部分封装为对象
 
-<img src="../../../pictures/Snipaste_2022-11-22_14-58-35.png" width="600"/>   
+<img src="../../pictures/Snipaste_2022-11-22_14-58-35.png" width="600"/>   
 
 **主要包含的对象**
 
@@ -817,7 +932,7 @@ regForm.onsubmit = function () {
 | Navigator | 浏览器对象     |
 | Screen    | 屏幕对象       |
 
-### Window 浏览器窗口对象
+#### Window 浏览器窗口对象
 
 - 直接使用window对象，`window.`可以省略
 
@@ -918,7 +1033,7 @@ regForm.onsubmit = function () {
 | scrollBy()      | 按照指定的像素值来滚动内容。                   |
 | scrollTo()      | 把内容滚动到指定的坐标。                       |
 
-#### 定时函数
+##### 定时函数
 
 | 函数                                     | 说明                           |
 | :--------------------------------------- | :----------------------------- |
@@ -951,7 +1066,7 @@ myRun();
 myCycle();
 ```
 
-#### 定时切换图片
+##### 定时切换图片
 
 ```html
 <!DOCTYPE html>
@@ -986,7 +1101,7 @@ myCycle();
 </html>
 ```
 
-#### 定时切换随机颜色
+##### 定时切换随机颜色
 
 - 十六进制：`#ffffff`
 - RGB：`rgb(00,00,99)`
@@ -1015,7 +1130,7 @@ setInterval(function (){
 },1000);
 ```
 
-### history对象
+#### history对象
 
 **获取history对象**
 
@@ -1032,7 +1147,7 @@ history.方法();
 | forward() | 加载 history 列表中的下一个 URL。   |
 | go()      | 加载 history 列表中的某个具体页面。 |
 
-### location对象
+#### location对象
 
 **获取**
 
@@ -1075,12 +1190,12 @@ setTimeout(function (){
 | replace() | 用新的文档替换当前文档。 |
 
 
-### navigator对象
+#### navigator对象
 
-### screen对象
+#### screen对象
 
 
-## DOM 文档对象模型
+### DOM 文档对象模型
 
 - DOM定义了访问HTML和xml文档的标准。W3C（万维网联盟）的标准。
 
@@ -1099,7 +1214,7 @@ setTimeout(function (){
 
 **DOM树**
 
-<img src="../../../pictures/Snipaste_2023-04-24_15-15-52.png" width="800"/> 
+<img src="../../pictures/Snipaste_2023-04-24_15-15-52.png" width="800"/> 
 
 | 对象     | 节点名称 | 组成部分         |
 | -------- | -------- | ---------------- |
@@ -1109,11 +1224,11 @@ setTimeout(function (){
 | Attr     | 属性节点 | HTML标签内的属性 |
 | Comment  | 注释节点 | 注释             |
 
-### Element 元素对象
+#### Element 元素对象
 
 [DOM具体属性使用](https://www.w3school.com.cn/js/js_htmldom.asp)
 
-#### 获取Element对象
+##### 获取Element对象
 
 | 方法                                     | 说明                                     |
 | :--------------------------------------- | :--------------------------------------- |
@@ -1124,7 +1239,7 @@ setTimeout(function (){
 | document.querySelector("css选择器")      | 根据CSS选择器获取，返回第一个Element对象 |
 | document.querySelectorAll("css选择器")   | 根据CSS选择器获取，返回Element对象集合   |
 
-#### 操作Element对象
+##### 操作Element对象
 
 | 常用用途  | 属性      | 说明                                                         |
 | --------- | :-------- | :----------------------------------------------------------- |
@@ -1143,7 +1258,7 @@ setTimeout(function (){
 | :------ | :--------------------------------------- |
 | write() | 向文档写文本、HTML表达式、JavaScript代码 |
 
-#### 自定义属性
+##### 自定义属性
 
 - html5：data-自定义属性  
 
@@ -1162,7 +1277,7 @@ setTimeout(function (){
 </script>
 ```
 
-### Core DOM操作节点
+#### Core DOM操作节点
 
 **访问节点**
 
@@ -1201,7 +1316,7 @@ setTimeout(function (){
 | removeChild(node)             | 删除指定的节点             |
 | replaceChild(newNode,oldNode) | 用其他的节点替换指定的节点 |
 
-### HTML DOM
+#### HTML DOM
 
 **table对象**
 
@@ -1235,20 +1350,18 @@ setTimeout(function (){
 | align     | 设置或返回单元格内部数据的水平排列方式 |
 | className | 设置或返回元素的class属性              |
 
-# AJAX
-
-## AJAX介绍
+## AJAX
 
 - AJAX (Asynchronous JavaScript And XML)：异步的 JavaScript 和 XML。
 
-**AJAX作用**
+| AJAX作用             | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| 与服务器进行数据交换 | 给服务器发送请求，服务器将数据直接响应回给浏览器。<br />AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面。 |
+| 异步交互             | 不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术 |
 
-1. **与服务器进行数据交换**：通过AJAX可以给服务器发送请求，服务器将数据直接响应回给浏览器。使用AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面
-2. **异步交互**：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术，如：搜索联想、用户名是否可用校验，等等…
+<img src="../../pictures/Snipaste_2023-03-24_18-27-13.png" width="800"/>  
 
-<img src="../../../pictures/Snipaste_2023-03-24_18-27-13.png" width="800"/>  
-
-<img src="C:\Users\zjk10\OneDrive\NoteBook\pictures\ajax.gif" width=600x/>
+<img src="../../pictures/ajax.gif" width=600x/>
 
 ```js
 //1.创建核心对象
@@ -1271,12 +1384,9 @@ xmlhttp.onreadystatechange = function () {
 }
 ```
 
-## XMLHttpRequest 对象
+### XMLHttpRequest 对象
 
-### 创建XMLHttpRequest对象
-
-- 检查浏览器是否支持 XMLHttpRequest 对象
-- 如果支持，创建 XMLHttpRequest 对象，如果不支持，则创建 ActiveX 对象：
+- 检查浏览器是否支持 XMLHttpRequest 对象。如果支持，创建 XMLHttpRequest 对象；如果不支持，则创建 ActiveX 对象。
 
 ```javascript
 var xmlhttp;
@@ -1287,29 +1397,25 @@ if (window.XMLHttpRequest) {
 }
 ```
 
-### 请求
-
-| 方法                     | 描述                                                         |
+| 请求方法                   | 描述                                                         |
 | :----------------------- | :----------------------------------------------------------- |
 | open(method, url, async) | method：请求类型：GET、POST<br>url：服务器（文件）位置 <br>async：true（异步）、 false（同步） |
 | send()                   | 向服务器发送GET请求                                          |
 | send(string)             | 向服务器发送POST请求                                         |
 | setRequestHeader(header, value) | 向请求添加 HTTP 头部<br>header：头部名称<br>value：头部值 |
 
-### 响应
-
-| 属性               | 描述                                                         |
+| 响应属性           | 描述                                                         |
 | :----------------- | :----------------------------------------------------------- |
 | onreadystatechange | 定义了当 readyState 属性发生改变时所调用的函数。             |
 | readyState         | 保存了 XMLHttpRequest 的状态。 <br>0: 请求未初始化 <br>1: 服务器连接已建立  <br>2: 请求已接收  <br>3: 正在处理请求   <br>4: 请求已完成且响应已就绪 |
 | status             | 200: "OK"  <br>403: "Forbidden" <br>404: "Page not found"    |
 | statusText         | 返回状态文本（例如 "OK" 或 "Not Found"）                     |
 
-# axios
+## axios
 
-- axios异步框架 对原生的AJAX进行封装，简化书写。
+- axios异步框架：对原生的AJAX进行封装，简化书写。
 
-## axios()
+### axios()
 
 ```javascript
 axios({
@@ -1334,7 +1440,7 @@ axios({
 -  回调函数在发送请求时不会被调用，而是在成功响应后调用的函数。
 -  该回调函数中的 `resp` 参数是对响应的数据进行封装的对象，通过 `resp.data` 可以获取到响应的数据。
 
-## axios实例
+### axios实例
 
 - axios.create([config])
 
@@ -1346,7 +1452,7 @@ const instance = axios.create({
 });
 ```
 
-## 请求方式别名
+### 请求别名
 
 | 请求    | 别名                            |
 | :------ | :------------------------------ |
@@ -1370,3 +1476,4 @@ axios.post('/user', {
     console.log(error);
   });
 ```
+

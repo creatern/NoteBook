@@ -4460,17 +4460,15 @@ try (DataInputStream din = new DataInputStream(new FileInputStream(file));
 
 ### RandomAccessFile 随机访问
 
-| RandomAccessFile          | 随机访问                                          |
-| ------------------------- | ------------------------------------------------- |
-| 实现DataOutput、DataInput | 可以在文件的任意位置读/写数据。                   |
-| 文件指针                  | 下一个将被读/写的字节所处位置。                   |
-| **方法**                  | **说明**                                          |
-| RandomAccessFile()        | filename：文件。<br />"r"（只读）、"rw"（读写）。 |
-| seek()                    | 设置文件指针在文件中的位置（`0~n`）。             |
-| getFilePointer()          | 返回文件指针当前位置。                            |
-|                           |                                                   |
-
-
+| RandomAccessFile          | 随机访问                                                     |
+| ------------------------- | ------------------------------------------------------------ |
+| 实现DataOutput、DataInput | 可以在文件的任意位置读/写数据。                              |
+| 文件指针                  | 下一个将被读/写的字节所处位置。                              |
+| **方法**                  | **说明**                                                     |
+| RandomAccessFile()        | filename：文件。<br />"r"（只读）、"rw"（读写）<br />"rws"（每次更新，对数据和元数据的写进行同步的读/写模式）<br />"rws"（每次更新，对数据的写进行同步的读/写模式）。 |
+| seek()                    | 设置文件指针距离文件开头（0）的位置（`0~n`）。               |
+| getFilePointer()          | 返回文件指针当前位置。                                       |
+| length()                  | 返回文件总字节长度。                                         |
 
 ## Serializable 序列化
 
