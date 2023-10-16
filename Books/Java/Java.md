@@ -4470,16 +4470,64 @@ try (DataInputStream din = new DataInputStream(new FileInputStream(file));
 | getFilePointer()          | 返回文件指针当前位置。                                       |
 | length()                  | 返回文件总字节长度。                                         |
 
-## Serializable 序列化
+### Zip
 
-- 序列化：将Java程序（内存）中的对象、数据保存在外存中，可以把Java中的对象写入到数据源中，也能把对象从数据源中还原回来。
+| 流     | ZipInputStream                                               | ZipOutputStream                                              |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 构造器 | ZipInputStream(InputStream in)                               | ZipOutputStream(OutputStream out)                            |
+| 方法   | getNextEntry()<br />返回下一项的ZipEntry                     | putNextEntry(ZipEntry ze)<br />指定ZipEntry写出，并定位输出流。 |
+|        | closeEntry()<br />关闭当前打开的ZipEntry，<br />getNextEntry()获取下一项 | closeEntry()<br />关闭当前打开的ZipEntry<br />putNextEntry()设置下一项。 |
+|        |                                                              | setLevel(int level)<br />设置默认压缩级别（`0~9`）。         |
+|        |                                                              | setMethod(int method)<br />设置默认压缩方法（DEFALTED、STORED）。 |
+
+| ZipEntry                  | 对应Zip文件的一项                                |
+| ------------------------- | ------------------------------------------------ |
+| ZipEntry(String filename) | 指定文件名创建。                                 |
+| getCrc()                  | 返回该ZipEntry的CRC232校验和的值。               |
+| getName()                 | 返回该项的名字。                                 |
+| getSize()                 | 返回一项未压缩的尺寸。<br />若不可知，则返回-1。 |
+| isDirectory()             | 判断是否为目录。                                 |
+| setMethod(int method)     | 指定压缩方法（DEFALTED、STORED）。               |
+| setSize(long size)        | 设置该项的尺寸（STORED必须）。                   |
+| setSrc(long crc)          | 设置该项的CRC32校验和（CRC32类）（STORED必须）。 |
+
+| ZipFile                                      | 压缩文件                                               |
+| -------------------------------------------- | ------------------------------------------------------ |
+| ZipFile(String name)<br />ZipFile(File file) | 从指定的字符串、File对象读取数据。                     |
+| entries()                                    | 返回Enumeration对象，枚举该ZipFile中各个项的ZipEntry。 |
+| getEntry(String name)                        | 返回指定文件名的项。<br />若该项不存在，则返回null。   |
+| getInputStream(ZipEntry ze)                  | 返回用于指定项的InputStream。                          |
+| getName()                                    | 返回该Zip文件的路径。                                  |
+
+```java
+try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream("test.zip"))) {
+    ZipEntry ze = new ZipEntry("t1.txt");
+    zout.putNextEntry(ze);
+    zout.write(0x1111);
+    zout.closeEntry();
+} catch (Exception ex) {
+}
+
+try (ZipInputStream zin = new ZipInputStream(new FileInputStream("test.zip"));
+     InputStream zein = new ZipFile("test.zip").getInputStream(zin.getNextEntry())) {
+    int b;
+    while ((b = zein.read()) != -1) {
+        System.out.println(b);
+    }
+} catch (Exception ex) {
+}
+```
+
+## Serializable 对象序列化
+
+- 序列化：将Java程序（内存）中的对象、数据保存在外存中。
 
 | 操作     | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
 | 序列化   | ObjectOutputStream、DataInputStream<br />保存基本类型数据或对象的机制 |
 | 反序列化 | ObjectInputStream、DataOutputStream<br />读取基本类型数据或对象的机制 |
 
-- 对象序列化机制：允许把内存中的Java对象转换成平台无关的二进制流，从而允许把这种二进制流持久地保存在磁盘上或通过网络将这种二进制流传输到另一个网络节点。当其它程序获取了这种二进制流，就可以恢复成原来的Java对象。可将任何实现了**Serializable**接口的对象转化为字节数据，使其在保存和传输时可被还原。
+- 对象序列化机制：允许把内存中的Java对象转换成平台无关的二进制流，从而允许把这种二进制流持久地保存在磁盘上或通过网络将这种二进制流传输到另一个网络节点。当其它程序获取了这种二进制流，就可以恢复成原来的Java对象。可将任何实现了Serializable接口的对象转化为字节数据，使其在保存和传输时可被还原。
 
 > 序列化是 RMI过程（Remote Method Invoke 远程方法调用）的参数和返回值都必须实现的机制，而 RMI 是 JavaEE 的基础。
 
