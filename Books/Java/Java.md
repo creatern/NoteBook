@@ -4470,15 +4470,15 @@ try (DataInputStream din = new DataInputStream(new FileInputStream(file));
 | getFilePointer()          | 返回文件指针当前位置。                                       |
 | length()                  | 返回文件总字节长度。                                         |
 
-### Zip
+### Zip(In/Out)putStream、ZipEntry
 
-| 流     | ZipInputStream                                               | ZipOutputStream                                              |
-| ------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 构造器 | ZipInputStream(InputStream in)                               | ZipOutputStream(OutputStream out)                            |
-| 方法   | getNextEntry()<br />返回下一项的ZipEntry                     | putNextEntry(ZipEntry ze)<br />指定ZipEntry写出，并定位输出流。 |
-|        | closeEntry()<br />关闭当前打开的ZipEntry，<br />getNextEntry()获取下一项 | closeEntry()<br />关闭当前打开的ZipEntry<br />putNextEntry()设置下一项。 |
-|        |                                                              | setLevel(int level)<br />设置默认压缩级别（`0~9`）。         |
-|        |                                                              | setMethod(int method)<br />设置默认压缩方法（DEFALTED、STORED）。 |
+| 流                 | ZipInputStream                                               | ZipOutputStream                                              |
+| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 构造器             | ZipInputStream(InputStream in)                               | ZipOutputStream(OutputStream out)                            |
+| 输入输出<br />定位 | getNextEntry()<br />返回并定位输入流到下一项的ZipEntry。     | putNextEntry(ZipEntry ze)<br />写出并定位输出流到下一项的ZipEntry。 |
+| 结束当前项         | closeEntry()<br />先关闭当前打开的ZipEntry，getNextEntry()才能获取下一项 | closeEntry()<br />先关闭当前打开的ZipEntry，putNextEntry()才能设置下一项。 |
+
+- Zip(In/Out)putStream可以在外部嵌套流，并通过定位来对Zip中的每一项操作，不需要对每个项都设置一个输入/出流。
 
 | ZipEntry                  | 对应Zip文件的一项                                |
 | ------------------------- | ------------------------------------------------ |
@@ -4500,20 +4500,27 @@ try (DataInputStream din = new DataInputStream(new FileInputStream(file));
 | getName()                                    | 返回该Zip文件的路径。                                  |
 
 ```java
-try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream("test.zip"))) {
-    ZipEntry ze = new ZipEntry("t1.txt");
-    zout.putNextEntry(ze);
-    zout.write(0x1111);
+try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream("test.zip"));
+     DataOutputStream dout = new DataOutputStream(zout)) {
+    zout.putNextEntry(new ZipEntry("t1.txt"));
+    dout.writeInt(100);
+    zout.closeEntry();
+
+    zout.putNextEntry(new ZipEntry("t2.txt"));
+    dout.writeBoolean(true);
     zout.closeEntry();
 } catch (Exception ex) {
 }
 
 try (ZipInputStream zin = new ZipInputStream(new FileInputStream("test.zip"));
-     InputStream zein = new ZipFile("test.zip").getInputStream(zin.getNextEntry())) {
-    int b;
-    while ((b = zein.read()) != -1) {
-        System.out.println(b);
-    }
+     DataInputStream din = new DataInputStream(zin)) {
+    zin.getNextEntry();
+    System.out.println(din.readInt());
+    zin.closeEntry();
+
+    zin.getNextEntry();
+    System.out.println(din.readBoolean());
+    zin.closeEntry();
 } catch (Exception ex) {
 }
 ```
