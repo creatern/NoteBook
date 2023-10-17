@@ -1,24 +1,17 @@
 # JVM概述
 
-## 整体结构
-
 <img src="../../pictures/Snipaste_2023-05-17_16-08-46.png" width="1000"/> 
 
-## 架构模型
-
-| 指令集架构 | 说明                                                         |
+| 指令集架构 | 架构模型说明                                                 |
 | ---------- | ------------------------------------------------------------ |
 | 基于栈     | 1. 设计、实现更简单：适用资源受限的系统。<br/>2. 跨平台性：不需要硬件支持，可移植性好。<br/>3. 指令集小：零地址指令方式分配：大部分指令是零地址指令，执行过程依赖于操作栈。 |
 | 基于寄存器 | 1. 性能优秀，执行高效。<br/>2. 完全依赖硬件，可移植性差。<br/>3. 操作需要的指令少：通常以一地址指令、二地址指令、三地址指令为主。 |
 
-
-## 生命周期
-
-| 虚拟机阶段 | 声明                                                         |
-| ---------- | ------------------------------------------------------------ |
-| 启动       | 引导类加载器（Bootstrap calss loader）创建（由虚拟机具体实现指定的）初始类（initial class）。 |
-| 执行       | 执行Java程序：执行的是Java虚拟机的进程。                     |
-| 退出       | 1.程序正常执行结束。<br />2.程序在执行过程中异常、错误。<br />3.操作系统出错。<br />4.线程调用Runtime类、System类：exit()、halt()；且Java安全管理器也允许本次调用。<br />5.JNI加载、卸载JVM。 |
+| 生命周期 | 虚拟机阶段说明                                               |
+| -------- | ------------------------------------------------------------ |
+| 启动     | 引导类加载器（Bootstrap calss loader）创建（由虚拟机具体实现指定的）初始类（initial class）。 |
+| 执行     | 执行Java程序：执行的是Java虚拟机的进程。                     |
+| 退出     | 1.程序正常执行结束。<br />2.程序在执行过程中异常、错误。<br />3.操作系统出错。<br />4.线程调用Runtime类、System类：exit()、halt()；且Java安全管理器也允许本次调用。<br />5.JNI加载、卸载JVM。 |
 
 ## JVM类型
 
@@ -42,7 +35,10 @@
 
 ## 类加载子系统 Class Loader Subsystem
 
-- Class Loader Subsystem：负责从文件系统、网络中加载class文件。class文件开头有特定的文件标识。
+- Class Loader Subsystem：负责从文件系统、网络中加载class文件。
+
+> class文件开头有特定的文件标识cafebabe。
+
 - ClassLoader只负责class文件的加载。由Execution Engine决定是否可以运行。
 - 方法区：存放 加载的类信息、运行时常量池信息 等。
 
@@ -95,12 +91,15 @@
 ##### 初始化 Initialization
 
 - 初始化：执行类构造器方法`<clinit>()`。
-- `<clinit>()`不需要定义：javac编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来。指令按语句在源文件中出现的顺序执行。
-- `<clinit>()`不同于类的构造器：构造器是虚拟机视角下的`<init>()`。
+
+> `<clinit>()`不同于类的构造器：构造器是虚拟机视角下的`<init>()`。
+
+- `<clinit>()`不需要定义，由javac编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来。（指令按语句在源文件中出现的顺序执行）
+
 - 若该类具有父类，JVM会保证子类的`<clinit>()`执行前，父类的`<clinit>()`已经执行完毕。
 - 虚拟机必须保证一个类的`<clinit>()`在多线程下被同步加锁。
 
-#### 类加载器分类
+#### 类加载器类别
 
 - 引导类加载器（Bootstrap ClassLoader）、自定义加载器（User-Defined ClassLoader） 
   - 自定义加载器：所有派生于抽象类ClassLoader的类加载器。
@@ -129,35 +128,28 @@ System.out.println(stringClassLoader); //null
 
 ##### 启动类加载器（引导类加载器） Bootstrap ClassLoader
 
-- 启动类加载器：使用C/C++语言实现，嵌套于JVM内部。并不继承子java.lang.ClassLoader，没有父加载器。
+- 启动类加载器：使用C/C++语言实现，嵌套于JVM内部，并不继承子java.lang.ClassLoader，没有父加载器。
 - 加载Java的核心库（JAVA_HOME/jre/lib/rt.jar、resources.jar、sun.boot.class.path），用于提供JVM自身需要的类。
 - 加载扩展类、应用程序类加载器，并指定为他们的父加载器。
-- 出于安全：Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类。
+- 出于安全，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类。
 
 ##### 扩展类加载器 Extension ClassLoader
 
 - Java语言编写：sun.misc.Launch$ExtClassLoader实现、派生于ClassLoader类。
 - 父类加载器为启动类加载器。
-- 从java.ext.dirs系统属性所指定的目录中加载类库，或从JDK的安装目录的jre/lib/ext扩展目录中加载类库。如果用户创建的JAR放在此目录中，也会自动由扩展类加载器加载。
+- 从java.ext.dirs系统属性所指定的目录中加载类库、或从JDK的安装目录的jre/lib/ext扩展目录中加载类库。（如果用户创建的JAR放在此目录中，也会自动由扩展类加载器加载）
 
 ##### 应用程序加载器（系统类加载器） AppClassLoader
 
-- Java语言编写：sun.misc.Launch$AppClassLoader实现、派生于ClassLoader类。
-
+- Java语言编写：sun.misc.Launch\$AppClassLoader实现、派生于ClassLoader类。
 - 父类加载器为扩展类加载器。
-
 - 负责加载环境变量classpath、或系统属性java.class.path 指定路径下的类库。
-
 - 程序中默认的类加载器：一般的Java应用的类都是由系统类加载器完成加载。
-
 - 获取系统类加载器：`ClassLoader#getSystemClassLoader()`。
 
 ##### 用户自定义类加载器
 
-- 隔离加载类。
-- 修改类加载的方式。
-- 扩展加载源。
-- 防止源码泄露。
+- 隔离加载类、修改类加载的方式、扩展加载源、防止源码泄露。
 1. 继承java.lang.ClassLoader。
 2. 不建议重写loadClass()，而是将自定义的类加载逻辑：findClass()。
 3. 对于简单的需求：直接继承URLClassLoader类。
@@ -202,11 +194,9 @@ public class CustomClassLoader extends ClassLoader {
 
 #### 类加载器引用
 
-- JVM必须知道一个类型是由启动类加载器加载、还是用户类加载器加载：如果一个类是由用户类加载器加载，则JVM将这个类加载器的一个引用作为类型信息的一部分保存在方法区。当解析一个类到另一个类的引用时，JVM需要保证这两个类的类加载器相同。
+- JVM必须知道一个类型是由启动类加载器还是用户类加载器加载：如果一个类是由用户类加载器加载，则JVM将该类加载器的一个引用作为类型信息的一部分保存在方法区。当解析一个类到另一个类的引用时，JVM需要保证这两个类的类加载器相同。
 
-- class对象是否为同一个类的条件：
-1. 类的全限定名一致。
-2. 类加载器相同。
+- class对象是否为同一个类的条件：类的全限定名一致、类加载器相同。
 
 #### ClassLoader
 
@@ -274,8 +264,6 @@ public class CustomClassLoader extends ClassLoader {
 
 #### 线程
 
-##### 线程简述
-
 - Hotspot VM：每个线程都与操作系统的本地线程直接映射。
 - 操作系统负责所有线程的安排调度到任何一个可用的CPU上，一旦本地线程初始化完成，就调用Java线程中的run()。
 
@@ -286,8 +274,6 @@ public class CustomClassLoader extends ClassLoader {
 | GC线程   | 对JVM中不同种类的垃圾收集行为提供支持。                                                  |
 | 编译线程   | 在运行时将字节码编译成到本地代码。                                                      |
 | 信号调度线程 | 接收信号并发送给JVM，在JVM内部调用适当的方法进行处理。                                         |
-
-##### CPU时间片
 
 - CPU时间片：CPU分配给各个程序的时间，每个线程被分配一个时间段。
   - 宏观：可用同时打开多个应用程序，每个程序并行不悖，同时运行。
@@ -304,13 +290,11 @@ public class CustomClassLoader extends ClassLoader {
 - JVM规范中：每个线程具有自身的PC寄存器。PC寄存器是线程私有的，其生命周期和线程的生命周期一致。
 - 任何时间一个线程都只有一个方法在执行（当前方法）：PC寄存器存储当前线程正在执行的JVM指令地址。如果执行的是native方法，则是未指定值（undefined）。
 - PC寄存器是程序控制流的指示器，分支、循环、跳转、异常处理、线程恢复等基础功能需要依赖该计数器来完成。字节码解释器工作时通过改变该计数器的值来选取下一条需要执行的字节码指令。
-- PC寄存器是唯一一个在JVM规范中没有规定任何OutOfMemoryError情况（OOM）的区域。同时也没有GC。
+- PC寄存器是唯一一个在JVM规范中没有规定任何OutOfMemoryError（OOM）的区域，也没有GC。
 
 <img src="../../pictures/Snipaste_2023-05-21_15-26-23.png" width="1200"/>    
 
 ### 虚拟机栈
-
-#### 概述
 
 - Java基于栈的指令集架构。
 
@@ -327,9 +311,9 @@ public class CustomClassLoader extends ClassLoader {
 
 #### -Xss 栈内存大小
 
-- 栈中可能出现的异常：JVM规范运行Java栈的大小是动态的 或 固定不变的。
+- 栈中可能出现的异常：JVM规范运行Java栈的大小是动态的、或固定不变的。
   - 如果采用固定大小的Java虚拟机栈，那每一个线程的Java虚拟机栈容量可以在线程创建是独立选定。如果线程请求分配的栈容量超过Java虚拟机栈允许的最大容量，JVM抛出StackOverflowError。
-  - 如果Java虚拟机栈可用动态扩展，并且在尝试扩展时无法申请到足够的内存，或在创建新的线程时没有足够的内存去创建对应的虚拟机栈，则JVM抛出OutOfMemoryError（OOM）。
+  - 如果Java虚拟机栈可用动态扩展，并且在尝试扩展时无法申请到足够的内存、或在创建新的线程时没有足够的内存去创建对应的虚拟机栈，则JVM抛出OutOfMemoryError（OOM）。
 - 栈内存大小设置：VM options-Xss。直接决定函数调用的最大可达深度。
 
 ```
@@ -366,8 +350,6 @@ public class CustomClassLoader extends ClassLoader {
   - 抛出异常。
 
 ##### 局部变量表
-
-###### 概述
 
 - 局部变量表（局部变量数组）（本地变量表）：定义一个数字数组，主要用于存储方法参数和定义在方法体内的局部变量：（基本数据类型、对象引用reference、returnAddress类型）。参数的存放总是在局部变量的index0开始，到数组长度-1的索引结束。
 - 局部变量表建立在线程的栈上，是线程的私有数据，不存在数据安全问题。

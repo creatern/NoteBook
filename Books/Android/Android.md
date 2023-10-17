@@ -88,7 +88,69 @@ mySpinner.setPrompt("选择你的学位："); //选项界面标题
 mySpinner.setSelection(1); //设置选中的选项
 ```
 
+### Toast 消息提醒
+
+```java
+Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
+```
+
+### 日期时间
+
+| 日期时间控件 | 说明 |
+| ------------ | ---- |
+| DatePicker   |      |
+| TimePicker   |      |
+
 ## 事件监听
+
+## Acitivity
+
+| Acitivity相关类 | 说明                     |
+| --------------- | ------------------------ |
+| Bundle          | Activity界面之间传递数据 |
+| Intent          | App内部传递数据          |
+
+| Activity                 | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| startActivity()          | 启动数据传输，不要求后一个Activity返回值。<br />intent：传递的Intent。 |
+| startActivityForResult() | 启动数据传输，要求后一个Activity返回值。<br />intent：传递的Intent。<br />code：状态码。 |
+| setResult()              | 设置当前Activity返回值<br />code：状态码。<br />intent：传递的Intent。 |
+| getIntent()              | 获取App内的Intent。                                          |
+| finish()                 | 关闭当前的Activity并返回上一个Activity                       |
+
+| Bundle                 | 说明                                         |
+| ---------------------- | -------------------------------------------- |
+| putXxx()<br />getXxx() | 存放Xxx类型的数据。<br />获取Xxx类型的数据。 |
+
+| Intent                       | 说明                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| Intent()                     | content：当前的Activity对象（this）。<br />class：目标Activity的class。 |
+| putExtras()<br />getExtras() | bundle：将Bundle存入Intent。<br />获取Intent内部的Bundle。   |
+
+```java
+private Intent intent = new Intent(this, CountActivity.class);
+private Bundle bundle = new Bundle();
+
+btnSub.setOnClickListener(v -> {
+    bundle.putDouble("a", Double.parseDouble(eA.getText().toString()));
+    bundle.putDouble("b", Double.parseDouble(eB.getText().toString()));
+    bundle.putDouble("c", Double.parseDouble(eC.getText().toString()));
+
+    intent.putExtras(bundle);
+
+    setResult(101,intent);
+});
+```
+
+```java
+private Intent intent = new Intent(this, MainActivity.class);
+private Bundle bundle = getIntent().getExtras();
+
+bundle.putString("x", "x=" + Arrays.asList(count(bundle.getDouble("a"), bundle.getDouble("b"), bundle.getDouble("c"))));
+intent.putExtras(bundle);
+
+finish();
+```
 
 
 
