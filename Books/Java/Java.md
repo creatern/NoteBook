@@ -4439,12 +4439,16 @@ try (PrintWriter pw = new PrintWriter(System.out,true)) {
 
 ## 二进制输入/输出
 
+- 数据流：基本数据类型、String（底层存储）的串行化，读取或写出基本数据类型的变量/字符串。
+
 > Java中的所有数据都是高位在前（MSB）的模式写出。
 
 | 二进制流 | DataInputStream                                              | DataOutputStream                                             |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 方法     | readInt()<br />readShort()<br />readLong()<br />readFloat()<br />readDouble()<br />readChar()<br />readBoolean()<br />readUTF() | writeChars()<br />writeByte()<br />writeInt()<br />writeShort()<br />writeLong()<br />writeFloat()<br />writeDouble()<br />writeChar()<br />writeBoolean()<br />writeUTF() |
 | 说明     | 以固定的字节读取                                             | 以固定的字节写出                                             |
+
+- 读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同：否则可能报错、数据顺序出错。
 
 ```java
 File file = new File(System.getProperty("user.dir") + "/test.txt");
@@ -4525,166 +4529,39 @@ try (ZipInputStream zin = new ZipInputStream(new FileInputStream("test.zip"));
 }
 ```
 
-## Serializable 对象序列化
+### Serializable 对象序列化
 
-- 序列化：将Java程序（内存）中的对象、数据保存在外存中。
-
-| 操作     | 说明                                                         |
-| -------- | ------------------------------------------------------------ |
-| 序列化   | ObjectOutputStream、DataInputStream<br />保存基本类型数据或对象的机制 |
-| 反序列化 | ObjectInputStream、DataOutputStream<br />读取基本类型数据或对象的机制 |
-
-- 对象序列化机制：允许把内存中的Java对象转换成平台无关的二进制流，从而允许把这种二进制流持久地保存在磁盘上或通过网络将这种二进制流传输到另一个网络节点。当其它程序获取了这种二进制流，就可以恢复成原来的Java对象。可将任何实现了Serializable接口的对象转化为字节数据，使其在保存和传输时可被还原。
+- 对象序列化机制：允许把内存中的对象转换成平台无关的二进制流，持久地保存在磁盘或网络。任何实现Serializable接口的对象都可被转化为字节数据，在保存和传输时可被还原。
 
 > 序列化是 RMI过程（Remote Method Invoke 远程方法调用）的参数和返回值都必须实现的机制，而 RMI 是 JavaEE 的基础。
 
-| 关键字    | 不能序列化static和transient修饰的成员变量 |
+| 操作     | 对象流             | 基本流           |
+| -------- | ------------------ | ---------------- |
+| 序列化   | ObjectOutputStream | DataInputStream  |
+| 反序列化 | ObjectInputStream  | DataOutputStream |
+
+> 对象流都实现了DataInput、DataOutput接口。
+
+#### transient 瞬态
+
+| 关键字    | 不能序列化static、transient修饰的成员变量 |
 | --------- | ----------------------------------------- |
 | static    | 类成员，反序列化时会被变成默认值          |
 | transient | 瞬态，不允许序列化                        |
-
-### transient 瞬态
 
 1. 变量被transient修饰，变量将不会被序列化
 2. transient关键字只能修饰变量，而不能修饰方法和类。
 3. 被static关键字修饰的变量不参与序列化，一个静态static变量不管是否被transient修饰，均不能被序列化。
 4. final变量值参与序列化。如果final transient同时修饰变量，final不会影响transient，一样不会参与序列化。
 
-### 数据流
+#### 对象流 （Serializable 标识接口）
 
-- 数据流：基本数据类型、String（底层存储）的串行化，读取或写出基本数据类型的变量/字符串。
+| 对象流               | ObjectInputStream                 | ObjectOutputStream                   |
+| -------------------- | --------------------------------- | ------------------------------------ |
+| 构造器               | ObjectInputStream(InputStream in) | ObjectOutputStream(OutputStream out) |
+| 序列化<br />反序列化 | readObject()                      | writeObject(Object obj)              |
 
-| 数据流           | 套接目标             |
-| ---------------- | -------------------- |
-| DataInputStream  | InputStream子类的流  |
-| DataOutputStream | OutputStream子类的流 |
-
-| DataInputStream提供的读取数据               | DataOutputStream相对应的写方法                   |
-| :------------------------------------------ | :----------------------------------------------- |
-| byte readByte()                             | void writeByte(int v)                            |
-| boolean readBoolean()                       | void writeBoolean(Boolean v)                     |
-| char readChar()                             | void writeChar(int v)                            |
-| double readDouble()                         | void writeDouble(double v)                       |
-| float readFloat()                           | void writeFloat(float v)                         |
-| int readInt()                               | void writeInt (int v)                            |
-| long readLong()                             | void writeLong(long v)                           |
-| short readshort()                           | void writeshort(int v)                           |
-| String readUTF()  读取以UTF格式保存的字符串 | void writeUTF(String str)  将字符串以UTF格式写出 |
-| -                                           | void writeBytes(String s)                        |
-| -                                           | void writeChars(String s)                        |
-
-- 读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同：否则可能报错、数据顺序出错。
-
-```java
-public class DataStreamTest {
-    //将内存的字符串\基本数据类型的变量写到文件中
-    @Test
-    public void test() {
-        DataOutputStream dataOutputStream = null;
-        try {
-            dataOutputStream = new DataOutputStream(new FileOutputStream("data.txt"));
-            dataOutputStream.writeUTF("小明");
-            dataOutputStream.flush(); //刷新操作，将内存中的数据写入文件
-            dataOutputStream.writeBoolean(true);
-            dataOutputStream.flush();
-            dataOutputStream.writeInt(23);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                dataOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    //将文件中存储的基本数据类型变量和字符串读取到内存中，保存在变量中。
-    @Test
-    public void test2() {
-        DataInputStream dataInputStream = null;
-        try {
-            dataInputStream = new DataInputStream(new FileInputStream("data.txt"));
-
-            //读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同
-            String name = dataInputStream.readUTF();
-            boolean sex = dataInputStream.readBoolean();
-            int age = dataInputStream.readInt();
-
-            System.out.println(name + ": " + age + ": " + sex);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                dataInputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}
-```
-
-```java
-import java.io.*;
-
-public class DataIOTest {
-
-    public static void main(String[] args) throws IOException {
-
-        // 创建数据输出流，前端套接文件流并以invoice1.txt为输出目的地。
-        DataOutputStream out = new DataOutputStream(new FileOutputStream("invoice1.txt"));
-//        数据流作为过滤流，可以实现基本数据类型读写数据
-
-        //定义要保存的数据数组。
-        double[] prices = {19.99, 9.99, 15.99, 3.99, 4.99};
-        int[] units = {12, 8, 13, 29, 50};
-        String[] descs = {"Java T-shirt", "Java Mug", "Duke Juggling Dolls", "Java Pin", "Java Key Chain"};
-
-        //将prices,unites以及descs中的数据以Tab键为分割符保存在文件中。
-        for (int i = 0; i < prices.length; i++) {
-            out.writeDouble(prices[i]);
-            out.writeChar('\t');
-            out.writeInt(units[i]);
-            out.writeChar('\t');
-            out.writeUTF(descs[i]);
-            out.writeChar('\t');
-        }
-        out.close();
-
-        // 创建数据输入流，将上面保存的文件再次打开并读取。
-        DataInputStream in = new DataInputStream(new FileInputStream("invoice1.txt"));
-
-        double price;
-        int unit;
-        String desc;
-        double total = 0.0;
-
-        for (int i = 0; i < prices.length; i++) {
-            price = in.readDouble();
-            in.readChar();       // 扔掉tab键
-            unit = in.readInt();
-            in.readChar();       // 扔掉tab键
-            desc = in.readUTF();
-            in.readChar();   // 扔掉tab键
-
-            System.out.println("You've ordered " + unit + " units of " + desc + " at $" + price);
-            total = total + unit * price;
-        }
-
-        System.out.println("For a TOTAL of: $" + total);
-        in.close();
-    }
-}
-```
-
-### 对象流 （Serializable 标识接口）
-
-- 对象流：ObjectInputStream、ObjectOutputStream，存储和读取基本数据类型数据或对象的处理流。
-
-- 可序列化：如果需要让某个对象支持序列化机制（Serializable、Externalizable接口），则必须让对象所属的类及其内部的成员属性是可序列化的，否则NotSerializableException。
+- 可序列化：如果需要让某个对象支持序列化机制（Serializable、Externalizable接口），则必须让对象所属的类及其内部的成员属性是可序列化的（若某个类实现了 Serializable 接口，该类的对象就是可序列化的），否则NotSerializableException。
 
 ```java
 //实现Serializable接口
@@ -4693,59 +4570,104 @@ public class Person implements Serializable {
 }
 ```
 
-- serialVersionUID（序列化版本标识符）：表明类的不同版本间的兼容性。对序列化对象进行版本控制，有关各版本反序列化时是否兼容。如果没有显示定义serialVersionUID ，则其值是Java运行时环境根据类的内部细节自动生成的，此时若类的实例变量做了修改，serialVersionUID 可能发生变化，在反序列化时很可能出错。
+- serialVersionUID（序列化版本标识符）：表明类的不同版本间的兼容性、代替内存地址。对序列化对象进行版本控制，有关各版本反序列化时是否兼容。如果没有显示定义serialVersionUID ，则其值是Java运行时环境根据类的内部细节自动生成的，此时若类的实例变量做了修改，serialVersionUID 可能发生变化，在反序列化时很可能出错。
 
 - 版本一致性：运行时判断类的serialVersionUID来验证版本一致性。在进行反序列化时，JVM会把传来的字节流中的serialVersionUID与本地相应实体类的serialVersionUID进行比较，如果相同就认为是一致的，可以进行反序列化，否则就会出现序列化版本不一致的异常(InvalidCastException)。
 
 <img src="../../pictures/482332600239578.png" width="540"/>   
 
-**序列化、反序列化**
-
-- 序列化 ObjectOutputStream：若某个类实现了 Serializable 接口，该类的对象就是可序列化的。
-
 ```java
-//1. 创建ObjectOutputStream对象。
-//2. ObjectOutputStream#writeObject()：输出可序列化对象，搭配flush()。
-
-ObjectOutputStream oos = null;
-try {
-    oos = new ObjectOutputStream(new FileOutputStream("Person01.person"));
+try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Person01.person"))){
     oos.writeObject(new Person("Jac", 20));
     oos.flush();
 } catch (IOException e) {
-    throw new RuntimeException(e);
-} finally {
-    try {
-        oos.close();
-    } catch (IOException e) {
-        throw new RuntimeException(e);
-    }
+}
+
+try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Person01.person")){
+    Person p1 = (Person) ois.readObject();
+} catch (IOException e) {
+} catch (ClassNotFoundException e) {
 }
 ```
 
-- 反序列化 ObjectInputStream：将磁盘文件中的对象还原为内存的一个对象 。
+##### 序列化的方法签名
+
+- 方法签名：可序列化的类（实现Serializable接口）中定义如下的方法后，数据域就不会被自动序列化，而是调用如下方法。
 
 ```java
-//1. 创建一个 ObjectInputStream对象。
-//2. readObject()：读取流中的对象。
+private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException;
+private void writeObject(ObjectOutputStream out) throws IOException,ClassNotFoundException;
+```
 
-ObjectInputStream ois = null;
-try {
-    ois = new ObjectInputStream(new FileInputStream("Person01.person"));
-    Person p1 = (Person) ois.readObject();
-    System.out.println(p1);
-} catch (IOException e) {
-    throw new RuntimeException(e);
-} catch (ClassNotFoundException e) {
-    throw new RuntimeException(e);
-} finally {
-    try {
-        ois.close();
-    } catch (IOException e) {
-        throw new RuntimeException(e);
+| 方法                 | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| defaultWriteObject() | 获取对象描述符、String域label。<br />属于ObjectWriteOutputStream，只能在可序列化的writeObject()中调用。 |
+| defaultReadObject()  | 获取对象描述符、String域label。<br />属于ObjectReadOutputStream，只能在可序列化的readObject()中调用。 |
+
+```java
+public class Ingredient implements Serializable {
+    
+    private final long serialVersionUID = 10086;
+
+    private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException{
+        in.defaultReadObject();
+        System.out.println("readObject");
     }
+
+    private void writeObject(ObjectOutputStream out) throws IOException,ClassNotFoundException{
+        out.defaultWriteObject();
+        System.out.println("outObject");
+    }
+    
 }
 ```
+
+##### 序列化单例（深拷贝）readResolve()
+
+- 即使构造器是私有的，序列化机制也能创建新的对象（这对单例模式不合适）。将对象序列化到输出流之后，读回的新对象就是对现有对象的一次深拷贝（使用enum结构则无需担心这点）。
+- readResolve()：对象被序列化后调用，返回一个对象，该对象之后会成为readObject()的返回值。（避免产生新的对象影响单例模式的类）
+
+```java
+//该类实现了Serializable
+protected Object readResolve() throws ObjectStreamException {
+    if (value == 1) return Type.SAUCE;
+    throw new ObjectStreamException(){};
+}
+```
+
+#### Externalizable 保存和恢复对象数据
+
+- 实现Externalizable接口，接口方法对包括超类数据在内的整个对象的存储和恢复负全责。对象重建时，使用公共无参构造器创建实例，然后调用readExternal()方法，从ObjectInputStream读取数据来还原对象。
+
+> 当一个类同时实现Serializable和Externalizable时，只能通过Externalizable的方法来完成对对象数据的操作，而不会自动调用readObject()和writeObject()。
+
+| 机制           | 方法                                | 说明                               |
+| -------------- | ----------------------------------- | ---------------------------------- |
+| Serializable   | readObject()<br />writeObject()     | 私有，只能被序列化机制调用。       |
+| Externalizable | readExternal()<br />writeExternal() | 公有，潜在允许修改现有对象的状态。 |
+
+```java
+public class Ingredient implements Externalizable{
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(id);
+        out.writeUTF(name);
+        out.writeObject(type);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        id = in.readUTF();
+        name = in.readUTF();
+        type = (Ingredient.Type)in.readObject();
+    }
+    
+    public Ingredient(){};
+}
+```
+
+#### 对象序列化文件
 
 ## NIO （Non-Blocking IO）
 
