@@ -20,19 +20,18 @@
 | `---`  | 固定的宽度或高度值                         |
 | `-^v-` | match constraint                           |
 
+### LinearLayout 线性布局
+
 ## 控件
 
 ### 基本控件
 
-| 控件          | 说明 |
-| :------------ | :--- |
-| TextView      |      |
-| ImageView     |      |
-| Drawable      |      |
-| MoveTextView  |      |
-| ImageTextView |      |
-| Button        |      |
-| ImageButton   |      |
+| 控件                                                         | 说明                     |
+| :----------------------------------------------------------- | :----------------------- |
+| TextView<br />ImageView<br />MoveTextView<br />ImageTextView | 文本标签<br />图片<br /> |
+| Button<br />ImageButton                                      | 按钮<br />图片按钮       |
+| EditText                                                     | 文本编辑                 |
+| Drawable                                                     |                          |
 
 - 标签变量绑定： R（代表res目录的类）。
 
@@ -46,9 +45,18 @@ findViewById(int id); //不需要强转，自动匹配控件类型。
 
 - CheckBox（复选框）需要单独设置一个界面文件，
 
-### Spinner 单选组
+### 单选组
 
-- Spinner（单选组）需要单独配置一个界面文件来设置选项，而一个主界面中不能存在两个Spinner。
+#### RadioGroup 单选按钮组
+
+| 控件        | 说明     |
+| ----------- | -------- |
+| RadioGroup  | 单选组   |
+| RadioButtun | 单选按钮 |
+
+#### Spinner 列表视图
+
+- Spinner需要单独配置一个界面文件来设置选项，而一个主界面中不能存在两个Spinner。
 
 ```xml
 <!--主界面-->
@@ -80,8 +88,9 @@ for (int i = 0; i < degreeName.length; i++) {
     degrees.add(item);
 }
 
+Adapter adapter = new SimpleAdapter(this, degrees, R.layout.myspinner_item, new String[]{"name", "icon"}, new int[]{R.id.degree_name, R.id.degree_icon});
 adapter.setDropDownViewResource(R.layout.myspinner_item);
-mySpinner.setAdapter(new SimpleAdapter(this, degrees, R.layout.myspinner_item, new String[]{"name", "icon"}, new int[]{R.id.degree_name, R.id.degree_icon}));
+mySpinner.setAdapter(adapter);
 
 mySpinner.setPrompt("选择你的学位："); //选项界面标题
 
@@ -96,10 +105,12 @@ Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
 
 ### 日期时间
 
-| 日期时间控件 | 说明 |
-| ------------ | ---- |
-| DatePicker   |      |
-| TimePicker   |      |
+| 日期时间控件 | 说明                                   |
+| ------------ | -------------------------------------- |
+| DatePicker   | 日期控件，getXxx()获取相应的日期格式。 |
+| TimePicker   | 时间控件，getXxx()获取相应的时间格式。 |
+
+## Adapter 适配器
 
 ## 事件监听
 
@@ -133,12 +144,10 @@ private Bundle bundle = new Bundle();
 
 btnSub.setOnClickListener(v -> {
     bundle.putDouble("a", Double.parseDouble(eA.getText().toString()));
-    bundle.putDouble("b", Double.parseDouble(eB.getText().toString()));
-    bundle.putDouble("c", Double.parseDouble(eC.getText().toString()));
 
     intent.putExtras(bundle);
 
-    setResult(101,intent);
+    startActivity(intent)
 });
 ```
 
@@ -146,11 +155,9 @@ btnSub.setOnClickListener(v -> {
 private Intent intent = new Intent(this, MainActivity.class);
 private Bundle bundle = getIntent().getExtras();
 
-bundle.putString("x", "x=" + Arrays.asList(count(bundle.getDouble("a"), bundle.getDouble("b"), bundle.getDouble("c"))));
+bundle.putString("x", "1");
+
 intent.putExtras(bundle);
 
 finish();
 ```
-
-
-
