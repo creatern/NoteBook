@@ -45,16 +45,39 @@ findViewById(int id); //不需要强转，自动匹配控件类型。
 
 - CheckBox（复选框）需要单独设置一个界面文件，
 
-### 单选组
-
-#### RadioGroup 单选按钮组
+### RadioGroup 单选按钮组
 
 | 控件        | 说明     |
 | ----------- | -------- |
 | RadioGroup  | 单选组   |
 | RadioButtun | 单选按钮 |
 
-#### Spinner 列表视图
+### Toast 消息提醒
+
+```java
+Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
+```
+
+### 日期时间
+
+| 日期时间控件 | 说明                                   |
+| ------------ | -------------------------------------- |
+| DatePicker   | 日期控件，getXxx()获取相应的日期格式。 |
+| TimePicker   | 时间控件，getXxx()获取相应的时间格式。 |
+
+## Adapter 适配器
+
+### AutoCompleteTextView
+
+```java
+AutoCompleteTextView actv = findViewById(R.id.actv);
+Drawable draw = getResources().getDrawable(R.drawable.testDraw);
+ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.myKeyItem, keyWords);
+actv.setAdapter(adapter);
+actv.setCompoundDrawables(draw, null, null, null);
+```
+
+### Spinner 列表视图
 
 - Spinner需要单独配置一个界面文件来设置选项，而一个主界面中不能存在两个Spinner。
 
@@ -96,21 +119,6 @@ mySpinner.setPrompt("选择你的学位："); //选项界面标题
 
 mySpinner.setSelection(1); //设置选中的选项
 ```
-
-### Toast 消息提醒
-
-```java
-Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
-```
-
-### 日期时间
-
-| 日期时间控件 | 说明                                   |
-| ------------ | -------------------------------------- |
-| DatePicker   | 日期控件，getXxx()获取相应的日期格式。 |
-| TimePicker   | 时间控件，getXxx()获取相应的时间格式。 |
-
-## Adapter 适配器
 
 ## 事件监听
 
