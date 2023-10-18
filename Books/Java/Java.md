@@ -4872,7 +4872,24 @@ Files.walkFileTree(Paths.get("testDir"), new SimpleFileVisitor<>() {
 });
 ```
 
-#### ZIP
+#### FileSystems 文件系统（ZIP）
+
+| FileSystems     | 文件系统                                                     |
+| --------------- | ------------------------------------------------------------ |
+| newFileSystem() | 对所安装的文件系统提供者进行迭代，返回第一个可以接受指定路径的文件系统。<br />默认ZIP文件系统是有一个提供者的，接受名字以`.zip、.jar`结尾的文件。<br />loader：若不为null，则迭代指定的类加载器能够加载的文件系统。 |
+| **FileSystem**  | **文件系统**                                                 |
+| getPath()       | 拼接指定的字符串。                                           |
+
+```java
+FileSystem fs = FileSystems.newFileSystem(Paths.get("test.zip"), ClassLoader.getPlatformClassLoader());
+Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<>() {
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        System.out.println(file);
+        return FileVisitResult.CONTINUE;
+    }
+});
+```
 
 # 多线程
 
