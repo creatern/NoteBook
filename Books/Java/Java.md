@@ -4675,10 +4675,10 @@ public class Ingredient implements Externalizable{
 
 > IO是面向流的。
 
-| 对比 |       IO       |   NIO   |
-| ---- | :------------: | :-----: |
-| 数据 | byte[] /char[] | Buffer  |
-| 面向 |     Stream     | Channel |
+| 对比 |         IO         |   NIO   |
+| ---- | :----------------: | :-----: |
+| 数据 | byte[]<br />char[] | Buffer  |
+| 面向 |       Stream       | Channel |
 
 <img src="../../pictures/Snipaste_2023-05-29_10-13-31.png" width="1300"/> 
 
@@ -4691,11 +4691,188 @@ public class Ingredient implements Externalizable{
 
 ### Path
 
-- Path接口：代表一个平台无关的平台路径，描述了目录结构中文件的位置，实际引用的资源可以不存在。
+- Path：代表一个平台无关的路径，描述目录结构中文件的位置，实际引用的资源可以不存在。
+
+| Paths | 返回Path对象             |
+| ----- | ------------------------ |
+| get() | 静态，指定（抽象）路径。 |
+
+| Path             | 说明                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| resolve()        | 若参数是绝对路径，则返回该参数。<br />否则，返回调用者（this）和该参数的拼接路径。 |
+| resolveSibling() | 若参数是绝对路径，则返回该参数。<br />否则，返回调用者（this）的parentPath和该参数的拼接路径。 |
+| relativize()     | 返回调用者（this）相对该参数的相对路径。                     |
+| toAbsolutePath() | 返回与该路径等价的绝对路径。                                 |
+| getParent()      | 返回父路径。<br />若不存在，则返回null。                     |
+| getFileName()    | 返回该路径的最后一个部件。<br />若不存在，则返回null。       |
+| getRoot()        | 返回该路径的根目录。<br />若不存在，则返回null。             |
+| normalize()      | 移除冗余的路径部件。                                         |
 
 ### Files
 
-- java.nio.file.Files：操作文件或目录的工具类。
+- java.nio.file.Files：操作文件、目录的工具类。
+
+| 来源  | 转换方法 | 返回                         |
+| ----- | -------- | ---------------------------- |
+| Path  | toFile() | 基于该路径创建一个File对象。 |
+| Files | toPath() | 基于该文件创建一个Path对象。 |
+
+#### 标准选项
+
+| StandardOpenOption     | 搭配writer()、new(In/Out)putStream()、newBuffered(Reader/Writer)() |
+| ---------------------- | ------------------------------------------------------------ |
+| READ                   | 用于读取而打开。                                             |
+| WRITER                 | 用于写入而打开。                                             |
+| APPEND                 | 若用于写入而打开，则执行追加。                               |
+| TRUNCATE_EXISTING      | 若用于写入而打开，则移除已有内容。                           |
+| CREATE_NEW             | 创建新文件，若文件已经存在，则创建失败。                     |
+| CREATE                 | 文件不存在时，自动创建新文件。                               |
+| DELETE_ON_CLOSE        | 当文件被关闭，尽力删除该文件。                               |
+| SPARSE                 | 提示文件系统该文件是稀疏的。                                 |
+| DSYN<br />SYN          | 要求对文件数据的每次更新都必须同步写入到存储。<br />要求对文件数据、元数据的每次更新都必须同步写入到存储。 |
+| **StandardCopyOption** | **搭配copy()、move()**                                       |
+| ATOMIC_MOVE            | 原子性移动文件。                                             |
+| COPY_ATTRIBUTES        | 复制文件的属性。                                             |
+| REPLACE_EXISTING       | 若目标已存在，则替换之。                                     |
+| **LinkOption**         | **搭配以上所有方法、以及exists、isDirectory、isRegularFile等** |
+| NOFOLLOW_LINKS         | 不跟踪符号链接。                                             |
+| **FileVisitOption**    | **搭配find、walk、walkFileTree**                             |
+| FOLLOW_LINKS           | 跟踪符号链接。                                               |
+
+#### 文件操作
+
+| Files                                        | 可搭配文件操作标准选项                                       |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| **读写**                                     | **说明**                                                     |
+| readAllBytes()                               | 返回`byte[]`，读取文件中的所有数据。                         |
+| readAllLines()                               | 返回List，以行序列读取文件。                                 |
+| write()                                      | 写出到文件（覆盖）。（数组、可迭代数据的写出）<br />StandardOpenOption.APPEND：追加。 |
+| **流式**                                     | **说明**                                                     |
+| newInputStream()<br />newOutputStream()      | 字节流                                                       |
+| newBufferedReader()<br />newBufferedWriter() | 字符流                                                       |
+| **创建**                                     | **说明**                                                     |
+| createDirectory()<br />createDirectorys()    | 创建新目录（父路径必须存在）。<br />创建新目录（自动创建中间目录）。 |
+| createFile()                                 | 创建空文件，此时，其他程序无法执行文件创建<br />若文件已经存在，则抛出异常。 |
+| createTempDirectory()<br />createTempFile()  | 指定位置创建临时文件、目录。<br />prefix：前缀，null则只有序列号做为前缀。<br />suffix：后缀，null则".tmp"。 |
+| **复制、移动、删除**                         | **说明**                                                     |
+| copy(from, to)                               | 复制，若目标路径已经存在，则失败。<br />选项：StandardCopyOption。 |
+| move(from, to)                               | 移动，若目标路径已经存在，则失败。<br />选项：StandardCopyOption。 |
+| delete()<br />deleteIfExists()               | 删除，若不存在，则抛出异常。<br />若存在，则删除。           |
+
+```java
+Path from = Paths.get("/home/zjk/IdeaProjects/untitled/test.txt");
+Path to = from.resolveSibling("target01.txt");
+Files.write(to,Files.readAllBytes(from), StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+Files.createTempFile(from.getParent(),"temp001",".txt");
+Files.copy(from,Paths.get("test_copy.txt"), StandardCopyOption.REPLACE_EXISTING);
+Files.deleteIfExists(to);
+Files.move(from,from.resolveSibling("test_move.txt"),StandardCopyOption.REPLACE_EXISTING);
+```
+
+#### 文件信息 BasicFileAttributes
+
+| Files                   | 说明                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| getOwner()              | 返回文件的拥有者（UserPrincipal）。                          |
+| readAttributes()        | 读取指定类型的文件信息。<br />type：指定返回的文件信息类型(class)。 |
+| **BasicFileAttributes** | **基本属性集**                                               |
+| **PosixFileAttributes** | **可移植操作系统接口的属性集（Unix）**                       |
+
+- 所有的文件系统都会返回一个基本属性集，被封装在BasicFileAttributes接口，包括：文件创建/最后一次访问/修改的时间（FileTime）、文件类型（常规文件、目录、符号链接、其他）、文件尺寸、文件主键。
+- 若文件系统兼容POSIX，则可获取PosixFileAttributes，包括：以上所有信息、组拥有者、文件拥有者、组、访问权限。
+
+```java
+Path path = Paths.get("test_move.txt");
+PosixFileAttributes posixFileAttributes = Files.readAttributes(path, PosixFileAttributes.class);
+UserPrincipal owner = Files.getOwner(path);
+```
+
+#### 目录操作
+
+##### 目录流
+
+| Files                | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| **访问目录项**       | **返回Stream**                                               |
+| list()               | 读取目录中每一项的`Stream<Path>`对象。<br />不会进入子目录中。 |
+| walk()               | 只有遍历的项是目录，就在进入该目录之前访问其兄弟项。<br />depth：限制访问树的深度。 |
+| find()               | 读取目录每一项的同时，执行过滤。<br />type：BasicFileAttributes过滤条件。 |
+| **目录流**           | **返回Iterable，而不是Stream**                               |
+| newDirectoryStream() | 产生一个DirectoryStream（Iterable子接口，而不是Stream），遍历目录。<br />glob：Glob模式过滤文件。 |
+
+| Glob模式 | 匹配                       |
+| -------- | -------------------------- |
+| `*`      | 路径中`0~n`个字符          |
+| `**`     | 跨目录边界的`0~n`个字符    |
+| `?`      | 一个字符                   |
+| `[..]`   | 一个字符集合               |
+| `{..}`   | 由逗号隔开的多个可选项之一 |
+
+```java
+System.out.println("总文件数量：" +
+                   Files.walk(Paths.get(""), 3, FileVisitOption.FOLLOW_LINKS)
+                   .sorted()
+                   .peek(p -> {
+                       String name = p.getFileName().toString();
+                       Matcher matcher = Pattern.compile("/").matcher(p.toString());
+                       while (matcher.find()) {
+                           name = "\t".concat(name);
+                       }
+                       System.out.println(name);
+                   }).count());
+```
+
+##### FileVisitor 访问器（walkFileTree()）
+
+| Files                     | walkFileTree()：访问指定目录的所有子孙成员。<br />fv：FileVisitor对象。<br />以下方法操作导致的异常均由该方法抛出。 |
+| ------------------------- | ------------------------------------------------------------ |
+| **FileVisitor通知**       | **返回FileVisitResult**                                      |
+| visitFile()               | 遇到一个文件/目录。                                          |
+| preVisitDirectory()       | 目录被处理前。                                               |
+| postVisitDirectory()      | 目录被处理后。                                               |
+| visitFileFailed()         | 试图访问文件/目录时发生错误。                                |
+| **FileVisitorResult操作** | **对于通知的每种情况，都可以指定是否希望执行以下操作。**     |
+| `CONTINUE`                | 继续访问下一个文件。                                         |
+| `SKIP_SUSBTREE`           | 继续访问，但不再访问该目录下的任何项。                       |
+| `SKIP_SIBLINGS`           | 继续访问，但不在访问该文件的兄弟文件。                       |
+| `TERMINATE`               | 终止访问。                                                   |
+
+- SimpleFileVisitor：FileVisitor的简单实现类，其除了visitFileFailed()之外的所有方法都默认不做任何操作而继续访问，而visitFileFailed()会抛出由失败导致的异常并终止访问。
+
+> 删除目录时，需要先删除目录内的所有内容（包括子目录），而postVisitDirectory()可以在搭配其余方法后，轻松实现对文件树的全部删除。（其他方式一般需要复杂的操作）
+
+```java
+Files.walkFileTree(Paths.get("testDir"), new SimpleFileVisitor<>() {
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        Files.delete(file);
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        System.out.println("prepare to visit " + dir + ".");
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        if (exc != null) System.out.println("After visit " + dir + " happen Exception.");
+        Files.delete(dir);
+        System.out.println(dir + " has deleted.");
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        if (exc != null) System.out.println("visit " + file + " failed.");
+        return FileVisitResult.CONTINUE;
+    }
+});
+```
+
+#### ZIP
 
 # 多线程
 
