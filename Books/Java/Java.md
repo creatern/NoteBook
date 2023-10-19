@@ -4872,7 +4872,7 @@ Files.walkFileTree(Paths.get("testDir"), new SimpleFileVisitor<>() {
 });
 ```
 
-#### FileSystems 文件系统（ZIP）
+### FileSystems 文件系统（ZIP）
 
 | FileSystems     | 文件系统                                                     |
 | --------------- | ------------------------------------------------------------ |
@@ -4889,6 +4889,98 @@ Files.walkFileTree(fs.getPath("/"), new SimpleFileVisitor<>() {
         return FileVisitResult.CONTINUE;
     }
 });
+```
+
+### FileChannel 内存映射文件
+
+| FileChannel            | 内存映射文件：从文件中获取一个通道（抽象的磁盘文件）         |
+| ---------------------- | ------------------------------------------------------------ |
+| open()                 | 静态，返回指定文件的FileChannel。<br />StandardOpenOption选项。 |
+| map()                  | 指定映射文件和映射模式获取ByteBuffer（MappedByteBuffer）。<br />缓冲区支持顺序和随机数据访问。<br />FileChannel.Mapmode指定映射模式。 |
+| **ByteBuffer**         | **缓冲区：ByteBuffer、Buffer**                               |
+| get()<br />getXxx()    | 读取数据，并向下移动一个字节。<br />index：从指定索引处获取一个字节。 |
+| put()<br />putXxx()    | 写入数据，并向下移动一个字节，并返回该缓冲区的引用。<br />index：向指定索引处推入一个字节。 |
+| order()                | 返回字节顺序（ByteOrder）。<br />order：设置字节顺序，ByteOrder（`BIG_ENDIAN、LITTLE_ENDIAN`）。 |
+| hasRemaining()         | 若当前缓冲区位置没有到达界限，则返回true。                   |
+| limit()                | 返回当前缓冲区的界限（第一个没有可用值的位置）。             |
+| allocate()<br />wrap() | 静态，构建指定容量的缓冲区。<br />静态，构建指定容量的缓冲区（对指定数组的包装）。 |
+| asCharBuffer()         | 构建字符缓冲区（对缓冲区的包装，从当前缓冲区的位置开始构造）。<br />对该字符缓冲区（有自己的位置、界限、标记）的变更都在该缓冲区中反映。 |
+| **CharBuffer**         | **字符缓冲区**                                               |
+| get()                  | 若方法有参数，则返回该字符缓冲区。<br />从该字符缓冲区的当前位置开始，获取一个/范围内所有char，之后将位置向前移动越过所有读入的字符。 |
+| put()                  | 返回该字符缓冲区。<br />从该字符缓冲区的当前位置开始，放置一个/范围内所有char，之后将位置向前移动越过所有被写出的字符。 |
+| **CRC32**              | **校验和**                                                   |
+| update()               | 传入一个字节，并更新该检验和。                               |
+| getValue()             | 返回检验和。                                                 |
+
+| 映射模式（FileChannel.Mapmode）  | 需要FileChanel也打开相应的权限（StandardOpenOption） |
+| -------------------------------- | ---------------------------------------------------- |
+| `FileChannel.MapModeREAD_ONLY`   | 缓冲区只读。                                         |
+| `FileChannel.MapMode.READ_WRITE` | 缓冲区可写，修改在某个时刻写回文件。                 |
+| `FileChannel.MapMode.PRIVATE`    | 缓冲区可写，修改是私有的，不会传播到文件。           |
+
+```java
+try (FileChannel channel = FileChannel.open(Paths.get("target01.txt"), StandardOpenOption.READ,StandardOpenOption.WRITE)) {
+    MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, (int) channel.size());
+    CRC32 crc32 = new CRC32();
+    while (buffer.hasRemaining()) {
+        int c = buffer.get();
+        crc32.update(c);
+    }
+    System.out.println(Long.toHexString(crc32.getValue()));
+} catch (Exception ex) {
+    ex.printStackTrace();
+}
+```
+
+#### Buffer 缓冲区
+
+- 缓冲区（Buffer）：由具有相同类型的数值构成的数组。
+
+​	<img src="../../pictures/Java-Buffer-struct.drawio.svg" width="700"/>
+
+| Buffer      | 缓冲区                                                       |
+| ----------- | ------------------------------------------------------------ |
+| clear()     | 将位置复位到0，并将界限设置到容量，为缓冲区写出准备。<br />返回当前缓冲区。 |
+| flip()      | 将界限设置到位置，并将位置复位到0，为缓冲区读入准备。<br />返回当前缓冲区。 |
+| rewind()    | 将读写位置复位到0，并保持界限不变，为缓冲区重新读入相同的值准备。<br />返回当前缓冲区。 |
+| mark()      | 将缓冲区的标记设置到读写位置。<br />返回当前缓冲区。         |
+| reset()     | 将缓冲区的位置设置到标记，允许被标记的部分可以再次被读入/写出。<br />返回当前缓冲区。 |
+| remaining() | 返回剩余可读入/写出的值的数量（界限 - 位置）。               |
+| position()  | 返回该缓冲区的位置。                                         |
+| capacity()  | 返回该缓冲区的容量。                                         |
+
+```java
+try (FileChannel channel = FileChannel.open(Paths.get("target01.txt"), StandardOpenOption.READ,StandardOpenOption.WRITE)) {
+    MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, (int) channel.size());
+    channel.read(buffer);
+    channel.position(1);
+    buffer.flip();
+    channel.write(buffer);
+} catch (Exception ex) {
+    ex.printStackTrace();
+}
+```
+
+#### FileLock 文件加锁机制
+
+| FilChannel   | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| lock()       | 返回FileLock，在整个文件获得独占的锁，若无法获得，则阻塞直至获得锁。<br />position：指定文件区域获得锁。<br />shared：是否共享锁。 |
+| tryLock()    | 返回FileLock，在整个文件获得独占的锁（阻塞该方法），若无法获得，则返回null。<br />position、size：指定文件区域获得锁。<br />shared：是否共享锁。<br />false，默认，锁定文件用于读写（独占）。<br />true，表明共享锁，允许多个进程从该文件读入，并阻止任何进程获得独占的锁。 |
+| **FileLock** | **说明**                                                     |
+| close()      | 释放锁。<br />实现了AutoCloseable接口，可通过try自动释放。   |
+| isShared()   | 查询持有的锁类型。                                           |
+
+- 若锁定了文件的尾部，而该文件的长度随后增长超过了锁定的部分，则增长的额外区域是未锁定的。
+- 文件加锁机制依赖于操作系统。
+
+```java
+try (FileChannel channel = FileChannel.open(Paths.get("target01.txt"), StandardOpenOption.READ, StandardOpenOption.WRITE);
+     FileLock lock = channel.lock()) {
+    System.out.println(lock.isShared());
+} catch (Exception ex) {
+    ex.printStackTrace();
+}
 ```
 
 # 多线程
