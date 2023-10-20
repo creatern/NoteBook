@@ -22,9 +22,7 @@
 
 # [算法](./Books/算法.md)
 
-# 前端
-
-## [HTML](./Books/Java/HTML.md)
+# [HTML、CSS、JS](./Books/Java/HTML.md)
 
 # 工具
 

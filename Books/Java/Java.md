@@ -1875,7 +1875,7 @@ public void test3(){
 | toDegrees(double angrad)                            | 弧度—>角度                            |
 | toRadians(double angdeg)                            | 角度—>弧度                            |
 
-### BigInteger、BigDecimal
+#### BigInteger、BigDecimal
 
 - java.math.BigInteger：不可变的任意精度的整数，提供所有 Java 的基本整数操作符的对应物，并提供 java.lang.Math 的所有相关方法。BigInteger还提供以下运算：模算术、GCD 计算、质数测试、素数生成、位操作以及一些其他操作。
 
@@ -1893,7 +1893,35 @@ System.out.println(bd.divide(bd2, 15, BigDecimal.ROUND_HALF_UP));
 //52744.483614048831304
 ```
 
-## 比较器
+### Pattern、Matcher 正则
+
+| Pattern                          | 正则表达式                                                   |
+| -------------------------------- | ------------------------------------------------------------ |
+| compile()                        | 静态，返回一个Pattern对象，编译正则表达式。<br />flag：模式标识。<br />`Pattern.CASE_INSENSITIVE`、r：匹配时忽略大小写，默认只考虑US ASCII字符。<br />`Pattern.UNICODE_CASE`、u：搭配r，匹配Unicode字符的大小写。<br />`Pattern.UNICODE_CHARACTER`、U：包含了u，使用Unicode替代POSIX。<br />`Pattern.MULTILINE`、m：指定`^、$`用于匹配行，而不是全文。<br />`Pattern.UNIX_LINES`、d：搭配m，只有`\n`作为行终止符。<br />`Pattern.DOTALL`、s：指定`.`匹配所有字符（包括行终止符）。<br />`Pattern.COMMENTS`、x：指定忽略空白字符、注释（`#`）。<br />`Pattern.LITERAL`：指定逐字地采纳，必须精确匹配（字母大小写的差异除外）。<br />`Pattern.CANON_EQ`：考虑Unicode字符的等价性， |
+| matcher()                        | 返回对应的匹配器（Matcher）                                  |
+| split()<br />splitAsStream()     | 返回将输入按指定分隔符分割的数组/Stream。<br />limit：数组的最大长度。<br />若分割到第limit-1个分隔符，则剩余的全部存入数组的最后一个位置。<br />limit&le;0时，分割整个输入；limit=0时，坠尾的字符串不会置于数组中。 |
+| **Matcher**                      | **匹配器（任何实现CharSequence接口的）**                     |
+| matches()                        | 若匹配模式，则返回true。                                     |
+| lookingAt()                      | 若输入的开头匹配，则返回true。                               |
+| find()                           | 查找下一个匹配，若找到下一个匹配，则返回true。<br />start：指定查找起始点。 |
+| start()<br />end()               | 返回当前匹配的开始、结尾索引位置。<br />groupIndex：群组索引（从1开始，0表示整个匹配）。 |
+| group()                          | 返回当前的匹配。<br />groupIndex：指定群组的匹配。           |
+| replaceAll()<br />replaceFirst() | 返回将匹配器的输入中所有/第一个匹配替换后的结果。<br />replacement：替换字符串（`$n`指定群组的引用，`\$`来表示`$`）。 |
+| reset()                          | 复位。<br />input：将匹配器用于另一个输入。                  |
+
+- 群组`()`（子表达式）。
+
+```java
+Pattern compile = Pattern.compile("(([1-9]|1[0-2]):([0-5][0-9]))[ap]m", Pattern.CASE_INSENSITIVE);
+Matcher matcher = compile.matcher("11:59am");
+if (matcher.matches()) {
+    for (int i = 0; i <= matcher.groupCount(); i++) {
+        System.out.println("groupIndex:" + i + "\t" + matcher.group(i));
+    }
+}
+```
+
+### 比较器
 
 - Java中的对象在正常情况下，只能使用`== 或  !=`比较，而不能使用` > 或 < `比较。
 
@@ -1902,7 +1930,7 @@ System.out.println(bd.divide(bd2, 15, BigDecimal.ROUND_HALF_UP));
 | Comparable | 自然排序 | 实现类的对象在任何位置都可以比较大小 |
 | Comparator | 定制排序 | 临时性的比较，定制排序大于自然排序。 |
 
-### Comparable 自然排序
+#### Comparable 自然排序
 
 > String、包装类等实现了Comparable接口，重写了compareTo()方法，给出了比较两个对象大小的方法。
 
@@ -1957,7 +1985,7 @@ public class Goods implements Comparable {
 }
 ```
 
-### Comparator 定制排序
+#### Comparator 定制排序
 
 - Comparator对象强行对多个对象进行整体排序的比较：没有实现java.lang.Comparable接口、 实现了java.lang.Comparable接口的排序规则不适合当前的操作。定制排序大于自然排序，如果存在自然排序，则被定制排序覆盖。
 
@@ -4351,7 +4379,7 @@ Stream.of(Locale.getAvailableLocales())
 
 > Java中输入输出的相对路径为用户工作目录起始：`System.getProperty("user.dir");`。
 
-## 输入/输出流
+## (In/Out)putStream 输入/输出流
 
 <img src="../../pictures/Java-IOCloseable-Flushable.drawio.svg" width="700"/>
 
@@ -4392,6 +4420,14 @@ try (FileReader fileReader = new FileReader(readFile);
 }
 ```
 
+### File 文件
+
+- File：外存文件和目录的抽象表示，用来操作文件和获得文件的信息，由文件流提供对文件数据读取的方法。
+
+| 文件字节流                            | 文件字符流                 |
+| ------------------------------------- | -------------------------- |
+| FileInputStream<br />FileOutputStream | FileReader<br />FileWriter |
+
 ### Filter(In/Out)putStream 组合过滤器
 
 - 套接流（流链）：过滤流将多个流套接在一起，利用各种流的特性共同处理数据。 在关闭外层流的同时，内层流也会自动进行关闭。
@@ -4403,7 +4439,39 @@ try (FileReader fileReader = new FileReader(readFile);
 | **FilterOutputStream过滤器** | **说明**                                                     |
 | BufferedOutputStream         | 缓冲区满、被冲刷时，写出。                                   |
 
+###  Piped(In/Out)putStream 管道流
+
+- 管道流：实现线程间数据的直接传输，一个管道由管道输出端（管道输出流）与管道输入端（管道输入流）连接而成。线程A可以通过它的输出管道发送数据，线程B把它的输人管道接到A的输出管道上即可接收A发送的数据。
+
+> 管道的连接实际上是使管道的输入流指向管道的输出流，或管道的输出流也指向管道输入流，这样从管道的输入流可以读取写入管道输出流的数据。
+> 管道流有时会使依赖于管道通信的程序造成**死锁** ： Java使用管道进行线程连接时不用考虑线程的同步问题。
+
+| 管道         | 类                                 |
+| ------------ | ---------------------------------- |
+| 管道的输入流 | PipedReader<br />PipedInputStream  |
+| 管道的输出流 | PipedWriter<br />PipedOutputStream |
+
+```java
+PipedInputStream pin = new PipedInputStream();
+//在管道输出流创建时挂接
+PipedOutputStream pout = new PipedOutputStream(pin);
+```
+
+```java
+PipedInputStream pin = new PipedInputstream();
+PipedOutputStream pout = new PipedOutputStrea();
+//在管道输出流和输入流创建后挂接
+pin.connect(out); //或者 pout.connect(in);
+```
+
 ## 文本输入/输出
+
+| System标准输入/输出重定向 | 说明           |
+| ------------------------- | -------------- |
+| setIn(InpuStream in)      | 重新指定输入流 |
+| setOut(PrintStream out)   | 重新指定输出流 |
+
+### PrintWriter、PrintStream
 
 | PrintWriter文本输出                                          | 说明                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -4438,6 +4506,8 @@ try (PrintWriter pw = new PrintWriter(System.out,true)) {
 | `Standard.UTF_8`           | utf-8编码方式。      |
 
 ## 二进制输入/输出
+
+### Data(In/Out)putStream 数据流
 
 - 数据流：基本数据类型、String（底层存储）的串行化，读取或写出基本数据类型的变量/字符串。
 
@@ -6160,458 +6230,13 @@ System.out.println(conn);
 
 > Java提供的网络类库可以实现无痛的网络连接，联网的底层细节被隐藏在 Java 的本机安装系统里，由 JVM 进行控制。并且 Java 实现了一个跨平台的网络库，程序员面对的是一个统一的网络编程环境。
 
-## InetAddress IP地址
-
-- InetAddress对象含有一个网络主机地址的域名和IP地址。分为Inet4Address、Inet6Address。
-
-| 方法                   | 获取           |
-| ---------------------- | -------------- |
-| getByName(String host) | 域名对应IP地址 |
-| getLocalHost()         | 127.0.0.1      |
-| getHostName()          | 域名           |
-| getHostAddress()       | 本机IP地址     |
-
-## Socket 套接字
-
-### TCP
-
-**1. 客户端发送数据到服务端**
-
-```java
-package com.zjk.java1;
-
-import org.junit.Test;
-
-import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
-public class TCPTest {
-
-    //客户端
-    @Test
-    public void client() {
-
-        Socket socket = null;
-        OutputStream outputStream = null;
-        try {
-            //1. 创建Socket对象,指明服务器的IP和端口号
-            InetAddress inet = InetAddress.getByName("127.0.0.1");
-            socket = new Socket(inet, 22112);
-            //2. 获取一个输出流，输出数据
-            outputStream = socket.getOutputStream();
-            //3. 写出数据
-            outputStream.write("客户端".getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            //4. 关闭资源
-            try {
-                if (outputStream != null)
-                    outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (socket != null)
-                    socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    //服务端
-    @Test
-    public void server(){
-        ServerSocket serverSocket = null;
-        Socket accept = null;
-        InputStream inputStream = null;
-        ByteArrayOutputStream byteArrayOutputStream = null;
-        try {
-            //1. 创建服务器端的ServerSocket，指明自己的端口号
-            serverSocket = new ServerSocket(22112);
-            //2. 调用accept()方法 表示接收来自客户端的Socket
-            accept = serverSocket.accept();
-            //3. 获取输入流
-            inputStream = accept.getInputStream();
-
-            //不建议，可能会有乱码
-//        byte[] buffer = new byte[20];
-//        int len;
-//        while ((len = inputStream.read(buffer)) != -1) {
-//            String str = new String(buffer, 0, len);
-//            System.out.println(str);
-//        }
-
-            //4. 读取输入流中的数据
-            byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[20];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, len);
-            }
-
-            System.out.println(byteArrayOutputStream);
-
-            System.out.println(accept.getInetAddress().getHostAddress());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            //5. 关闭资源
-            try {
-                if(byteArrayOutputStream != null)
-                    byteArrayOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if(inputStream!=null)
-                    inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if(accept!=null) {
-                    accept.close();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if(serverSocket!=null)
-                    serverSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}
-```
-
-**2. 客户端发送文件到服务端，服务端将文件保存到本地**
-
-```java
-package com.zjk.java1;
-
-import org.junit.Test;
-
-import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-public class TCPTest2 {
-    @Test
-    public void client() {
-        Socket socket = null;
-        OutputStream outputStream = null;
-        BufferedInputStream bufferedInputStream = null;
-        try {
-            socket = new Socket(InetAddress.getByName("127.0.0.1"), 22112);
-            outputStream = socket.getOutputStream();
-            bufferedInputStream = new BufferedInputStream(new FileInputStream("th.jpg"));
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = bufferedInputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (bufferedInputStream != null)
-                    bufferedInputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (outputStream != null)
-                    outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (socket != null)
-                    socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @Test
-    public void server() {
-        ServerSocket serverSocket = null;
-        Socket accept = null;
-        InputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
-        try {
-            serverSocket = new ServerSocket(22112);
-            accept = serverSocket.accept();
-            inputStream = accept.getInputStream();
-            fileOutputStream = new FileOutputStream(new File("thClient.jpg"));
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, len);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (fileOutputStream != null)
-                    fileOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (inputStream != null)
-                    inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (accept != null)
-                    accept.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (serverSocket != null)
-                    serverSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}
-```
-
-**3.从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。**
-
-```java
-package com.zjk.java1;
-
-import org.junit.Test;
-
-import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-public class TCPTest3 {
-    @Test
-    public void client() {
-        Socket socket = null;
-        OutputStream outputStream = null;
-        BufferedInputStream bufferedInputStream = null;
-        InputStream inputStream = null;
-        ByteArrayOutputStream byteArrayOutputStream = null;
-        try {
-            socket = new Socket(InetAddress.getByName("127.0.0.1"), 22112);
-            outputStream = socket.getOutputStream();
-            bufferedInputStream = new BufferedInputStream(new FileInputStream("th.jpg"));
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = bufferedInputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-            //关闭数据的输出
-            socket.shutdownOutput();
-
-            //接收服务端的反馈，并显示在控制台
-            inputStream = socket.getInputStream();
-            byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer2 = new byte[20];
-            int len2;
-            while ((len2 = inputStream.read(buffer2)) != -1) {
-                byteArrayOutputStream.write(buffer2, 0, len2);
-            }
-
-            System.out.println(byteArrayOutputStream.toString());
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (bufferedInputStream != null)
-                    bufferedInputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (outputStream != null)
-                    outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (socket != null)
-                    socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (inputStream!=null)
-                    inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if(byteArrayOutputStream!=null)
-                    byteArrayOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @Test
-    public void server() {
-        ServerSocket serverSocket = null;
-        Socket accept = null;
-        InputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
-        OutputStream outputStream = null;
-
-        try {
-            serverSocket = new ServerSocket(22112);
-            accept = serverSocket.accept();
-            inputStream = accept.getInputStream();
-            fileOutputStream = new FileOutputStream(new File("thClient2.jpg"));
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, len);
-            }
-
-            //服务器端给予客户端反馈
-            outputStream = accept.getOutputStream();
-            outputStream.write("服务端：已接收客户端文件。".getBytes());
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (fileOutputStream != null)
-                    fileOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (inputStream != null)
-                    inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (accept != null)
-                    accept.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (serverSocket != null)
-                    serverSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            try {
-                if(outputStream!=null)
-                    outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}
-```
-
-### UDP
-
-```java
-package com.zjk.java1;
-
-
-import org.junit.Test;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-
-public class UDPTest {
-
-    //发送端
-    @Test
-    public void sender() {
-        DatagramSocket socket = null;
-        try {
-            socket = new DatagramSocket();
-
-            String str = "UDP:发送端";
-            byte[] date = str.getBytes();
-            InetAddress inet = InetAddress.getLocalHost();
-            DatagramPacket packet = new DatagramPacket(date, 0, date.length, inet, 21122);
-
-            socket.send(packet);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                socket.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-
-    //接收端
-    @Test
-    public void receiver() {
-        DatagramSocket socket = null;
-        try {
-            socket = new DatagramSocket(21122);
-
-            byte[] buffer = new byte[100];
-            DatagramPacket packet = new DatagramPacket(buffer, 0, buffer.length);
-
-            socket.receive(packet);
-
-            System.out.println(new String(packet.getData(), 0, packet.getLength()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                socket.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-}
-```
-
-### URL
+## URL
 
 - URL对象一旦创建就不可修改。
 
 | 构造器                                                       | 说明                                                      |
 | ------------------------------------------------------------ | --------------------------------------------------------- |
-| public URL (String spec)                                     | `new URL ("http://www. atguigu.com/") `                   |
+| public URL (String spec)                                     | `new URL ("http://www.atguigu.com/") `                    |
 | public URL(URL context, String spec)                         | `new URL(url, “download.html")`                           |
 | public URL(String protocol, String host, String file)        | `new URL("http", "www.atguigu.com", “download. html")`    |
 | public URL(String protocol, String host, int port, String file) | `new URL("http", "www.atguigu.com", 80, “download.html")` |
@@ -6627,33 +6252,55 @@ public class UDPTest {
 | getQuery( )    | 查询名                       |
 
 ```java
-//URL对象信息的获取
+URL url = new URL("http:/java.sun.com:80/docs/books/tutorial/index.html#DOWNLOADING");
+```
 
-package com.zjk.java1;
+## InetAddress IP地址
 
-import java.net.MalformedURLException;
-import java.net.URL;
+- InetAddress对象含有一个网络主机地址的域名和IP地址（Inet4Address、Inet6Address）。
 
-public class URLtest1 {
-    public static void main(String[] args) {
-        try {
-            URL url = new URL("http:/java.sun.com:80/docs/books/tutorial/index.html#DOWNLOADING");
+| InetAddress                         | 返回                                                         |
+| ----------------------------------- | ------------------------------------------------------------ |
+| getByName()<br />getAllByName()     | 返回InetAddress对象，指定域名对应的IP地址。<br />返回`InetAddress[]`，该域名所对应的所有IP地址。 |
+| getAddress()                        | 返回包含IP地址的`byte[]`。                                   |
+| getLocalHost()                      | 返回返回InetAddress对象，本地主机127.0.0.1。                 |
+| getHostName()<br />getHostAddress() | 返回本机名。<br />返回本机IP。                               |
 
-            //getProtocol() 获取协议名
-            System.out.println(url.getProtocol());//http
-            //getHost() 获取主机
-            System.out.println(url.getHost());
-            //getPort() 获取端口
-            System.out.println(url.getPort());//-1
-            //getRef() 获取相对路径
-            System.out.println(url.getRef());//DOWNLOADING
-            //getFile() 获取文件名
-            System.out.println(url.getFile());// /java.sun.com:80/docs/books/tutorial/index.html
-            //getQuery() 获取查询名
-            System.out.println(url.getQuery());//null
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+## Socket 套接字
+
+| Socket         | 网络套接字                                                   |
+| -------------- | ------------------------------------------------------------ |
+| Socket()       | 创建空套接字。<br />若指定host、port，则连接指定地址（可能一直阻塞）。 |
+| **套接字超时** | **说明**                                                     |
+| connect()      | 将套接字连接到指定地址，超时则返回。<br />address：SocketAddress，地址。<br />timeout：最大尝试连接时间（ms）。 |
+| setSoTimeOut() | 设置该套接字上读请求的阻塞时间，超时则抛出InterruptedIOException。 |
+| isConnected()  | 若该套接字已经被连接，则返回true。                           |
+| isClosed()     | 若该套接字已经被关闭，则返回true。                           |
+
+```java
+try (Socket socket = new Socket()) {
+    socket.connect(new InetSocketAddress("time-a.nist.gov", 13), 10000);
+    try (BufferedInputStream in = new BufferedInputStream(socket.getInputStream())) {
+        System.out.println(new String(in.readAllBytes()));
     }
 }
+```
+
+### ServerSocket 服务器套接字
+
+| ServerSocket  | 服务器套接字                                                 |
+| ------------- | ------------------------------------------------------------ |
+| SeverSocket() | 指定监听端口的服务器套接字。                                 |
+| accept()      | 等待连接，将一直阻塞，直到建立连接。<br />与客户端建立连接后，返回一个Scoket对象。 |
+| close()       | 关闭。                                                       |
+
+```java
+try (ServerSocket serverSocket = new ServerSocket(8081)) {
+    try (Socket socket = serverSocket.accept();
+         OutputStream out = socket.getOutputStream()) {
+        out.write("Hello! I`m Server.".getBytes());
+    }
+}
+
+//socket.connect(new InetSocketAddress("127.0.0.1", 8081), 30000);
 ```

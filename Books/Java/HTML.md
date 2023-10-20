@@ -295,11 +295,11 @@ body h1 + p .special {
 | async | 异步，js和html一同加载；但无法控制脚本的运行次序 |
 | defer | 按上下顺序控制脚本的运行次序                     |
 
-## 基础语法
+## Js
 
-### 变量
+### 基础语法
 
-#### 变量声明
+#### 变量
 
 - JavaScript区分大小写，并使用Unicode字符集。
 
@@ -327,7 +327,7 @@ let number = 1;
 alert(number); //33 全局变量number被更改
 ```
 
-#### var 变量提升
+##### var 变量提升
 
 | 变量      | 说明                                                         |
 | --------- | ------------------------------------------------------------ |
@@ -344,7 +344,231 @@ let y = 3;
 
 - 一个函数中所有的var语句应尽可能地放在接近函数顶部的地方，避免变量提升。
 
-##### 函数提升
+##### 解构赋值
+
+| 解构赋值目标             | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| 可迭代对象<br />（数组） | 等号左边的参数少于右边：右边多出的会被忽略。<br />等号左边的参数多于右边：左边多出的参数值为undifind。 |
+| 对象属性                 | 只有名称相对应的参数会被赋值，不匹配的参数值为undifind。     |
+
+```javascript
+//x,y分别被赋值1,2
+let [x,y] = [1,2]
+```
+
+##### 基本数据类型
+
+| 类型      | 名称   | 说明                                                         |
+| :-------- | :----- | :----------------------------------------------------------- |
+| number    | 数值型 | Infinity 无穷<br>NaN 非数值                                  |
+| string    | 字符串 | JavaScript不区分字符、字符串；<br>单引号、双引号作用相同。   |
+| boolean   | 布尔型 | true：非零的数值，非空字符串，非空对象<br>false：零 NaN，空字符串，null，undefined |
+| null      | 空     | number: 0 <br>boolean：false<br>typeof()返回object类型       |
+| undefined | 未定义 | 变量未初始化时的默认为undefined                              |
+
+```js
+//返回变量数据类型
+typeof(变量)
+```
+
+| 自动转换      | 值              | boolean | String              | number |
+| :------------ | :-------------- | :------ | :------------------ | :----- |
+| **number**    | 0<br>NaN        | false   | "0"<br>"NaN"        |        |
+|               | Infinity<br>123 | true    | "Infinity"<br>"123" |        |
+| **string**    | "" 空字符串     | false   |                     | 0      |
+|               | "abc" 非数值    | true    |                     | NaN    |
+|               | "123" 数值      | true    |                     | 123    |
+| **null**      |                 | false   | "null"              | NaN    |
+| **undefined** |                 | false   | "undefined          | 0      |
+
+| 强制转换目标 | 方法                       |
+| :----------- | :------------------------- |
+| **String**   | String()                   |
+|              | toString()                 |
+| **number**   | Number()                   |
+|              | parseInt()<br>parseFloat() |
+| **boolean**  | Boolean()                  |
+
+```js
+//string 按照字符串的字面值，转为数字；不是数字则转为NaN
+var number = +"123"; //+转为数字
+parseInt(str);
+
+//boolean  true转为1，false转为0
+var number = +true;
+```
+
+##### 运算符、操作符 
+
+| 运算符 | 说明                                     | 示例              |
+| :----- | :--------------------------------------- | ----------------- |
+| `==`   | 等于，只根据表面值判断，不考虑数据类型   | "17"==17 //true   |
+| `!=`   | 不等于，只根据表面值判断，不考虑数据类型 | "17"!=17 //false  |
+| `===`  | 绝对等于，根据表面值和数据类型考虑       | "17"===17 //false |
+| `!==`  | 绝对不等于，根据表面值和数据类型考虑     | "17"!==17 //true  |
+
+| 操作符      | 说明                                                         | 示例                                                         |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| in          | 是否为对象的属性名                                           | `let person = {name:"tom"};`<br>`"name" in person;`//true    |
+| instanceof  | 是否为对象类的实例                                           | `let d = new Date();`<br>`d instanceof Date;`//true          |
+| eval() 函数 | 传入非字符串：返回该值<br>传入字符串：作为JavaScript代码解析 | 返回最后一句表达式/语句的值；没有值则undefined<br>eval()内使用const/let声明的变量只在eval内作用<br>eval()内使用var变量作用域和eval()所在相同 |
+| `?:`        | 三元操作符                                                   |                                                              |
+| `??`        | 先定义：如果左侧为null/undefined，则返回右侧的值             | `null ?? 1`//返回1                                           |
+| typeof      | 显示类型<br>null --> object<br>符号--> symbol                | `typeof 123`//"number"                                       |
+| delete      | 删除对象的某个属性。<br />删除的元素仍然占用内存空间。<br /> | `delete person.name;`//删除person对象的name属性<br>`delete arr[0];`//删除arr数组的第1个元素 |
+
+> delete不会改变数组的元素个数， 数组中删除的元素的位置会被设置为 undefined，并且它的位置不会被重新分配。
+
+#### 流程控制
+
+##### 条件语句
+
+###### if..else
+
+- 
+
+```javascript
+//如果需要在条件表达式中使用赋值，通常在赋值语句前后额外添加一对括号
+if ((x = y)) {
+}
+```
+
+###### switch
+
+```javascript
+switch (expression) {
+   case label_1:
+      statements_1
+      [break;]
+   case label_2:
+      statements_2
+      [break;]
+   default:
+      statements_def
+      [break;]
+}
+```
+
+##### 循环
+
+###### for、for..in、for..of
+
+```javascript
+for ([initialExpression]; [condition]; [incrementExpression]){
+  statement
+}
+```
+
+| 循环     | 遍历的结果     | 方式                                                         |
+| :------- | -------------- | ------------------------------------------------------------ |
+| for...in | 数组元素的下标 | 循环一个指定的变量来循环一个对象所有可枚举的属性 。          |
+| for...of | 元素的值       | 循环可迭代对象，对值的每一个独特属性调用一次迭代。<br />Map类型：for..of每次循环输出一个数组`[key,value]`。 |
+
+- 数组迭代是实时的，如果在迭代中修改数组中下一个元素的值，则迭代出的下个元素的值是修改后的。
+
+```javascript
+let arr = [3, 5, 7];
+arr.foo = "hello"; 
+//这里的foo严格意义上来说是数组的属性，而不是数组中的元素
+//所以for..of不会输出foo属性对应的值，而是输出数组中的元素
+
+for (let i in arr) {
+    console.log(i); // 输出 "0", "1", "2", "foo"
+}
+
+for (let i of arr) {
+    console.log(i); // 输出 "3", "5", "7"
+    //注意 for...of 的输出没有出现 "hello"
+}
+```
+
+###### while、do..while
+
+- do..while：statement在检查条件之前会执行一次。
+
+```javascript
+do{
+    statement
+}while (condition);
+```
+
+```javascript
+while (condition){
+    statement
+}
+```
+
+###### continue、break
+
+| 关键字   | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| continue | 不带label：终止当前 `while`、`do-while`、for这次的循环并且继续执行下一次循环。<br />带label：应用被 label 标识的循环语句。 |
+| break    | 不带label：立即终止当前所在的 `while`、`do-while`、`for`、 `switch` 并把控制权交回这些结构后面的语句。<br />带label：终止指定的带标记（label）的语句。 |
+
+```javascript
+var num = 0;
+outPoint:
+for (var i = 0 ; i < 10 ; i++){
+  for (var j = 0 ; j < 10 ; j++){
+    if( i == 5 && j == 5 ){
+      break outPoint; // 在 i = 5，j = 5 时，跳出所有循环，
+                      // 返回到整个 outPoint 下方，继续执行
+    }
+    num++;
+  }
+}
+
+alert(num); // 输出 55
+```
+
+#### 异常处理
+
+##### throw
+
+```javascript
+throw new UserException("Value too high");
+```
+
+##### try-catch-finally
+
+```javascript
+openMyFile();
+try {
+    writeMyFile(theData); //This may throw a error
+}catch(e){
+    handleError(e); // If we got a error we handle it
+    console.log(e.name);
+    console.log(e.message);
+}finally {
+    closeMyFile(); // always close the resource
+}
+```
+
+##### Error对象
+
+| Error属性 | 说明                                               |
+| :-------- | :------------------------------------------------- |
+| name      | 提供了常规的错误类（如 'DOMException' 或 'Error'） |
+| message   | 通常提供了一条从错误对象转换成字符串的简明信息。   |
+
+```javascript
+throw (new Error('The message'));
+```
+
+#### 函数
+
+- 定义函数：形参不需要数据类型，返回值也不需要定义类型，如果需要返回值，直接return相应的数据即可。
+
+```javascript
+function 函数名(参数1, 参数2,...) {
+    ...语句;
+  return 返回值;
+}
+
+var 变量 =  function (参数列表) {
+   //执行语句
+}
+```
 
 - 函数提升：只有函数声明会被提升到顶部，而函数表达式不会被提升。
 
@@ -367,264 +591,10 @@ var baz = function() {
 };
 ```
 
-#### 解构赋值
-
-| 目标               | 说明                                                         |
-| ------------------ | ------------------------------------------------------------ |
-| 可迭代对象（数组） | 如果等号左边的参数少于右边，右边多出的会被忽略。<br />如果等号左边的参数多于右边：左边多出的参数值为undifind。 |
-| 对象属性           | 只有名称相对应的参数会被赋值，不匹配的参数值为undifind。     |
-
-```javascript
-let [x,y] = [1,2]
-//x,y分别被赋值1,2
-```
-
-### 基本数据类型
-
-| 类型      | 名称   | 说明                                                         |
-| :-------- | :----- | :----------------------------------------------------------- |
-| number    | 数值型 | Infinity 无穷<br>NaN 非数值                                  |
-| string    | 字符串 | JavaScript不区分字符、字符串；<br>单引号、双引号作用相同。   |
-| boolean   | 布尔型 | true：非零的数值，非空字符串，非空对象<br>false：零 NaN，空字符串，null，undefined |
-| null      | 空     | number: 0 <br>boolean：false<br>typeof()返回object类型       |
-| undefined | 未定义 | 变量未初始化时的默认为undefined                              |
-
-- typeof(变量)：返回变量数据类型。
-
-#### 类型转化
-
-| 自动转换   | 值               | boolean | String              | number |
-| :-------- | :-------------- | :------ | :------------------ | :----- |
-| number    | 0<br>NaN        | false   | "0"<br>"NaN"        |        |
-|           | Infinity<br>123 | true    | "Infinity"<br>"123" |        |
-| string    | "" 空字符串      | false   |                     | 0      |
-|           | "abc" 非数值     | true    |                     | NaN    |
-|           | "123" 数值       | true    |                     | 123    |
-| null      |                 | false   | "null"              | NaN    |
-| undefined |                 | false   | "undefined          | 0      |
-
-| 强制转换目标    | 方法                        |
-| :----------- | :------------------------- |
-| String  | String()                   |
-|               | toString()                 |
-| number  | Number()                   |
-|               | parseInt()<br>parseFloat() |
-| boolean | Boolean()                  |
-
-- string 按照字符串的字面值，转为数字；不是数字则转为NaN
-  - `var number = +"123"; `  **+转为数字**
-  - `parseInt(str)`
-- boolean  true转为1，false转为0
-  - `var number = +true;` 
-
-### 运算符
-
-| 运算符 | 说明                                     | 示例              |
-| :----- | :--------------------------------------- | ----------------- |
-| `==`   | 等于，只根据表面值判断，不考虑数据类型   | "17"==17 //true   |
-| `!=`   | 不等于，只根据表面值判断，不考虑数据类型 | "17"!=17 //false  |
-| `===`  | 绝对等于，根据表面值和数据类型考虑       | "17"===17 //false |
-| `!==`  | 绝对不等于，根据表面值和数据类型考虑     | "17"!==17 //true  |
-
-### 操作符
-
-| 操作符      | 说明                                                         | 示例                                                         |
-| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| in          | 是否为对象的属性名                                           | `let person = {name:"tom"};`<br>`"name" in person;`//true    |
-| instanceof  | 是否为对象类的实例                                           | `let d = new Date();`<br>`d instanceof Date;`//true          |
-| eval() 函数 | 传入非字符串：返回该值<br>传入字符串：作为JavaScript代码解析 | 返回最后一句表达式/语句的值；没有值则undefined<br>eval()内使用const/let声明的变量只在eval内作用<br>eval()内使用var变量作用域和eval()所在相同 |
-| ?:          | 三元操作符                                                   |                                                              |
-| ??          | 先定义：如果左侧为null/undefined，则返回右侧的值             | `null ?? 1`//返回1                                           |
-| typeof      | 显示类型<br>null --> object<br>符号--> symbol                | `typeof 123`//"number"                                       |
-| delete      | 删除                                                         | `delete person.name;`//删除person对象的name属性<br>`delete arr[0];`//删除arr数组的第1个元素 |
-
-### 流程控制
-
-#### 条件语句
-
-##### if..else
-
-- 如果需要在条件表达式中使用赋值，通常在赋值语句前后额外添加一对括号
-
-```javascript
-if ((x = y)) {
-  /* statements here */
-}
-```
-
-##### switch
-
-```javascript
-switch (expression) {
-   case label_1:
-      statements_1
-      [break;]
-   case label_2:
-      statements_2
-      [break;]
-   ...
-   default:
-      statements_def
-      [break;]
-}
-```
-
-#### 循环
-
-##### for
-
-```javascript
-for ([initialExpression]; [condition]; [incrementExpression]){
-  statement
-}
-```
-
-##### for..of和for..in
-
-- for..in循环一个指定的变量来循环一个对象所有可枚举的属性 。
-
-
-- for...of循环可迭代对象，对值的每一个独特属性调用一次迭代。
-
-- Map类型：for..of每次循环输出一个数组：`[key,value]`。
-
-**for..of和for..in**
-
-|循环|遍历的结果|
-|:--|:--|
-|for...in|数组元素的下标|
-|for...of|元素的值|
-
-- 数组迭代是实时的，如果在迭代中修改数组中下一个元素的值，则迭代出的下个元素的值是修改后的。
-
-```javascript
-let arr = [3, 5, 7];
-arr.foo = "hello"; 
-//这里的foo严格意义上来说是数组的属性，而不是数组中的元素
-//所以for..of不会输出foo属性对应的值，而是输出数组中的元素
-
-for (let i in arr) {
-  console.log(i); // 输出 "0", "1", "2", "foo"
-}
-
-for (let i of arr) {
-  console.log(i); // 输出 "3", "5", "7"
-}
-
-// 注意 for...of 的输出没有出现 "hello"
-```
-
-##### do..while
-
-- statement在检查条件之前会执行一次。
-
-```javascript
-do{
-    statement
-}while (condition);
-```
-
-##### while
-
-```javascript
-while (condition){
-    statement
-}
-```
-
-##### continue
-
-```javascript
-var num = 0;
-outPoint:
-for (var i = 0 ; i < 10 ; i++){
-  for (var j = 0 ; j < 10 ; j++){
-    if( i == 5 && j == 5 ){
-      break outPoint; // 在 i = 5，j = 5 时，跳出所有循环，
-                      // 返回到整个 outPoint 下方，继续执行
-    }
-    num++;
-  }
-}
-
-alert(num); // 输出 55
-```
-
-##### break
-
-- 当使用不带 label 的 break时，它会立即终止当前所在的 `while`，`do-while`，`for`，或者 `switch` 并把控制权交回这些结构后面的语句。
-- 当使用带 label 的 break时，它会终止指定的带标记（label）的语句。
-
-```javascript
-break [label];
-```
-
-##### label
-
-- 当使用不带 label 的 `continue` 时，它终止当前 `while`，`do-while`，或者 for 语句到结尾的这次的循环并且继续执行下一次循环。
-- 当使用带 label 的 `continue` 时，它会应用被 label 标识的循环语句。
-
-```javascript
-continue [label];
-```
-
-### 异常处理
-
-#### throw
-
-```javascript
-throw new UserException("Value too high");
-```
-
-#### try-catch-finally
-
-```javascript
-openMyFile();
-try {
-    writeMyFile(theData); //This may throw a error
-}catch(e){
-    handleError(e); // If we got a error we handle it
-    console.log(e.name);
-    console.log(e.message);
-}finally {
-    closeMyFile(); // always close the resource
-}
-```
-
-#### Error对象
-
-|Error属性|说明|
-|:--|:--|
-|name|提供了常规的错误类（如 'DOMException' 或 'Error'）|
-|message|通常提供了一条从错误对象转换成字符串的简明信息。|
-
-```javascript
-throw (new Error('The message'));
-```
-
-### 函数
-
-#### 定义函数
-
-- 形参不需要数据类型
-- 返回值也不需要定义类型，如果需要返回值，直接return相应的数据即可。
-
-```javascript
-function 函数名(参数1, 参数2,...) {
-    ...语句;
-  return 返回值;
-}
-
-var 变量 =  function (参数列表) {
-   //执行语句
-}
-```
-
-#### 调用函数
-
-- 调用时，函数调用可以传递任意个数的参数，可以没有参数也可以超过列表中的参数。
-- 如果参数超过参数列表的个数：多余的参数被传递，但不接收
-- 如果参数低于参数列表的个数：其没有接收到传递值的参数会转为undifined
+| 调用函数         | 函数调用可以传递任意个数的参数（没有参数`~`超过列表的参数）。 |
+| ---------------- | ------------------------------------------------------------ |
+| 参数少于参数列表 | 其没有接收到传递值的参数会转为undifined。                    |
+| 参数超过参数列表 | 多余的参数被传递，但不接收。                                 |
 
 ```javascript
 //绑定函数变量
@@ -645,7 +615,7 @@ alert(add(1,2,3)); //3 多余的参数不接收
 alert(add(1)); //NaN
 ```
 
-#### 匿名函数
+##### 匿名函数
 
 - 声明一个函数，相当于创建了一个函数对象，将这个对象的引用赋值给变量。
 
@@ -656,9 +626,9 @@ var 变量 = function(参数1, 参数2) {
 };
 ```
 
-#### 立即函数
+##### 立即函数
 
-- 立刻调用执行
+- 立即函数：立刻调用执行。
 
 ```js
 (function (a, b) {
@@ -666,7 +636,7 @@ var 变量 = function(参数1, 参数2) {
 })(1, 2);
 ```
 
-## 事件
+##### 事件绑定
 
 | 事件绑定方式                                      | 说明                         |
 | ------------------------------------------------- | ---------------------------- |
@@ -679,11 +649,11 @@ document.getElementById("H1").onclick = function (){
 }
 ```
 
-## 对象
+#### 对象
 
-### 自定义对象
+##### 自定义对象
 
-- 属性/方法会被之后的同名属性/方法覆盖。
+- 自定义对象：属性/方法会被之后的同名属性/方法覆盖。
 
 ```javascript
 //new构造对象
@@ -717,16 +687,15 @@ let students = [
 ]
 ```
 
-#### 属性/方法访问
-
  ```javascript
- person.name;
- person["name"];
+//属性/方法访问
+person.name;
+person["name"];
  ```
 
-##### ?. 条件访问/调用
-
 ```javascript
+//?. 条件访问/调用
+
 //当属性（右侧）为null或undefined时，不访问该属性，直接返回undefined
 person?.name;
 person?.[name];
@@ -734,14 +703,12 @@ person?.[name];
 person?.(eat("apple"));
 ```
 
-#### this
-
 | this位置   | 指向                         |
 | ---------- | ---------------------------- |
 | 在函数外面 | window对象（当前浏览器窗口） |
 | 在函数里面 | 调用函数的对象               |
 
-### 系统对象
+##### 系统对象
 
 | 对象   | 说明         |
 | :----- | :----------- |
@@ -751,7 +718,7 @@ person?.(eat("apple"));
 | Math   | 数学处理     |
 | Number | number       |
 
-#### Array 数组
+###### Array 数组
 
 - Array数组是变长变类型的，下标从0开始。
 
@@ -790,11 +757,7 @@ alert(arr.length); //11
 alert(arr[9]); //undefined
 ```
 
-##### delete操作符
-
-- delete删除对象的某个属性。delete不会改变数组的元素个数， 数组中删除的元素的位置会被设置为 undefined，并且它的位置不会被重新分配（delete删除的元素仍然占用内存空间）。
-
-#### String 字符串
+###### String 字符串
 
 ```javascript
 var 变量 = new String(""); 
@@ -814,115 +777,28 @@ let name = "Tom";
 let str = `hello ${name}`; //hello Tom
 ```
 
-#### RegExp 正则表达式 
-
-**正则表达式对象**
+###### RegExp 正则表达式 
 
 ```javascript
+//正则表达式对象
 var reg = /正则/
 var reg = new RegExp("正则")
 ```
 
-**语法规则**
-
-**单个**
-
-| 符号 | 含义                                                     |
-| :--- | :------------------------------------------------------- |
-| ^    | 表示开始                                                 |
-| $    | 表示结束                                                 |
-| [ ]  | 代表某个范围内的单个字符，比如： [0-9] 单个数字字符      |
-| .    | 代表任意单个字符，除了换行和行结束符                     |
-| \w   | 代表单词字符：字母、数字、下划线(_)，相当于 [A-Za-z0-9_] |
-| \d   | 代表数字字符： 相当于 [0-9]                              |
-
-**量词：**
-
-| 符号  | 含义             |
-| :---- | :--------------- |
-| +     | 至少一个         |
-| `*`   | 零个或多个       |
-| ？    | 零个或一个       |
-| {x}   | x个              |
-| {m,}  | 至少m个          |
-| {m,n} | 至少m个，最多n个 |
-
-##### 表单验证
-
-- 当输入框失去焦点时，验证输入内容是否符号要求
-- 当点击注册按钮时，判断所有输入框的内容是否都符合要求，如果不符合则阻止表单提交。
-
-**应用**
-
-- js文件
+| RegExp | 说明               |
+| ------ | ------------------ |
+| test() | 判断是否匹配模式。 |
 
 ```javascript
-var userNameInput = document.getElementById("userNameInput");
-userNameInput.onblur = checkUserName;
-
-function checkUserName() {
-    var userName = userNameInput.value.trim();
-    var reg = /^\w{6,12}$/;
-    //判断名字是否符合规则：6~12位
-    if (userName.length >= 6 && userName.length <= 12 && reg.test(userName)) {
-        document.getElementById("userNameErr").style.display = "none";
-        return true;
-    } else {
-        document.getElementById("userNameErr").style.display = "";
-        userNameInput.value = "";
-        return false;
-    }
-}
-
-var passwdInput = document.getElementById("passwdInput");
-passwdInput.onblur = checkPasswd;
-
-function checkPasswd() {
-    //密码规则：6~12位 不能全部为数字
-    if (passwdInput.value.length >= 6 && passwdInput.value.length <= 12 && !/^\d{6,12}$/.test(passwdInput.value)) {
-        document.getElementById("passwdErr").style.display = "none";
-        return true;
-    } else {
-        document.getElementById("passwdErr").style.display = "";
-        passwdInput.value = "";
-        return false;
-    }
-};
-
-var phoneNumInput = document.getElementById("phoneNumInput");
-phoneNumInput.onblur = checkPhoneNum;
-
-function checkPhoneNum() {
-    //电话号码：11位；且全部数字
-    if (phoneNumInput.value.length == 11 && /^\d{6,12}$/.test(phoneNumInput.value)) {
-        document.getElementById("phoneNumErr").style.display = "none";
-        return true;
-    } else {
-        document.getElementById("phoneNumErr").style.display = "";
-        phoneNumInput.value = "";
-        return false;
-    }
-}
-
-var regForm = document.getElementById("reg-form");
-//表单提交
-regForm.onsubmit = function () {
-    if (checkPasswd() && checkUserName() && checkPhoneNum()) {
-        alert("已提交");
-        return true;
-    } else
-        return false;
-}
+/^\d{6,12}$/.test(passwdInput.value)
 ```
+
 
 ### BOM 浏览器对象模型
 
-- Browser Object Model
-- JavaScript将浏览器的各个组成部分封装为对象
+- Browser Object Model：JavaScript将浏览器的各个组成部分封装为对象。
 
 <img src="../../pictures/Snipaste_2022-11-22_14-58-35.png" width="600"/>   
-
-**主要包含的对象**
 
 | 对象      | 说明           |
 | :-------- | :------------- |
@@ -936,301 +812,95 @@ regForm.onsubmit = function () {
 
 - 直接使用window对象，`window.`可以省略
 
-**属性**
+| 常用属性  | 说明                            |
+| :-------- | :------------------------------ |
+| history   | 对 History 对象的只读引用。     |
+| Navigator | 对 Navigator 对象的只读引用。   |
+| Screen    | 对 Screen 对象的只读引用。      |
+| location  | 用于窗口/框架的 Location 对象。 |
 
-| 属性      | 说明                               |
-| :-------- | :--------------------------------- |
-| history   | 对 History 对象的只读引用。        |
-| Navigator | 对 Navigator 对象的只读引用。      |
-| Screen    | 对 Screen 对象的只读引用。         |
-| location  | 用于窗口或框架的 Location 对象。。 |
-
-**方法**
-
-| 方法          | 说明                                                        |
-| :------------ | :---------------------------------------------------------- |
-| alert()       | 显示带有一段消息和一个确认按钮的警告框。                    |
-| confirm()     | 显示带有一段消息以及确认按钮和取消按钮的对话框。返回boolean |
-| setInterval() | 按照指定的周期（以毫秒计）来调用函数或计算表达式。          |
-| setTimeout()  | 在指定的毫秒数后调用函数或计算表达式。                      |
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-</body>
-<script typr="text/javascript">
-    window.alert("Hello"); //window可以省略
-
-    //confirm 返回boolean
-    //确定：true 取消：false
-    if(confirm("是否确认删除"))
-        alert("删除成功");
-    else
-        alert("已取消");
-
-    //定时器 在一段时间后执行
-    //setTimeout(函数,毫秒) 执行一次
-    //setInterval(函数,毫秒) 循环执行
-    setTimeout(function (){
-        alert("setTimeout 执行")
-    },1000);
-    var count = 0;
-    setInterval(function (){
-        alert("setInterval 执行" + ++count);
-    },1000);
-</script>
-</html>
-```
-
-**不常用的**
-
-| 属性          | 说明                                                    |
-| :------------ | :------------------------------------------------------ |
-| closed        | 返回窗口是否已被关闭。                                  |
-| defaultStatus | 设置或返回窗口状态栏中的默认文本。                      |
-| document      | 对 Document 对象的只读引用。请参阅 Document 对象。      |
-| innerheight   | 返回窗口的文档显示区的高度。                            |
-| innerwidth    | 返回窗口的文档显示区的宽度。                            |
-| length        | 设置或返回窗口中的框架数量。                            |
-| name          | 设置或返回窗口的名称。                                  |
-| opener        | 返回对创建此窗口的窗口的引用。                          |
-| outerheight   | 返回窗口的外部高度。                                    |
-| outerwidth    | 返回窗口的外部宽度。                                    |
-| pageXOffset   | 设置或返回当前页面相对于窗口显示区左上角的 X 位置。     |
-| pageYOffset   | 设置或返回当前页面相对于窗口显示区左上角的 Y 位置。     |
-| parent        | 返回父窗口。                                            |
-| self          | 返回对当前窗口的引用。等价于 Window 属性。              |
-| status        | 设置窗口状态栏的文本。                                  |
-| top           | 返回最顶层的先辈窗口。                                  |
-| window        | window 属性等价于 self 属性，它包含了对窗口自身的引用。 |
-
-- screenXxx只读整数。声明了窗口的左上角在屏幕上的的 x 坐标和 y 坐标
-  - IE、Safari 和 Opera 支持 screenLeft 和 screenTop
-  - 而 Firefox 和 Safari 支持 screenX 和 screenY
-
-**方法**
-
-| 方法            | 说明                                           |
-| :-------------- | :--------------------------------------------- |
-| blur()          | 把键盘焦点从顶层窗口移开。                     |
-| clearInterval() | 取消由 setInterval() 设置的 timeout。          |
-| clearTimeout()  | 取消由 setTimeout() 方法设置的 timeout。       |
-| close()         | 关闭浏览器窗口。                               |
-| createPopup()   | 创建一个 pop-up 窗口。                         |
-| focus()         | 把键盘焦点给予一个窗口。                       |
-| moveBy()        | 可相对窗口的当前坐标把它移动指定的像素。       |
-| moveTo()        | 把窗口的左上角移动到一个指定的坐标。           |
-| open()          | 打开一个新的浏览器窗口或查找一个已命名的窗口。 |
-| print()         | 打印当前窗口的内容。                           |
-| prompt()        | 显示可提示用户输入的对话框。                   |
-| resizeBy()      | 按照指定的像素调整窗口的大小。                 |
-| resizeTo()      | 把窗口的大小调整到指定的宽度和高度。           |
-| scrollBy()      | 按照指定的像素值来滚动内容。                   |
-| scrollTo()      | 把内容滚动到指定的坐标。                       |
-
-##### 定时函数
-
-| 函数                                     | 说明                           |
-| :--------------------------------------- | :----------------------------- |
-| setTimeout("要执行的语句",时间)          | 在指定毫秒时间后执行           |
-| clearTimeout(timeoutID)                  | 清除定时设置                   |
-| setInterval("要执行的语句",周期间隔时间) | 按照指定的周期（毫秒时间）执行 |
-| clearInterval()                          | 清除定时设置                   |
-
-```javascript
-function myShowTime(){  
-    console.log(new Date());
-}
-
-function myRun(){
-    console.log("等待3秒");    
-    setTimeout(3000);
-    myShowTime();
-    console.log("结束");
-}
-
-var counter = 0;
-
-function myCycle(){
-    setInterval(1000);
-    console.log("开始" + ++counter + "次");
-    myShowTime();
-}
-
-myRun();
-myCycle();
-```
-
-##### 定时切换图片
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<input type="button" onclick="th()" value="picture_01">
-<img id="myImage" src="E:\\HTML\\images\\th.jpg">
-<input type="button" onclick="th02()" value="picture_02">
-</body>
-<script typr="text/javascript">
-    function th() {
-        document.getElementById("myImage").src = "E:\\HTML\\images\\th.jpg";
-    }
-
-    function th02() {
-        document.getElementById("myImage").src = "E:\\HTML\\images\\th02.jpg";
-    }
-
-    var count = 1;
-    setInterval(function () {
-        if (++count % 2 == 0) {
-            th();
-        } else {
-            th02();
-        }
-    }, 1000)
-</script>
-</html>
-```
-
-##### 定时切换随机颜色
-
-- 十六进制：`#ffffff`
-- RGB：`rgb(00,00,99)`
+| 方法                               | 说明                                                         |
+| :--------------------------------- | :----------------------------------------------------------- |
+| alert()                            | 显示带有一段消息和一个确认按钮的警告框。                     |
+| confirm()                          | 显示带有一段消息以及确认按钮和取消按钮的对话框。返回boolean  |
+| setTimeout()<br />clearTimeout()   | 在指定的毫秒数后调用函数或计算表达式。<br />清除定时设置。   |
+| setInterval()<br />clearInterval() | 按照指定的周期（以毫秒计）来调用函数或计算表达式。<br />清除定时设置。 |
 
 ```js
-let getRGB = function () {
-    let rgb = "rgb(";
-    for (let i = 0; i < 3; i++) {
-        rgb += Math.floor(Math.random() * 255) + 1 + ",";
-    }
-    rgb = rgb.substring(0, rgb.length - 1);
-    rgb += ")";
-    return rgb;
-}
-let getFFF = function () {
-    let fff = "#";
-    let arr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
-    for (let i = 0; i < 6; i++) {
-        fff += arr[Math.floor(Math.random() * 15)];
-    }
-    return fff;
-}
+window.alert("Hello"); //window可以省略
 
+//confirm 返回boolean，确定：true 取消：false。
+if(confirm("是否确认删除"))
+    alert("删除成功");
+else
+    alert("已取消");
+
+//setTimeout(函数,毫秒) 执行一次
+setTimeout(function (){
+    alert("setTimeout 执行")
+},1000);
+var count = 0;
+
+//setInterval(函数,毫秒) 循环执行
 setInterval(function (){
-    document.getElementById("timeShow").style.color = getRGB();
+    alert("setInterval 执行" + ++count);
 },1000);
 ```
 
-#### history对象
+#### history 历史记录对象
 
-**获取history对象**
+| window.history()<br />history | 获取历史记录对象<br />加载history列表的内容 |
+| :---------------------------- | :------------------------------------------ |
+| **方法**                      | **说明**                                    |
+| back()                        | 前一个 URL。                                |
+| forward()                     | 下一个 URL。                                |
+| go()                          | 某个具体页面。                              |
 
-```javascript
-window.history().方法();
-history.方法();
-```
+#### location 地址栏对象
 
-**方法**
-
-| 属性      | 说明                                |
-| :-------- | :---------------------------------- |
-| back()    | 加载 history 列表中的前一个 URL。   |
-| forward() | 加载 history 列表中的下一个 URL。   |
-| go()      | 加载 history 列表中的某个具体页面。 |
-
-#### location对象
-
-**获取**
-
-```javascript
-window.location().方法();
-location.方法();
-```
-
-| 属性 | 说明                   |
-| :--- | :--------------------- |
-| href | 设置或返回完整的 URL。 |
+| window.location()<br />location | 获取地址栏对象           |
+| :------------------------------ | :----------------------- |
+| **属性**                        | **设置/返回**            |
+| href                            | 完整的URL。              |
+| host<br />hostname、port        | 主机名、当前URL的端口号  |
+| pathname                        | 当前URL的路径部分。      |
+| protocol                        | 当前URL的协议。          |
+| **方法**                        | **说明**                 |
+| assign()                        | 加载新的文档。           |
+| reload()                        | 重新加载当前文档。       |
+| replace()                       | 用新的文档替换当前文档。 |
 
 ```javascript
-alert("即将到达百度");
-document.write("3秒后跳转到百度");
-
-setTimeout(function (){
-    location.href = "https://www.baidu.com"; //直接跳转到百度
-},3000)
+//直接跳转到百度
+location.href = "https://www.baidu.com";
 ```
-
-**属性**
-
-| 属性     | 说明                                          |
-| :------- | :-------------------------------------------- |
-| hash     | 设置或返回从井号 (#) 开始的 URL（锚）。       |
-| host     | 设置或返回主机名和当前 URL 的端口号。         |
-| hostname | 设置或返回当前 URL 的主机名。                 |
-| pathname | 设置或返回当前 URL 的路径部分。               |
-| port     | 设置或返回当前 URL 的端口号。                 |
-| protocol | 设置或返回当前 URL 的协议。                   |
-| search   | 设置或返回从问号 (?) 开始的 URL（查询部分）。 |
-
-**方法**
-
-| 方法      | 说明                     |
-| :-------- | :----------------------- |
-| assign()  | 加载新的文档。           |
-| reload()  | 重新加载当前文档。       |
-| replace() | 用新的文档替换当前文档。 |
-
-
-#### navigator对象
-
-#### screen对象
 
 
 ### DOM 文档对象模型
 
-- DOM定义了访问HTML和xml文档的标准。W3C（万维网联盟）的标准。
+- DOM定义了访问HTML和xml文档的标准：W3C（万维网联盟）标准。
 
-**W3C DOM标准分为3个不同部分：**
+**标准分为3个不同部分：**
 
-1. 核心DOM：针对任何结构化文档的标准模型
-   - Document  整个文档对象 
-   - Element 元素对象
-   - Attribute 属性对象    
-   - Text 文本对象
-   - Comment  注释对象  
-2. XML DOM：针对xml文档的标准模型
-3. HTML DOM：找到HTML文档的标准模型
-   - Image：`<img>`
-   - Button：`<input type="button">`
-
-**DOM树**
+| W3C DOM部分 | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| 核心DOM     | 针对任何结构化文档的标准模型。<br />Document（整个文档对象）、Element（元素对象）<br />Attribute（属性对象）、Text（文本对象）、Comment（注释对象） |
+| XML DOM     | 针对xml文档的标准模型。                                      |
+| HTML DOM    | 找到HTML文档的标准模型。                                     |
 
 <img src="../../pictures/Snipaste_2023-04-24_15-15-52.png" width="800"/> 
 
-| 对象     | 节点名称 | 组成部分         |
-| -------- | -------- | ---------------- |
-| Document | 文档节点 | 整个文档         |
-| Element  | 元素节点 | HTML标签         |
-| Text     | 文本节点 | HTML标签内的文本 |
-| Attr     | 属性节点 | HTML标签内的属性 |
-| Comment  | 注释节点 | 注释             |
+| 对象     | 节点 | 组成部分         |
+| -------- | ---- | ---------------- |
+| Document | 文档 | 整个文档         |
+| Element  | 元素 | HTML标签         |
+| Text     | 文本 | HTML标签内的文本 |
+| Attr     | 属性 | HTML标签内的属性 |
+| Comment  | 注释 | 注释             |
 
 #### Element 元素对象
 
-[DOM具体属性使用](https://www.w3school.com.cn/js/js_htmldom.asp)
-
-##### 获取Element对象
-
-| 方法                                     | 说明                                     |
+| 获取Element对象                          | 说明                                     |
 | :--------------------------------------- | :--------------------------------------- |
 | document.getElementById("id")            | 根据id属性值获取，返回一个Element对象    |
 | document.getElementsByName("name")       | 根据name属性值获取，返回Element对象数组  |
@@ -1239,9 +909,7 @@ setTimeout(function (){
 | document.querySelector("css选择器")      | 根据CSS选择器获取，返回第一个Element对象 |
 | document.querySelectorAll("css选择器")   | 根据CSS选择器获取，返回Element对象集合   |
 
-##### 操作Element对象
-
-| 常用用途  | 属性      | 说明                                                         |
+| 常用用途  | 属性      | 操作Element对象                                              |
 | --------- | :-------- | :----------------------------------------------------------- |
 | 文档      | referrer  | 设置或返回载入当前文档的URL                                  |
 |           | URL       | 设置或返回当前文档的URL                                      |
@@ -1251,7 +919,7 @@ setTimeout(function (){
 |           | type      | 设置和返回元素的类型：如表单中的password                     |
 | HTML内容  | innerHTML | 设置（覆盖）或返回元素的内容，文本中包含的标签会被解析       |
 |           | innerText | 设置（覆盖）或返回元素的内容，文本中包含的标签不会被解析     |
-| class属性 | classList | 返回节点的class属性列表<br>add("class") 增加类<br>remove("class") 删除类<br>toggle("class") 切换类：如果元素中已经存在该类名，toggle方法会将其移除；如果不存在该类名，toggle方法会将其添加。<br>toggle方法还支持一个可选的参数，该参数为布尔值，指定是否强制添加或删除类名。当参数为true时，toggle方法会强制添加类名；当参数为false时，toggle方法会强制删除类名。 |
+| class属性 | classList | 返回节点的class属性列表<br>add("class") 增加类<br>remove("class") 删除类<br>toggle("class") 切换类：如果元素中已经存在该类名，toggle方法会将其移除；如果不存在该类名，toggle方法会将其添加。<br>当参数为true时，toggle方法会强制添加类名；当参数为false时，toggle方法会强制删除类名。 |
 |           | className | 设置或返回节点的class属性（通常使用classList）               |
 
 | 方法    | 说明                                     |
@@ -1260,28 +928,18 @@ setTimeout(function (){
 
 ##### 自定义属性
 
-- html5：data-自定义属性  
+- html5：data-自定义属性，在标签上一律以data-开头，在DOM对象上一律以dataset对象方式获取。
 
-- 在标签上一律以data-开头
-
-- 在DOM对象上一律以dataset对象方式获取
-
-```html
-<div data-id="1"> 自定义属性 </div>
-<script>
-    // 1. 获取元素
-    let div = document.querySelector('div')
-    // 2. 获取自定义属性值
-    console.log(div.dataset.id)
-
-</script>
+```js
+// 1. 获取元素
+let div = document.querySelector('div')
+// 2. 获取自定义属性值
+console.log(div.dataset.id)
 ```
 
 #### Core DOM操作节点
 
-**访问节点**
-
-| 方法                  | 说明                               |
+| 访问节点              | 说明                               |
 | :-------------------- | :--------------------------------- |
 | getElementById()      | 返回对拥有指定id的第一个对象的引用 |
 | getElementByName()    | 返回带有指定名称的对象的集合       |
@@ -1293,66 +951,53 @@ setTimeout(function (){
 | firstChild | 首个子节点，（如果某有，文本和属性节点返回空数组，元素节点返回null） |
 | lasstChild | 最后一个字节点                                               |
 
-**操作节点属性值**
-
-| 方法                   | 说明       |
+| 操作节点属性值         | 说明       |
 | :--------------------- | :--------- |
 | getAttribute("属性名") | 获取属性值 |
 | setAttribute("属性名") | 设置属性值 |
 
-**创建和增加属性**
-
-| 方法                          | 说明                                                         |
+| 创建和增加属性                | 说明                                                         |
 | :---------------------------- | :----------------------------------------------------------- |
 | createElement(tagName)        | 按照给定的标签名创建一个新的元素节点                         |
 | appendChild(nodeName)         | 向已存在节点列表的末尾添加新的节点                           |
 | insertBefore(newNode,oldNode) | 向指定的节点之前插入一个新的节点                             |
 | cloneNode(boolean)            | 复制某个指定的节点（true复制该节点及其字节点，false只复制当前节点） |
 
-**删除和替换节点**
-
-| 方法                          | 说明                       |
+| 删除和替换节点                | 说明                       |
 | :---------------------------- | :------------------------- |
 | removeChild(node)             | 删除指定的节点             |
 | replaceChild(newNode,oldNode) | 用其他的节点替换指定的节点 |
 
 #### HTML DOM
 
-**table对象**
+| table对象   | 说明                           |
+| ----------- | ------------------------------ |
+| **属性**    | **说明**                       |
+| `rows[]`    | 返回该表格中所有行的一个数组。 |
+| **方法**    | **说明**                       |
+| insertRow() | 向表格中插入一行               |
+| deleteRow() | 从表格中删除一行               |
 
-| 属性   | 说明                         |
-| :----- | :--------------------------- |
-| rows[] | 返回该表格中所有行的一个数组 |
+| tableRow对象 | 说明                                     |
+| ------------ | ---------------------------------------- |
+| **属性**     | **说明**                                 |
+| `cells[]`    | 返回包含行中所有单元格的一个数组         |
+| rowIndex     | 返回该行在表中的位置                     |
+| **方法**     | **说明**                                 |
+| insertCell() | 在一行中的指定位置插入一个空的`<td>`标签 |
+| deleteCell() | 删除行中指定的单元格                     |
 
-| 方法        | 说明                 |
-| :---------- | :------------------- |
-| insertRow() | 从表格中插入一个新行 |
-| deleteRow() | 从表格中删除一行     |
-
-**tableRow对象**
-
-| 属性     | 说明                             |
-| :------- | :------------------------------- |
-| cells[]  | 返回包含行中所有单元格的一个数组 |
-| rowIndex | 返回该行在表中的位置             |
-
-| 方法              | 说明                                     |
-| :---------------- | :--------------------------------------- |
-| insertCell(index) | 在一行中的指定位置插入一个空的`<td>`标签 |
-| deleteCell()      | 删除行中指定的单元格                     |
-
-**tableCell对象**
-
-| 属性      | 说明                                   |
-| :-------- | :------------------------------------- |
-| cellIndex | 返回单元格在某行单元格集合中的位置     |
-| innerHTML | 设置或返回单元格                       |
-| align     | 设置或返回单元格内部数据的水平排列方式 |
-| className | 设置或返回元素的class属性              |
+| tableCell对象 | **说明**                               |
+| :------------ | :------------------------------------- |
+| **属性**      | **说明**                               |
+| cellIndex     | 返回单元格在某行单元格集合中的位置     |
+| innerHTML     | 设置或返回单元格                       |
+| align         | 设置或返回单元格内部数据的水平排列方式 |
+| className     | 设置或返回元素的class属性              |
 
 ## AJAX
 
-- AJAX (Asynchronous JavaScript And XML)：异步的 JavaScript 和 XML。
+- AJAX（Asynchronous JavaScript And XML）：异步的JavaScript和XML。
 
 | AJAX作用             | 说明                                                         |
 | -------------------- | ------------------------------------------------------------ |
@@ -1361,9 +1006,13 @@ setTimeout(function (){
 
 <img src="../../pictures/Snipaste_2023-03-24_18-27-13.png" width="800"/>  
 
+### XMLHttpRequest（xhr）
+
+- XMLHttpRequest：Ajax的本质核心。
+
 <img src="../../pictures/ajax.gif" width=600x/>
 
-```js
+```javascript
 //1.创建核心对象
 var xhttp;
 if (window.XMLHttpRequest) {
@@ -1378,38 +1027,63 @@ xmlhttp.send();
 xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
         alert(this.responseText);
-        // document.getElementById("demo").innerHTML =
-        //     this.responseText;
+        // document.getElementById("demo").innerHTML = this.responseText;
     }
-}
-```
-
-### XMLHttpRequest 对象
-
-- 检查浏览器是否支持 XMLHttpRequest 对象。如果支持，创建 XMLHttpRequest 对象；如果不支持，则创建 ActiveX 对象。
-
-```javascript
-var xmlhttp;
-if (window.XMLHttpRequest) { 
-    xmlhttp = new XMLHttpRequest();
-    } else {
-     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 }
 ```
 
 | 请求方法                   | 描述                                                         |
 | :----------------------- | :----------------------------------------------------------- |
-| open(method, url, async) | method：请求类型：GET、POST<br>url：服务器（文件）位置 <br>async：true（异步）、 false（同步） |
-| send()                   | 向服务器发送GET请求                                          |
-| send(string)             | 向服务器发送POST请求                                         |
-| setRequestHeader(header, value) | 向请求添加 HTTP 头部<br>header：头部名称<br>value：头部值 |
+| open() | method：请求类型（GET、POST）<br>url：服务器（文件）位置 <br>async：true（异步）、 false（同步） |
+| send()                   | 向服务器发送GET、POST请求                                   |
+| setRequestHeader() | 向请求添加 HTTP 头部<br>header：头部名称<br>value：头部值 |
 
-| 响应属性           | 描述                                                         |
-| :----------------- | :----------------------------------------------------------- |
-| onreadystatechange | 定义了当 readyState 属性发生改变时所调用的函数。             |
-| readyState         | 保存了 XMLHttpRequest 的状态。 <br>0: 请求未初始化 <br>1: 服务器连接已建立  <br>2: 请求已接收  <br>3: 正在处理请求   <br>4: 请求已完成且响应已就绪 |
-| status             | 200: "OK"  <br>403: "Forbidden" <br>404: "Page not found"    |
-| statusText         | 返回状态文本（例如 "OK" 或 "Not Found"）                     |
+| 响应属性               | 描述                                                         |
+| :--------------------- | :----------------------------------------------------------- |
+| onreadystatechange     | 定义readyState属性发生改变时所调用的函数。                   |
+| readyState             | 保存XMLHttpRequest的状态。 <br>0: 请求未初始化 <br>1: 服务器连接已建立  <br>2: 请求已接收  <br>3: 正在处理请求   <br>4: 请求已完成且响应已就绪 |
+| status<br />statusText | 请求状态码（200、404..）<br />返回状态文本（ "OK"、"Not Found"） |
+
+### jQuery `$`
+
+| 参数    | 说明                     |
+| ------- | ------------------------ |
+| url     | 待载入页面的URL。        |
+| data    | 待发送的数据（键值对）。 |
+| success | 回调函数。               |
+
+```js
+function home() {
+    $.post({
+        url: "/",
+        data: {"name": $("#userName").val()},
+        success: function (data, status) {
+            console.log(data);
+            console.log(status);
+        }
+    });
+
+    $("textName").val();
+}
+```
+
+```js
+$(function () {
+    $("#btnData").click(function () {
+        $.post("/", function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += "<tr>" +
+                    "<td>" + data[i].name + "</td>" +
+                    "<td>" + data[i].age + "</td>"
+                    + "</tr>";
+
+            }
+            $("#content").html(html);
+        })
+    })
+})
+```
 
 ## axios
 
@@ -1417,28 +1091,24 @@ if (window.XMLHttpRequest) {
 
 ### axios()
 
-```javascript
+| axios()             | 发送异步请求，使用js对象传递请求相关的参数。                 |
+| ------------------- | ------------------------------------------------------------ |
+| **属性**            | **说明**                                                     |
+| method              | 请求方式（get、post）。                                      |
+| url                 | 资源路径。<br> `get` ： `url?参数名=参数值&参数名2=参数值2`。 |
+| data                | 请求体发送的数据。<br>`post` ：数据需要作为 `data` 属性的值。 |
+| **方法**            | **说明**                                                     |
+| **then(回调函数) ** | 回调函数在发送请求时不会被调用，而是在成功响应后调用的函数。<br />resp：对响应的数据进行封装的对象， `resp.data` 获取到响应的数据。 |
+
+```js
 axios({
     method:"post",
     url="http://localhost:8080/aJAXDemo1",
     data:"username=zjk"
 }).then(function(resp){
     alert(resp.data);
-})s
+})
 ```
-
-**axios() 是用来发送异步请求的，使用 js 对象传递请求相关的参数：**
-
-| 属性   | 说明                                                         |
-| ------ | ------------------------------------------------------------ |
-| method | 请求方式：get、post                                          |
-| url    | 资源路径。<br>如果是 `get` 请求： `url?参数名=参数值&参数名2=参数值2`。 |
-| data   | 请求体发送的数据。<br>如果是 `post` 请求的话，数据需要作为 `data` 属性的值。 |
-
-**then(回调函数) ** 
-
--  回调函数在发送请求时不会被调用，而是在成功响应后调用的函数。
--  该回调函数中的 `resp` 参数是对响应的数据进行封装的对象，通过 `resp.data` 可以获取到响应的数据。
 
 ### axios实例
 

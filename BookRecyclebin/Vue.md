@@ -11,8 +11,6 @@
 - 前端框架，免除原始JavaScript的DOM操作
 - 基于MVVM思想，实现数据的双向绑定，将编程的重点放在数据上
 
-<img src="c:/users/zjk10/onedrive/notebook/pictures/image-20210831114805052.png" alt="image-20210831114805052" style="zoom:80%;"/>
-
 # 基础使用
 
 1. **新建 HTML 页面，引入 Vue.js文件**
@@ -186,7 +184,7 @@ new Vue({
 | beforeDestory | 销毁前       |
 | destoryed     | 销毁后       |
 
-<img src="../../../pictures/image-20210831160335496.png" width="1200"/>  
+<img src="../pictures/image-20210831160335496.png" width="1200"/>  
 
 ```html
 <!DOCTYPE html>
