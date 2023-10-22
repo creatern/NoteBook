@@ -2406,10 +2406,10 @@ class Son extends Fathor{
 - Class文件：对应唯一一个类/接口的定义信息，是一组8字节的二进制流，不一定以磁盘文件格式存在。
 - Class文件只有两种数据类型：无符号数、表。
 
-| 数据类型 | 说明                                                                                                   |
-| ---- | ---------------------------------------------------------------------------------------------------- |
-| 无符号数 | 基本数据类型：u1、u2、u4、u8分布代表1B、2B、4B、8B的无符号数。<br />无符号数可以描述数字、索引引用、数量值、字符串值（UTF-8）。                        |
-| 表    | 复合数据类型：多个无符号数、其他表构成。<br />表无固定长度：需要标识位说明表的长度<br />习惯：以“_info”结尾。<br />描述有层次关系的复合结构的数据：Class文件相当于一个表。 |
+| 数据类型 | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 无符号数 | 基本数据类型：u1、u2、u4、u8分布代表1B、2B、4B、8B的无符号数。<br />无符号数可以描述数字、索引引用、数量值、字符串值（UTF-8）。 |
+| 表       | 复合数据类型：多个无符号数、其他表构成。<br />表无固定长度：需要标识位说明表的长度<br />习惯：以“\_info”结尾。<br />描述有层次关系的复合结构的数据：Class文件相当于一个表。 |
 
 <img src="../../pictures/Snipaste_2023-06-12_13-24-42.png" width="1200"/>
 
@@ -2419,8 +2419,8 @@ class Son extends Fathor{
 
 #### major_version minor_version 版本号
 
-- Java版本号：major_version.minor_version，从45开始，JDK1.1之后每个JDK版本发布，其对应的主版本号+1.（46-1.2）
-- 不同版本的Java编译器编译的Class文件对应的版本不同（向下兼容），高版本JVM可以执行低版本编译器生成的Class文件；但低版本JVM不能执行高版本编译器生成的Class文件：JDK1.k的JVM对应的class文件版本号范围：45.0`~`44+k.0。
+- Java版本号：major\_version.minor\_version，从45开始，JDK1.1之后每个JDK版本发布，其对应的主版本号+1.（46-1.2）
+- 不同版本的Java编译器编译的Class文件对应的版本不同（向下兼容），高版本JVM可以执行低版本编译器生成的Class文件；但低版本JVM不能执行高版本编译器生成的Class文件：JDK1.k的JVM对应的class文件版本号范围：45.0\~44+k.0。
 
 #### 常量池
 
@@ -2497,46 +2497,46 @@ System.out.println(arr2);//[[J@14ae5a5
 
 ##### 存放类型
 
-| tag（u1） | 常量池存放的类型                                         | 结构                                                                                                                                              |
-| ------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 01      | CONSTANT_utf8_info<br />UTF-8编码的字符串              | lenth（u2）：UTF-8编码字符串占用的字符数<br />bytes（u lenth）:长度为length的UTF-8编码的字符串                                                                            |
-| 03      | CONSTANT_Integer_info<br />整型字面量                 | bytes（u4）：按照高位在前存储的int值                                                                                                                         |
-| 04      | CONSTANT_Float_info<br />浮点型字面量                  | bytes（u4）：按照高位在前存储的float值                                                                                                                       |
-| 05      | CONSTANT_Long_info<br />长整型字面量                   | bytes（u8）：按照高位在前存储的long值                                                                                                                        |
-| 06      | CONSTANT_Double_info<br />双精度浮点型字面量              | bytes（u8）：按照高位在前存储的double值                                                                                                                      |
-| 07      | CONSTANT_Class_info<br />类/接口的符号引用               | index（u2）：指向全限定名常量项的索引                                                                                                                          |
-| 08      | CONSTANT_String_info<br />字符串类型字面量               | index（u2）：指向字符串字面量的索引                                                                                                                           |
-| 09      | CONSTANT_Fieldref_info<br />字段的符号引用              | index（u2）：指向CONSTANT_Class_info的索引项<br />index（u2）：指向CONSTANT_NameAndType的索引项                                                                   |
-| 10（0a）  | CONSTANT_Method_info<br />类中方法的符号引用              | index（u2）：指向CONSTANT_Class_Info的索引项<br />index（u2）：指向CONSTANT_NameAndType的索引项                                                                   |
-| 11（0b）  | CONSTANT_InterfaceMethodref_info<br />接口中方法的符号引用 | index（u2）：指向CONSTANT_Class_Info的索引项<br />index（u2）：指向CONSTANT_NameAndType的索引项                                                                   |
-| 12（0c）  | CONSTANT_NameAndType_info<br />字段/方法的符号引用        | index（u2）：指向该字段或方法名称常量项的索引<br />index（u2）：指向该字段或方法描述符常量项的索引                                                                                     |
-| 15（0f）  | CONSTANT_MethodHandle_info<br />方法句柄             | reference_kind（u1）：值必须在1-9之间，决定了方法句柄的类型，表示方法句柄的字节码行为<br />reference_index（u2）：对常量池的有效索引                                                         |
-| 16（10）  | CONSTANT_MethodType_info<br />标识方法类型             | descriptor_index（u2）：对常量池的有效索引，该索引项必须是CONSTANT_Utf8_info                                                                                        |
-| 18（12）  | CONSTANT_InvokeDynamic_info<br />一个动态方法调用点       | bootstrap_method_attr（u2）：对当前Class文件中引导方法表的bootstrap_methods[]数组的有效索引<br />name_and_type_index（u2）：对当前常量池的有效索引，该索引项必须是CONSTANT_NameAndType_Info |
+| tag（u1） | 常量池存放的类型                                             | 结构                                                         |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 01        | CONSTANT\_utf8\_info<br />UTF-8编码的字符串                  | lenth（u2）：UTF-8编码字符串占用的字符数<br />bytes（u lenth）:长度为length的UTF-8编码的字符串 |
+| 03        | CONSTANT\_Integer\_info<br />整型字面量                      | bytes（u4）：按照高位在前存储的int值                         |
+| 04        | CONSTANT\_Float\_info<br />浮点型字面量                      | bytes（u4）：按照高位在前存储的float值                       |
+| 05        | CONSTANT\_Long\_info<br />长整型字面量                       | bytes（u8）：按照高位在前存储的long值                        |
+| 06        | CONSTANT\_Double\_info<br />双精度浮点型字面量               | bytes（u8）：按照高位在前存储的double值                      |
+| 07        | CONSTANT\_Class\_info<br />类/接口的符号引用                 | index（u2）：指向全限定名常量项的索引                        |
+| 08        | CONSTANT\_String\_info<br />字符串类型字面量                 | index（u2）：指向字符串字面量的索引                          |
+| 09        | CONSTANT\_Fieldref\_info<br />字段的符号引用                 | index（u2）：指向CONSTANT\_Class\_info的索引项<br />index（u2）：指向CONSTANT\_NameAndType的索引项 |
+| 10（0a）  | CONSTANT\_Method\_info<br />类中方法的符号引用               | index（u2）：指向CONSTANT\_Class\_Info的索引项<br />index（u2）：指向CONSTANT\_NameAndType的索引项 |
+| 11（0b）  | CONSTANT\_InterfaceMethodref\_info<br />接口中方法的符号引用 | index（u2）：指向CONSTANT\_Class\_Info的索引项<br />index（u2）：指向CONSTANT\_NameAndType的索引项 |
+| 12（0c）  | CONSTANT\_NameAndType\_info<br />字段/方法的符号引用         | index（u2）：指向该字段或方法名称常量项的索引<br />index（u2）：指向该字段或方法描述符常量项的索引 |
+| 15（0f）  | CONSTANT\_MethodHandle\_info<br />方法句柄                   | reference\_kind（u1）：值必须在1-9之间，决定了方法句柄的类型，表示方法句柄的字节码行为<br />reference\_index（u2）：对常量池的有效索引 |
+| 16（10）  | CONSTANT\_MethodType\_info<br />标识方法类型                 | descriptor\_index（u2）：对常量池的有效索引，该索引项必须是CONSTANT\_Utf8\_info |
+| 18（12）  | CONSTANT\_InvokeDynamic\_info<br />一个动态方法调用点        | bootstrap\_method\_attr（u2）：对当前Class文件中引导方法表的bootstrap\_methods\[\]数组的有效索引<br />name\_and\_type\_index（u2）：对当前常量池的有效索引，该索引项必须是CONSTANT\_NameAndType\_Info |
 
 #### 访问标识
 
-| Flag Name      | Value  | Interpretation                                                                                       |
-| -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
-| ACC_PUBLIC     | 0x0001 | 标识为public类型                                                                                          |
-| ACC_FINAL      | 0x0010 | 标识声明为final，只有类可以设置<br />与 ACC_ABSTRACT冲突                                                             |
-| ACC_SUPER      | 0x0020 | 标识允许使用invokespecial字节码指令的新语义<br />Jdk1.0.2之后默认为true，由于向后兼容                                           |
-| ACC_INTERFACE  | 0x0200 | 标识为接口。没有该标识的则是类：可具有除ACC_ANNOTAION外所有标识<br />必须伴随ACC_ABSTRACT标识，<br />与ACC_FINAL、ACC_SUPER、ACC_ENUM冲突 |
-| ACC_ABSTRACT   | 0x0400 | 是否为abstract类型对于接口/抽象类，此标识为true；其他类型为false                                                            |
-| ACC_SYNTHETIC  | 0x1000 | 标识此类并非用户代码产生，而是由编译器产生的类，没有对应源码                                                                       |
-| ACC_ANNOTATION | 0x2000 | 标识为注解<br />必须伴随ACC_INTERFACE                                                                         |
-| ACC_ENUM       | 0x4000 | 标识该类/其父类为枚举                                                                                          |
+| Flag Name       | Value  | Interpretation                                               |
+| --------------- | ------ | ------------------------------------------------------------ |
+| ACC\_PUBLIC     | 0x0001 | 标识为public类型                                             |
+| ACC\_FINAL      | 0x0010 | 标识声明为final，只有类可以设置<br />与 ACC\_ABSTRACT冲突    |
+| ACC\_SUPER      | 0x0020 | 标识允许使用invokespecial字节码指令的新语义<br />Jdk1.0.2之后默认为true，由于向后兼容 |
+| ACC\_INTERFACE  | 0x0200 | 标识为接口。没有该标识的则是类：可具有除ACC\_ANNOTAION外所有标识<br />必须伴随ACC_ABSTRACT标识，<br />与ACC\_FINAL、ACC\_SUPER、ACC\_ENUM冲突 |
+| ACC\_ABSTRACT   | 0x0400 | 是否为abstract类型对于接口/抽象类，此标识为true；其他类型为false |
+| ACC\_SYNTHETIC  | 0x1000 | 标识此类并非用户代码产生，而是由编译器产生的类，没有对应源码 |
+| ACC\_ANNOTATION | 0x2000 | 标识为注解<br />必须伴随ACC\_INTERFACE                       |
+| ACC\_ENUM       | 0x4000 | 标识该类/其父类为枚举                                        |
 
 #### 类索引、父类索引、接口索引集合
 
 - 访问标识后，会指定该类的类别、父类类别、实现的接口
 
-| 长度  | 含义                           | 说明                                                                                                                                          |
-| --- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| u2  | this_class                   | 该类的全限定名                                                                                                                                     |
-| u2  | super_class                  | 该类的父类的全限定名，只有java.lang.Object的父类索引为0<br />指向的不能是final类                                                                                      |
-| u2  | interfaces_count             | 接口计数器，该类/接口的直接超接口数量                                                                                                                         |
-| u2  | interfaces[interfaces_count] | 该类实现的接口索引数组，每一项都是CONSTANT_CLass_info<br />0 `<=` i `<` interfaces_count<br />interface各成员表示的接口顺序和对应源代码中给定的接口顺序相同（从左到右）：interface[0]对应最左边的接口 |
+| 长度 | 含义                            | 说明                                                         |
+| ---- | ------------------------------- | ------------------------------------------------------------ |
+| u2   | this\_class                     | 该类的全限定名                                               |
+| u2   | super\_class                    | 该类的父类的全限定名，只有java.lang.Object的父类索引为0<br />指向的不能是final类 |
+| u2   | interfaces\_count               | 接口计数器，该类/接口的直接超接口数量                        |
+| u2   | interfaces\[interfaces\_count\] | 该类实现的接口索引数组，每一项都是CONSTANT\_CLass\_info<br />0 `<=` i `<` interfaces\_count<br />interface各成员表示的接口顺序和对应源代码中给定的接口顺序相同（从左到右）：interface\[0\]对应最左边的接口 |
 
 #### 字段表集合
 
@@ -2552,58 +2552,58 @@ System.out.println(arr2);//[[J@14ae5a5
     - 字段数据类型（基本数据类型、对象、数组）
     - 字段名称
 
-- 字段表计数器（fileds_count）u2：当前Class文件fields表的成员个数。
+- 字段表计数器（fileds\_count）u2：当前Class文件fields表的成员个数。
 
 - 字段表集合（fields）：描述接口/类中声明的变量。
   
-  - fields中的各个成员都是field_info，只表示该类/接口所声明的所有类字段、实例字段。不包括局部变量、父类/接口中继承而来的字段。
+  - fields中的各个成员都是field\_info，只表示该类/接口所声明的所有类字段、实例字段。不包括局部变量、父类/接口中继承而来的字段。
   - fields有可能会列出原本Java代码中不存在的字段（内部类为保持对外部类的访问性，会自动添加指向外部类实例的字段）。
 
-| 类型             | 名称               | 含义    | 数量               |
-| -------------- | ---------------- | ----- | ---------------- |
-| u2             | acess_flags      | 访问标识  | 1                |
-| u2             | name_index       | 字段名索引 | 1                |
-| u2             | descripto_index  | 描述符索引 | 1                |
-| u2             | attributes_count | 属性计数器 | 1                |
-| attribute_info | attributes       | 属性集合  | attributes_count |
+| 类型            | 名称              | 含义       | 数量              |
+| --------------- | ----------------- | ---------- | ----------------- |
+| u2              | acess\_flags      | 访问标识   | 1                 |
+| u2              | name\_index       | 字段名索引 | 1                 |
+| u2              | descripto\_index  | 描述符索引 | 1                 |
+| u2              | attributes\_count | 属性计数器 | 1                 |
+| attribute\_info | attributes        | 属性集合   | attributes\_count |
 
-| acess_flags 字段表访问标识 | 标识值    | 含义        |
-| ------------------- | ------ | --------- |
-| ACC_PUBLIC          | 0x0001 | public    |
-| ACC_PRIVATE         | 0x0002 | private   |
-| ACC_PROTECTED       | 0x0004 | protected |
-| ACC_STATIC          | 0x0008 | static    |
-| ACC_FINAL           | 0x0010 | final     |
-| ACC_VOLATILE        | 0x0040 | volatile  |
-| ACC_TRANSIENT       | 0x0080 | transient |
-| ACC_SYNCHETIC       | 0x1000 | 编译器自动产生   |
-| ACC_ENUM            | 0x4000 | enum      |
+| acess_flags 字段表访问标识 | 标识值 | 含义           |
+| -------------------------- | ------ | -------------- |
+| ACC\_PUBLIC                | 0x0001 | public         |
+| ACC\_PRIVATE               | 0x0002 | private        |
+| ACC\_PROTECTED             | 0x0004 | protected      |
+| ACC\_STATIC                | 0x0008 | static         |
+| ACC\_FINAL                 | 0x0010 | final          |
+| ACC\_VOLATILE              | 0x0040 | volatile       |
+| ACC\_TRANSIENT             | 0x0080 | transient      |
+| ACC\_SYNCHETIC             | 0x1000 | 编译器自动产生 |
+| ACC\_ENUM                  | 0x4000 | enum           |
 
 #### 方法表集合
 
-- methods：指向常量池索引集合，完整描述每个方法的签名。字节码文件中，一个method对应一个类/接口中的方法信息。每个成员都是method_info。
+- methods：指向常量池索引集合，完整描述每个方法的签名。字节码文件中，一个method对应一个类/接口中的方法信息。每个成员都是method\_info。
   - 只描述当前类/接口中声明的方法，不包括从父类/父接口继承的方法。
   - 有可能会出现由编译器自动添加的方法（类/接口初始化方法`<clinit>()`、实例初始化方法`<init>()`）。
 
-| 类型          | 名称              | 含义    | 数量            |
-| ----------- | --------------- | ----- | ------------- |
-| u2          | acess_flags     | 访问标识  | 1             |
-| u2          | name_index      | 方法名索引 | 1             |
-| u2          | descripto_index | 描述符索引 | 1             |
-| u2          | methods_count   | 方法计数器 | 1             |
-| method_info | attributes      | 方法集合  | methods_count |
+| 类型         | 名称             | 含义       | 数量           |
+| ------------ | ---------------- | ---------- | -------------- |
+| u2           | acess\_flags     | 访问标识   | 1              |
+| u2           | name\_index      | 方法名索引 | 1              |
+| u2           | descripto\_index | 描述符索引 | 1              |
+| u2           | methods\_count   | 方法计数器 | 1              |
+| method\_info | attributes       | 方法集合   | methods\_count |
 
-| acess_flags 字段表访问标识 | 标识值    | 含义           |
-| ------------------- | ------ | ------------ |
-| ACC_PUBLIC          | 0x0001 | public       |
-| ACC_PRIVATE         | 0x0002 | private      |
-| ACC_PROTECTED       | 0x0004 | protected    |
-| ACC_STATIC          | 0x0008 | static       |
-| ACC_FINAL           | 0x0010 | final        |
-| ACC_SYNCHRONIZED    | 0x0020 | synchronized |
-| ACC_BRIDGE          | 0x0040 | bridge       |
+| acess_flags 字段表访问标识 | 标识值 | 含义         |
+| -------------------------- | ------ | ------------ |
+| ACC\_PUBLIC                | 0x0001 | public       |
+| ACC\_PRIVATE               | 0x0002 | private      |
+| ACC\_PROTECTED             | 0x0004 | protected    |
+| ACC\_STATIC                | 0x0008 | static       |
+| ACC\_FINAL                 | 0x0010 | final        |
+| ACC\_SYNCHRONIZED          | 0x0020 | synchronized |
+| ACC\_BRIDGE                | 0x0040 | bridge       |
 
-- 方法计数器（methods_count）u2：当前class文件中methods表的成员个数。
+- 方法计数器（methods\_count）u2：当前class文件中methods表的成员个数。
 
 - 方法重载(Overload)：
   
@@ -2612,7 +2612,7 @@ System.out.println(arr2);//[[J@14ae5a5
 
 #### 属性表集合
 
-- 属性表集合（attributes）：class文件所携带的辅助信息、任何带有RetentionPolicy.CLASS/RetentionPolicy.RUNTIME的注解（用于JVM的验证和运行、Java程序的调试）。
+- 属性表集合（attributes）：class文件所携带的辅助信息、任何带有RetentionPolicy\.CLASS/RetentionPolicy\.RUNTIME的注解（用于JVM的验证和运行、Java程序的调试）。
   - 字段表、方法表中也有自己的属性表集合。
   - 属性表集合不要求具有严格的顺序，只要不与已有的属性名重复即可。任何实现的编译器都可以向属性表中写入自定义的属性信息，但JVM运行时会忽略其不认识的属性。
 
@@ -2624,24 +2624,24 @@ ConstantValue_attribute{
 }
 ```
 
-- 属性表计数器（attributes_count）：当前class文件属性表的成员个数。每项都是attribute_info。
+- 属性表计数器（attributes\_count）：当前class文件属性表的成员个数。每项都是attribute\_info。
 
 ##### Code
 
-| 类型                 | 名称                     | 含义           | 数量                   |
-| ------------------ | ---------------------- | ------------ | -------------------- |
-| u2                 | attribute_name_index   | 属性名索引        | 1                    |
-| u4                 | attribute_length       | 属性长度         | 1                    |
-| u2                 | max_stack              | 操作数栈深度最大值    | 1                    |
-| u2                 | max_local              | 局部变量表所需的存续空间 | 1                    |
-| u4                 | code_length            | 字节码指令长度      | 1                    |
-| u1                 | code                   | 存储字节码指令      | code_length          |
-| u2                 | exception_table_length | 异常表长度        | 1                    |
-| exception_info     | exception_table        | 异常表          | exception_length     |
-| **u2**             | **attributes_count**   | **属性表计数器**   | **1**                |
-| **attribute_info** | **attributes**         | **属性表**      | **attributes_count** |
+| 类型                | 名称                     | 含义                     | 数量                  |
+| ------------------- | ------------------------ | ------------------------ | --------------------- |
+| u2                  | attribute\_name\_index   | 属性名索引               | 1                     |
+| u4                  | attribute\_length        | 属性长度                 | 1                     |
+| u2                  | max\_stack               | 操作数栈深度最大值       | 1                     |
+| u2                  | max\_local               | 局部变量表所需的存续空间 | 1                     |
+| u4                  | code\_length             | 字节码指令长度           | 1                     |
+| u1                  | code                     | 存储字节码指令           | code\_length          |
+| u2                  | exception\_table\_length | 异常表长度               | 1                     |
+| exception_info      | exception\_table         | 异常表                   | exception\_length     |
+| **u2**              | **attributes\_count**    | **属性表计数器**         | **1**                 |
+| **attribute\_info** | **attributes**           | **属性表**               | **attributes\_count** |
 
-- LineNumberTable_attribute、LocalVariableTable_attribute：
+- LineNumberTable\_attribute、LocalVariableTable\_attribute：
 
 - LineNumberTable：可选变长属性，位于Code结构的属性表。用来描述Java源码行号与字节码之间的对应关系，在调试时定位代码执行的行数。
 
@@ -2692,26 +2692,26 @@ SourceFile_attribute {
 javap <options> <classes>
 ```
 
-| javap参数                                                | 说明                                                                   |
-| ------------------------------------------------------ | -------------------------------------------------------------------- |
-| --help -help -h -?                                     | 输出此帮助消息                                                              |
-| -version                                               | 版本信息                                                                 |
-| -v  -verbose                                           | 输出附加信息（不显示私有信息）                                                      |
-| -l                                                     | 输出行号和本地变量表                                                           |
+| javap参数                                              | 说明                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------ |
+| `--help -help -h -?`                                   | 输出此帮助消息                                               |
+| `-version`                                             | 版本信息                                                     |
+| `-v  -verbose`                                         | 输出附加信息（不显示私有信息）                               |
+| `-l`                                                   | 输出行号和本地变量表                                         |
 | -public<br />-protected<br />-package<br />-p -private | 仅显示公共类和成员<br />显示保护、公共的类和成员<br />（默认）显示程序包/受保护的/公共类和成员<br />显示所有类和成员 |
-| -sysinfo                                               | 显示正在处理的类的系统信息（路径、大小、日期、SHA-256 散列）                                   |
-| -constants                                             | 显示最终常量                                                               |
-| `--module <模块>, -m <模块>`                               | 指定包含要反汇编的类的模块                                                        |
-| -J `<vm-option>`                                       | 指定 VM 选项                                                             |
-| `--module-path <路径>`                                   | 指定查找应用程序模块的位置                                                        |
-| `--system <jdk> `                                      | 指定查找系统模块的位置                                                          |
-| `--class-path <路径> `                                   | 指定查找用户类文件的位置                                                         |
-| ` -classpath <路径>   `                                  | 指定查找用户类文件的位置                                                         |
-| `-cp <路径>  `                                           | 指定查找用户类文件的位置                                                         |
-| `-bootclasspath <路径> `                                 | 覆盖引导类文件的位置                                                           |
-| `--multi-release <version>`                            | 指定要在多发行版 JAR 文件中使用的版本                                                |
-| -s                                                     | 输出内部类型签名                                                             |
-| -c                                                     | 对代码进行反编译                                                             |
+| -sysinfo                                               | 显示正在处理的类的系统信息（路径、大小、日期、SHA-256 散列） |
+| -constants                                             | 显示最终常量                                                 |
+| `--module <模块>, -m <模块>`                           | 指定包含要反汇编的类的模块                                   |
+| `-J <vm-option>`                                       | 指定 VM 选项                                                 |
+| `--module-path <路径>`                                 | 指定查找应用程序模块的位置                                   |
+| `--system <jdk> `                                      | 指定查找系统模块的位置                                       |
+| `--class-path <路径> `                                 | 指定查找用户类文件的位置                                     |
+| ` -classpath <路径>   `                                | 指定查找用户类文件的位置                                     |
+| `-cp <路径>  `                                         | 指定查找用户类文件的位置                                     |
+| `-bootclasspath <路径> `                               | 覆盖引导类文件的位置                                         |
+| `--multi-release <version>`                            | 指定要在多发行版 JAR 文件中使用的版本                        |
+| -s                                                     | 输出内部类型签名                                             |
+| -c                                                     | 对代码进行反编译                                             |
 
 <img src="../../pictures/Snipaste_2023-06-15_14-37-47.png" width="900"/>
 
@@ -2723,7 +2723,7 @@ javap <options> <classes>
 
 - 字节码指令（byte code）：JVM的指令由一个字节长度的、代表某种特定操作含义的操作码（opcode）以及跟随其后的零至多个代表次操作所需参数的操作数（operand）所构成。
   - JVM基于栈（操作数栈）：大多数指令不包含操作数。
-  - 操作码的长度为1Byte（0`~`255），指令集的操作码总数不得超过256 。
+  - 操作码的长度为1Byte（0\~255），指令集的操作码总数不得超过256 。
 - 执行模型：
 
 ```java
@@ -2750,7 +2750,7 @@ do{
 | f                    | float  |
 | d                    | double |
 
-- 大多数对于boolean、byte、short、char类型数据的操作使用相应的int类型作为运算类型：大部分的指令没有支持整数类型 byte、char、short，甚至没有指令支持boolean类型。编译器在编译期/运行期将byte、short类型的数据带符号扩展为相应的int类型（Sign-Extend）。将boolean、char零位扩展为相应的int类型（Zero-Extend）。
+- 大多数对于boolean、byte、short、char类型数据的操作使用相应的int类型作为运算类型：大部分的指令不支持整数类型 byte、char、short，甚至没有指令支持boolean类型。编译器在编译期/运行期将byte、short类型的数据带符号扩展为相应的int类型（Sign-Extend），将boolean、char零位扩展为相应的int类型（Zero-Extend）。
 
 - 字节码指令按用途分类：
 1. 加载与存储指令。
@@ -2765,24 +2765,22 @@ do{
 
 ### 加载和存储指令
 
-#### 概述
-
 - 加载和存储指令：将数据从栈帧的局部变量表和操作数栈之间来回传递。
 
 <img src="../../pictures/JVM-加载和存储指令.drawio.svg" width="400"/> 
 
-| 常用指令            | 说明                                                                                                                                                         |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 局部变量压栈指令        | `xload`<br />`xload_<n>`：（x：i、l、f、d、a；n：0`~`3）                                                                                                             |
-| 常量入栈指令          | bipush<br />sipush<br />ldc<br />ldc_w<br />ldc2_w<br />aconst_null<br />iconst_m1<br />`iconst_<i>`<br />`lconst_<l>`<br />`fconst_<f>`<br />`dconst_<d>` |
-| 出栈装入局部变量表指令     | xstore<br />`xstore_<n>`：（x：i、l、f、d、a；n：0`~`3）<br />xastore：（x：i、l、f、d、a、b、c、s）                                                                            |
-| 扩充局部变量表的访问索引的指令 | wide                                                                                                                                                       |
+| 常用指令                       | 说明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| 局部变量压栈指令               | `xload`<br />`xload_<n>`：x（i、l、f、d、a），n（0\~3）      |
+| 常量入栈指令                   | bipush<br />sipush<br />ldc<br />ldc_w<br />ldc2_w<br />aconst_null<br />iconst_m1<br />`iconst_<i>`<br />`lconst_<l>`<br />`fconst_<f>`<br />`dconst_<d>` |
+| 出栈装入局部变量表指令         | xstore<br />`xstore_<n>`：x（i、l、f、d、a），n（0\~3）<br />xastore：x（i、l、f、d、a、b、c、s） |
+| 扩充局部变量表的访问索引的指令 | wide                                                         |
 
 - 对于表面上没有出操作数的指令，不需要进行取操作数的动作，其操作数隐含在指令中。
 
 > 将局部变量表中索引为0位置上的数据压入操作数栈：
 > 
-> iload_0：只有操作码，只要1B空间。
+> iload\_0：只有操作码，只要1B空间。
 > iload 0：操作码+操作数，需要2B空间。
 
 - 操作数栈（Operand Stacks）：执行每一条指令之前，JVM要求该指令的操作数已经被压入操作数栈中。在执行指令时，JVM会将该指令所需的操作数弹出，并且将该指令的结果重新压入栈中。
@@ -2796,10 +2794,10 @@ do{
 
 #### 局部变量压栈指令
 
-| 指令          | 说明                                         |
-| ----------- | ------------------------------------------ |
-| `xload_<n>` | 向操作数栈压入局部变量表中第n个索引位置的操作数<br />n一般预定义为0`~`3 |
-| `xload`     | 向操作数栈压入局部变量表中第n个索引位置的操作数                   |
+| 指令        | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| `xload_<n>` | 向操作数栈压入局部变量表中第n个索引位置的操作数<br />n一般预定义为0\~3 |
+| `xload`     | 向操作数栈压入局部变量表中第n个索引位置的操作数              |
 
 <img src="../../pictures/JVM-Xload_LocalVariables.drawio.svg" width="1200"/> 
 
@@ -2807,47 +2805,30 @@ do{
 
 - 常量入栈指令：将常数压入操作数栈。根据数据类型、入栈内容不同，分为const系列、push系列、ldc系列指令。
 
-##### const系列
-
-- const：对特定常量入栈，入栈的常量隐含在指令本身。
-
-| 指令           | n的取值范围 | 示例                                                                                   |
-| ------------ | ------ | ------------------------------------------------------------------------------------ |
-| `iconst_<n>` | `-1~5` | `iconst_m1`：将-1压入操作数栈。<br />`iconst_1`：将1压入操作数栈。                                     |
-| `lconst_<n>` | `0~1`  | `lconst_0 `：将长整数0压入操作数栈。<br />`lconst_1 `：将长整数1压入操作数栈。                               |
-| `fconst_<n>` | `0~2`  | `fconst_0 `：将浮点数0压入操作数栈。<br />`fconst_1 `：将浮点数1压入操作数栈。<br />`fconst_2 `：将浮点数2压入操作数栈。 |
-| `dconst_<n>` | `0~1`  | `fconst_0 `：将双精度数0压入操作数栈。<br />`fconst_1 `：将双精度数1压入操作数栈。                             |
-| aconst_null  |        | 将null压入操作数栈                                                                          |
+| const指令    | 范围          | 对特定常量入栈，入栈的常量隐含在指令本身                     |
+| ------------ | ------------- | ------------------------------------------------------------ |
+| `iconst_<n>` | `-1~5`        | `iconst_m1`：将-1压入操作数栈。<br />`iconst_1`：将1压入操作数栈。 |
+| `lconst_<n>` | `0~1`         | `lconst_0 `：将长整数0压入操作数栈。<br />`lconst_1 `：将长整数1压入操作数栈。 |
+| `fconst_<n>` | `0~2`         | `fconst_0 `：将浮点数0压入操作数栈。<br />`fconst_1 `：将浮点数1压入操作数栈。<br />`fconst_2 `：将浮点数2压入操作数栈。 |
+| `dconst_<n>` | `0~1`         | `fconst_0 `：将双精度数0压入操作数栈。<br />`fconst_1 `：将双精度数1压入操作数栈。 |
+| aconst_null  | null          | 将null压入操作数栈                                           |
+| **push指令** | **范围**      | **将参数压入栈，接收数据类型：int、short、byte**             |
+| bipush       | -128\~127     | 8位整数                                                      |
+| sipush       | -32768\~32767 | 16位整数                                                     |
+| **ldc指令**  | **范围**      | **将指定的内容压入堆栈。**                                   |
+| ldc          |               | 接收一个8位参数（int、float、String）。<br />该参数指向常量池中的int、float、String的索引 |
+| ldc\_w       |               | 接收两个8位参数（int、float、String）。                      |
+| ldc2\_w      | -             | 接收两个8位参数（long、double）。                            |
 
 > iconst 6：错误（超过范围），应该为：bipush 6
 
-##### push系列
-
-- push：将参数压入栈。
-
-| 指令     | 接收数据类型 <br />int/short/byte |
-| ------ | --------------------------- |
-| bipush | 8位整数                        |
-| sipush | 16位整数                       |
-
-##### ldc系列
-
-- ldc：该参数指向常量池中的int、float、String的索引，将指定的内容压入堆栈。
-
-| 指令     | 说明             |
-| ------ | -------------- |
-| ldc    | 接收一个8位参数<br /> |
-| ldc2_w | 接收两个8位参数。      |
-
 #### 出栈装入局部变量表指令
 
-- store：将操作数栈中栈顶元素弹出后，装入局部变量表的指定位置，用于给局部变量表赋值。
-
-| 指令           | 说明                                                                       |
-| ------------ | ------------------------------------------------------------------------ |
-| xstore       | 没有隐含参数信息，需要提供一个byte类型参数指定目标局部变量表中的位置。                                    |
-| `xstore_<n>` | x：i、l、f、d、a<br />n：0`~`3<br />`istore_n`：从操作数栈中弹出一个整数，并将其赋值给局部变量表中索引n位置。 |
-| xastore      | x：i、l、f、d、a、b、c、s                                                        |
+| store指令    | 将操作数栈中栈顶元素弹出后，装入局部变量表的指定位置，用于给局部变量表赋值。 |
+| ------------ | ------------------------------------------------------------ |
+| xstore       | 没有隐含参数信息，需要提供一个byte类型参数指定目标局部变量表中的位置。 |
+| `xstore_<n>` | x：i、l、f、d、a<br />n：0\~3<br />istore\_n：从操作数栈中弹出一个整数，并将其赋值给局部变量表中索引n位置。 |
+| xastore      | x：i、l、f、d、a、b、c、s                                    |
 
 <img src="../../pictures/JVM-xstore_n.drawio.svg" width="700"/> 
 
@@ -2855,12 +2836,10 @@ do{
 
 - 算术指令：对操作数栈上的两个值进行某种特定运算，并将结果重新压入操作数栈。
 
-| 实际类型          | 运算类型          |
+| 实际类型      | 运算类型      |
 | ------------- | ------------- |
-| boolean       | int           |
-| byte          | int           |
-| char          | int           |
-| short         | int           |
+| boolean、char | int           |
+| short、byte   | int           |
 | int           | int           |
 | float         | float         |
 | reference     | reference     |
@@ -2883,28 +2862,30 @@ double y = 10 / 0.0; //Infinity
 double z = 0.0 / 0.0; //NaN
 ```
 
-| 类型   | 算术指令                               |
-| ---- | ---------------------------------- |
-| 加法指令 | iadd<br />ladd<br />fadd<br />dadd |
-| 减法指令 | isub<br />lsub<br />fsub<br />dsub |
-| 乘法指令 | imul<br />lmul<br />fmul<br />dmul |
-| 除法指令 | idiv<br />ldiv<br />fdiv<br />ddiv |
-| 求余指令 | irem<br />lrem<br />frem<br />drem |
-| 取反指令 | ineg<br />lneg<br />fneg<br />dneg |
-| 自增指令 | iinc：iinc 局部变量表索引 by 值             |
-
-| 类型    | 位运算指令                                                    |
-| ----- | -------------------------------------------------------- |
-| 位移指令  | ishl<br />ishr<br />iushr<br />lshl<br />lshr<br />lushr |
-| 位或指令  | ior<br />lor                                             |
-| 位与指令  | iand<br />land                                           |
-| 位异或指令 | ixor<br />lxor                                           |
-
-| 类型   | 比较指令                                              |
-| ---- | ------------------------------------------------- |
-| 比较指令 | dcmpg<br />dcompl<br />fcmpg<br />fcmpl<br />lcmp |
+| 类型     | 算术指令                            |
+| -------- | ----------------------------------- |
+| 加法指令 | iadd、ladd、fadd、dadd              |
+| 减法指令 | isub、lsub、fsub、dsub              |
+| 乘法指令 | imul、lmul、fmul、dmul              |
+| 除法指令 | idiv、ldiv、fdiv、ddiv              |
+| 求余指令 | irem、lrem、frem、drem              |
+| 取反指令 | ineg、lneg、fneg、dneg              |
+| 自增指令 | iinc（`iinc 局部变量表索引 by 值`） |
 
 <img src="../../pictures/JVM-运算指令++.drawio.svg" width="1200"/>
+
+| 类型       | 位运算指令                               |
+| ---------- | ---------------------------------------- |
+| 位移指令   | ishl、ishr、iushr<br />lshl、lshr、lushr |
+| 位或指令   | ior、lor                                 |
+| 位与指令   | iand、land                               |
+| 位异或指令 | ixor、lxor                               |
+
+<img src="../../pictures/JVM-ixor_code.drawio.png" width="600"/> 
+
+| 类型     | 比较指令                                  |
+| -------- | ----------------------------------------- |
+| 比较指令 | dcmpg、dcompl<br />fcmpg、fcmpl<br />lcmp |
 
 ### 类型转换指令
 
