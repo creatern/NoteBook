@@ -3290,8 +3290,10 @@ mockMvc.perform(MockHttpServletRequestBuilder).andExpect(MockHttpServletRequestB
 <artifactId>spring-boot-starter-jdbc</artifactId>
 ```
 
-- 模式定义：若应用的根路径下存在schema\.sql文件（src/main/resources），则应用启动时会基于数据库执行该文件。
-- data\.sql预加载数据：同上，在数据源bean初始化时执行，适用于任何关系型数据库。
+| 自动脚本文件 | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| schema\.sql  | src/main/resources/schema\.sql。<br />模式定义，若应用的根路径下存在该文件，则应用启动时会基于数据库执行该文件。 |
+| data\.sql    | src/main/resources/data.sql。<br />预加载数据，同上，在数据源bean初始化时执行，适用于任何关系型数据库。 |
 
 | 角色                                        | 类/接口           |
 | ------------------------------------------- | ----------------- |
@@ -3438,6 +3440,32 @@ docker run -p 27017:27017 -d mongo:latest
 | @Transient | 声明该属性是否持久化                                         |
 
 - 聚合根需要@Document、@Id标注；聚合成员（子文档）则不需要。
+
+## [Mybatis-Plus](https://baomidou.com)
+
+```xml
+<groupId>com.baomidou</groupId>
+<artifactId>mybatis-plus</artifactId>
+<version>3.5.3.2</version>
+```
+
+> 任何能使用MyBatis进行 CRUD, 并且支持标准 SQL 的数据库。
+
+<img src="../../../../pictures/mybatis-plus-framework.png" width="600"/> 
+
+| 包结构 | 说明                                                         |
+| ------ | ------------------------------------------------------------ |
+| mapper | BaseMapper接口内定义了大部分的SQL语句。<br />@MapperScan：在配置类上注释，扫描mapper。 |
+| pojo   | 类名和表名对应。                                             |
+
+[Mybatis-Plus注解](https://baomidou.com/pages/223848/)
+
+| CURD表达式条件参数                  | 说明                     |
+| ----------------------------------- | ------------------------ |
+| \<T\> entity                        | 对应的pojo类型。         |
+| Map\<String, Object\>  columnMap    | key：字段<br />value：值 |
+| @Param("coll") Collection<?> idList | 通过id批量删除。         |
+| Wrapper\<T\> queryWrapper           | 查询条件构造器。         |
 
 # Spring Security
 

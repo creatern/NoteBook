@@ -17,7 +17,7 @@
 
 <img src="../../../pictures/Snipaste_2023-04-01_10-31-59.png" width="800"/> 
 
-# MyBatis工作流程
+## MyBatis工作流程
 
 ```java
 String resource = "mybatis-config.xml";
@@ -568,7 +568,7 @@ int deleteByIds(@Param("ids") int[] ids);
 - `SqlSession sqlSession = sqlSessionFactory.openSession()` 默认开启事务，需要手动提交：`sqlSession.commit()`
 - `SqlSession sqlSession = sqlSessionFactory.openSession(true)` 自动提交事务 
 
-### 插入`<insert>`
+### 插入`<insert>` @Insert 插入
 
 ```xml
 <insert id="mapper接口中对应的方法">
@@ -623,7 +623,7 @@ public void test04() throws Exception {
 }
 ```
 
-### 更新 `<update>`
+### 更新 `<update> `@Update
 
 - 返回被影响的行数
 
@@ -679,7 +679,7 @@ int update(Brand brand); //返回被影响的行数
 </update>
 ```
 
-### 删除 `<delete>`
+### 删除 `<delete>` @Delete
 
 ```xml
 <delete id="指定的mapper接口方法">
@@ -731,26 +731,3 @@ int deleteByIds(@Param("ids"))int[] ids);
 //MyBatis默认将数组参数封装为一个Map集合，默认为array = 数组
 //可以通过@Param("新的key")的方式来将array修改为新的key，在<foreach>中的collection使用
 ```
-
-
-# 注解方式
-
-- 注解开发只适用于简单的语句。
-- 省略了配置文件，但复杂的功能还是需要使用配置文件来完成。
-
-**类型**
-
-- @Select 查询
-- @Insert 插入
-- @Update 更新
-- @Delete 删除
-
-**应用**
-
-- mapper接口
-
-```java
-@Select("SELECT * FROM tb_user WHERE id = #{id}")
-public List<User> selectUserById(int id);
-```
-
