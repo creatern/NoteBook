@@ -41,213 +41,6 @@
 
 <img src="../../pictures/Snipaste_2023-05-18_22-07-39.png" width="800"/>  
 
-### 类加载器 Class Loader
-
-- ClassLoader只负责class文件的加载（`.class文件 --> JVM --> DNA元数据模板`），由Execution Engine决定是否可以运行。
-
-#### 类的加载过程
-
-<img src="../../pictures/Snipaste_2023-05-18_22-23-15.png" width="500"/>  
-
-##### 加载 Loading
-
-1. 通过类的全限定名获取定义该类的二进制字符流。
-2. 将该字符流所代表的静态存储结构转化为方法区的运行时数据结构。
-3. 在内存生成一个代表该类的java.lang.Class对象，作为方法区中这个类的各种数据的访问入口。
-
-> 加载.class文件的方式：
-> 
-> - 从本地系统中获取。
-> - 通过网络获取：Web Applet。
-> - 从zip压缩包中读取：jar、war格式。
-> - 动态代理技术。
-> - 其他文件生成：JSP。
-> - 从专有数据库提取。
-> - 从加密文件中获取：防止.class文件被反编译的保护措施。
-
-##### 链接 Linking
-
-###### 验证 Verify
-
-- 验证：确保class文件的字节流中包含信息符合当前虚拟机要求，保证被加载类的正确性，不会危害虚拟机自身安全。
-- 文件格式验证、元数据验证、字节码验证、符号引用验证。
-
-###### 准备 Prepare
-
-- 准备：为类变量分配内存并且设置该列变量的默认初始值（零值）。
-- 不包含 final 修饰的 static：final在编译时就分配，准备阶段会显式初始化。
-- 不会为实例变量分配初始化：类变量会分配在方法区中，而实例变量随着对象分配到Java堆中。
-
-###### 解析 Resolve
-
-- 解析：将常量池中的符号引用转化为直接引用。解析往往伴随着JVM在执行完初始化之后再执行。
-
-| 引用     | 说明                                                       |
-| -------- | ---------------------------------------------------------- |
-| 符号引用 | 一组符号描述所引用的目标。                                 |
-| 直接引用 | 直接执行目标的指针、相对偏移量、一个间接定位到目标的句柄。 |
-
-- 解析主要针对：类、接口、字段、类方法、接口方法、方法类型等。对应常量池：CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info等。
-
-##### 初始化 Initialization
-
-- 初始化：执行类构造器方法`<clinit>()`。
-
-> `<clinit>()`不同于类的构造器：构造器是虚拟机视角下的`<init>()`。
-
-- `<clinit>()`不需要定义，由javac编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来。（指令按语句在源文件中出现的顺序执行）
-
-- 若该类具有父类，JVM会保证在子类的`<clinit>()`执行前，父类的`<clinit>()`已经执行完毕。
-- 虚拟机必须保证一个类的`<clinit>()`在多线程下被同步加锁。
-
-#### 类加载器类别
-
-- 引导类加载器（Bootstrap ClassLoader）、自定义加载器（User-Defined ClassLoader） 
-  - 自定义加载器：所有派生于抽象类ClassLoader的类加载器。
-
-<img src="../../pictures/Snipaste_2023-05-18_23-37-09.png" width="600"/>  
-
-```java
-//系统类加载器
-ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-System.out.println(systemClassLoader); //jdk.internal.loader.ClassLoaders$AppClassLoader@78308db1
-//扩展类加载器
-ClassLoader extClassLoader = systemClassLoader.getParent();
-System.out.println(extClassLoader); //jdk.internal.loader.ClassLoaders$PlatformClassLoader@16b98e56
-//引导类加载器：获取不到 null
-ClassLoader bootstrapClassLoader = extClassLoader.getParent();
-System.out.println(bootstrapClassLoader); //null
-
-//用户自定义类：默认使用 系统类加载器 加载
-ClassLoader classLoader = StackStruTest.class.getClassLoader();
-System.out.println(classLoader); //jdk.internal.loader.ClassLoaders$AppClassLoader@78308db1
-
-//String类等Java核心类库：使用引导类加载器加载。
-ClassLoader stringClassLoader = String.class.getClassLoader();
-System.out.println(stringClassLoader); //null
-```
-
-##### 启动类加载器（引导类加载器） Bootstrap ClassLoader
-
-- 启动类加载器：使用C/C++语言实现，嵌套于JVM内部，并不继承java.lang.ClassLoader，没有父加载器。
-- 加载Java的核心库（JAVA_HOME/jre/lib/rt.jar、resources.jar、sun.boot.class.path），用于提供JVM自身需要的类。
-- 加载扩展类、应用程序类加载器，并指定为他们的父加载器。
-- 出于安全，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类。
-
-##### 扩展类加载器 Extension ClassLoader
-
-- Java语言编写：sun.misc.Launch\$ExtClassLoader实现、派生于ClassLoader类，父类加载器为启动类加载器。
-- 从java.ext.dirs系统属性所指定的目录中加载类库、或从JDK的安装目录的jre/lib/ext扩展目录中加载类库。（如果用户创建的JAR放在此目录中，也会自动由扩展类加载器加载）
-
-##### 应用程序加载器（系统类加载器） AppClassLoader
-
-- Java语言编写：sun.misc.Launch\$AppClassLoader实现、派生于ClassLoader类，父类加载器为扩展类加载器。
-- 负责加载环境变量classpath、或系统属性java.class.path 指定路径下的类库。
-- 程序中默认的类加载器：一般的Java应用的类都是由系统类加载器完成加载。
-
-```java
-//获取系统类加载器
-ClassLoader.getSystemClassLoader()
-```
-
-##### 用户自定义类加载器
-
-- 隔离加载类、修改类加载的方式、扩展加载源、防止源码泄露。
-1. 继承java.lang.ClassLoader。
-2. 不建议重写loadClass()，而是将自定义的类加载逻辑重写findClass()。
-3. 对于简单的需求：直接继承URLClassLoader类。
-
-```java
-public class CustomClassLoader extends ClassLoader {
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-
-        try {
-            byte[] result = getClassFromCustomPath(name);
-            if(result == null){
-                throw new FileNotFoundException();
-            }else{
-                return defineClass(name,result,0,result.length);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        throw new ClassNotFoundException(name);
-    }
-
-    private byte[] getClassFromCustomPath(String name){
-        //从自定义路径中加载指定类:细节略
-        //如果指定路径的字节码文件进行了加密，则需要在此方法中进行解密操作。
-        return null;
-    }
-
-    public static void main(String[] args) {
-        CustomClassLoader customClassLoader = new CustomClassLoader();
-        try {
-            Class<?> clazz = Class.forName("One",true,customClassLoader);
-            Object obj = clazz.newInstance();
-            System.out.println(obj.getClass().getClassLoader());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-#### 类加载器引用
-
-- JVM必须知道一个类型是由启动类加载器还是用户类加载器加载：如果一个类是由用户类加载器加载，则JVM将该类加载器的一个引用作为类型信息的一部分保存在方法区。当解析一个类到另一个类的引用时，JVM需要保证这两个类的类加载器相同。
-
-- class对象是否为同一个类的条件：类的全限定名一致、类加载器相同。
-
-#### ClassLoader
-
-- ClassLoader：抽象类，其后所有的类加载器都继承自ClassLoader（除了启动类加载器 Bootstrap ClassLoader）。
-
-| 方法                                                   | 说明                                            |
-| ---------------------------------------------------- | --------------------------------------------- |
-| getParent()                                          | 返回该类加载器的父类加载器                                 |
-| loaderClass(String name)                             | 加载名称为name的类<br />返回java.lang.Class实例          |
-| findClass(String name)                               | 查找名称为name的类<br />返回java.lang.Class实例          |
-| findLoadedClass(String name)                         | 查找名称为name的已经被加载过的类<br />返回java.lang.Class实例   |
-| defineClass(String name, byte[] b, int off, int len) | 把字节数组b中的内容转化为一个Java类<br />返回java.lang.Class实例 |
-| `resolveClass(Class<?> c)`                           | 连接指定的一个Java类                                  |
-
-| 获取ClassLoader                                  | 说明                  |
-| ---------------------------------------------- | ------------------- |
-| clazz.getClassLoader()                         | 当前类的ClassLoader     |
-| Thread.currentThread().getContextClassLoader() | 当前线程上下文的ClassLoader |
-| ClassLoader.getSystemClassLoader()             | 系统ClassLoader       |
-| DriverManager                                  | 调用者的ClassLoader     |
-
-### 双亲委派机制
-
-- 双亲委派机制：如果一个类加载器收到类加载的请求，则将这个请求委托给父类的加载器执行，如果父类加载器存在其父类加载器，则依次向上委托，请求最终到达顶层的启动类加载器。如果父类加载器可以完成类加载器，就成功返回；否则由子加载器尝试加载。
-
-1. 避免类的重复加载。
-
-2. 保护程序安全，防止核心API被篡改。 
-
-<img src="../../pictures/Snipaste_2023-05-19_12-44-34.png" width="600"/>  
-
-### 沙箱安全机制
-
-- 沙箱安全机制：引导类加载器在加载的过程会先加载jdk自带的文件（rt.jar包java.lang）。
-
-### 类的使用方式
-
-- Java对类的使用方式：自动使用、被动使用。
-- 自动使用：
-  1. 创建类的实例。
-  2. 访问某个类/接口的静态变量、或 对该静态变量赋值。
-  3. 调用类的静态方法。
-  4. 反射。
-  5. 初始化一个类的子类。
-  6. JVM启动时被标明为启动类的类。
-  7. 动态语言支持：java.lang.invoke.MethodHandle实例的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic句柄对应的类没有初始化，则初始化。
-- 被动使用：其他使用Java类的方式，不会导致类的初始化。
-
 ## 运行时数据区 Runtime Data Areas
 
 ### 概述
@@ -1530,8 +1323,6 @@ StringDeduplicationAgeThreshold 设置去重的String对象的年龄阈值，作
 
 # GC
 
-## 垃圾回收概述
-
 > - 哪些内存需要回收？
 > 
 > - 什么时候回收？
@@ -2805,20 +2596,20 @@ do{
 
 - 常量入栈指令：将常数压入操作数栈。根据数据类型、入栈内容不同，分为const系列、push系列、ldc系列指令。
 
-| const指令    | 范围          | 对特定常量入栈，入栈的常量隐含在指令本身                     |
-| ------------ | ------------- | ------------------------------------------------------------ |
-| `iconst_<n>` | `-1~5`        | `iconst_m1`：将-1压入操作数栈。<br />`iconst_1`：将1压入操作数栈。 |
-| `lconst_<n>` | `0~1`         | `lconst_0 `：将长整数0压入操作数栈。<br />`lconst_1 `：将长整数1压入操作数栈。 |
-| `fconst_<n>` | `0~2`         | `fconst_0 `：将浮点数0压入操作数栈。<br />`fconst_1 `：将浮点数1压入操作数栈。<br />`fconst_2 `：将浮点数2压入操作数栈。 |
-| `dconst_<n>` | `0~1`         | `fconst_0 `：将双精度数0压入操作数栈。<br />`fconst_1 `：将双精度数1压入操作数栈。 |
-| aconst_null  | null          | 将null压入操作数栈                                           |
-| **push指令** | **范围**      | **将参数压入栈，接收数据类型：int、short、byte**             |
-| bipush       | -128\~127     | 8位整数                                                      |
-| sipush       | -32768\~32767 | 16位整数                                                     |
-| **ldc指令**  | **范围**      | **将指定的内容压入堆栈。**                                   |
-| ldc          |               | 接收一个8位参数（int、float、String）。<br />该参数指向常量池中的int、float、String的索引 |
-| ldc\_w       |               | 接收两个8位参数（int、float、String）。                      |
-| ldc2\_w      | -             | 接收两个8位参数（long、double）。                            |
+| const指令     | 范围          | 对特定常量入栈，入栈的常量隐含在指令本身                     |
+| ------------- | ------------- | ------------------------------------------------------------ |
+| iconst\_\<n\> | \-1\~5        | iconst\_m1：将-1压入操作数栈。<br />iconst\_1：将1压入操作数栈。 |
+| lcons\_\<n\>  | 0\~1          | lconst\_0：将长整数0压入操作数栈。<br />lconst\_1：将长整数1压入操作数栈。 |
+| fconst\_\<n\> | 0\~2          | fconst\_0 ：将浮点数0压入操作数栈。<br />fconst\_1 ：将浮点数1压入操作数栈。<br />fconst\_2 ：将浮点数2压入操作数栈。 |
+| dconst\_\<n\> | 0\~1          | fconst\_0 ：将双精度数0压入操作数栈。<br />fconst\_1 ：将双精度数1压入操作数栈。 |
+| aconst\_null  | null          | 将null压入操作数栈                                           |
+| **push指令**  | **范围**      | **将参数压入栈，接收数据类型：int、short、byte**             |
+| bipush        | -128\~127     | 8位整数                                                      |
+| sipush        | -32768\~32767 | 16位整数                                                     |
+| **ldc指令**   | **范围**      | **将指定的内容压入堆栈。**                                   |
+| ldc           |               | 接收一个8位参数（int、float、String）。<br />该参数指向常量池中的int、float、String的索引 |
+| ldc\_w        |               | 接收两个8位参数（int、float、String）。                      |
+| ldc2\_w       | -             | 接收两个8位参数（long、double）。                            |
 
 > iconst 6：错误（超过范围），应该为：bipush 6
 
@@ -2827,7 +2618,7 @@ do{
 | store指令    | 将操作数栈中栈顶元素弹出后，装入局部变量表的指定位置，用于给局部变量表赋值。 |
 | ------------ | ------------------------------------------------------------ |
 | xstore       | 没有隐含参数信息，需要提供一个byte类型参数指定目标局部变量表中的位置。 |
-| `xstore_<n>` | x：i、l、f、d、a<br />n：0\~3<br />istore\_n：从操作数栈中弹出一个整数，并将其赋值给局部变量表中索引n位置。 |
+| xstore\_\<n\> | x：i、l、f、d、a<br />n：0\~3<br />istore\_n：从操作数栈中弹出一个整数，并将其赋值给局部变量表中索引n位置。 |
 | xastore      | x：i、l、f、d、a、b、c、s                                    |
 
 <img src="../../pictures/JVM-xstore_n.drawio.svg" width="700"/> 
@@ -3182,13 +2973,18 @@ System.out.println(b); //-128
 
 ## 类的加载过程
 
-<img src="../../pictures/JVM-Page-33.drawio.svg" width="800"/> 
+<img src="../../pictures/Snipaste_2023-05-18_22-07-39.png" width="800"/> 
 
-### Loading 加载阶段
+<img src="../../pictures/JVM-Page-33.drawio.svg" width="1000"/> 
+
+### 加载阶段 Loading
 
 - Loading（加载）：将字节码文件加载到机器内存，并在内存中构建出类模板对象（Java类的原型、内存中的快照）。JVM把从字节码文件中解析出的常量池、类字段、类方法等信息存储到类模板中，以便JVM在运行期（反射）通过类模板获取Java类中的任意信息、对成员变量进行遍历、方法调用。
 
 1. 由类的全名获取该类的二进制数据流。
+
+> 加载.class文件的方式：从本地系统中获取、通过网络获取（Web Applet）、从zip压缩包中读取（jar、war格式）、动态代理技术、其他文件生成（JSP）、从专有数据库提取、从加密文件中获取（防止.class文件被反编译的保护措施）。
+
 2. 解析类的二进制数据为方法区（JDK1.8之前是永久代，JDK1.8之后是元空间）内的数据结构（类模板）。
 
 > 若输入数据不是JVM规范的class文件，则抛出ClassFormatError。
@@ -3208,45 +3004,255 @@ System.out.println(b); //-128
 | 引用类型       | 遵循定义的加载过程递归加载和创建数组的元素类型，JVM使用指定的元素类型和数组维度来创建新的数组类。<br />可访问性由元素类型的可访问性决定。 |
 | 基本数据类型   | 基本数据类型由JVM预先定义（不需要类加载），只需要关注数组维度。<br />可访问性被缺省定义为public。 |
 
-### Linking 链接阶段
+### 链接阶段 Linking
 
+#### 验证 Verification
 
+- 验证：确保class文件的字节流中包含信息符合当前虚拟机要求，保证被加载类的正确性，不会危害虚拟机自身安全。
 
+> 文件格式验证、元数据验证、字节码验证、符号引用验证。
 
+<img src="../../pictures/JVM-Linking-Verifaction.drawio.svg" width="800"/> 
 
+#### 准备 Preparation
 
+- 准备（Preparation）：为类变量分配内存并设置默认初始值（零值）。
 
+> 与初始化阶段不同，没有涉及初始化代码的执行。
 
+1. 不包含 static final 修饰的：final在编译时就分配，准备阶段会显式初始化。
 
+2. 不会为实例变量分配初始化：类变量会分配在方法区中，而实例变量随着对象分配到Java堆中。
 
+| 数据类型  | 默认初始化值 |
+| --------- | ------------ |
+| byte      | (byte)0      |
+| short     | (short)0     |
+| int       | 0            |
+| long      | 0L           |
+| float     | 0\.0f        |
+| double    | 0\.0         |
+| char      | \\u0000      |
+| boolean   | false        |
+| reference | null         |
 
+> java并不直接支持boolean类型，其boolean类型的内部实现是int。
 
+```java
+private static int a = 1; //准备环节，默认初始化为0。
+private static final int b = 1; //准备环节，显式初始化为1。ConstantValue
+//private fianl int b = 1; 也是显式初始化为1。ConstantValue
 
+private static final String str1 = "Hello"; //准备环节，String以字面量的方式显式初始化。ConstantValue
+private static final String str2 = new String("Hellp"); //在<clinit>中进行初始化。
+```
 
+<img src="../../pictures/20231024100024.png" width="800"/> 
 
+> ConstantValue：显式初始化（常量）。
 
+#### 解析 Resolution
 
+- 解析：将常量池中的符号引用转化为直接引用。
 
+> JVM规范中并没有要求解析阶段一定要按顺序执行，但解析往往伴随着JVM在执行完初始化之后再执行。
 
+> 只要存在直接引用，则一定存在该类、方法、字段；而若只存在符号引用，则不确定。
 
+| 引用类型 | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 符号引用 | 一组符号描述所引用的目标，与JVM的内部数据结构和内存布局无关。 |
+| 直接引用 | 目标方法在类中方法表的位置，直接执行目标的指针、相对偏移量、一个间接定位到目标的句柄。 |
 
+> 解析主要针对：类、接口、字段、类方法、接口方法、方法类型等。
+>
+> 对应常量池：CONSTANT\_Class\_info、CONSTANT\_Fieldref\_info、CONSTANT\_Methodref\_info等。
 
+### 初始化阶段 Initialization
 
+- 初始化（Initialization）：JVM真正执行类中定义的Java代码，执行类构造器方法\<clinit\>\(\)。
 
+> \<clinit\>\(\)不同于类的构造器：构造器是虚拟机视角下的\<init\>\(\)。
 
+- \<clinit\>\(\)方法只能由Java编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句生成（指令按语句在源文件中出现的顺序执行）。（无法自定义该同名方法，也不能由我们调用）
+- 在加载一个类之前，JVM总会试图加载该类的父类，JVM保证父类的\<clinit\>\(\)方法先于子类的\<clinit\>\(\)方法执行。（父类的static块优先于子类）
+- Java编译器并不会为所有的类都产生\<clinit\>()方法，在以下情况中，class文件将不包含\<clinit\>()方法：
 
+1. 该类没有声明任何类变量，没有静态代码块。
+2. 该类声明了类变量，但没有显式赋值（使用类变量的初始化语句和静态代码块来执行初始化操作）。
+3. 该类中static final修饰的基本数据类型的字段（包括字面量赋值的String），也不会加入到\<clinit\>\(\)方法。（只要有final，就在链接阶段中的准备环节进行显式初始化）
 
+> 引用数据类型（以及new的String），则在\<clinit\>()中进行初始化。
 
+```java
+private static final String str1 = "Hello"; //准备环节，String以字面量的方式显式初始化。ConstantValue
+private static final String str2 = new String("Hellp"); //在<clinit>()中进行初始化。
 
+private static final Integer INTERGE_CONS1 = Integer.valueOf(100); //在<clinit>()中进行初始化。
+```
 
+<img src="../../pictures/20231024111809.png" width="1000"/>
 
+- JVM保证一个类的\<clinit\>\(\)方法在多线程下被同步加锁（隐式）。
 
+> 若多个线程同时准备初始化一个类，则只有一个线程能够进入，其他线程只能等待，等该类初始化完成后，JVM会直接将准备好的信息返回给处于等待队列的线程。
 
+#### 类的初始化时机：主动/被动使用
 
+| 类的使用方式 | 说明                           |
+| ------------ | ------------------------------ |
+| 主动使用     | 触发类的初始化\<clinit\>\(\)   |
+| 被动使用     | 不触发类的初始化\<clinit\>\(\) |
 
+- 自动使用：
+  1. 创建类的实例。
+  2. 访问某个类/接口的静态变量、或 对该静态变量赋值。
+  3. 调用类的静态方法。
+  4. 反射。
+  5. 初始化一个类的子类。
+  6. JVM启动时被标明为启动类的类。
+  7. 动态语言支持：java.lang.invoke.MethodHandle实例的解析结果REF\_getStatic、REF\_putStatic、REF\_invokeStatic句柄对应的类没有初始化，则初始化。
+- 被动使用：其他使用Java类的方式，不会导致类的初始化。
 
+## 类加载器 Class Loader
 
-## 类加载器
+- ClassLoader只负责class文件的加载（`.class文件 --> JVM --> DNA元数据模板`），由Execution Engine决定是否可以运行。
+
+### 类加载器类别
+
+- 引导类加载器（Bootstrap ClassLoader）、自定义加载器（User-Defined ClassLoader） 
+  - 自定义加载器：所有派生于抽象类ClassLoader的类加载器。
+
+<img src="../../pictures/Snipaste_2023-05-18_23-37-09.png" width="600"/>  
+
+```java
+//系统类加载器
+ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+System.out.println(systemClassLoader); //jdk.internal.loader.ClassLoaders$AppClassLoader@78308db1
+//扩展类加载器
+ClassLoader extClassLoader = systemClassLoader.getParent();
+System.out.println(extClassLoader); //jdk.internal.loader.ClassLoaders$PlatformClassLoader@16b98e56
+//引导类加载器：获取不到 null
+ClassLoader bootstrapClassLoader = extClassLoader.getParent();
+System.out.println(bootstrapClassLoader); //null
+
+//用户自定义类：默认使用 系统类加载器 加载
+ClassLoader classLoader = StackStruTest.class.getClassLoader();
+System.out.println(classLoader); //jdk.internal.loader.ClassLoaders$AppClassLoader@78308db1
+
+//String类等Java核心类库：使用引导类加载器加载。
+ClassLoader stringClassLoader = String.class.getClassLoader();
+System.out.println(stringClassLoader); //null
+```
+
+#### 启动类加载器（引导类加载器） Bootstrap ClassLoader
+
+- 启动类加载器：使用C/C++语言实现，嵌套于JVM内部，并不继承java.lang.ClassLoader，没有父加载器。
+- 加载Java的核心库（JAVA_HOME/jre/lib/rt.jar、resources.jar、sun.boot.class.path），用于提供JVM自身需要的类。
+- 加载扩展类、应用程序类加载器，并指定为他们的父加载器。
+- 出于安全，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类。
+
+#### 扩展类加载器 Extension ClassLoader
+
+- Java语言编写：sun.misc.Launch\$ExtClassLoader实现、派生于ClassLoader类，父类加载器为启动类加载器。
+- 从java.ext.dirs系统属性所指定的目录中加载类库、或从JDK的安装目录的jre/lib/ext扩展目录中加载类库。（如果用户创建的JAR放在此目录中，也会自动由扩展类加载器加载）
+
+#### 应用程序加载器（系统类加载器） AppClassLoader
+
+- Java语言编写：sun.misc.Launch\$AppClassLoader实现、派生于ClassLoader类，父类加载器为扩展类加载器。
+- 负责加载环境变量classpath、或系统属性java.class.path 指定路径下的类库。
+- 程序中默认的类加载器：一般的Java应用的类都是由系统类加载器完成加载。
+
+```java
+//获取系统类加载器
+ClassLoader.getSystemClassLoader()
+```
+
+#### 用户自定义类加载器
+
+- 隔离加载类、修改类加载的方式、扩展加载源、防止源码泄露。
+
+1. 继承java.lang.ClassLoader。
+2. 不建议重写loadClass()，而是将自定义的类加载逻辑重写findClass()。
+3. 对于简单的需求：直接继承URLClassLoader类。
+
+```java
+public class CustomClassLoader extends ClassLoader {
+    @Override
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
+
+        try {
+            byte[] result = getClassFromCustomPath(name);
+            if(result == null){
+                throw new FileNotFoundException();
+            }else{
+                return defineClass(name,result,0,result.length);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        throw new ClassNotFoundException(name);
+    }
+
+    private byte[] getClassFromCustomPath(String name){
+        //从自定义路径中加载指定类:细节略
+        //如果指定路径的字节码文件进行了加密，则需要在此方法中进行解密操作。
+        return null;
+    }
+
+    public static void main(String[] args) {
+        CustomClassLoader customClassLoader = new CustomClassLoader();
+        try {
+            Class<?> clazz = Class.forName("One",true,customClassLoader);
+            Object obj = clazz.newInstance();
+            System.out.println(obj.getClass().getClassLoader());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 类加载器引用
+
+- JVM必须知道一个类型是由启动类加载器还是用户类加载器加载：如果一个类是由用户类加载器加载，则JVM将该类加载器的一个引用作为类型信息的一部分保存在方法区。当解析一个类到另一个类的引用时，JVM需要保证这两个类的类加载器相同。
+
+- class对象是否为同一个类的条件：类的全限定名一致、类加载器相同。
+
+### ClassLoader
+
+- ClassLoader：抽象类，其后所有的类加载器都继承自ClassLoader（除了启动类加载器 Bootstrap ClassLoader）。
+
+| 方法                                                 | 说明                                                         |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| getParent()                                          | 返回该类加载器的父类加载器                                   |
+| loaderClass(String name)                             | 加载名称为name的类<br />返回java.lang.Class实例              |
+| findClass(String name)                               | 查找名称为name的类<br />返回java.lang.Class实例              |
+| findLoadedClass(String name)                         | 查找名称为name的已经被加载过的类<br />返回java.lang.Class实例 |
+| defineClass(String name, byte[] b, int off, int len) | 把字节数组b中的内容转化为一个Java类<br />返回java.lang.Class实例 |
+| `resolveClass(Class<?> c)`                           | 连接指定的一个Java类                                         |
+
+| 获取ClassLoader                                | 说明                        |
+| ---------------------------------------------- | --------------------------- |
+| clazz.getClassLoader()                         | 当前类的ClassLoader         |
+| Thread.currentThread().getContextClassLoader() | 当前线程上下文的ClassLoader |
+| ClassLoader.getSystemClassLoader()             | 系统ClassLoader             |
+| DriverManager                                  | 调用者的ClassLoader         |
+
+### 双亲委派机制
+
+- 双亲委派机制：如果一个类加载器收到类加载的请求，则将这个请求委托给父类的加载器执行，如果父类加载器存在其父类加载器，则依次向上委托，请求最终到达顶层的启动类加载器。如果父类加载器可以完成类加载器，就成功返回；否则由子加载器尝试加载。
+
+1. 避免类的重复加载。
+
+2. 保护程序安全，防止核心API被篡改。 
+
+<img src="../../pictures/Snipaste_2023-05-19_12-44-34.png" width="600"/>  
+
+### 沙箱安全机制
+
+- 沙箱安全机制：引导类加载器在加载的过程会先加载jdk自带的文件（rt.jar包java.lang）。
 
 # 性能监控与调优
 
