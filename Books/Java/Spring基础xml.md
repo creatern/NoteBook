@@ -101,15 +101,15 @@
 
 - BeanFactory（Bean工厂）：Spring底层核心部分。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/>  
+<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-01_14-34-11.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-01_14-34-11.png" width="700"/> 
 
 ### IoC 控制反转
 
 - IoC：工厂设计模式，BeanFactory根据配置文件/配置类来生产Bean实例。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
 
 1. beans.xml配置文件
 
@@ -143,7 +143,7 @@ System.out.println(userService);
 
 - DI：通过注入的方式反转Bean的创建权。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
 
 1. 定义接口及其实现类，setXxx(Xxx xxx)注入方法。（只要存在setXxx()，即使没有相应的xxx属性，也会执行该setXxx()注入方法）
 
@@ -252,10 +252,10 @@ UserService userService3 = applicationContext.getBean("userService", UserService
 1. BeanFactory是Spring的早期接口：Bean工厂；ApplicationContext是后期更高级接口：Spring容器。
 
 2. ApplicationContext在BeanFactory基础上对功能进行了扩展，监听功能、国际化功能等。BeanFactory的API更偏向底层，ApplicationContext的API大多数是对这些底层API的封装。
-   <img src="../../../../pictures/ApplicationContextImplements2023_4_1_14_10.png" width="500"/>  
+   <img src="../../pictures/ApplicationContextImplements2023_4_1_14_10.png" width="500"/>  
 
    - ApplicationContext除了继承了BeanFactory外，还继承了ApplicationEventPublisher（事件发布器）、ResouresPatternResolver（资源解析器）、MessageSource（消息资源）等。但是ApplicationContext的核心功能还是BeanFactory。
-     <img src="../../../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
+     <img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
 
 3. ApplicationContext与BeanFactory既有继承关系，又有融合关系。Bean创建的主要逻辑和功能都被封装在BeanFactory中，ApplicationContext不仅继承了BeanFactory，而且ApplicationContext内部还维护着BeanFactory的引用。 
 
@@ -274,9 +274,9 @@ System.out.println(userService);
 
 - 只在Spring基础环境下，即只导入spring-context坐标时，此时ApplicationContext的继承体系:
 
-<img src="../../../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
+<img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-01_14-33-10.png" width="700"/>  
+<img src="../../pictures/Snipaste_2023-04-01_14-33-10.png" width="700"/>  
 
 - Spring基础环境下，常用的三个ApplicationContext作用如下：
 
@@ -503,7 +503,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
 - context:property-placeholder 将properties文件导入到配置文件中
 - 加载的properties文件中的属性最终通过Spring解析后会被存储到了Spring容器的environment中去，不仅自己定义的属性会进行存储，Spring也会把环境相关的一些属性进行存储。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_13-01-01.png" width="800"/>  
+<img src="../../pictures/Snipaste_2023-04-08_13-01-01.png" width="800"/>  
 
 - 使用SpEL表达式在xml或注解中根据key获得value：`${key}`来获取properties文件中相应的值
 
@@ -541,20 +541,20 @@ jdbc.password=1234
 
 ### 原理解析
 
-<img src="../../../../pictures/Snipaste_2023-04-08_11-45-05.png" width="1000"/>  
+<img src="../../pictures/Snipaste_2023-04-08_11-45-05.png" width="1000"/>  
 
 - 如果是默认命名空间，则执行parseDefaultElement()方法。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_11-45-52.png" width="500"/>  
+<img src="../../pictures/Snipaste_2023-04-08_11-45-52.png" width="500"/>  
 
 - 如果是自定义命名空间，则执行parseCustomElement()方法。在执行resovle方法时，就是从Map<String, Object> handlerMappings中根据命名空间名称获得对应的处理器对象，此处是ContextNamespaceHandler，最终执行NamespaceHandler的parse方法。
 - 在创建DefaultNamespaceHandlerResolver时，为处理器映射地址handlerMappingsLocation属性赋值，并加载命名空间处理器到Map<String, Object> handlerMappings 中去。用于DefaultBeanDefinitionDocumentReader的parseBeanDefinitions()方法中。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_11-58-30.png" width="900"/>  
+<img src="../../pictures/Snipaste_2023-04-08_11-58-30.png" width="900"/>  
 
 - ContextNamespaceHandler，间接实现了NamespaceHandler接口，初始化方法init会被自动调用。由于context命名空间下有多个标签，所以每个标签又单独注册了对应的解析器，注册到了其父类NamespaceHandlerSupport的`Map<String,BeanDefinitionParser> parsers`
 
-<img src="../../../../pictures/Snipaste_2023-04-08_12-06-22.png" width="800"/>  
+<img src="../../pictures/Snipaste_2023-04-08_12-06-22.png" width="800"/>  
 
 ## 外部命名空间标签的执行流程
 
@@ -562,7 +562,7 @@ jdbc.password=1234
 2. 将自定义命名空间的名称 与 自定义命名空间的处理器映射关系 以键值对形式存在到一个叫spring.handlers文件里，该文件存储在类加载路径的 META-INF里，Spring会自动加载到;
 3. 准备好NamespaceHandler，如果命名空间只有一个标签，那么直接在parse方法中进行解析即可，一般解析结果就是注册该标签对应的BeanDefinition。如果命名空间里有多个标签，那么可以在init方法中为每个标签都注册一个BeanDefinitionParser，在执行NamespaceHandler的parse方法时在分流给不同的BeanDefinitionParser进行解析(重写doParse方法即可)。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_12-56-55.png" width="300"/>  
+<img src="../../pictures/Snipaste_2023-04-08_12-56-55.png" width="300"/>  
 
 ## 框架与Spring的集成开发
 
@@ -609,7 +609,7 @@ jdbc.password=1234
 
 - 在resource下创建com/zjk/myTest/config存放每个标签的xsd文件。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_14-11-01.png" width="400"/>  
+<img src="../../pictures/Snipaste_2023-04-08_14-11-01.png" width="400"/>  
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -625,7 +625,7 @@ jdbc.password=1234
 
 - 在schema约束文件的com/zjk/myTest/config的同一目录(resources)下创建META-INF目录。
 
-<img src="../../../../pictures/Snipaste_2023-04-08_14-17-06.png" width="300"/>  
+<img src="../../pictures/Snipaste_2023-04-08_14-17-06.png" width="300"/>  
 
 #### spring.schemas 约束映射文件
 
@@ -715,7 +715,7 @@ public class MyTestBeanPostProcessor implements BeanPostProcessor {
 public class ApplicationContextConfig {}
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-09_21-10-56.png" width="600"/>  
+<img src="../../pictures/Snipaste_2023-04-09_21-10-56.png" width="600"/>  
 
 ```java
 //注解方式加载配置文件
@@ -897,9 +897,9 @@ public class ApplicationContextConfig {
 
 ##### 组件扫描原理
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-40-11.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-10_00-40-11.png" width="700"/> 
 
-<img src="../../../../pictures/Snipaste_2023-04-09_21-39-11.png" width="1200"/> 
+<img src="../../pictures/Snipaste_2023-04-09_21-39-11.png" width="1200"/> 
 
 ###### component-scan
 
@@ -909,7 +909,7 @@ public class ApplicationContextConfig {
 <context:conponent-scan base-package="com.zjk"></context>
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-09_22-05-52.png" width="1200"/>
+<img src="../../pictures/Snipaste_2023-04-09_22-05-52.png" width="1200"/>
 
 ###### @ComponentScan
 
@@ -921,9 +921,9 @@ AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry)
 
 - 其中，ConfigurationClassPostProcessor 是一个 BeanDefinitionRegistryPostProcessor，经过一系列源码调用，最终也被指定到了ClassPathBeanDefinitionScanner 的doScan 方法（与xml方式最终终点一致）。
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-43-27.png" width="800"/>  
+<img src="../../pictures/Snipaste_2023-04-10_00-43-27.png" width="800"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-38-31.png" width="1200"/>      
+<img src="../../pictures/Snipaste_2023-04-10_00-38-31.png" width="1200"/>      
 
 #### properties资源加载 @PropertySource、`<context:property-placeholder>`
 
@@ -1030,7 +1030,7 @@ System.out.println(userDao);
 | id存在   | 别名指向id，singletoObjects中的beanName使用id |
 | id不存在 | singletonObjects中的beanName使用第一个别名    |
 
-<img src="../../../../pictures/Snipaste_2023-04-02_20-22-15.png" width="500"/>   
+<img src="../../pictures/Snipaste_2023-04-02_20-22-15.png" width="500"/>   
 
 - name：对于多个别名，别名之间使用逗号`,`分隔： 
 
@@ -1493,7 +1493,7 @@ public class UserDaoFactoryBean {
 }
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-02_21-36-25.png" width="500"/>   
+<img src="../../pictures/Snipaste_2023-04-02_21-36-25.png" width="500"/>   
 
 ###### @Bean
 
@@ -1552,7 +1552,7 @@ public interface FactoryBean<T> {
 
 - Spring容器创建时，FactoryBean被实例化并存储到singletonObjects中，但getObject() 方法尚未被执行，UserDaoImpl也没被实例化，当首次用到UserDaoImpl时，才调用getObject() 。此工厂方式产生的Bean实例不会存储到singletonObjects中，而是存储到factoryBeanObjectCache中，之后每次使用到userDao都从该缓存池中获取同一个userDao实例。
 
-<img src="../../../../pictures/Snipaste_2023-04-02_21-55-12.png" width="500"/>   
+<img src="../../pictures/Snipaste_2023-04-02_21-55-12.png" width="500"/>   
 
 ```xml
 <bean id="userDao" class="com.zjk.factory.UserDaoFactoryBean"></bean>
@@ -1741,7 +1741,7 @@ public interface BeanFactoryPostProcessor {
 
 - postProcessBeanFactory的参数ConfigurableListab实质上是**DefaultListableBeanFactory**。可以对beanDefinitionMap中的BeanDefinition进行操作。
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
 
 - applicationContext.xml
 
@@ -1923,7 +1923,7 @@ public class TimeLogBeanPostProcessor implements BeanPostProcessor {
 | 初始化       | Bean创建之后仅是个"半成品"，需要对Bean实例的属性进行填充、执行一些Aware接口方法、执行BeanPostProcessor方法、执行InitializingBean接口的初始化方法、执行自定义初始化init方法等。 |
 | 完成         | 完整的Spring Bean被存储到单例池singletonObjects。            |
 
-<img src="../../../../pictures/202304062302.png" width="1200"/> 
+<img src="../../pictures/202304062302.png" width="1200"/> 
 
 #### 实例化阶段
 
@@ -1939,19 +1939,19 @@ public class TimeLogBeanPostProcessor implements BeanPostProcessor {
 
 5. 当执行applicationContext.getBean(beanName)时，从singletonObjects去匹配Bean实例返回。
    
-   <img src="../../../../pictures/202304062302.png" width="1200"/>   
+   <img src="../../pictures/202304062302.png" width="1200"/>   
 
 ##### beanDefinitionMap
 
 - Spring容器在进行初始化时，会将xml配置的`<bean>`的信息封装成一个BeanDefinition对象，所有的BeanDefinition存储到一个名为beanDefinitionMap（Map），Spring框架在对该Map进行遍历，使用反射创建Bean实例对象，创建好的Bean对象存储在singletonObjects（Map），当调用getBean()方法时则最终从singletonObjects中取出Bean实例对象返回。
 
-<img src="../../../../pictures/Snipaste_2023-04-03_13-42-50.png" width="1200"/>   
+<img src="../../pictures/Snipaste_2023-04-03_13-42-50.png" width="1200"/>   
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-36-40.png" width="600"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-36-40.png" width="600"/>   
 
 - BeanDefinition接口：RootBeanDefinition。
 
-<img src="../../../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
+<img src="../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
 
 ##### DefaultListableBeanFactory
 
@@ -1967,7 +1967,7 @@ public class DefaultListableBeanFactory extends ... implements ... {
 
 - Spring框架会取出beanDefinitionMap中的每个BeanDefinition信息，反射构造方法或调用指定的工厂方法生成Bean实例对象：只要将BeanDefinition注册到beanDefinitionMap这个Map中，Spring就会进行对应的Bean的实例化操作。
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
 
 ##### Bean实例、单例池singletonObjects
 
@@ -1981,7 +1981,7 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 }
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="1200"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="1200"/>   
 
 #### 初始化阶段
 
@@ -1998,7 +1998,7 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 
 - BeanDefinition将当前Bean实体的注入信息存储在propertyValues属性。
 
-<img src="../../../../pictures/Snipaste_2023-04-05_23-45-21.png" width="600"/>   
+<img src="../../pictures/Snipaste_2023-04-05_23-45-21.png" width="600"/>   
 
 | 属性注入     | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -2008,13 +2008,13 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 
 - 单项对象引用：Bean对象的创建是按照在配置文件xml中`<bean>`的位置来确定先后顺序的。因此，尽量将被注入Bean的`<bean>`放在上面。
 
-<img src="../../../../pictures/Snipaste_2023-04-05_16-25-34.png" width="900"/>   
+<img src="../../pictures/Snipaste_2023-04-05_16-25-34.png" width="900"/>   
 
 - 循环依赖 三级缓存存储：多个实体之间相互依赖并形成闭环的情况
 
-<img src="../../../../pictures/Snipaste_2023-04-05_16-22-45.png" width="900"/>   
+<img src="../../pictures/Snipaste_2023-04-05_16-22-45.png" width="900"/>   
 
-<img src="../../../../pictures/Spring-循环引用问题.drawio.svg" width="1200"/>   
+<img src="../../pictures/Spring-循环引用问题.drawio.svg" width="1200"/>   
 
 ###### 三级缓存存储
 
@@ -2047,7 +2047,7 @@ public class DefaultSingletonBeanRegistry ... {
 6. UserService 注入UserDao；
 7. UserService执行其他生命周期过程，最终成为一个完成Bean，存储到一级缓存，删除二三级缓存。
 
-<img src="../../../../pictures/三级缓存源码剖析流程_00.png" width="3000"/>   
+<img src="../../pictures/三级缓存源码剖析流程_00.png" width="3000"/>   
 
 ##### Aware
 
@@ -2138,11 +2138,11 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 | 切面      | Aspect    | 增强和切入点的组合                                   |
 | 织入      | Weaving   | 将通知和切入点组合动态组合的过程                     |
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
+<img src="../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
 
-<img src="../../../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
+<img src="../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
+<img src="../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
 
 ### 通知
 
@@ -2314,7 +2314,7 @@ public class UserServiceImpl implements UserService {
 </aop:config>
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-12_12-33-08.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-12_12-33-08.png" width="700"/> 
 
 ###### # 环绕通知
 
@@ -2365,7 +2365,7 @@ public void afterThrowing(Throwable throwable){
 
 **通知类实现Advice的子功能接口**
 
-<img src="../../../../pictures/Snipaste_2023-04-12_12-54-44.png" width="600"/>  
+<img src="../../pictures/Snipaste_2023-04-12_12-54-44.png" width="600"/>  
 
 | 通知类型 | 接口                 | 实现的方法                                                   |
 | :------- | :------------------- | :----------------------------------------------------------- |
@@ -2455,7 +2455,7 @@ public class UserServiceAdvice2 implements MethodBeforeAdvice, AfterReturningAdv
 http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNamespaceHandler
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-12_14-26-57.png" width="1000"/> 
+<img src="../../pictures/Snipaste_2023-04-12_14-26-57.png" width="1000"/> 
 
 - **wrapIfNecessary()** 方法最终返回的就是一个Proxy对象：`return this.wrapIfNecessary(bean, beanName, cacheKey);`
 
@@ -2472,11 +2472,11 @@ http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNam
 | JDK 动态代理技术   | 目标类有接口，是基于接口动态生成实现类的代理对象             | 目标类有接口的情况下，默认方式                               |
 | Cglib 动态代理技术 | 目标类无接口且不能使用final修饰，是基于被代理对象动态生成子对象为代理对象 | 目标类无接口时，默认使用该方式；目标类有接口时，手动配置`<aop:config proxytarget-class="true">`强制使用Cglib方式 |
 
-<img src="../../../../pictures/Snipaste_2023-04-12_14-41-51.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-12_14-41-51.png" width="600"/> 
 
-<img src="../../../../pictures/Snipaste_2023-04-12_14-52-41.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-12_14-52-41.png" width="600"/> 
 
-<img src="../../../../pictures/Snipaste_2023-04-12_14-49-51.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-12_14-49-51.png" width="600"/> 
 
 ###### Cglib基于超类的动态代理
 
@@ -2559,13 +2559,13 @@ personProxy.show();
 
 - `<aop:aspectj-autoproxy/>`
 
-<img src="../../../../pictures/Snipaste_2023-04-13_00-13-28.png" width="1200"/> 
+<img src="../../pictures/Snipaste_2023-04-13_00-13-28.png" width="1200"/> 
 
 - @EnableAspectJAutoProxy
 
-<img src="../../../../pictures/Snipaste_2023-04-13_00-19-49.png" width="500"/> 
+<img src="../../pictures/Snipaste_2023-04-13_00-19-49.png" width="500"/> 
 
-<img src="../../../../pictures/2023_04_13_0_20.png" width="1000"/> 
+<img src="../../pictures/2023_04_13_0_20.png" width="1000"/> 
 
 ### 声明式事务控制
 
@@ -2601,7 +2601,7 @@ personProxy.show();
 
 - MyBatis使用的平台事务管理器： **DataSourceTransactionManager**
 
-<img src="../../../../pictures/Snipaste_2023-04-13_23-11-23.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-13_23-11-23.png" width="600"/> 
 
 - 需要注入的属性：
 
@@ -2673,7 +2673,7 @@ private DataSource dataSource;
 
 ##### 原理解析
 
-<img src="../../../../pictures/Snipaste_2023-04-14_01-36-17.png" width="1200"/>  
+<img src="../../pictures/Snipaste_2023-04-14_01-36-17.png" width="1200"/>  
 
 - TxAdviceBeanDefinitionParser二级父类AbstractBeanDefinitionParser的parse方法将TransactionInterceptor以配置的名称注册到了Spring容器中
 

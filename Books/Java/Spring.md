@@ -1,6 +1,557 @@
-# Spring基础
+# Maven
 
-<img src="../../../../pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
+## 概述
+
+### POM
+
+- 项目管理工具（项目对象模型）：POM。
+
+<img src="../../pictures/Snipaste_2023-03-16_20-33-31.jpg" width="800"/>  
+
+1. 项目构建。
+2. 依赖管理。
+3. 统一开发结构。
+
+### 环境配置
+
+```shell
+# JAVA_HOME已经配置
+# set maven enviroment
+export MAVEN_HOME=/opt/apache-maven-3.9.0
+export PATH=$PATH:$MAVEN_HOME\bin
+```
+
+### 基础概念
+
+#### 仓库
+
+- 仓库：存储资源，包含各种jar包。
+
+- Maven中央仓库：[mvn](https://mvnrepository.com/)。
+
+- 获取jar包的方式：中央仓库、本地仓库、私服。
+
+| 仓库     | 说明                               |
+| -------- | ---------------------------------- |
+| 本地仓库 |                                    |
+| 远程仓库 | 中央仓库<br />私服：版权和访问速度 |
+
+#### 坐标
+
+- 坐标：描述仓库中资源的位置。
+
+| 坐标的主要组成 | 说明                                                 |
+| -------------- | ---------------------------------------------------- |
+| groupid        | 当前Maven项目隶属组织名称：org.mybatis等（域名反写） |
+| artifactid：   | 当前Maven项目名称：通常是模块名称：CRM、SMS等        |
+| version        | 当前项目版本号                                       |
+| packaging      | 该项目的打包方式                                     |
+
+<img src="../../pictures/Snipaste_2023-03-16_21-09-16.jpg" width="800"/>  
+
+## 仓库配置
+
+- Maven配置文件：conf/settings.xml。
+
+| setting     | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| 全局setting | 当前计算器中Maven的公共配置。<br />maven安装路径的conf/settings.xml |
+| 用户setting | 当前用户的配置                                               |
+
+### 本地仓库配置
+
+```xml
+<!-- localRepository 49行
+   | The path to the local repository maven will use to store artifacts.
+   | 默认的本地仓库位置
+   | Default: ${user.home}/.m2/repository
+   配置本地仓库的模板
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+<!--
+   对本地仓库的配置
+  -->
+<localRepository>D:\maven\repository</localRepository>
+```
+
+### 远程仓库配置
+
+#### 中央仓库 central
+
+- pom-4.0.0.xml文件：在lib目录下随便找一个jar包，用WinRAR打开，并在WinRAR回到上一级目录，搜索`pom*.*`找到不同的那个，并打开即可发现pom-4.0.0.xml。
+
+```xml
+<repositories>
+    <repository>
+        <id>central</id>
+        <name>Central Repository</name>
+        <url>https://repo.maven.apache.org/maven2</url>
+        <layout>default</layout>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+#### 镜像仓库配置
+
+- maven安装路径的conf/settings.xml
+
+```xml
+<mirrors> 配置镜像仓库 148行
+    <mirror>
+        <!--此镜像的唯一标识符：用来区分不同的mirror元素-->
+        <id>aliyunmaven</id>
+        <!--对哪种仓库进行镜像：即替代哪个库-->
+        <mirrorOf>central</mirrorOf>
+        <!--镜像名称：可以随便起-->
+        <name>aliyunmaven</name>
+        <!--镜像url-->
+        <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+</mirrors>
+```
+
+> 阿里云等镜像仓库的url可能会更新，需要去阿里云maven官网查看id和url并及时更改。
+
+## 项目构建
+
+### 标准Maven项目
+
+1. 标准Maven项目的文件结构：
+- 项目 --> src 
+  
+  - main 主目录
+    
+    - java Java文件
+    - resources 静态资源
+  
+  - test  测试目录
+    
+    - java Java测试文件
+    - resources 静态资源
+2. src同级目录配置pom.xml：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.zjk</groupId>
+  <artifactId>project-java</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+    </dependency>
+  </dependencies>
+
+</project>
+```
+
+### 插件创建工程
+
+- 插件创建工程：要求创建时，目录内部是空的，不能已经是Maven的项目文件。
+- 在当前目录下自动创建工程：
+
+```
+mvn archetype:generate 使用模板生成
+-DgroupId={project-packaging} 项目内的包
+-DartifactId={project-name} 要创建的项目名称
+-DarchetypeArtifactId=maven-archetype-quickstart 使用的模板
+-DinteractiveMode=false
+```
+
+- 创建Java工程：
+
+```xml
+mvn archetype:generate -DgroupId=com.zjk -DartifactId=java-project -DarchetypeArtifactId=maven-archetype-quickstart -Dversion=0.0.1-snapshot -DinteractiveMode=false
+```
+
+- 创建Web工程：
+
+```xml
+mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArtifactId=maven-archetype-webapp -Dversion=0.0.1-snapshot -DinteractiveMode=false
+```
+
+### IDEA
+
+#### 构建Maven项目
+
+1. 创建、配置Maven项目：
+
+<img src="../../pictures/Snipaste_2023-03-17_10-54-50.jpg" width="600"/> 
+
+2. 创建Maven的Module：
+
+<img src="../../pictures/Snipaste_2023-03-17_10-58-29.jpg" width="600"/> 
+
+3. 为相应的文件设置属性，通常已经设置好：
+
+<img src="../../pictures/Snipaste_2023-03-17_11-00-52.jpg" width="600"/>  
+
+#### 管理Maven
+
+<img src="../../pictures/Snipaste_2023-03-17_11-06-04.jpg" width="400"/>  
+
+- 配置快捷命令：
+
+<img src="../../pictures/Snipaste_2023-03-17_11-17-02.jpg" width="1000"/>  
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion> 指定maven的POM的模型版本
+    <parent>
+        <groupId>org.example</groupId> 组织id
+        <artifactId>MavenProject</artifactId> 项目id
+        <version>1.0-SNAPSHOT</version> 版本号 release完成版，snapshot开发版
+    </parent>
+    <groupId>com.zjk</groupId> 
+    <artifactId>JaveWebDemo02</artifactId> 
+    <packaging>war</packaging> 打包方式：web工程打包为war；java工程打包为jar
+    <name>JaveWebDemo02 Maven Webapp</name> 非必要
+    <url>http://maven.apache.org</url>
+    <dependencies> 设置当前工程的所有依赖
+        <dependency> 具体的依赖
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build> 构建
+        <finalName>JaveWebDemo02</finalName>
+        <plugins> 插件
+            <plugin> 插件
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1</version>
+                <configuration> 插件设置
+                    <port>8080</port> 端口号
+                    <path>/</path> 路径
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+<img src="../../pictures/Snipaste_2023-03-17_12-12-47.jpg" width="800"/>    
+
+#### 导入Maven项目
+
+1. 已经创建Maven工程的，可以直接导入别的Maven工程：选择要导入的Maven工程的pom.xml文件。
+
+2. View-->Apperance-->Tool Window Bars。
+
+## 依赖管理 dependencies
+
+### 导入依赖 dependency
+
+<img src="../../pictures/Snipaste_2023-03-17_11-10-46.jpg" width="1000"/>
+
+| 依赖分类             | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| 直接依赖             | 导入仓库中的坐标。                                           |
+| 依赖传递（间接依赖） | 将另一个项目的坐标复制到当前项目的dependencies中作为dependency；可以使用另一个项目中的依赖。 |
+
+- 依赖冲突问题：
+
+| 解决方式 | 说明                                 |
+| -------- | ------------------------------------ |
+| 路径优先 | 层级越深，优先级越低。               |
+| 声明优先 | om.xml中配置的位置先后，在上的优先。 |
+
+### 可选依赖 optional
+
+```xml
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.12</version>
+    <optional>true</optional> 表示依赖传递时，该依赖不会被传递
+</dependency>
+```
+
+### 排除依赖 exclusion
+
+```xml
+<dependency>
+    <groupId></groupId> 被传递依赖的项目
+    <artifactId></artifactId>
+    <version></version>
+    <exclusions> 需要排除的依赖
+        <exclusion>
+            <groupId></groupId>
+            <artifactId></artifactId>
+            不需要版本号versionId
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+### 依赖范围 scope
+
+- scope：设定依赖的作用范围。
+  - 依赖jar包默认情况下可以在任何地方使用。
+
+| 作用范围     | 说明                        |
+| ------------ | --------------------------- |
+| main         | 主程序范围有效 main目录下   |
+| test         | 测试程序范围有效 test目录下 |
+| 是否参与打包 | package指令范围             |
+
+| scope           | 主代码 | 测试代码 | 打包 |
+| :-------------- | :----: | :------: | :--: |
+| compile（默认） |   √    |    √     |  √   |
+| test            |        |    √     |      |
+| provided        |   √    |    √     |      |
+| runtime         |        |          |  √   |
+
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope> 依赖范围
+</dependency>
+```
+
+- 依赖范围具有传递性：
+
+| 间接依赖、直接依赖 | compile | test | provided | runtime |
+| :----------------: | :-----: | :--: | :------: | :-----: |
+|      compile       | compile | test | provided | runtime |
+|        test        |         |      |          |         |
+|      provided      |         |      |          |         |
+|      runtime       | runtime | test | provided | runtime |
+
+### 父级 parent
+
+- 子级可以直接使用父级的Maven项目的所有依赖和插件。
+
+```xml
+<parent>  <!--父级项目的坐标-->
+    <groupId>com.zjk</groupId>
+    <artifactId>MavenProject</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</parent>
+```
+
+## 生命周期
+
+<img src="../../pictures/Maven-生命周期.drawio.svg" width="600"/> 
+
+- 对于生命周期，如果要执行一个命令，则在其生命周期之前的命令也全部会被执行。
+
+> 执行test：会先执行compile等命令。
+
+| 命令        | 功能           | 说明                                                         |
+| :---------- | :------------- | ------------------------------------------------------------ |
+| mvn compile | 编译           | 在项目下创建新的内容：<br />`E:\project-java\target`         |
+| mvn clean   | 清理           |                                                              |
+| mvn test    | 测试           | 存放测试报告日志的内容：<br />`E:\project-java\target\surefire-reports` |
+| mvn package | 打包           | 打包的jar包放在项目同级目录下                                |
+| mvn install | 安装到本地仓库 | 由groupid和version来确定存放在仓库的位置                     |
+
+## build
+
+### 插件 plugins
+
+- 插件与生命周期内的阶段绑定：在执行到对应生命周期时，执行对应的插件功能。
+  
+  - Maven默认在各个生命周期上绑定有预设的功能。
+
+- 插件可以自定义其他功能。
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId></groupId>
+            <artifactId></artifactId>
+            <version></version>
+            <executions> 执行
+                <execution>
+                    <goals> 插件的输出
+                        <goal></goal>
+                    </goals>
+                    <phase></phase> 对应的生命周期
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+```xml
+<build> 构建
+    <plugins>
+        <plugin> 插件
+            坐标
+            <groupId>org.apache.tomcat.maven</groupId> 
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.1</version>
+            <configuration> 插件信息
+                <port>8080</port> 端口号设置
+                <path>/</path> 路径设置
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+<img src="../../pictures/Snipaste_2023-03-17_12-37-00.jpg" width="1200"/>  
+
+## 分模块开发与设计
+
+### 模块拆分思想
+
+# Docker
+
+## Docker概述
+
+- 容器技术只隔离应用程序的运行时环境但容器之间可以共享同一个操作系统（程序的运行只和容器有关，即屏蔽环境差异）。
+
+- docker将程序以及程序所有的依赖都打包到docker container。
+
+<img src="../../pictures/image-20200325194141346.png" width="700"/> 
+
+| 概念       | 说明                        |
+| ---------- | --------------------------- |
+| Dockerfile | 自动化脚本（创建Image）     |
+| Image      | 镜像（创建Container的模板） |
+| Container  | 容器                        |
+| **其他**   | **说明**                    |
+| Repository | 仓库（存放镜像）            |
+
+### [Docker命令](https://docs.docker.com/reference/)
+
+<img src="../../pictures/docker-cmd-basic202310072321.png" width="1000"/>
+
+> portainer 界面工具。
+
+### image Docker镜像
+
+> UnionFS（联合文件系统）：分层、轻量级、高性能的文件系统，是Docker镜像的基础（所有镜像都基于其基础镜像）。
+
+| 层次   | 说明                                               |
+| ------ | -------------------------------------------------- |
+| bootfs | Docker最底层，包含bootloader、kernel。<br />公用。 |
+| rootfs | 底层直接使用Host的kernel，只需要基本的指令集。     |
+
+- Docker镜像是只读的。当容器启动时，新的可写层（容器）被加载到镜像层顶部，用户的操作都基于容器层。
+
+<img src="../../pictures/20231008155727.png" width="400"/>
+
+### volume 容器数据卷
+
+- volume：容器之间数据共享（本地挂载目录）。
+
+> 只要数据卷还存在，删除任何容器都不会导致其他容器在该数据卷中的数据被删除。
+
+```shell
+# 指定容器的数据卷
+-v [卷名: | /主机目录:]{/容器目录}[:ro | :rw]
+# 默认主机目录 /var/lib/docker/volumes，主机目录会覆盖容器目录的内容。
+```
+
+> docker inspect `{containerID}`的`"Mount":[{}]`查看挂载具体信息。
+
+```shell
+# 继承指定容器（数据卷容器）的数据卷（共用同一个）
+--volumes-from {containerName}
+```
+
+### [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+
+<img src="../../pictures/16f13b67659bbbabtplv-t2oaga2asx-jj-mark_3024_0_0_0_q75.png" width="500"/>
+
+```shell
+# 通过DockerFile构建镜像
+docker build [-f {dockerFile}] -t {imageName[:tag]} .
+# 如果当前目录下存在文件名为Dockerfile，Docker自动寻找该文件（不需要-f指定）
+# 镜像名称必须小写
+```
+
+> ```shell
+> # 查看镜像构建过程
+> docker history {imageID}
+> ```
+
+| 执行时机 | DockerFile命令 | 说明 |
+| -------------- | ---- | ---- |
+|镜像构建                |FROM                | 基础镜像 |
+|            |MAINTAINER            | `姓名<邮箱>` |
+|                    |ENV                    | 环境变量 |
+|                |WORKDIR                | 工作目录 |
+|                    |RUN                    | 运行命令 |
+|                    |ADD                    | 复制到镜像（自动解压）                             |
+|                |COPY                | 复制到镜像 |
+|                |VOLUME                | 数据卷 |
+|                |EXPOSE                | 暴露端口 |
+|                |ONBUILD                |  |
+|容器启动                    |CMD                    | 运行命令，只有最后一个CMD会执行（替换之前的CMD）。 |
+|            |ENTRYPOINT            | 运行命令，在之前ENTRYPOINT基础上追加命令。         |
+
+```dockerfile
+FROM ubuntu
+MAINTAINER zjk<1054860443@163.com>
+
+ENV MYPATH /usr/local
+
+WORKDIR $MYPATH
+
+RUN touch t1.txt
+
+COPY ReadMe.md /usr/local
+
+ADD apache-tomcat-9.0.80.tar.gz /usr/local
+
+ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.80
+ENV CATALINA_BASH /usr/local/apache-tomcat-9.0.80
+ENV PATH $PATH:CATALINA_HOME/lib:CATALINA_HOME/bin
+
+EXPOSE 8080
+
+CMD echo "---Tomcat OK---" && pwd
+```
+
+#### DockerHub国内源
+
+[阿里云-镜像容器服务](https://cr.console.aliyun.com/cn-shenzhen/instances)
+
+[阿里云-镜像仓库文档](https://cr.console.aliyun.com/repository/cn-shenzhen/zhengjk/zhengjk-repo/details)
+
+## Docker网络 network
+
+> docker run --link 在hosts中配置连接到的容器ip地址（单向的）。不建议使用。
+
+Docker0
+
+| 网络模式  | 说明             |
+| --------- | ---------------- |
+| bridge    | 默认，桥接       |
+| none      | 不配置网络       |
+| host      | 和宿主机共享网络 |
+| container | 容器网络连通     |
+
+```shell
+# docker run 默认--net bridge
+--net {bridge | networkName}
+```
+
+
+
+# Spring
+
+<img src="../../pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
 
 | 基本思想 | 名词     | 说明                              |
 | ---- | ------ | ------------------------------- |
@@ -14,15 +565,15 @@
 
 - BeanFactory（Bean工厂）：Spring底层核心部分。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/>  
+<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-01_14-34-11.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-01_14-34-11.png" width="700"/> 
 
 #### IoC 控制反转
 
 - IoC：工厂设计模式，BeanFactory根据配置文件/配置类来生产Bean实例。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
 
 1. beans.xml配置文件
 
@@ -56,7 +607,7 @@ System.out.println(userService);
 
 - DI：通过注入的方式反转Bean的创建权。
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
 
 1. 定义接口及其实现类，setXxx(Xxx xxx)注入方法。（只要存在setXxx()，即使没有相应的xxx属性，也会执行该setXxx()注入方法）
 
@@ -165,10 +716,10 @@ UserService userService3 = applicationContext.getBean("userService", UserService
 1. BeanFactory是Spring的早期接口：Bean工厂；ApplicationContext是后期更高级接口：Spring容器。
 
 2. ApplicationContext在BeanFactory基础上对功能进行了扩展，监听功能、国际化功能等。BeanFactory的API更偏向底层，ApplicationContext的API大多数是对这些底层API的封装。
-   <img src="../../../../pictures/ApplicationContextImplements2023_4_1_14_10.png" width="500"/>  
+   <img src="../../pictures/ApplicationContextImplements2023_4_1_14_10.png" width="500"/>  
    
    - ApplicationContext除了继承了BeanFactory外，还继承了ApplicationEventPublisher（事件发布器）、ResouresPatternResolver（资源解析器）、MessageSource（消息资源）等。但是ApplicationContext的核心功能还是BeanFactory。
-     <img src="../../../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
+     <img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
 
 3. ApplicationContext与BeanFactory既有继承关系，又有融合关系。Bean创建的主要逻辑和功能都被封装在BeanFactory中，ApplicationContext不仅继承了BeanFactory，而且ApplicationContext内部还维护着BeanFactory的引用。 
 
@@ -187,9 +738,9 @@ System.out.println(userService);
 
 - 只在Spring基础环境下，即只导入spring-context坐标时，此时ApplicationContext的继承体系:
 
-<img src="../../../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
+<img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-01_14-33-10.png" width="700"/>  
+<img src="../../pictures/Snipaste_2023-04-01_14-33-10.png" width="700"/>  
 
 - Spring基础环境下，常用的三个ApplicationContext作用如下：
 
@@ -218,7 +769,7 @@ System.out.println(userService);
 public class ApplicationContextConfig {}
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-09_21-10-56.png" width="600"/>  
+<img src="../../pictures/Snipaste_2023-04-09_21-10-56.png" width="600"/>  
 
 ```java
 //注解方式加载配置文件
@@ -417,7 +968,7 @@ public class ApplicationContextConfig {
 )
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-40-11.png" width="700"/>  
+<img src="../../pictures/Snipaste_2023-04-10_00-40-11.png" width="700"/>  
 
 - component-scan是一个context命名空间下的自定义标签，要找到对应的命名空间处理器（NamespaceHandler）和解析器，查看spring-context包下的spring.handlers文件。将标注的@Component的类生成的对应的BeanDefiition进行注册。
 
@@ -425,7 +976,7 @@ public class ApplicationContextConfig {
 <context:conponent-scan base-package="com.zjk"></context>
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-09_22-05-52.png" width="1200"/>
+<img src="../../pictures/Snipaste_2023-04-09_22-05-52.png" width="1200"/>
 
 - AnnotationConfigApplicationContext在进行创建时，内部调用了如下代码，该工具注册了几个Bean后处理器。
 
@@ -435,9 +986,9 @@ AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry)
 
 - 其中，ConfigurationClassPostProcessor 是一个 BeanDefinitionRegistryPostProcessor，经过一系列源码调用，最终也被指定到了ClassPathBeanDefinitionScanner 的doScan 方法（与xml方式最终终点一致）。
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-43-27.png" width="800"/>  
+<img src="../../pictures/Snipaste_2023-04-10_00-43-27.png" width="800"/>  
 
-<img src="../../../../pictures/Snipaste_2023-04-10_00-38-31.png" width="1200"/>      
+<img src="../../pictures/Snipaste_2023-04-10_00-38-31.png" width="1200"/>      
 
 ### @PropertySource properties资源加载
 
@@ -722,7 +1273,7 @@ public class UserDaoImpl implements UserDao {
 | 作用 | 将方法的返回值作为Bean实例注册到Spring容器中。               |
 | 说明 | @Bean@Bean("beanName")指定当前返回的Bean实例的beanName。<br />如果不指定，则直接使用当前方法的名称作为当前Bean实例的beanName。 |
 
-<img src="../../../../pictures/Snipaste_2023-04-02_21-36-25.png" width="500"/>
+<img src="../../pictures/Snipaste_2023-04-02_21-36-25.png" width="500"/>
 
 ```java
 @Component
@@ -769,7 +1320,7 @@ public interface FactoryBean<T> {
 
 - Spring容器创建时，FactoryBean被实例化并存储到singletonObjects中，但getObject() 方法尚未被执行，UserDaoImpl也没被实例化，当首次用到UserDaoImpl时，才调用getObject() 。此工厂方式产生的Bean实例不会存储到singletonObjects中，而是存储到factoryBeanObjectCache中，之后每次使用到userDao都从该缓存池中获取同一个userDao实例。
 
-<img src="../../../../pictures/Snipaste_2023-04-02_21-55-12.png" width="500"/>   
+<img src="../../pictures/Snipaste_2023-04-02_21-55-12.png" width="500"/>   
 
 ```java
 @Component
@@ -816,7 +1367,7 @@ public interface BeanFactoryPostProcessor {
 
 - postProcessBeanFactory的参数ConfigurableListab：实质上是DefaultListableBeanFactory，可以对beanDefinitionMap中的BeanDefinition进行操作。
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
 
 ```java
 public class MyBeanFactoryProcessor implements BeanFactoryPostProcessor {
@@ -940,7 +1491,7 @@ public interface BeanPostProcessor {
 | 初始化      | Bean创建之后仅是个"半成品"，需要对Bean实例的属性进行填充、执行一些Aware接口方法、执行BeanPostProcessor方法、执行InitializingBean接口的初始化方法、执行自定义初始化init方法等。 |
 | 完成       | 完整的Spring Bean被存储到单例池singletonObjects。                                                                            |
 
-<img src="../../../../pictures/202304062302.png" width="1200"/> 
+<img src="../../pictures/202304062302.png" width="1200"/> 
 
 #### 实例化阶段
 
@@ -956,11 +1507,11 @@ public interface BeanPostProcessor {
 
 - Spring会取出beanDefinitionMap中的每个BeanDefinition信息，反射构造方法或调用指定的工厂方法生成Bean实例对象：只要将BeanDefinition注册到beanDefinitionMap这个Map中，Spring就会进行对应的Bean的实例化操作。
 
-<img src="../../../../pictures/Snipaste_2023-04-03_13-42-50.png" width="1200"/>   
+<img src="../../pictures/Snipaste_2023-04-03_13-42-50.png" width="1200"/>   
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-36-40.png" width="600"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-36-40.png" width="600"/>   
 
-> BeanDefinition接口：RootBeanDefinition。<img src="../../../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
+> BeanDefinition接口：RootBeanDefinition。<img src="../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
 
 - DefaultListableBeanFactory内部维护着beanDefinitionMap。
 
@@ -972,7 +1523,7 @@ public class DefaultListableBeanFactory extends ... implements ... {
 }
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="700"/>   
 
 ##### Bean实例、singletonObjects 单例池
 
@@ -986,7 +1537,7 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 }
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-04_23-46-45.png" width="1200"/>   
+<img src="../../pictures/Snipaste_2023-04-04_23-46-45.png" width="1200"/>   
 
 #### 初始化阶段
 
@@ -1003,7 +1554,7 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 
 - BeanDefinition将当前Bean实体的注入信息存储在propertyValues属性。
 
-<img src="../../../../pictures/Snipaste_2023-04-05_23-45-21.png" width="600"/>   
+<img src="../../pictures/Snipaste_2023-04-05_23-45-21.png" width="600"/>   
 
 | 属性注入     | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -1013,13 +1564,13 @@ public class DefaultSingletonBeanRegistry extends ... implements ... {
 
 - 单项对象引用：Bean对象的创建是按照在配置文件xml中`<bean>`的位置来确定先后顺序的。因此，尽量将被注入Bean的`<bean>`放在上面。
 
-<img src="../../../../pictures/Snipaste_2023-04-05_16-25-34.png" width="900"/>   
+<img src="../../pictures/Snipaste_2023-04-05_16-25-34.png" width="900"/>   
 
 - 循环依赖 三级缓存存储：多个实体之间相互依赖并形成闭环的情况
 
-<img src="../../../../pictures/Snipaste_2023-04-05_16-22-45.png" width="900"/>   
+<img src="../../pictures/Snipaste_2023-04-05_16-22-45.png" width="900"/>   
 
-<img src="../../../../pictures/Spring-循环引用问题.drawio.svg" width="1200"/>   
+<img src="../../pictures/Spring-循环引用问题.drawio.svg" width="1200"/>   
 
 ###### 三级缓存存储
 
@@ -1052,7 +1603,7 @@ public class DefaultSingletonBeanRegistry ... {
 6. UserService 注入UserDao；
 7. UserService执行其他生命周期过程，最终成为一个完成Bean，存储到一级缓存，删除二三级缓存。
 
-<img src="../../../../pictures/三级缓存源码剖析流程_00.png" width="3000"/>   
+<img src="../../pictures/三级缓存源码剖析流程_00.png" width="3000"/>   
 
 ##### Aware
 
@@ -1204,7 +1755,7 @@ ResourceLoaderAware {
 }
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-10_15-16-38.png" width="800"/>   
+<img src="../../pictures/Snipaste_2023-04-10_15-16-38.png" width="800"/>   
 
 ## AOP
 
@@ -1225,11 +1776,11 @@ ResourceLoaderAware {
 | 切面    | Aspect    | 增强和切入点的组合                  |
 | 织入    | Weaving   | 将通知和切入点组合动态组合的过程           |
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
+<img src="../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
 
-<img src="../../../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
+<img src="../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
 
-<img src="../../../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
+<img src="../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
 
 ### Advice 通知
 
@@ -1349,7 +1900,7 @@ public class UserServiceAdvice{
 http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNamespaceHandler
 ```
 
-<img src="../../../../pictures/Snipaste_2023-04-12_14-26-57.png" width="1000"/> 
+<img src="../../pictures/Snipaste_2023-04-12_14-26-57.png" width="1000"/> 
 
 - **wrapIfNecessary()** 方法最终返回的就是一个Proxy对象：`return this.wrapIfNecessary(bean, beanName, cacheKey);`
 
@@ -1357,13 +1908,13 @@ http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNam
 
 - `<aop:aspectj-autoproxy/>`
 
-<img src="../../../../pictures/Snipaste_2023-04-13_00-13-28.png" width="1200"/> 
+<img src="../../pictures/Snipaste_2023-04-13_00-13-28.png" width="1200"/> 
 
 - @EnableAspectJAutoProxy
 
-<img src="../../../../pictures/Snipaste_2023-04-13_00-19-49.png" width="500"/> 
+<img src="../../pictures/Snipaste_2023-04-13_00-19-49.png" width="500"/> 
 
-<img src="../../../../pictures/2023_04_13_0_20.png" width="1000"/> 
+<img src="../../pictures/2023_04_13_0_20.png" width="1000"/> 
 
 ### 声明式事务控制
 
@@ -1398,7 +1949,7 @@ http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNam
 >
 > - MyBatis使用的平台事务管理器： **DataSourceTransactionManager**
 >
-> <img src="../../../../pictures/Snipaste_2023-04-13_23-11-23.png" width="600"/> 
+> <img src="../../pictures/Snipaste_2023-04-13_23-11-23.png" width="600"/> 
 >
 > - 需要注入的属性：
 >
@@ -1513,7 +2064,9 @@ public class AccountServiceImpl implements AccountService {
 
 ## JavaWeb（Servlet）
 
-<img src="../../../../pictures/26080321227450.png" width="709"/>
+<img src="../../pictures/26080321227450.png" width="709"/>
+
+<img src="../../pictures/Snipaste_2023-03-23_14-17-01.jpg" width="1000"/>
 
 ### Web基础
 
@@ -1521,21 +2074,14 @@ public class AccountServiceImpl implements AccountService {
 
 | 体系结构                    | 说明                                                         |
 | --------------------------- | ------------------------------------------------------------ |
-| C/S <br />客户端/服务器结构 | <img src="../../../../pictures/Snipaste_2023-03-08_16-34-12.png" width="400"/> |
-| B/S <br />浏览器/服务器结构 | <img src="../../../../pictures/Snipaste_2023-03-08_16-34-48.png" width="400"/> |
+| C/S <br />客户端/服务器结构 | <img src="../../pictures/Snipaste_2023-03-08_16-34-12.png" width="400"/> |
+| B/S <br />浏览器/服务器结构 | <img src="../../pictures/Snipaste_2023-03-08_16-34-48.png" width="400"/> |
 
 | 比较           | C/S                                                          | B/S                                                          |
 | -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 开发和维护成本 | 不同的客户端要开发不同的应用程序而且软件的安装、调试和升级均需要在所有的客户机上进行。 | 不必在客户端进行安装和维护，只需要对服务器进行升级维护即可。 |
 | 客户端负载     | 减轻服务器的压力<br />减轻网络负荷                           | 服务器的负荷较重<br />网络负荷较重                           |
 | 安全性         | 高于B/S                                                      |                                                              |
-
-#### Web应用程序的工作原理
-
-| Web应用  | 说明                                                         |
-| -------- | ------------------------------------------------------------ |
-| 静态网站 | HTML语言<br /><img src="../../../../pictures/Snipaste_2023-03-08_16-50-52.png" width="500"/> |
-| 动态网站 | HTML语言和动态脚本语言<br />根据用户的请求动态地生成页面信息。  <br />（并不等同于带有动画效果的网页，而是具有交互功能的网页）<br /><img src="../../../../pictures/Snipaste_2023-03-08_16-51-06.png" width="500"/> |
 
 #### MVC三层架构
 
@@ -1545,7 +2091,7 @@ public class AccountServiceImpl implements AccountService {
 | Controller（业务逻辑层） | 对业务逻辑进行封装，组合数据访问层中的基本功能。 |
 | View（表现层）           | 接受请求，封装数据，调用业务逻辑层，响应数据。   |
 
-<img src="../../../../pictures/image-20210818165808589.png" alt="image-20210818165808589" style="zoom:60%;" />
+<img src="../../pictures/image-20210818165808589.png" alt="image-20210818165808589" style="zoom:60%;" />
 
 #### HTTP 超文本传输协议
 
@@ -1555,7 +2101,7 @@ public class AccountServiceImpl implements AccountService {
 
 **请求： 请求行、请求消息头、请求主体。**
 
-<img src="../../../../pictures/Snipaste_2022-11-25_11-26-34.png" width="400"/>
+<img src="../../pictures/Snipaste_2022-11-25_11-26-34.png" width="400"/>
 
 | 请求部分   | 说明                                                         |
 | ---------- | ------------------------------------------------------------ |
@@ -1588,7 +2134,7 @@ public class AccountServiceImpl implements AccountService {
 | 响应头 | 服务器的信息、服务器发送给浏览器的信息<br />响应体的说明书、服务器端对浏览器端设置数据。 |
 | 响应体 | 服务器返回的数据主体，有可能是各种数据类型。                 |
 
-<img src="../../../../pictures/Snipaste_2022-11-25_11-32-42.png" width="400"/>
+<img src="../../pictures/Snipaste_2022-11-25_11-32-42.png" width="400"/>
 
 | [响应状态码 ](https://config.net.cn/tools/HttpStatusCode.html) | 原因短语                         | 说明                       |
 | :----------------------------------------------------------- | :------------------------------- | -------------------------- |
@@ -1606,6 +2152,31 @@ public class AccountServiceImpl implements AccountService {
 | Set-Cookie       | 服务器返回新的Cookie信息给浏览器。            |
 | location         | 重定向时，告诉浏览器访问下一个资源的地址。    |
 
+### Tomcat
+
+| 目录结构 | 说明           |
+| -------- | -------------- |
+| bin      | 可执行文件目录 |
+| conf     | 配置文件目录   |
+| lib      | 存放lib目录    |
+| logs     | 日志文件目录   |
+| temp     | 临时目录       |
+| webapps  | 项目部署目录   |
+| work     | 工作目录       |
+
+> 其他文件：BUILDING.txt、CONTRIBUTING.md、LICENSE、NOTICE、README.md、RELEASE-NOTES、RUNNING.txt。
+
+```shell
+# JAVA_HOME 也需要配置
+# set Tomcat enviroment
+export CATALINA_HOME=/opt/Tomcat9
+export PATH=$PATH:$CATALINA_HOME\lib:$CATALINA_HOME\bin
+```
+
+> Tomcat是用C和Java编写的。 
+
+- Tomcat默认的地址为`http://localhost:8080`。
+
 ### Servlet
 
 ```xml
@@ -1618,7 +2189,7 @@ public class AccountServiceImpl implements AccountService {
 </dependency>
 ```
 
-<img src="../../../../pictures/Snipaste_2022-11-23_16-02-35.png" width="600"/>
+<img src="../../pictures/Snipaste_2022-11-23_16-02-35.png" width="600"/>
 
 #### HttpServlet
 
@@ -1868,7 +2439,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 | `req.getRequestDispatcher("网页路径")`<br />`.forward(req,resp);` | `resp.sendRedirect("网页路径");`                             |
 | 一次请求响应的过程<br />客户端不知道服务器内部的转发         | 两次请求响应的过程                                           |
 | 地址栏不变                                                   | 地址栏改变                                                   |
-| <img src="../../../../pictures/Snipaste_2022-11-27_10-06-35.png" width="300"/> | <img src="../../../../pictures/Snipaste_2022-11-27_10-09-04.png" width="300"/> |
+| <img src="../../pictures/Snipaste_2022-11-27_10-06-35.png" width="300"/> | <img src="../../pictures/Snipaste_2022-11-27_10-09-04.png" width="300"/> |
 
 ### 会话跟踪
 
@@ -1876,7 +2447,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 
 - Session（数据保存在服务端）：客户端第一次发请求给服务器时，服务器获取其session（如果获取不到，则创建新的session并响应给客户端[sessionID]）。客户端再次给服务器发请求（带有sessionID）带给服务器，服务器根据sessionID判断是同一个客户端。
 
-<img src="../../../../pictures/Snipaste_2022-11-25_14-33-58.png" width="500"/>
+<img src="../../pictures/Snipaste_2022-11-25_14-33-58.png" width="500"/>
 
 > sessionID解决HTTP无状态的问题（识别会话）。
 
@@ -1917,8 +2488,8 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 | 保存作用域                          | 范围                                                         |
 | ----------------------------------- | ------------------------------------------------------------ |
 | page                                | 页面级别（几乎不用）                                         |
-| request                             | 一次请求响应<br /><img src="../../../../pictures/2023_3_15_13_38.png" width="400"/> |
-| session                             | 一次会话（和具体的某一个session对应的，切换其他session时，保存域不同）<br />同一个客户端（浏览器）<br /><img src="../../../../pictures/Snipaste_2022-11-25_14-51-25.png" width="400"/> |
+| request                             | 一次请求响应<br /><img src="../../pictures/2023_3_15_13_38.png" width="400"/> |
+| session                             | 一次会话（和具体的某一个session对应的，切换其他session时，保存域不同）<br />同一个客户端（浏览器）<br /><img src="../../pictures/Snipaste_2022-11-25_14-51-25.png" width="400"/> |
 | application<br />（ServletContext） | 整个Web应用程序<br />不同客户端（浏览器）也可以访问同一个Servlet上下文保存作用域。 |
 
 | 方法                                  | 说明                     |
@@ -1978,7 +2549,7 @@ cookie.setMaxAge(int seconds);//设置Cookie最大存活时间
 
 ### Filter接口 过滤器
 
-<img src="../../../../pictures/Snipaste_2022-11-24_23-53-56.png" width="400"/>
+<img src="../../pictures/Snipaste_2022-11-24_23-53-56.png" width="400"/>
 
 #### Filter配置
 
@@ -2035,7 +2606,7 @@ public class FilterTest implements Filter {
 
 #### Filter生命周期
 
-<img src="../../../../pictures/Snipaste_2022-11-25_00-07-59.png" width="300"/>
+<img src="../../pictures/Snipaste_2022-11-25_00-07-59.png" width="300"/>
 
 **init(FilterConfig filterConfig)**
 
@@ -2917,7 +3488,7 @@ try {
 }
 ```
 
-# Sping Boot
+# Spring Boot
 
 ## Spring Boot 基础
 
@@ -3039,7 +3610,7 @@ public CommandLineRunner testMethod() {
 
 ## 配置属性
 
-<img src="../../../../pictures/Spring-SpringBoot-属性源-数据源.drawio.svg" width="600"/> 
+<img src="../../pictures/Spring-SpringBoot-属性源-数据源.drawio.svg" width="600"/> 
 
 ### 配置日志
 
@@ -3451,21 +4022,192 @@ docker run -p 27017:27017 -d mongo:latest
 
 > 任何能使用MyBatis进行 CRUD, 并且支持标准 SQL 的数据库。
 
-<img src="../../../../pictures/mybatis-plus-framework.png" width="600"/> 
+<img src="../../pictures/mybatis-plus-framework.png" width="600"/> 
 
-| 包结构 | 说明                                                         |
-| ------ | ------------------------------------------------------------ |
-| mapper | BaseMapper接口内定义了大部分的SQL语句。<br />@MapperScan：在配置类上注释，扫描mapper。 |
-| pojo   | 类名和表名对应。                                             |
+### [Mybatis](https://mybatis.net.cn)
 
-[Mybatis-Plus注解](https://baomidou.com/pages/223848/)
+- MyBatis是持久层（DAO）框架、ORM框架。
 
-| CURD表达式条件参数                  | 说明                     |
-| ----------------------------------- | ------------------------ |
-| \<T\> entity                        | 对应的pojo类型。         |
-| Map\<String, Object\>  columnMap    | key：字段<br />value：值 |
-| @Param("coll") Collection<?> idList | 通过id批量删除。         |
-| Wrapper\<T\> queryWrapper           | 查询条件构造器。         |
+>**持久层：负责将数据保持到数据库。**
+>
+>JavaEE三层架构：表现层、业务层、持久层。
+
+```java
+String resource = "mybatis-config.xml";
+InputStream inputStream = Resources.getResourceAsStream(resource);
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuild().build(inputStream);
+SqlSesison sqlSession = sqlSessionFactory.openSession();
+
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+List<User> userList = userMapper.selectAllUser();
+
+sqlSession.close();
+```
+
+1. 读取主配置文件mybatis-config.xml，获得运行环境和数据库连接。
+2. 加载SQL映射文件Mapper.xml。
+3. 根据主配置文件，SqlSessionFactoryBuild对象创建SqlSessionFactory对象。
+4. 由SqlSessionFactory对象创建SqlSession对象，通过SqlSession对象进行CRUD操作（或者通过代理开发sqlSession.getMapper()进行CRUP操作的调用）。
+5. Executor接口操作数据库。
+6. 对输入参数进行映射，在执行SQL语句前，将输入的Java对象映射到SQL语句中。
+7. 将输出结果映射为Java对象
+
+<img src="../../pictures/Snipaste_2023-04-01_10-31-59.png"/> 
+
+#### 核心配置文件 mybatis-config.xml
+
+- configuration（配置）
+  - properties（属性）
+  - settings（设置）
+  - typeAliases（类型别名）
+  - typeHandlers（类型处理器）
+  - objectFactory（对象工厂）
+  - plugins（插件）
+  - environments（环境配置）
+    - environment（环境变量）
+      - transactionManager（事务管理器）
+      - dataSource（数据源）
+  - databaseIdProvider（数据库厂商标识）
+  - mappers（映射器）
+
+#### SQL映射文件 Mapper.xml
+
+##### Mapper接口 代理开发 
+
+1. 定义与SQL映射文件同名的Mapper接口，并将Mapper接口和SQL映射文件分别放置在java和resources中对应的mapper目录（`classpath*:/mapper/**/*.xml`）。
+2. 设置SQL映射文件的nameSpace属性为Mapper接口全限定名。
+3. 在Mapper接口中定义方法，方法名就是SQL映射文件中sql语句的id ，并保持参数类型和返回值类型一致。
+4. 通过SqlSession对象的getMapper(UserMapper.class)方法来获取Mapper接口的对象，进行查询操作。
+
+```java
+UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+List<User> list = userMapper.selectAll(); 
+```
+
+```xml
+<!--SQL映射文件：UserMapper.xml-->
+<mapper namespace="com.zjk.mapper.UserMapper">  
+    <select id="selectAllUser" resultType="com.zjk.pojo.User">
+        SELECT *
+        FROM tb_user;
+    </select>
+</mapper>   
+```
+
+```java
+package com.zjk.mapper;
+/**/
+public interface UserMapper {
+    public List<User> selectAllUser(); //该方法名为SQL映射文件中对应的id
+}
+```
+
+##### resultMap 属性名称不一致 
+
+> 若数据库表的字段名称和实体类的属性名称不一样，则不能自动封装数据。
+
+```xml
+<mapper namespace="com.zjk.mapper.BrandMapper">
+    <!--<resultMap id="resultMap的ID" type="对应类型">-->
+    <resultMap id="brandResultMap" type="brand">
+        <!--<result column="表中的列名" property="对应类型的相应属性名"/>-->
+        <result column="brand_name" property="brandName"></result>
+        <result column="company_name" property="companyName"></result>
+    </resultMap>
+    <!--<select id="selectAll" resultMap="resultMap的ID">-->
+    <select id="selectAll" resultMap="brandResultMap">
+        SELECT *
+        FROM tb_brand;
+    </select>
+</mapper>
+```
+
+##### 参数传递
+
+- MyBatis提供了ParamNameResolver类来进行参数封装。MyBatis接口方法中可以接收各种各样的参数，MyBatis底层对这些参数进行不同的封装处理方式。
+
+| 参数占位符 | 说明                                               |
+| ---------- | -------------------------------------------------- |
+| `#{}`      | 相当于预编译语句的?，参数传递时使用。（如`#{id}`） |
+| `${}`      | 拼sql，存在SQL注入问题，表名或列名不固定时使用。   |
+
+> 参数类型 parameterType 可以忽略。
+
+| 特殊字符 | 说明                   |
+| -------- | ---------------------- |
+| 转义字符 | `&lt;`、=、`<`等       |
+| CDATA区  | `<![CDATA[特殊字符]]>` |
+
+```xml
+<select id="selectByIdIn" resultMap="brandResultMap">
+    SELECT *
+    FROM tb_brand
+    WHERE id <![CDATA[ <= ]]> #{id};
+</select>
+```
+
+| 单参数接收                      | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| POJO类型                        | 直接使用，属性名和sql参数占位符名称相一致即可。              |
+| Map集合                         | 直接使用，键名和sql参数占位符名称相一致即可。                |
+| Collection<br />List<br />Array | 封装为Map集合（相当于多参数方式接收单个参数）。<br />map.put("arg0", collection/list/数组); <br />map.put("collection", collection/list);<br />map.put("list", list);<br />map.put("array", 数组); |
+| 其他类型                        | 直接使用                                                     |
+
+| 多参数接收               | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| @Param<br />（散装参数） | 方法中有多个参数时需要使用`@Param("sql参数占位符名称")`指定。 |
+| 对象参数                 | 传入设置好相应属性的对象，对象属性的名称必须和sql参数占位符内的名称相一致（resultMap）。 |
+| map集合参数              | 传入一个Map（存有相应的参数和属性值），可使用@Param替换Map集合中默认的arg键名。<br />`返回值类型 方法名(@Param("id") 参数类型 参数1,@Param("name") 参数类型 参数2)`<br />key：sql参数占位符的参数名，默认arg0、praram1作为key分别开始存放值。<br />value：传入的属性值。 |
+
+```java
+//散装参数 @Param("")
+List<Brand> selectByCondition(@Param("status") int status, @Param("brandName") String brandName, @Param("companyName") String companyName);
+
+//对象参数
+List<Brand> selectByCondition(Brand brand);
+
+//map集合参数
+List<Brand> selectByCondition(Map map);
+```
+
+```java
+//此时修改后的键名为：param1\~n、id、name（arg<n>被替换）
+map.put("id",值1);
+map.put("name",值2);
+map.put("param1",值1);
+map.put("param2",值2);
+```
+
+##### [动态 SQL](https://mybatis.net.cn/dynamic-sql.html)
+
+### [Mybatis-Plus注解](https://baomidou.com/pages/223848/)
+
+### 核心功能
+
+#### 代码生成器
+
+- Mybatis-Plus代码生成器：默认使用元数据查询方式（DefaultQuery ）来生成代码，依赖数据库厂商驱动（通用接口）来读取元数据的方式。
+
+```xml
+<groupId>com.baomidou</groupId>
+<artifactId>mybatis-plus-generator</artifactId>
+```
+
+#### CRUD接口
+
+| CRUD接口   | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| BaseMapper | 通用CRUD接口，定义了大部分的SQL语句。                        |
+| IService   | 自定义CRUD接口。<br />public interface UserService extends IService<br />public class UserServiceImpl extends ServiceImpl\<UserMapper, User\> implements UserService |
+
+| CURD表达式条件参数                                        | 说明                                   |
+| --------------------------------------------------------- | -------------------------------------- |
+| \<T\> entity                                              | 对应的pojo类型。                       |
+| Map\<String, Object\>  columnMap                          | key：字段<br />value：值               |
+| Serializable id                                           | 主键 ID                                |
+| Collection<? extends Serializable> idList                 | 主键 ID 列表。                         |
+| Wrapper\<T\> queryWrapper<br />Wrapper\<T\> updateWrapper | 查询条件构造器。<br />更新条件构造器。 |
+| IPage\<T\> page                                           | 分页查询条件。                         |
 
 # Spring Security
 

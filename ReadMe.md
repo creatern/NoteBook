@@ -6,19 +6,9 @@
 
 # [JVM](./Books/Java/JVM.md)
 
-# JavaEE
+# [Spring](./Books/Java/Spring.md)
 
-## [MyBatis](./Books/Java/JavaEE/MyBatis.md)
-
-## [Spring](./Books/Java/JavaEE/Spring/Spring.md)
-
-[Spring基础xml](./Books/Java/JavaEE/Spring/Spring基础xml.md)
-
-## [Tomcat](./Books/Java/JavaEE/Tomcat.md)
-
-## [Maven](./Books/Java/JavaEE/Maven.md)
-
-## [Docker](./Books/Java/JavaEE/Docker.md)
+[Spring基础xml](./Books/Java/Spring基础xml.md)
 
 # [算法](./Books/算法.md)
 
