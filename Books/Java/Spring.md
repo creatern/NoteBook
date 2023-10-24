@@ -1675,88 +1675,6 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 }
 ```
 
-## 第三方框架 MyBatis
-
-```java
-@Configuration
-@ComponentScan("com.zjk")
-@Import(OtherConfig.class)
-@MapperScan("com.zjk.mapper")
-@PropertySource("classpath:jdbc.properties")
-public class ApplicationContextConfig {
-    @Bean("dataSource")
-    public DataSource dataSource(@Value("${jdbc.url}") String url,
-                                 @Value("${jdbc.username") String username,
-                                 @Value("${jdbc.password}") String password) {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        return dataSource;
-    }
-
-    @Bean("sqlSessionFactoryBean")
-    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource){
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-        return sqlSessionFactoryBean;
-    }
-
-}
-```
-
-- com.zjk.mapper.UserMapper接口
-- sql映射文件：UserMapper.xml
-- 直接使用userMapper
-
-```java
-AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ApplicationContextConfig.class);
-UserMapper userMapper = applicationContext.getBean("userMapper", UserMapper.class);
-userMapper.selectAll().forEach(user -> System.out.println(user));
-```
-
-### @MapperScan
-
-| 注解 | @MapperScan                                                  |
-| ---- | ------------------------------------------------------------ |
-| 位置 | 配置类                                                       |
-| 作用 | 指明需要扫描的Mapper在哪个包下。<br />（MapperScannerConfigurer） |
-| 说明 | MyBatis整合包org.mybatis.spring.annotation提供。             |
-
-```java
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-@Documented
-@Import({MapperScannerRegistrar.class})
-@Repeatable(MapperScans.class)
-public @interface MapperScan {
-    String[] value() default {};
-    String[] basePackages() default {};
-    Class<?>[] basePackageClasses() default {};
-    Class<? extends Annotation> annotationClass() default Annotation.class;
-    // ... ...
-}
-```
-
-- @MapperScan通过MapperScannerRegistrar来加载MapperScannerConfigurer（**@Import({MapperScannerRegistrar.class})**）：MapperScannerRegistrar实现了ImportBeanDefinitionRegistrar接口，Spring会自动调用registerBeanDefinitions方法，该方法中又注册MapperScannerConfigurer类。**MapperScannerConfigurer**类扫描Mapper、向容器中注册Mapper对应的MapperFactoryBean。
-
-```java
-public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, 
-ResourceLoaderAware {
-    //默认执行registerBeanDefinitions方法
-    void registerBeanDefinitions(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs, 
-                                 BeanDefinitionRegistry registry, String beanName) {
-        BeanDefinitionBuilder builder = 
-            BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
-        //... 省略其他代码 ...
-        //注册BeanDefinition
-        registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
-    }
-}
-```
-
-<img src="../../pictures/Snipaste_2023-04-10_15-16-38.png" width="800"/>   
-
 ## AOP
 
 > aspectjweaver包。
@@ -4054,7 +3972,9 @@ sqlSession.close();
 
 <img src="../../pictures/Snipaste_2023-04-01_10-31-59.png"/> 
 
-#### 核心配置文件 mybatis-config.xml
+#### 配置
+
+##### 核心配置文件 mybatis-config.xml
 
 - configuration（配置）
   - properties（属性）
@@ -4069,6 +3989,75 @@ sqlSession.close();
       - dataSource（数据源）
   - databaseIdProvider（数据库厂商标识）
   - mappers（映射器）
+
+##### 配置类 @MapperScan
+
+```java
+@Configuration
+@ComponentScan("com.zjk")
+@Import(OtherConfig.class)
+@MapperScan("com.zjk.mapper")
+@PropertySource("classpath:jdbc.properties")
+public class ApplicationContextConfig {
+    @Bean("dataSource")
+    public DataSource dataSource(@Value("${jdbc.url}") String url,
+                                 @Value("${jdbc.username") String username,
+                                 @Value("${jdbc.password}") String password) {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        return dataSource;
+    }
+
+    @Bean("sqlSessionFactoryBean")
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource){
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        return sqlSessionFactoryBean;
+    }
+
+}
+```
+
+| 注解 | @MapperScan                                                  |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 配置类                                                       |
+| 作用 | 指明需要扫描的Mapper在哪个包下。<br />（MapperScannerConfigurer） |
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+@Documented
+@Import({MapperScannerRegistrar.class})
+@Repeatable(MapperScans.class)
+public @interface MapperScan {
+    String[] value() default {};
+    String[] basePackages() default {};
+    Class<?>[] basePackageClasses() default {};
+    Class<? extends Annotation> annotationClass() default Annotation.class;
+    // ... ...
+}
+```
+
+- @MapperScan通过MapperScannerRegistrar来加载MapperScannerConfigurer（**@Import({MapperScannerRegistrar.class})**）：MapperScannerRegistrar实现了ImportBeanDefinitionRegistrar接口，Spring会自动调用registerBeanDefinitions方法，该方法中又注册MapperScannerConfigurer类。**MapperScannerConfigurer**类扫描Mapper、向容器中注册Mapper对应的MapperFactoryBean。
+
+```java
+public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, 
+ResourceLoaderAware {
+    //默认执行registerBeanDefinitions方法
+    void registerBeanDefinitions(AnnotationMetadata annoMeta, AnnotationAttributes annoAttrs, 
+                                 BeanDefinitionRegistry registry, String beanName) {
+        BeanDefinitionBuilder builder = 
+            BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
+        //... 省略其他代码 ...
+        //注册BeanDefinition
+        registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
+    }
+}
+```
+
+<img src="../../pictures/Snipaste_2023-04-10_15-16-38.png" width="800"/>   
 
 #### SQL映射文件 Mapper.xml
 
