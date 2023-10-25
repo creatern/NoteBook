@@ -34,13 +34,7 @@
 
 ### [Redis](./Books/数据库/NoSQL/Redis.md)
 
-# Linux
-
-## [Linux基础](./Books/Linux/Linux基础.md)
-
-### [Vim](./Books/Linux/vim.md)
-
-### [Shell](./Books/Linux/Shell.md)
+# [Linux](./Books/Linux/Linux.md)
 
 # [Android](./Books/Android/Android.md)
 
