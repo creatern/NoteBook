@@ -1,9 +1,5 @@
 # [Java](./Books/Java/Java.md)
 
-## [单元测试](./Books/Java/单元测试.md)
-
-## [设计模式](./Books/Java/设计模式.md)
-
 # [JVM](./Books/Java/JVM.md)
 
 # [Spring](./Books/Java/Spring.md)
@@ -12,30 +8,14 @@
 
 # [算法](./Books/算法.md)
 
-# [HTML、CSS、JS](./Books/Java/HTML.md)
+# [Linux](./Books/Linux/Linux.md)
 
-# 工具
-
-## [Git](./Books/其他/Git.md)
-
-## [UML](./Books/其他/UML.md)
+# [前端](./Books/Java/前端.md)
 
 # 数据库
 
-## SQL
+## [SQL](./Books/数据库/SQL.md)
 
-### [Oracle](./Books/数据库/SQL/Oracle.md)
-
-## NoSQL
-
-### [MongoDB](./Books/数据库/NoSQL/MongoDB.md)
-
-### [Cassandra](./Books/数据库/NoSQL/Cassandra.md)
-
-### [Redis](./Books/数据库/NoSQL/Redis.md)
-
-# [Linux](./Books/Linux/Linux.md)
+## [NoSQL](./Books/数据库/NoSQL.md)
 
 # [Android](./Books/Android/Android.md)
-
-## [Gradle](./Books/Android/Gradle.md)
