@@ -4189,9 +4189,7 @@ sqlSession.close();
 4. 由SqlSessionFactory对象创建SqlSession对象，通过SqlSession对象进行CRUD操作（或者通过代理开发sqlSession.getMapper()进行CRUP操作的调用）。
 5. Executor接口操作数据库。
 6. 对输入参数进行映射，在执行SQL语句前，将输入的Java对象映射到SQL语句中。
-7. 将输出结果映射为Java对象
-
-<img src="../../pictures/Snipaste_2023-04-01_10-31-59.png"/> 
+7. 将输出结果映射为Java对象。 
 
 #### 配置
 
@@ -4389,6 +4387,132 @@ map.put("param2",值2);
 ```
 
 ##### [动态 SQL](https://mybatis.net.cn/dynamic-sql.html)
+
+- 动态 SQL：sql语句会随用户输入或外界条件的变化而变化。
+
+###### if 条件判断
+
+```xml
+<if test="逻辑表达式">  该逻辑表达式中的变量为#{}内的参数名称
+    部分sql语句
+</if>
+```
+
+###### choose 单项选择
+
+- choose只会有一个满足条件的部分sql语句生效，当所有when的条件都满足时，只会选择第一个满足的when。（case\-when）
+
+```xml
+<choose>
+    <when test="逻辑表达式">
+        部分sql语句
+    </when>
+    <when test="逻辑表达式">
+        部分sql语句
+    </when>
+    <otherwise>  可以省略
+        部分sql语句
+    </otherwise>
+</choose>
+```
+
+```xml
+<select id="selectByConditionSingle" resultMap="brandResultMap">
+    SELECT *
+    FROM tb_brand
+    WHERE
+    <choose>
+        <when test="status != null">
+            status = #{status}
+        </when>
+        <when test="companyName != null and companyName != ''">
+            company_name like #{companyName}
+        </when>
+        <when test="brandName != null and brandName != ''">
+            brand_name like #{brandName}
+        </when>
+        <otherwise>
+            1 = 1
+        </otherwise>
+    </choose>
+</select>
+```
+
+###### foreach 循环
+
+```xml
+<foreach collection="ids" item="id" separator="," open="(" close=")">
+    collection 传入的数组 | item 数组内的属性 | separator 分隔符 | open\close 开始\结束符
+    #{id}
+</foreach>
+```
+
+- mapper.xml配置
+
+```xml
+<delete id="deleteByIds">
+    DELETE FROM tb_brand
+    WHERE id IN
+    <foreach collection="ids" item="id" separator="," open="(" close=")">
+           collection 传入的数组 | item 数组内的属性 | separator 分隔符 | open\close 开始\结束符
+        #{id}
+    </foreach>
+</delete>
+```
+
+- mapper接口
+
+```java
+int deleteByIds(@Param("ids") int[] ids); 
+//MyBatis默认将数组参数封装为一个Map集合，默认为array = 数组
+//可以通过@Param("新的key")的方式来将array修改为新的key，在<foreach>中的collection使用
+```
+
+
+###### trim 自定义标签
+
+- `<where>`的自定义类型`<trim>`
+
+```xml
+<trim prefix="WHERE" prefixOverrides="AND |OR ">
+    
+</trim>
+```
+
+- `<set>`的自定义类型`<trim>`
+
+```xml
+<trim prefix="SET" suffixOverrides=",">
+    
+</trim>
+```
+
+###### where 谓词替代
+
+- `<where>`替代sql语句中的WHERE子句：if（条件判断）通常搭配`<where>`来避免不满足条件而造成一些特殊sql语句的报错。或者`WHERE 1 = 1` 作为WHERE语句的第一条，避免第一条WHERE子句的特殊性。
+- where元素只会在子元素返回任何内容的情况下才插入 “WHERE” 子句。而且，若子句的开头为 “AND” 或 “OR”，where 元素也会将它们去除。
+
+```xml
+<select id="selectByCondition" resultMap="brandResultMap">
+    SELECT *
+    FROM tb_brand
+    <where>
+        <if test="status != null">
+            status = #{status}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND brand_name like #{brandName}
+        </if>
+        <if test="companyName != null and companyName != ''">
+            AND company_name like #{companyName}
+        </if>
+    </where>
+</select>
+```
+
+###### set 动态更新
+
+- set 元素可以用于动态包含需要更新的列，忽略其它不更新的列
 
 ### [Mybatis-Plus注解](https://baomidou.com/pages/223848/)
 
