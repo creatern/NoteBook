@@ -1,33 +1,21 @@
 # SQL
 
-## SQL概述
-
-| 引号   | 使用位置                                                     |
-| ------ | ------------------------------------------------------------ |
-| 单引号 | 字符型：'hello' <br />日期型：'17-12月-80' <br />to_char/to_date(日期,'YYYY-MM-DD HH24:MI:SS') |
-| 双引号 | 列别名：select ename "姓 名" from emp;<br />to_char/to_date(日期,'YYYY"年"MM"月"DD"日" HH24:MI:SS') |
-| 逃逸符 | 字符型、日期型等内部使用单引号时：使用两个连续的单引号''来表示一个单引号。<br />第一个单引号为逃逸符，用来消除第二个单引号的特殊含义。 |
-
-### DML、DDL、DCL
-
-| 术语                                          | 说明                                                         |
+| DML、DDL、DCL                                 | 说明                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
 | DML（data manipulation language）数据操纵语言 | 对数据库的数据进行一些操作<br />DML会对每个语句的每条记录都做日志记录以便于回滚。<br />insert、update、delete、select。 |
 | DDL（data definition language）数据库定义语言 | 定义或改变表的结构，数据类型，表之间的链接和约束等初始化工作。<br />create、alter、drop。 |
 | DCL （data control language) 数据库操纵语言   | grant、revoke、commit、rollback、savepoint、lock。           |
+
+## SQL概述
 
 ### 事务
 
 - 事务会将所有在事务中被修改的数据行加上锁（行级锁），来阻止其它人（会话）同时对这些数据的修改操作。当事务被提交或回滚后，这些数据才会被释放锁。事务分为：一个或多个DML语句、一个DDL语句、一个DCL语句。
 
 
-- DML事务（一般事务）由以下情况之一结束：commit、ROLLBACK；DDL(自动提交)；用户会话正常结束；系统异常终止。
+- DML事务（一般事务）由以下情况之一结束：commit、rollback；DDL(自动提交)；用户会话正常结束；系统异常终止。
 
-- commit、ROLLBACK：
-
-1. 数据完整性。
-2. 数据改变被提交之前预览。
-3. 将逻辑上的操作分组。
+- commit、rollback提供了：数据完整性、数据改变被提交之前预览、将逻辑上的操作分组。
 
 | 事务进程（数据状态） | 说明                                                         |
 | -------------------- | ------------------------------------------------------------ |
@@ -35,41 +23,41 @@
 | 提交后               | 1. 数据的改变保存到数据库中。<br/>2. 改变前的数据已经丢失。<br/>3. 所有用户可以看到结果。<br/>4. 所有保存点被释放。 |
 | 回滚后               | 1. 数据改变被取消。<br/>2. 修改前的数据状态被恢复。<br/>3. 锁被释放。 |
 
-#### 提交 commit
+### 提交 commit
 
-##### 显式提交、隐式提交
+#### 显式提交、隐式提交
 
-- 显示提交：commit语句。
+| 提交     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| 显式提交 | commit语句。                                                 |
+| 隐式提交 | 无需显示执行commit语句，session中的操作被自动提交到数据库的过程。<br />此隐式提交是在自己的session，如果在其他人的session中正在修改相同的数据，则引起隐式提交的语句则必须等待。s |
 
-> 触发隐式提交的SQL：alter，AUDIT，COMMENT，ConNECT，create，DISConNECT，drop，EXIT，grant，NOAUDIT，QUIT，REVOKE，rename。
+> 触发隐式提交的SQL：alter，audit，comment，connect，create，disconnect，drop，exit，grant，noaudit，quit，revoke，rename。
 
-- 隐式提交：无需显示执行commit语句，session中的操作被自动提交到数据库的过程。
-  - 此隐式提交是在自己的session，如果在其他人的session中正在修改相同的数据，则引起隐式提交的语句则必须等待。
-
-| 隐式提交           | 说明                                  |
-| ------------------ | ------------------------------------- |
-| 正常执行完DDL语句  | create、alter、drop、truncate、rename |
-| 正常执行完DCL语句  | grant、REVOKE                         |
-| 正常退出`sql*plus` | 没有明确发出commit/ROLLBACK           |
+| 隐式提交          | 说明                                  |
+| ----------------- | ------------------------------------- |
+| 正常执行完DDL语句 | create、alter、drop、truncate、rename |
+| 正常执行完DCL语句 | grant、revoke                         |
+| 正常退出          | 没有明确发出commit/rollback           |
 
 - 执行DDL语句时（即使DDL语句执行失败），其之前的DML操作也会被提交到数据库中：为了避免隐式提交或者回滚，尽量保证一条或者几条DML操作完成后有显示的提交/回滚，防止后续执行的DCL或者DDL自动提交前期的DML操作。
 
 - 事务读一致性：commit之前的数据，其他用户不可见。执行DDL语句时，Oracle需要在它的系统表中进行元数据的记录操作，如果不隐式提交就无法保证一致性。
 
-##### 自动提交 autocommit
+#### 自动提交 autocommit
 
 - 自动提交：autocommit设置为on，则DML语句执行后，系统将自动进行提交。
 
 ```sql
-set AUtocommit on；
+set autocommit on；
 ```
 
 ```sql
 -- 查看当前是否是自动提交：
-show AUtocommit；
+show autocommit；
 ```
 
-##### 保存点 savepoint
+#### 保存点 savepoint
 
 ```sql
 -- 设置保存点：当事物提交后保存点也被清除，需要重新设置
@@ -83,25 +71,22 @@ rollback to savepoint 保存点名称;
 
 ## 权限管理
 
-> **系统权限SYSDBA、SYSOPER**
->
-> - SYSDBA > SYSOPER（超级权限）：同属于系统权限（System Privileges），Oracle允许拥有该权限的用户在数据库未打开的情况下访问实例、执行重大的数据库操作（数据库启动、关闭等）。
->
-> | sysdba可执行任务          | 说明                                           |
-> | ------------------------- | ---------------------------------------------- |
-> | STARTUP、SHUTDOWN         | 启动、关闭数据库                               |
-> | alter dataBASE            | 修改数据库<br />打开、装载、备份、改变字符集等 |
-> | create dataBASE           | 创建数据库                                     |
-> | drop dataBASE             | 删除数据库                                     |
-> | create SPFILE             | 创建服务器参数文件                             |
-> | alter dataBASE ARCHIVELOG | 改变归档模式                                   |
-> | alter dataBASE RECOVER    | 执行数据库恢复                                 |
+- sysdba &gt; sysoper（超级权限）：同属于系统权限（system Privileges），Oracle允许拥有该权限的用户在数据库未打开的情况下访问实例、执行重大的数据库操作（数据库启动、关闭等）。
+
+| sysdba可执行任务          | 说明                                           |
+| ------------------------- | ---------------------------------------------- |
+| startup、shutdown         | 启动、关闭数据库                               |
+| alter database            | 修改数据库<br />打开、装载、备份、改变字符集等 |
+| create database           | 创建数据库                                     |
+| drop database             | 删除数据库                                     |
+| create spfile             | 创建服务器参数文件                             |
+| alter database archivelog | 改变归档模式                                   |
+| alter database recover    | 执行数据库恢复                                 |
 
 ```shell
-## 以SYSDBA登录数据库
+# 以sysdba登录数据库
 sqlplus sys/change_on_install[@orcl] as sysdba
 ```
-
 
 ### 数据库安全性
 
@@ -113,39 +98,32 @@ sqlplus sys/change_on_install[@orcl] as sysdba
 
 ##### 创建用户 
 
-> 创建用户需要DBA权限。
-
-- 一般信息 表空间 分配用户创建表空间等数据库对象存储再硬盘中分配空间
-- 系统 系统权限
-- 角色 系统/对象权限赋予角色，角色赋予用户
-- 限额 表空间
+- 创建用户需要DBA权限。
 
 ```sql
 create user user_name
-IDENTIFIED BY password;
+identitied by password;
 ```
 
 ##### 用户解锁
 
 ```sql
 alter user scott  
-IDENTIFIED BY tiger 
-ACcount UNLOCK;
+identitied by tiger 
+account unlock;
 ```
 
 ##### 用户信息
 
-###### 查看当前用户名
-
 ```sql
+-- 查看当前用户名
 show user
 ```
 
-###### 查看所有用户名 all_userS
-
 ```sql
+-- 查看所有用户名 all_users
 select *
-from all_userS
+from all_users
 ```
 
 ##### 用户密码
@@ -154,19 +132,18 @@ from all_userS
 
 ```sql
 alter user user_name
-inDETIFIED BY password;
+identitied by password;
 ```
 
 ##### 切换用户
 
 ```sql
-ConNECT scott/tiger@orcl
+connect scott/tiger@orcl
 ```
 
 #### 角色
 
-- 角色可以像用户一样被赋予权限和收回权限。
-- 当角色被赋予某个用户时，其权限也被赋予给用户。因此：一个用户的权限=其本身的权限+其拥有的角色的权限。
+- 角色可以像用户一样被赋予权限和收回权限，当角色被赋予某个用户时，其权限也被赋予给用户。因此，一个用户的权限=其本身的权限\+其拥有的角色的权限。
 
 ##### 创建角色
 
@@ -183,9 +160,9 @@ create role 角色名
 
 ### 权限管理
 
-1. 不同对象具不同的对象权限
-2. 对象的拥有者拥有所有的权限  或 SYSDBA/SYSTEM用户
-3. 对象的拥有者可以向外分配权限
+1. 不同对象具有不同的对象权限。
+2. 对象的拥有者或sysdba/system用户拥有所有的权限。
+3. 对象的拥有者可以向外分配权限。
 
 #### public 公共用户
 
@@ -193,101 +170,71 @@ create role 角色名
 
 #### SQL标准权限
 
-| 权限            | 说明         |
-| :-------------- | :----------- |
-| select          | 查询         |
-| insert          | 插入         |
-| update          | 更新         |
-| delete          | 删除         |
-| all [privilege] | 以上所有权限 |
+| 权限              | 权限     |
+| :---------------- | :------- |
+| select            | 查询     |
+| insert            | 插入     |
+| update            | 更新     |
+| delete            | 删除     |
+| all \[privilege\] | 以上所有 |
 
-#### grant 赋予权限
+#### 权限管理命令
 
-```sql
-grant 权限列表
-[on [模式.]关系/视图]
-to 用户/角色列表;
-```
-
-##### with grant OPTIon 获得分配权限的能力
+##### grant 赋予权限
 
 ```sql
 grant 权限列表
 [on [模式.]关系/视图]
-to 用户/角色列表;
-with grant OPTIon;
+to 用户/角色列表
+[with grant option] -- 获得分配权限的能力
+[by current_role] -- 通过角色授权，避免级联收权
 ```
-
-##### grant BY current_role
-
-- 通过角色授权，避免级联收权。
 
 ```sql
 -- 先设置与当前会话关联的角色（默认空）必须是该授权用户拥有的角色
 set role 角色
--- 通过与当前会话关联的角色授权
-grant 权限列表
-[on [模式.]关系/视图]
-to 用户/角色列表
-with grant OPTIon
-BY CURRENT_ROLE; 
 ```
 
-#### REVOKE 收回对象权限
+##### revoke 收回对象权限
 
 ```sql
-REVOKE 权限列表
+revoke [grant option for] 权限列表 -- grant option for 仅收回分配权
 [on [模式.]关系/视图]
 from 用户/角色列表
+[restrict] -- 阻止级联收权
 ```
 
-##### REVOKE grant OPTIon FOR 仅收回分配权
-
-```sql
-revoke grant option for 权限列表
-[on [模式.]关系/视图]
-from 用户/角色列表
-```
-
-##### RESTRICT 阻止级联收权
-
-- 在grant授权时，通常会产生一个**授权图**。当revoke收回权限时，默认级联收权：即A授权给B，B授权给C时，如果收回B的权限，则C的权限也被收回。
-- RESTRICT 阻止级联收权；如果发生级联授权则使这次收权失败。
-
-```sql
-revoke 权限列表
-[on [模式.]关系/视图]
-from 用户/角色列表
-restrict
-```
+- restrict阻止级联收权，如果发生级联授权，则使这次收权失败。grant授权时，通常会产生一个授权图。当revoke收回权限时，默认级联收权：即a授权给b，b授权给c时，如果收回b的权限，则c的权限也被收回。
 
 #### 行级授权
 
 ##### VPD Oracle虚拟私有数据库
 
-- 将函数和关系相关联，该函数返回一个谓词，并自动将该谓词添加到使用该关系的任何查询。
-- 隐患：可能会改变查询的含义。
+- VPD（Oracle虚拟私有数据库）将函数和关系相关联，该函数返回一个谓词，并自动将该谓词添加到使用该关系的任何查询。
 
-#### grant references 引用权限
+> 隐患：可能会改变查询的含义。
 
 #### 权限分配情况
 
-| 数据库字典          | 描述                       |
-| :------------------ | :------------------------- |
-| ROLE_SYS_PRIVS      | 角色拥有的系统权限         |
-| ROLE_TAB_PRIVS      | 角色拥有的对象权限         |
-| user_ROLE_PRIVS     | 用户拥有的角色             |
-| user_TAB_PRIVS_MADE | 用户分配的关于表对象权限   |
-| user_TAB_PRIVS_RECD | 用户拥有的关于表对象权限   |
-| user_COL_PRIVS_MADE | 用户分配的关于列的对象权限 |
-| user_COL_PRIVS_RECD | 用户拥有的关于列的对象权限 |
-| user_SYS_PRIVS      | 用户拥有的系统权限         |
+| 数据库字典             | 权限描述                   |
+| :--------------------- | :------------------------- |
+| role\_sys\_privs       | 角色拥有的系统权限         |
+| role\_tab\\_privs      | 角色拥有的对象权限         |
+| user\_role\_privs      | 用户拥有的角色             |
+| user\_tab\_privs\_made | 用户分配的关于表对象权限   |
+| user\_tab\_privs\_recd | 用户拥有的关于表对象权限   |
+| user\_col\_privs\_made | 用户分配的关于列的对象权限 |
+| user\_col\_privs\_recd | 用户拥有的关于列的对象权限 |
+| user\_sys\_privs       | 用户拥有的系统权限         |
 
-## 基本查询
+## select 基本查询
 
 ### select .. from
 
-- from：确定查询的数据源。
+| 子句   | 作用               |
+| ------ | ------------------ |
+| select | 查询的条件。       |
+| from   | 确定查询的数据源。 |
 
 ```sql
 -- 查询指定值域
@@ -303,22 +250,22 @@ select salary * 1.02
 from emp;
 ```
 
-| 关键字   | 说明                           |
-| -------- | ------------------------------ |
-| as       | 别名（没有命名规范，可省略as） |
-| `||`     | 连接符                         |
-| distinct | 唯一性                         |
+| 关键字   | 说明             |
+| -------- | ---------------- |
+| as       | 别名（可省略）   |
+| \|\|     | 连接符（Oracle） |
+| distinct | 唯一性           |
 
 ```sql
 select first_name || '' || last_name
 from employees;
 ```
 
-| 运算符              | 说明       |
-| ------------------- | ---------- |
-| `+  - * /`          | 算术运算符 |
-| `> >= < <= = <> !=` | 比较运算符 |
-| AND OR not          | 逻辑运算符 |
+| 运算符类型 | 运算符              |
+| ---------- | ------------------- |
+| 算术运算符 | `+  - * /`          |
+| 比较运算符 | `> >= < <= = <> !=` |
+| 逻辑运算符 | and or not          |
 
 ### where 谓词查询
 
@@ -330,20 +277,18 @@ from emp
 where salary > 100;
 ```
 
-| 关键字          | 说明                                                         |
-| --------------- | ------------------------------------------------------------ |
-| in              | 列表取值                                                     |
-| is null         | 判断空值                                                     |
-| like            | 模糊查询<br />`-`：一个字符<br />`%`：n个字符<br />\\：转义符 |
-| between A and B | 范围查询（A<=X<=B）                                          |
+| 关键字          | 说明                                                      |
+| --------------- | --------------------------------------------------------- |
+| in              | 列表取值                                                  |
+| is null         | 判断空值                                                  |
+| like            | 模糊查询<br />-：一个字符<br />%：n个字符<br />\\：转义符 |
+| between a and b | 范围查询（a&le;X&le;B）                                   |
 
 ```sql
-select last_name
-      ,employee_id
-      ,salary
+select last_name, employee_id, salary
 from employees
 where salary > 1000
- AND department_id in (10,20,30);
+ and department_id in (10,20,30);
 ```
 
 ```sql
@@ -355,117 +300,47 @@ where dept_name = null;
 
 ```sql
 -- 查询员工姓名含有a的
-select last_name
-      ,employee_id
+select last_name, employee_id
 from employees
-where last_name LIKE '%a%'
+where last_name like '%a%';
 ```
 
 ```sql
-select last_name
-      ,employee_id
-      ,salary
+select last_name, employee_id, salary
 from employees
-where salary BETWEEN 1000 AND 7000;
+where salary between 1000 and 7000;
 ```
-
-#### null 空值处理
-
-- null表示的是未知，而不是空、0、空格。
-- null=null：判断的结果是false/unknow，两个null并不相等。
-
-##### not in
-
-- 对于not in，如果测试值不在列表内，但列表中有一个null，则结果为false。
-
-- 单行子查询中返回空值，要使用in之类的关键字，= 的话查询结果永远为空
-
-```sql
--- 查询不是管理者的员工
-select *
-from employees
-where employee_id not in (
-    select manager_id
-    from employees  -- 包含null值
-);  
--- 会不返回结果，返回空值，
--- 因为当子查询中包含空值的时候，不能使用not in，not in等同于不等于所有（永远为假）
-
--- 改为：
-select*
-from employees
-where employee_id not in (
-    select manager_id
-    from employees
-    where manager_id IS not null -- 去除null值的影响
-);
-```
-
-##### 组函数处理null
-
-- count()：将null看作0来处理。
-- 其他：忽略输入集合中的null，如果作用在null上，则返回null。
 
 ### order 排序
 
-- order by子句只能在语句最后出现，可以使用第一个查询中的列名，别名或相对位置。
+- order by子句只能在语句最后出现，可以使用第一个查询中的列名、别名、相对位置。
 
 | 顺序 | 说明       |
 | :--- | :--------- |
-| ASC  | 默认，升序 |
-| DESC | 降序       |
+| asc  | 默认，升序 |
+| desc | 降序       |
 
 ```sql
-select employee_id
-      ,last_name
+select employee_id, last_name
 from employees
-order by employee_id DESC;
+order by employee_id desc;
 ```
 
 - 多列排序：依次在先前列的排序结果上进行排序。
 
 ```sql
 -- 先对employee_id排列，再在employee_id排列的基础上对last_name排列
-select emlpoyee_id
-      ,last_name
+select emlpoyee_id, last_name
 from employees
-order by employee_id,last_name;
+order by employee_id, last_name;
 ```
 
 - 别名排列：order by子句直接使用别名进行排序。
 
 ```sql
-select employee_id
-      ,last_name
-      ,salary*1.1 sal -- 别名
+select employee_id, last_name, salary*1.1 sal -- 别名
 from employees
 order by sal;
-```
-
-### 集合运算
-
-| 运算 | 说明                 |
-| ---- | -------------------- |
-| 并集 | union<br />union all |
-| 交集 | intersect            |
-| 差集 | minus                |
-
-- 多个进行集合运算的结果集的select字句中的列名、表达式在数量、数据类型上一一对应。
-
-1. 除union all之外，其余集合运算会自动去重。
-
-2. 除union all之外，其余集合运算会自动按照第一个查询中的第一个列的升序排列。
-
-```sql
--- 使用相对位置排序举例
-select job_id,1
-from employees
-where department_id = 10
-union
-select job_Id ,2
-from employees
-where department_id = 20
-order by 1 DESC;
 ```
 
 ### case .. when
@@ -491,42 +366,52 @@ where 0 = case
           end
 ```
 
+### 集合运算
+
+| 运算 | 说明                 |
+| ---- | -------------------- |
+| 并集 | union<br />union all |
+| 交集 | intersect            |
+| 差集 | minus                |
+
+- 多个进行集合运算的结果集的select字句中的列名、表达式在数量、数据类型上一一对应。
+
+- 除union all之外，其余集合运算会自动去重，会自动按照第一个查询中的第一个列的升序排列。
+
+```sql
+-- 使用相对位置排序举例
+select job_id,1
+from employees
+where department_id = 10
+union
+select job_Id ,2
+from employees
+where department_id = 20
+order by 1 DESC;
+```
+
 ## 数据类型
 
-### 字符型
-
-| 长度类型 | 数据类型     | 说明                                   |
-| :------- | :----------- | :------------------------------------- |
-| 固定     | CHAR(n)      | max2000                                |
-|          | nchar(n)     | unicode格式，max1000，多数用来存储汉字 |
-| 可变     | varchar2(n)  | max4000                                |
-|          | nvarchar2(n) | unicode格式，max2000                   |
-
-### 数值型
-
-| 数据类型    | 说明                                                    |
-| :---------- | :------------------------------------------------------ |
-| number(p,s) | p为有效数字，s为小数点后面的位数，s可正可负             |
-| FLOAT(n)    | 用来存储二进制数据，二进制数据的1-126位，一般使用number |
-| int         | 整数                                                    |
-| intEGER     |                                                         |
-
-### 日期型
-
-| 数据类型  | 说明                                                       |
-| :-------- | :--------------------------------------------------------- |
-| DATE      | 范围为公元前4712年1月1日到公元9999年12月31日，可以精确到秒 |
-| TIMESTAMP | 可以精确到小数秒，一般用DATE类型                           |
-
-### 其他类型
-
-| 数据类型 | 说明                             |
-| :------- | :------------------------------- |
-| LonG     | 可变长字符数据，最大2G           |
-| RAW      | (LonG RAW) 原始的二进制          |
-| BLOB     | 可存4G数据以二进制存放           |
-| CLOB     | 可存4G数据以字符串存放           |
-| BFILB    | 存储外部文件的二进制数据，最大4G |
+| 字符型（固定长度） |                                                            |
+| ------------------ | ---------------------------------------------------------- |
+| char(n)            | max2000                                                    |
+| nchar(n)           | unicode格式，max1000，多数用来存储汉字                     |
+| varchar2(n)        | max4000                                                    |
+| nvarchar2(n)       | unicode格式，max2000                                       |
+| **数值型**         |                                                            |
+| number(p,s)        | p为有效数字，s为小数点后面的位数，s可正可负                |
+| float(n)           | 存储二进制数据，二进制数据的1-126位，一般使用number        |
+| int                | 整数                                                       |
+| integer            |                                                            |
+| **日期型**         |                                                            |
+| date               | 范围为公元前4712年1月1日到公元9999年12月31日，可以精确到秒 |
+| timestamp          | 可以精确到小数秒，一般用date类型                           |
+| **其他类型**       |                                                            |
+| long               | 可变长字符数据，最大2G                                     |
+| raw                | (long raw) 原始的二进制                                    |
+| blob               | 可存4G数据以二进制存放                                     |
+| clob               | 可存4G数据以字符串存放                                     |
+| bfilb              | 存储外部文件的二进制数据，最大4G                           |
 
 ## table 表（关系）
 
@@ -544,7 +429,7 @@ desc tablename;
 
 - create table：权限、存储空间、命名规则。
 
-- 命名规则：以字母开头、在1-30个字符之间、只能包含`A ~ Z,a ~ z，0~9，_，$，#`、不能和其他对象重名、不能是关键字。
+- 命名规则：以字母开头、在1-30个字符之间、只能包含`a ~ Z,a ~ z，0~9，_，$，#`、不能和其他对象重名、不能是关键字。
 
 ```sql
 create table emp (
@@ -968,18 +853,18 @@ overflow tablespace userdb;
 
 ```sql
 /*
-‪F:\temtb\data\temstu.txt
+‪f:\temtb\data\temstu.txt
 ‪‪50016,小张,上海,22
 30011,小李,天津,24
 */
 
 -- 外部表文件路径
 create or replace directory dat_dir
-as 'F:\temtb\data';
+as 'f:\temtb\data';
 create or replace directory log_dir
-as 'F:\temtb\log';
+as 'f:\temtb\log';
 create or replace directory bad_dir
-as 'F:\temtb\bad';
+as 'f:\temtb\bad';
 grant read on directory dat_dir to rawman;
 grant read, write on directory log_dir to rawman;
 grant read, write on directory bad_dir to rawman;
@@ -1015,7 +900,7 @@ reject limit unlimited;
 ## 数据操作
 
 ```
-SQL> DESC emp
+SQL> desc emp
 name      type         nullable default Comments
 -- -- -- -- - -- -- -- -- -- --  -- -- -- --  -- -- -- - -- -- -- -- 
 ID        number(6,2)  Y
@@ -1046,7 +931,7 @@ insert into emp(name,salary,hire_date,id)
 values(2500,'王五',to_DATE('2004-4-5','yyyy-mm-dd'),3);
 ```
 
-#### & 窗口输入
+#### \& 窗口输入
 
 - 窗口输入 ：对于日期和字符型等需要单引号的数据类型，可以在&外面加上单引号（`'&name'`），从而不用在窗口输入时使用单引号。而其他不需要单引号的数据类型则可以直接使用`&id` 。
 
@@ -1150,61 +1035,61 @@ when not matched then  -- 当条件不满足时，执行
 4. 自我更新的using若存在null，则改为count()将null改为0处理。
 
 ```sql
-merge into t_bonus T
+merge into t_bonus t
 using (select employee_id, salary
        from  s_employee
-      ) S
-on (T.employee_id = S.employee_id)
+      ) s
+on (t.employee_id = s.employee_id)
 when matched then 
-  update set T.bonus = S.salary + 40
-  where T.bonus > 1000
+  update set t.bonus = s.salary + 40
+  where t.bonus > 1000
              
   delete 
-  where (T.bonus > 1300)
+  where (t.bonus > 1300)
 when not matched then 
-  insert into (T.employee_id, T.bonus)
-  values (S.employee_id, S.salary +20)
-  where (S.salary > 3000)
+  insert into (t.employee_id, t.bonus)
+  values (s.employee_id, s.salary +20)
+  where (s.salary > 3000)
 ```
 
 ```sql
-merge into T2
+merge into t2
 using (select * 
        from t2 
-       where name='D') T
-on (T.name=T2.name)
+       where name='d') t
+on (t.name=T2.name)
 when matched then
- update set T2.MonEY=100
+ update set t2.MonEY=100
 when not matched then
- insert values ('D',200);
+ insert values ('d',200);
 
--- 本来T表应该由于name=D不存在而要添加记录。可是实际却根本无变化。
-SQL> select * from T2;
+-- 本来t表应该由于name=D不存在而要添加记录。可是实际却根本无变化。
+SQL> select * from t2;
 name                      MonEY
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-A                            30
-C                            20
--- 由于此时select * from t2 where name='D'为null,所以出现了无法插入的情况。
+a                            30
+c                            20
+-- 由于此时select * from t2 where name='d'为null,所以出现了无法插入的情况。
 
 -- 自我更新的using若存在null，则改为count()将null改为0处理。
-merge into T2
+merge into t2
 using (select count(*) CNT 
        from t2 
-       where name='D') T
-on (T.CNT <> 0)
+       where name='d') t
+on (t.CNT <> 0)
 when matched then
  update
- set T2.MonEY = 100
+ set t2.MonEY = 100
 when not matched then
  insert
- values ('D',100);
+ values ('d',100);
 
-SQL> select * from T2;
+SQL> select * from t2;
 name                      MonEY
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-A                            30
-C                            20
-D                           100
+a                            30
+c                            20
+d                           100
 ```
 
 ## view 视图
@@ -1227,7 +1112,7 @@ D                           100
 
 ### 视图操作
 
-#### create [or replace] view 创建/修改视图
+#### create \[or replace\] view 创建/修改视图
 
 - create view子句中各列的别名应和子查询中各列相对应。
 - 修改视图只能重新创建视图。
@@ -1307,7 +1192,7 @@ with read only;
 
 - 物化视图（相当于一个表）将视图的查询结果存储在数据库中。使用该视图时，使用的是查询的结果，而不是查询表达式。
 
-#### create|alter materialized view 创建/修改物化视图
+#### create\|alter materialized view 创建/修改物化视图
 
 > 创建物化视图的权限
 >
@@ -1337,9 +1222,7 @@ as
 | build immediate | 创建物化视图的时候就生成数据             |
 | build deferred  | 创建时不生成数据，以后根据需要在生成数据 |
 
-##### 物化视图刷新
-
-###### 刷新模式
+##### 刷新模式
 
 | 刷新模式  | 说明                                                         |
 | --------- | ------------------------------------------------------------ |
@@ -1354,7 +1237,7 @@ as
 
 > Oracle物化视图的快速刷新机制是通过物化视图日志完成的。Oracle通过一个物化视图日志还可以支持多个物化视图的快速刷新 。 物化视图日志根据不同物化视图的快速刷新的需要，可以建立为rowid、primary key类型的 ，还可以选择是否包括sequence、including new values以及指定列的列表。
 
-####### 物化视图日志
+###### 物化视图日志
 
 ```sql
 create materialized  view log on test_table  
@@ -1369,7 +1252,7 @@ drop materialized view log on test_table;
 drop materialized view mv_materialized_test; 
 ```
 
-###### 刷新时间
+##### 刷新时间
 
 ```sql
 create materialized view mv_materialized_test 
@@ -1380,7 +1263,7 @@ as
 select  *  from  user_info;  -- 这个物化视图在每天10：25进行刷新 
 ```
 
-###### 查询重写（QueryRewrite）
+##### 查询重写（QueryRewrite）
 
 - `enable|disable query rewrite`：指出创建的物化视图是否支持查询重写，默认disable。 查询重写是当对物化视图的基表进行查询时 ， oracle会自动判断能否通过查询物化视图来得到结果，如果可以，直接从已经计算好的物化视图中读取数据。
 
@@ -1468,7 +1351,7 @@ where job_id = (
                 from employees
                 where employee_id = 141
                 )
-AND salary > (
+and salary > (
               select salary
               from employees
               where employee_id = 143
@@ -1522,7 +1405,7 @@ from employees a,(
                   group by department_id
                   ) b
 where a.department_id = b.department_id
-AND a.salary > b.avg_sal;
+and a.salary > b.avg_sal;
 ```
 
 #### in、 exists
@@ -1685,7 +1568,7 @@ where (manager_id,department_id) in (
                                      from employees
                                      where employee_id in (141,174)
                                      )
-AND employee_id not in  (141,174);
+and employee_id not in  (141,174);
 
 -- 2)不成对比较
 select employee_id
@@ -1697,12 +1580,12 @@ where manager_id in (
                      from employees
                      where employee_id in (141,174)
                      )
-  AND department_id in (
+  and department_id in (
                         select department_id
                         from employees
                         where employee_id in (141,174)
                         )
-  AND employee_id not in (141,174);
+  and employee_id not in (141,174);
 ```
 
 ## join 连接
@@ -1733,7 +1616,7 @@ select e1.employee_id,e1.hire_date
 from employees e1
  inner join employees e2 
   on e1.employee_id <> e2.employee_id
-  AND e1.hire_date = e2.hire_date;
+  and e1.hire_date = e2.hire_date;
 ```
 
 #### natural join 自然连接
@@ -1812,7 +1695,7 @@ from employees e
 select employee_id,e.department_id,department_name,d.location_id,city
 from employees e,departments d,locations l
 where e.department_id = d.department_id
-  AND d.location_id = l.location_id;
+  and d.location_id = l.location_id;
 ```
 
 ### cross join 交叉连接
@@ -1825,13 +1708,13 @@ from table1 t1
  cross join table2;
 ```
 
-### [outer] join 外连接
+### \[outer\] join 外连接
 
-| 外连接                               | 包含from子句中的表与on中的表不匹配的值           |
-| ------------------------------------ | ------------------------------------------------ |
-| left [outer] join<br />（左外连接）  | 当连接条件不成立的时候，等号左边的表仍然被包含。 |
-| right [outer] join<br />（右外连接） | 当连接条件不成立的时候，等号右边的表仍然被包含。 |
-| full [outer] join<br />（全连接）    | 查询结果等于左外连接和右外连接的和。             |
+| 外连接                                 | 包含from子句中的表与on中的表不匹配的值           |
+| -------------------------------------- | ------------------------------------------------ |
+| left \[outer\] join<br />（左外连接）  | 当连接条件不成立的时候，等号左边的表仍然被包含。 |
+| right \[outer\] join<br />（右外连接） | 当连接条件不成立的时候，等号右边的表仍然被包含。 |
+| full \[outer\] join<br />（全连接）    | 查询结果等于左外连接和右外连接的和。             |
 
 ```sql
 -- left [outer] join可以返回左表(table1)中与右表(table2)不匹配的值
@@ -1871,1185 +1754,6 @@ select t1.no1,no2,no4
 from table1 t1,table2 t2
 where t1.no1(+) = t2.no1;
 ```
-
-## 常用函数
-
-### 数值函数
-
-#### round(n[,m]) 四舍五入 
-
-- round(n[,m])：传回一个数值，该数值是按照指定的小数位元数进行四舍五入运算的结果。
-
-| m的数值 | 小数位元数  |
-| ------- | ----------- |
-| 0       | 省略m       |
-| >0      | 小数点后m位 |
-| <0      | 小数点前m位 |
-
-```sql
-select round(4.5),round(2.3),round(2.12,2)
-from dual;
-
-round(4.5) round(2.3) round(2.12,2)
--- -- -- -- --  -- -- -- -- --  -- -- -- -- -- -- -
-         5          2          2.12
-```
-
-```sql
-select round(123.456, 0) 
-from dual;          
--- 回传 123
-```
-
-```sql
-select round(123.456, 1) 
-from dual;          
--- 回传 123.5
-```
-
-```sql
-select round(-123.456, 2) 
-from dual;        
--- 回传 -123.46
-```
-
-#### 取整函数 
-
-##### CEIL() 天花板 取最大值(向上取整) 
-
-- ceil(n) 取大于等于数值n的最小整数
-
-##### FLOOR() 地板 取最小值(向下取整)
-
-- floor(n)取小于等于数值n的最大整数
-
-```
-select CEIL(23.45),FLOOR(23.45) 
-from dual;
-
-CEIL(23.45) FLOOR(23.45)
--- -- -- -- -- - -- -- -- -- -- -- 
-         24           23
-```
-
-```
--- 对于每个员工，显示其加入公司的天数
-select floor(sysdate-hiredate) "入职天数"
-      ,ename 
-from emp;
-
--- 等价于
-
-select trunc(sysdate-hiredate) "入职天数"
-      ,ename 
-from emp;
-```
-
-##### Oracle计算时间差
-
-Oracle计算时间差表达式
-
-```
--- 获取两时间的相差豪秒数
-select ceil((to_date('2008-05-02 00:00:00' , 'yyyy-mm-dd hh24-mi-ss') - 
-             to_date('2008-04-30 23:59:59' , 'yyyy-mm-dd hh24-mi-ss')) * 24 * 60 * 60 * 1000
-           ) 相差豪秒数 
-from DUAL;
-
-/*
-相差豪秒数
-
--- -- -- -- -- 
-
-  86401000
-
-1 row selected
-*/
-```
-
-```
--- 获取两时间的相差秒数
-
-select ceil((to_date('2008-05-02 00:00:00' , 'yyyy-mm-dd hh24-mi-ss') - 
-             to_date('2008-04-30 23:59:59' , 'yyyy-mm-dd hh24-mi-ss')) * 24 * 60 * 60
-           ) 相差秒数 
-from DUAL;
-
-/*
-相差秒数
-
--- -- -- -- -- 
-
-     86401
-
-1 row selected
-*/
-```
-
-```
--- 获取两时间的相差分钟数
-
-select ceil(((to_date('2008-05-02 00:00:00' , 'yyyy-mm-dd hh24-mi-ss') - 
-              to_date('2008-04-30 23:59:59' , 'yyyy-mm-dd hh24-mi-ss'))) * 24 * 60
-           )  相差分钟数 
-from DUAL;
-
-/*
-相差分钟数
-
--- -- -- -- -- 
-
-      1441
-
-1 row selected
-*/
-```
-
-```
--- 获取两时间的相差小时数
-
-select ceil((to_date('2008-05-02 00:00:00' , 'yyyy-mm-dd hh24-mi-ss') - 
-             to_date('2008-04-30 23:59:59' , 'yyyy-mm-dd hh24-mi-ss')) * 24
-           )  相差小时数 
-from DUAL;
-
-/*
-```
-
-```
-相差小时数
-
--- -- -- -- -- 
-
-        25
-
-1 row selected
-
-*/
-
-```
-
-```
--- 获取两时间的相差天数
-
-select ceil((to_date('2008-05-02 00:00:00' , 'yyyy-mm-dd hh24-mi-ss') - 
-             to_date('2008-04-30 23:59:59' , 'yyyy-mm-dd hh24-mi-ss'))
-             )  相差天数 
-from DUAL;
-
-/*
-
-相差天数
-
--- -- -- -- -- 
-
-         2
-
-1 row selected
-
-*/
-```
-
-```
--- 获取两时间月份差
-
-select (EXTRACT(year from to_date('2009-05-01','yyyy-mm-dd')) - EXTRACT(year from to_date('2008-04-30','yyyy-mm-dd'))) * 12 + 
-
-        EXTRACT(month from to_date('2008-05-01','yyyy-mm-dd')) - EXTRACT(month from to_date('2008-04-30','yyyy-mm-dd')) months
-
-from dual;
-
-/*
-
-MonTHS
-
--- -- -- -- -- 
-
-        13
-
-1 row selected
-```
-
-*/
-
-```
--- 获取两时间年份差
-
-select EXTRACT(year from to_date('2009-05-01','yyyy-mm-dd')) - EXTRACT(year from to_date('2008-04-30','yyyy-mm-dd')) years from dual;
-
-/*
-
-YEARS
-
--- -- -- -- -- 
-
-         1
-
-1 row selected
-
-*/
-```
-
-
-#### 常用计算
-
-| 函数       | 说明         |
-| :--------- | :----------- |
-| ABS(n)     | 取绝对值     |
-| MOD(m,n)   | 取模 m%n     |
-| POWER(m,n) | 取m的n次幂   |
-| SQRT(n)    | 求平方根     |
-| SIGN(n)    | 返回值的符号 |
-
-#### 三角函数 提供弧度参数
-
-
-| 函数           | 说明 |
-| :------------- | :--- |
-| Sin(n) ASin(n) |      |
-| COS(N) ACOS(n) |      |
-| TAN(n) ATAN(n) |      |
-
-
-#### 随机
-
-##### DBMS_RANDOM.VALUE(n,m) 随机数 
-
-- 生成一个指定范围[n,m)的38位随机小数（小数点后38位），若不指定范围则默认为范围为[0,1)的随机数。
-
-```sql
-select DBMS_RANDOM.VALUE
-from dual;
-
-select TRUNC(DBMS_RANDOM.VALUE(10,50),0)
-from dual;
-```
-
-##### DBMS_RANDOM.STRinG('c',n) 随机字符串
-
-- 生成一个长度为n的随机字符串。
-
-```sql
-select DBMS_RANDOM.STRinG('A',20)
-from dual
-```
-
-### 字符函数
-
-#### 大小写转换函数
-
-| 函数          | 说明       |
-| :------------ | :--------- |
-| UPPER(char)   | 转换为大写 |
-| LOWER(char)   | 转换为小写 |
-| inITCAP(char) | 首字母大写 |
-
-```sql
-select UPPER('hello'),LOWER('HELLO'),inITCAP('hELlo')
-from dual;
-
-UPPER('HELLO') LOWER('HELLO') inITCAP('HELLO')
--- -- -- -- -- -- --  -- -- -- -- -- -- --  -- -- -- -- -- -- -- -- 
-HELLO          hello          Hello
-```
-
-```sql
-select employee_id,salary
-from employees
-where LOWER(last_name) = 'king'
-```
-
-#### SUBSTR(char,[m[,n]])  获取子字符
-
-- char：字符串
-- m 子字符串的起始位置，m从1开始,如果m写0也是从第一个字符开始。如果m为负数时，从字符串的尾部开始截取。
-- n 取出多少位,而不是取到哪一位，n省略时，从m的位置截取到结束，
-
-```sql
-select SUBSTR('hello',2,3)
-from dual;
-
-SUBSTR('HELLO',2,3)
--- -- -- -- -- -- -- -- -- -
-ell
-```
-
-```sql
-select employee_id,last_name,salary
-from employees
-where LOWER(SUBSTR(last_name,0)) = 'king'; -- 即where LOWER(last_name) = 'king';  -- LIKE 模糊查询类似作用
-```
-
-#### LENTH(char) 获取字符串长度函数 
-
-- 获取的长度会包含空格的长度 
-
-#### ConCAT(char1,char2)  字符串连接函数 
-
-- 与||作用一样
-
-```sql
-select ConCAT('hello ','world')
-from dual;
-```
-
-```sql
-select ConCAT(first_name,last_name)
-from employees;
-```
-
-#### inSTR(c1,c2) 获取c2在c1中的位置
-
-```sql
-select inSTR('hello','h')
-from dual;
-```
-
-#### 填充函数
-
-##### LPAD(c1,n,c2) 左填充
-
-- 用c2从左往右补满(n-LENTH(c1))空位
-
-```sql
-select LPAD(salary,10,'*')
-from employees;
-```
-
-##### RPAD(c1,n,c2) 右填充
-
-- 用c2从左往右补满(n-LENTH(c1))空位
-
-#### 去除字符串函数
-
-##### TRIM(c2 from c1) 首尾均去除
-
-- 要求首/尾是要去除的字符代表从c1中去除c2字符串。就是子文本替换，要求c2中只能是一个字符
-
-```sql
-select TRIM('e' from 'hello') -- 结果不变
-from dual;
-
-TRIM('E'from'HELLO')
--- -- -- -- -- -- -- -- -- -- 
-hello
-```
-
-```sql
-select trim(leading 9 from 9998767999) s1,
-       trim(trailing 9 from 9998767999) s2,
-       trim(9 from 9998767999) s3 
-from dual;
-```
-
-##### TRIM(c1) 去空
-
-- 代表去除首尾的空格，删首尾空，LTRIM和RTRIM只有一个参数时同理
-
-```sql
-select TRIM('   hello    ')
-from dual;
-```
-
-##### LTRIM(c1[,c2]) 左去除
-
-- 从c1中去除c2，从左边开始去除，要求第一个就是要去除的字符，有多少个重复的该字符就会去除多少次
-- 默认去除左边的空格
-
-```sql
-select LTRIM('h','hello')
-from dual;
-
-LTRIM('H','HELLO')
--- -- -- -- -- -- -- -- -- -- 
-ello
-```
-
-##### RTRIM(c1[,c2]) 右去除
-
-- 从c1中去除c2，要求右侧第一个就是要去除的字符，有多少个重复的该字符就会去除多少次
-- 默认去除右边的空格
-
-
-##### REPLACE(char,s_string[,r_string]) 字符串替换函数，省略第三个参数则用空白替换
-
-```
-select REPLACE('hello','el','lll')
-from dual;
-
-REPLACE('HELLO','EL','LLL')
--- -- -- -- -- -- -- -- -- -- -- -- 
-helllo
-```
-
-##### TRANSLATE(c1,c2,c3) 字符替换
-
-- 将c1中的c2字符替换为c3字符中
-- 如果c3的字符长度大于c2的字符长度：替换为c3中与c2字符长度相对应的子字符。
-- 如果c3的字符长度小于c2的字符长度：仍然是将c2替换为c3。
-
-```sql
-TRANSLATE('ABC','C','XX') 
-'ABC' -- 要被替换的字符串
-'AC' -- ''内的所有字符被一一替换，不是字符串'AC'而是替换'A''C';
-'XX' -- 要替换成的字符与'AC'一一对应
-```
-
-```sql
-select translate('abc','b','xx') from dual; --  x是1位
--- 返回axc
-select translate('abc','bc','xx') from dual;
--- axx
-select translate('abc','bc','x') from dual;
--- ax
-```
-
-```sql
-select TRANSLATE('abcd','acd','#')
-from dual;
--- #B
-```
-
-###### 统计某个字符出现次数
-
-```sql
-select LENGTH(TRANSLATE('abcdbbb','b' || 'abcdbbb','b'))
-from dual
-
--- 而不是
-select LENGTH('abcdbbb') - LENGTH(TRANSLATE('abcdbbb','b',''))
-from dual; -- 返回空值 
-```
-
-
-
-
-```sql
-insert into mytable 
-values chr(38);
-```
-
-- ASCII
-
-```sql
-select ASCII('x'), ASCII('y'),ASCII('z') 
-from dual;
-```
-
-#### ASCII码相关函数
-
-##### Ascii值 返回字符串首字的Ascii值
-
-- ASCII()函数表示返回指定字符的ASCII码，作用和 CHR() 相反。
-
-```sql
-select ascii('a') from dual
-```
-
-##### chr() 返回ascii值对应的字符 
-
-- CHR() 函数表示返回指定 ASCII 码的字符，作用和 ASCII() 相反。
-
-```sql
-chr(9);  tab
-chr(10);  换行符
-chr(13);  回车符
-chr(32);  空格符
-chr(34;，  双引号“"”
-```
-
-```sql
-select chr(97) from dual
-```
-
-### 日期函数
-
-- 日期不允许加法，可以相减
-- 系统时间 sysdate 默认格式：DD-Mon-RR 天-月-年
-
-#### add_MonTHS(date,i)  用于添加指定的月份，返回在指定的日期上添加的月份
-
-i可以是任意整数，如果i是负数，则是在原有的值上减去该月份了
-
-```
-select add_MonTHS(sysdate,1)
-from dual;
-```
-
-#### next_DAY(date,char)  第二个参数指定星期几，在中文环境下输入星期X即可，返回下一个周几是哪一天
-
-```
-select next_DAY(sysdate,'星期二')
-from dual;
-```
-
-#### LAST_DAY(date) 用于返回日期所在月的最后一天
-
-```
-select LAST_DAY(sysdate)
-from dual;
-```
-
-#### MonTHS_BETWEEN(date1,date2) 计算两个日期之间间隔的月份，前者减后者
-
-```
-select MonTHS_BETWEEN('20-5月-15','10-1月-15') 
-from dual;
-```
-
-#### EXTRACT(date from datetime) 返回相应的日期部分
-
-```
-select EXTRACT(year from sysdate)  -- 可以改month或者day
-from dual; 
-```
-
-```
-select EXTRACT(hour from timestamp '2015-10-1 17:25:13') 
-from dual;
-```
-
-#### 应用
-
-##### 1. 显示Two Hundred Twenty-Two  
-
-```
-select to_char( to_date(222,'J'),'Jsp') 
-from dual     
-```
-
-***
-
-##### 2.求某天是星期几
-
-```
--- 星期一     
-select to_char(to_date('2002-08-26','yyyy-mm-dd'),'day') 
-from dual;     
--- monday
-```
-
-```
-select to_char(to_date('2002-08-26','yyyy-mm-dd'),'day','NLS_DATE_LANGUAGE = American') 
-from dual;     
-```
-
-***
-
-##### 3. 设置日期语言  NLS_DATE_LANGUAGE
-
-###### 1)修改会话
-
-```
-alter SESSIon set NLS_DATE_LANGUAGE='AMERICAN';     
-```
-
-###### 2)参数
-
-```
-to_DATE ('2002-08-26', 'YYYY-mm-dd', 'NLS_DATE_LANGUAGE = American')    
-```
-
-***
-
-##### 4. 两个日期间的天数   相减返回天数
-
-```
-select floor(sysdate - to_date('20020405','yyyymmdd'))   
-from dual;    
-```
-
-***
-
-##### 5. 时间为null的用法
-
-```
-select id
-      ,active_date 
-from table1     
-UNIon     
-select 1
-       ,to_DATE(null) 
-from dual;     
--- 注意要用to_DATE(null)    
-????
-```
-
-##### 6.月份差  
-
-```
-a_date between to_date('20011201','yyyymmdd') and to_date('20011231','yyyymmdd')     
-
-那么12月31号中午12点之后和12月1号的12点之前是不包含在这个范围之内的。     
-所以，当时间需要精确的时候，觉得to_char还是必要的
-```
-
-##### 7. 日期格式冲突问题
-
-输入的格式要看你安装的ORACLE字符集的类型, 比如: US7ASCII, date格式的类型就是: '01-Jan-01'
-
-```
-(1)
-alter system set NLS_DATE_LANGUAGE = American     
-(2)
-alter session set NLS_DATE_LANGUAGE = American     
-(3) 在to_date中写     
-select to_char(to_date('2002-08-26','yyyy-mm-dd'),'day','NLS_DATE_LANGUAGE = American') 
-from dual;     
-(4)
-注意我这只是举了NLS_DATE_LANGUAGE，当然还有很多，     
-可查看:     
-select * from nls_session_parameters     
-select * from V$NLS_parameters    
-```
-
-##### 8
-
-```
-   select count(*)     
-   from ( select rownum-1 rnum     
-       from all_objects     
-       where rownum <= to_date('2002-02-28','yyyy-mm-dd') - to_date('2002-     
-       02-01','yyyy-mm-dd')+1     
-      )     
-   where to_char( to_date('2002-02-01','yyyy-mm-dd')+rnum-1, 'D' )     
-        not in ( '1', '7' )     
-  
-   查找2002-02-28至2002-02-01间除星期一和七的天数     
-   在前后分别调用DBMS_UTILITY.GET_TIME, 让后将结果相减(得到的是1/100秒, 而不是毫秒).    
-```
-
-##### 9. 查找月份
-
-```
-    select months_between(to_date('01-31-1999','MM-DD-YYYY'),to_date('12-31-1998','MM-DD-YYYY')) "MonTHS" 
-    from DUAL;     
-    -- 1     
-   
-    select months_between(to_date('02-01-1999','MM-DD-YYYY'),to_date('12-31-1998','MM-DD-YYYY')) "MonTHS" 
-    from DUAL;     
-    -- 1.03225806451613
-```
-
-##### 10. next_day的用法
-
-```
-    next_day(date, day)     
-   
-    Monday-Sunday, for format code DAY     
-    Mon-Sun, for format code DY     
-    1-7, for format code D    
-```
-
-##### 11
-
-```
-   select to_char(sysdate,'hh:mi:ss') TIME from all_objects     
-   
-   注意：第一条记录的TIME 与最后一行是一样的     
-```
-
-```
-   可以建立一个函数来处理这个问题     
-   create or replace function sys_date return date is     
-   begin     
-   return sysdate;     
-   end;     
-```
-
-```
-   select to_char(sys_date,'hh:mi:ss') from all_objects;  
-```
-
-##### 12.获得小时数
-
-extract()找出日期或间隔值的字段值
-
-```
-    select EXTRACT(HOUR from TIMESTAMP '2001-02-16 2:38:40') 
-    from offer;
-         
-    SQL> select sysdate ,to_char(sysdate,'hh') from dual;     
-   
-    SYSDATE to_CHAR(SYSDATE,'HH')     
-    -- -- -- -- -- -- -- -- -- --  -- -- -- -- -- -- -- -- -- -- -     
-    2003-10-13 19:35:21 07     
-   
-    SQL> select sysdate ,to_char(sysdate,'hh24') from dual;     
-   
-    SYSDATE to_CHAR(SYSDATE,'HH24')     
-    -- -- -- -- -- -- -- -- -- --  -- -- -- -- -- -- -- -- -- -- -- -     
-    2003-10-13 19:35:21 19    
-```
-
-##### 13.年月日的处理
-
-```
-   select older_date
-         ,newer_date
-         ,years
-         ,months
-         ,abs(trunc(     
-                    newer_date-     
-                    add_months( older_date, years * 12 + months )     
-                    )     
-          ) days
-   from ( select trunc(months_between( newer_date, older_date ) / 12) YEARS
-                ,mod(trunc(months_between( newer_date, older_date )),12 ) MonTHS
-                ,newer_date
-                ,older_date     
-          from (
-                select hiredate older_date
-                     , add_months(hiredate,rownum) + rownum newer_date     
-                from emp
-                )     
-        )    
-```
-
-##### 14.处理月份天数不定的办法
-
-```
-select to_char(add_months(last_day(sysdate) +1, -2), 'yyyymmdd')
-      ,last_day(sysdate) 
-from dual    
-```
-
-##### 16.找出今年的天数
-
-```
-select add_months(trunc(sysdate,'year'), 12) - trunc(sysdate,'year') 
-from dual    
-
-闰年的处理方法     
-to_char( last_day( to_date('02' || :year,'mmyyyy') ), 'dd' )     
-如果是28就不是闰年    
-```
-
-##### 17.yyyy与rrrr的区别
-
-```
-   'YYYY99 to_C     
-   -- -- -- - -- --      
-   yyyy 99 0099     
-   rrrr 99 1999     
-   yyyy 01 0001     
-   rrrr 01 2001    
-```
-
-##### 18.不同时区的处理
-
-```
-   select to_char( NEW_TIME( sysdate, 'GMT','EST'), 'dd/mm/yyyy hh:mi:ss') ,sysdate     
-   from dual;    
-```
-
-##### 19.5秒钟一个间隔
-
-```
-   select to_DATE(FLOOR(to_CHAR(sysdate,'SSSSS')/300) * 300,'SSSSS') ,to_CHAR(sysdate,'SSSSS')     
-   from dual    
-
-   2002-11-1 9:55:00 35786     
-   SSSSS表示5位秒数    
-```
-
-##### 20.一年的第几天
-
-```
-   select to_CHAR(SYSDATE,'DDD'),sysdate from dual
-       
-   310 2002-11-6 10:03:51    
-```
-
-##### 21.计算小时,分,秒,毫秒
-
-```
-    select     
-     Days,     
-     A,     
-     TRUNC(A*24) Hours,     
-     TRUNC(A*24*60 - 60*TRUNC(A*24)) minutes,     
-     TRUNC(A*24*60*60 - 60*TRUNC(A*24*60)) Seconds,     
-     TRUNC(A*24*60*60*100 - 100*TRUNC(A*24*60*60)) mSeconds     
-    from     
-    (     
-     select     
-     trunc(sysdate) Days,     
-     sysdate - trunc(sysdate) A     
-     from dual     
-   )    
-
-
-   select * from tabname     
-   order by decode(mode,'FIFO',1,-1)*to_char(rq,'yyyymmddhh24miss');     
-  
-   //     
-   floor((date2-date1) /365) 作为年     
-   floor((date2-date1, 365) /30) 作为月     
-   d(mod(date2-date1, 365), 30)作为日.
-```
-
-##### 23.next_day函数      返回下个星期的日期,day为1-7或星期日-星期六,1表示星期日
-
-```
-   next_day(sysdate,6)是从当前开始下一个星期五。后面的数字是从星期日开始算起。     
-   1 2 3 4 5 6 7     
-   日 一 二 三 四 五 六   
-```
-
-```  
-   select    (sysdate-to_date('2003-12-03 12:55:45','yyyy-mm-dd hh24:mi:ss'))*24*60*60 from ddual
-   日期 返回的是天 然后 转换为ss
-```
-
-##### 24,round[舍入到最接近的日期](day:舍入到最接近的星期日)
-
-```
-   select sysdate S1,
-   round(sysdate) S2 ,
-   round(sysdate,'year') YEAR,
-   round(sysdate,'month') MonTH ,
-   round(sysdate,'day') DAY 
-   from dual
-```
-
-##### 25,trunc[截断到最接近的日期,单位为天] ,返回的是日期类型
-
-```
-   select sysdate S1,                    
-     trunc(sysdate) S2,                 //返回当前日期,无时分秒
-     trunc(sysdate,'year') YEAR,        //返回当前年的1月1日,无时分秒
-     trunc(sysdate,'month') MonTH ,     //返回当前月的1日,无时分秒
-     trunc(sysdate,'day') DAY           //返回当前星期的星期天,无时分秒
-   from dual
-```
-
-##### 26,返回日期列表中最晚日期
-
-```
-select greatest('01-1月-04','04-1月-04','10-2月-04') from dual
-```
-
-##### 27.计算时间差
-
-注:oracle时间差是以天数为单位,所以换算成年月,日
-
-```
-select floor(to_number(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))/365) as spanYears from dual        //时间差-年
-select ceil(moths_between(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))) as spanMonths from dual        //时间差-月
-select floor(to_number(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))) as spanDays from dual             //时间差-天
-select floor(to_number(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))*24) as spanHours from dual         //时间差-时
-select floor(to_number(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))*24*60) as spanminutes from dual    //时间差-分
-select floor(to_number(sysdate-to_date('2007-11-02 15:55:03','yyyy-mm-dd hh24:mi:ss'))*24*60*60) as spanSeconds from dual //时间差-秒
-```
-
-##### 28.更新时间
-
-注:oracle时间加减是以天数为单位,设改变量为n,所以换算成年月,日
-
-```
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),to_char(sysdate+n*365,'yyyy-mm-dd hh24:mi:ss') as newTime from dual        //改变时间-年
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),add_months(sysdate,n) as newTime from dual                                 //改变时间-月
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),to_char(sysdate+n,'yyyy-mm-dd hh24:mi:ss') as newTime from dual            //改变时间-日
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),to_char(sysdate+n/24,'yyyy-mm-dd hh24:mi:ss') as newTime from dual         //改变时间-时
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),to_char(sysdate+n/24/60,'yyyy-mm-dd hh24:mi:ss') as newTime from dual      //改变时间-分
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),to_char(sysdate+n/24/60/60,'yyyy-mm-dd hh24:mi:ss') as newTime from dual   //改变时间-秒
-```
-
-##### 29.查找月的第一天,最后一天
-
-```
-select Trunc(Trunc(SYSDATE, 'MonTH') - 1, 'MonTH') First_Day_Last_Month,
-       Trunc(SYSDATE, 'MonTH') - 1 / 86400 Last_Day_Last_Month,
-       Trunc(SYSDATE, 'MonTH') First_Day_Cur_Month,
-       LAST_DAY(Trunc(SYSDATE, 'MonTH')) + 1 - 1 / 86400 Last_Day_Cur_Month
-from dual;
-```
-
-
-### 转换函数
-
-#### to_char 转为字符串
-
-##### to_CHAR(date[,fmt[,params]]) 日期转为字符串
-
-- date为需要转换的日期，fmt为转换的格式(不区分大小写)，params为转换的语言（通常默认会自动选择，可以省略，与安装语言一致）  
-
-**fmt参数格式**
-
-- 默认格式：DD-Mon-RR   
-- 格式有：  以02-02-1997为例
-
-| 时域   | fmt参数 | 说明                   |
-| :----- | :------ | :--------------------- |
-| 年     | YY      | 97                     |
-|        | YYYY    | 1997                   |
-|        | YEAR    | NintENN AND NITY SEVEN |
-| 月     | MM      | 02                     |
-|        | Mon     | JUL                    |
-|        | MonTH   | JULY                   |
-| 日     | DD      | 02                     |
-|        | DY      | Mon                    |
-|        | DAY     | MonDAY                 |
-| 时     | HH24    |                        |
-|        | HH12    |                        |
-| 分     | MI      |                        |
-| 秒     | SS      |                        |
-| 上下午 | AM      | 上午/下午              |
-
-- 用双引号""向日期函数添加字符,日期要用单引号''括起
-
-```sql
-select to_CHAR(sysdate,'yyyy"年"mm"月"dd"日" hh:mi:ss')
-from dual;
-```
-
-```sql
-select to_CHAR(sysdate,'HH24:MI:SS AM')
-from dual;
-
-to_CHAR(SYSDATE,'HH24:MI:SSAM'
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-15:58:45 下午
-```
-
-##### to_CHAR(number[,fmt]) 数字转为字符串
-
-
-| fmt参数 | 说明                        |
-| :------ | :-------------------------- |
-| 9       | 显示数字并忽略前面的0       |
-| 0       | 显示数字，位数不足，用0补齐 |
-| .或D    | 显示小数点                  |
-| ,或G    | 显示千分位                  |
-| $       | 美元符号                    |
-| S       | 加正负号（前后都可以）      |
-
-```sql
-select to_CHAR(123456,'$0000000000')
-from dual;
-```
-
-
-#### to_DATE(char[,fmt[,params]]) 字符串转为日期
-
-**fmt参数格式**
-
-
-```sql
-select to_DATE('2022-2-2','yyyy-mm-dd')
-from dual;
-```
-
-##### 日期和字符转换函数用法（to_date,to_char）
-
-```
-select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') as nowTime from dual;   //日期转化为字符串  
-select to_char(sysdate,'yyyy') as nowYear from dual;   //获取时间的年  
-select to_char(sysdate,'mm') as nowMonth from dual;   //获取时间的月  
-select to_char(sysdate,'dd') as nowDay from dual;   //获取时间的日  
-select to_char(sysdate,'hh24') as nowHour from dual;   //获取时间的时  
-select to_char(sysdate,'mi') as nowminute from dual;   //获取时间的分  
-select to_char(sysdate,'ss') as nowSecond from dual;   //获取时间的秒
-
-select to_date('2004-05-07 13:23:44','yyyy-mm-dd hh24:mi:ss')    from dual//
-
-```
-
-#### to_number(char[,fmt]) 字符串转数字
-
-```sql
-select to_number('$123,456.789','$999999.999')
-from dual;
-```
-
-#### 空值转换
-
-##### NVL(expr1,expr2)
-
-- NVL(expr1,expr2) 如果expr1为空值，则返回expr2
-
-```sql
-select last_name,salary,NVL(commission_pct,0)
-from employees;
-```
-
-##### NVL2(expr1,expr2,expr3) 
-
-- NVL2(expr1,expr2,expr3) 如果expr1不为空值则返回expr2，expr1为空值则返回expr3
-
-```sql
--- 若工资有奖金率，commission_pct不为空值，则返回工资加奖金，否则返回工资上调500
-select last_name,NVL2(commission_pct,salary * (1 + commission_pct),salary + 500)
-from employees;
-```
-
-### 通用函数
-
--  适用于任何(包含空值)
-
-#### nullIF(expr1,expr2) 
-
-- nullIF(expr1,expr2) 若相等返回null,不等返回expr2
-
-```sql
--- 显示出那些换过工作的人员原工作，现工作。
-select e.last_name,e.job_id,j.job_id,nullIF(e.job_id,j.job_id) "Old Job ID"
-from employees e, job_history j
-where e.employee_id = j.employee_id
-order by last_name;
-```
-
-#### coalesce(expr1,expr2,expr3)
-
-1. 同时处理交替多值
-2. 若第一个表达式为空，则返回下一个表达式对其他参数coalesce结果
-
-```sql
-select last_name,coalesce(commission_pct,salary,10)
-from employees
-order by commission_pct;
-```
-
-#### decode(exp1,con1,result1,con2,resul2...default) 解码
-
-- 实现if ..then 逻辑
-- 第一个是表达式,最后一个是不满足任何一个条件的值
-- decode 是专属oracle的语法 有逗号','
-- decode(字段,条件1,表达式1,条件2,表达式2,…默认表达式n)
-
-```sql
--- 查询部门为10，20，30的员工信息，
--- 若部门号为10，则工资*1.1，若部门号为20，则工资*1.2，若部门号为30，则工资*1.3
-  
-select employee_id
-      ,last_name
-      ,decode(department_id,10,salary * 1.1
-                           ,20,salary * 1.2
-                           ,30,salary * 1.3
-              ) new_sal
-from employees
-where department_id in (10,20,30);
-```
-
-#### TRUNC(date,精度说明符) 用于截取日期时间的TRUNC函数
-
-- 精度说明符有: yyyy-mm-dd-hh-mi 截取时间到秒(不是ss)暂时不知道怎么操作
-- 不可直接用TRUNC(sysdate,'yyyy-mm-dd')，会提示“精度说明符过多”
-- 如果不填写精度说明符，则默认到DD，包含年月日，不包含时分秒
-
-```sql
-select TRUNC(sysdate,'yyyy') -- 'yyyy' = 'year'
-from dual;
-```
-
-##### 处理数字
-
-- trunc函数返回处理后的数值，其工作机制与round函数极为类似，只是该函数不对指定小数前或后的部分做相应舍入选择处理，而统统截去。
-- 其具体的语法格式如下
-
-```sql
-TRUNC（number[,decimals]）
-
--- number 待做截取处理的数值
--- decimals 指明需保留小数点后面的位数。可选项，忽略它则截去所有的小数部分。
-```
-
-**注意：**
-
-- 第二个参数可以为负数，表示为小数点左边指定位数后面的部分截去，即均以0记。
-- 与取整类似，比如参数为1即取整到十分位，如果是-1，则是取整到十位，以此类推；
-- 如果所设置的参数为负数，且负数的位数大于或等于整数的字节数的话，则返回为0。
-  - 如：TRUNC(89.985,-3)=0。
-
-```sql
-select trunc(123.98)
-from dual;
-```
-
-```sql
-select trunc(123.123,2)
-from dual;
-```
-
-```sql
-select trunc(123.123,-1)
-from dual;
-```
-
-##### 处理日期
-
-- trunc函数返回以指定元元素格式截去一部分的日期值。
-- 其具体的语法格式如下：
-
-```sql
-TRUNC（date,[fmt]）
-
--- date为必要参数，是输入的一个日期值
--- fmt参数可忽略，是日期格式，用以指定的元素格式来截去输入的日期值。忽略它则由最近的日期截去
-```
-
-- 下面是该函数的使用情况：
-
-```sql
-trunc(sysdate,'yyyy') 
--- 返回当年第一天.
-select trunc(sysdate,'YYYY')
-from dual;
-```
-
-```sql
-trunc(sysdate,'mm')
- -- 返回当月第一天.
-select trunc(sysdate,'MM')
-from dual;
-```
-
-```sql
-trunc(sysdate,'d') 
--- 返回当前星期的第一天.
-select trunc(sysdate,'D')
-from dual;
-```
-
-#### WM_ConCAT(column) 行转列
-
-- 对分组函数的每一组结果中的某一指定值域进行整行输出。
-- wm_concat()中使用的列不必出现在group by子句中。
-
-```sql
-select deptno,wm_concat(ename)
-from emp
-group by deptno;
-
-DEPTNO WM_ConCAT(ENAME)
--- -- --  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-    10 CLARK,MILLER,KinG
-    20 SMITH,FORD,ADAMS,SCOTT,JonES
-    30 allEN,JAMES,TURNER,BLAKE,MARTin,WARD
-```
-
-### 分析函数
-
-#### 偏移量 LEAD() LAG()
-
-- 这种操作可以代替表的自联接，从而更方便地进行进行数据过滤，并且LAG和LEAD有更高的效率。
-
-**LEAD()**
-
-- 在一次查询中取出同一字段的后N行的数据作为独立的列
-
-**LAG()**
-
-- 在一次查询中取出同一字段的前N行的数据作为独立的列
-
-**OVER()**
-
-- 表示 LAG()与LEAD()操作的数据都在OVER()的范围内，
-  - `PARTITIon BY `语句（用于分组） 
-  - `order by` 语句（用于排序）。
-
-- 例如：LEAD(FIELD, NUM, defaultVALUE) FIELD需要查找的字段，NUM往后查找的NUM行的数据，defaultVALUE没有符合条件的默认值。
 
 ## 组函数（聚集函数）
 
@@ -3117,7 +1821,7 @@ having avg(sal) > 100
 
 1. 将sequence装入内存可以提高访问效率
 2. sequence序列号是数据库系统按照一定规则自增的数字序列（不会重复）
-6. sequence可用于记录数据库中最新动作（CRUD）的语句，序列号都会随着更新。
+3. sequence可用于记录数据库中最新动作（CRUD）的语句，序列号都会随着更新。
 
 ### create sequence 创建序列
 
@@ -3141,17 +1845,17 @@ create sequence sequence_name
 | cycle<br />nocycle                               | 序列达到最值后是否从生成的第一个数值开始循环。<br />默认，不循环。 |
 | order<br />no order                              | 指定按顺序生成序列。（RAC时保证序列号因为有请求才生成的）<br />默认，不指定按顺序生成序列。 |
 
-- cache不能保证序列号是连续的。如果缓存中的序列号没有用完就关闭数据库等其它原因，没有使用的序列号就丢失（跳号）。如果指定cache值，ORACLE就可以预先在内存里面放置一些sequence,cache里面的取完后，oracle自动再取一组到cache。
+- cache不能保证序列号是连续的。如果缓存中的序列号没有用完就关闭数据库等其它原因，没有使用的序列号就丢失（跳号）。如果指定cache值，ORACLE就可以预先在内存里面放置一些sequence，cache里面的取完后，oracle自动再取一组到cache。
 - 序列装入内存可提高访问速度，但会在以下的情况下出现裂缝（跳号）：回滚、系统异常、多个表同时使用同一个序列。
 
-> SEQUENCE_CACHE_ENTRIES参数，设置能同时被cache的sequence数目。
+> SEQUENCE\_CACHE\_ENTRIES参数，设置能同时被cache的sequence数目。
 
-### .nextval、.currval 序列移动
+### \.nextval、\.currval 序列移动
 
-| 操作     | 说明                                                         |
-| -------- | ------------------------------------------------------------ |
-| .nextval | 引用下一序列值。<br />第一次.nextval返回的是初始值；随后的每次.nextval都会触发自动增长（increment by），返回增加后的值。 |
-| .currval | 引用当前序列值。<br />序列创建后初始无值，无法查询当前值.currval。第一次使用序列时，要先查询下一值（.nextval）才能查询当前值（.currval）。 |
+| 操作      | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| \.nextval | 引用下一序列值。<br />第一次\.nextval返回的是初始值；随后的每次\.nextval都会触发自动增长（increment by），返回增加后的值。 |
+| \.currval | 引用当前序列值。<br />序列创建后初始无值，无法查询当前值.currval。第一次使用序列时，要先查询下一值（\.nextval）才能查询当前值（\.currval）。 |
 
 ```sql
 select emp_seq.nextval                
@@ -3172,9 +1876,9 @@ create table tab_name(
 
 -- insert语句的values子句
 insert tab_name into values(1, 'xyz', sequence_name.nextval); 
--- 或者 insert tab_name into values(1, 'abc', nextval FOR sequence_name);
+-- 或者 insert tab_name into values(1, 'abc', nextval for sequence_name);
 insert tab_name into values(2, 'fgh', sequence_name.nextval); 
--- 或者 insert tab_name into values(2, 'fgh', nextval FOR sequence_name);
+-- 或者 insert tab_name into values(2, 'fgh', nextval for sequence_name);
 
 -- update语句的set子句
 update tab_name 
@@ -3185,7 +1889,7 @@ delete tab_name col_sql = sequence_name.nextval
 where col_int = 1;
 ```
 
-### alter seq_name .. 修改序列 
+### alter seq\_name 修改序列 
 
 - 若要修改start with、minvalue的值，则必须删除序列后再重新建立序列。
 - 可修改序列的增量、最大值、循环选项、是否装入内存。修改之后，只有将来的序列值会被改变。
@@ -3204,7 +1908,7 @@ drop sequence emp_seq;
 2. 索引被删除/破坏，不会对表产生影响，其影响的只是查询的速度。
 3. 索引一旦建立，Oracle管理系统会对其进行自动维护，且由Oracle管理系统决定何时引用索引，用户不用在查询语句中指定使用哪个索引。
 4. 删除表时，所有基于该表的索引会自动被删除。
-4. 表中的数据非常多时，引用索引带来的查询效率非常可观。但索引会减慢数据插入表的速度（插入数据时也要维护索引）。
+5. 表中的数据非常多时，引用索引带来的查询效率非常可观。但索引会减慢数据插入表的速度（插入数据时也要维护索引）。
 
 ### create index 创建索引
 
@@ -3244,38 +1948,14 @@ create [unique] [bitmap] index 索引名 on 表(列1[,列2…]);
 create index emp_last_name_index on employees(last_name);
 ```
 
-### 索引的类型
-
-**b-tree索引**
-
-- Oracle数据中最常见的索引，就是b-tree索引，create index创建的普通索引就是b-tree索引，没有特殊的必须应用在哪些数据上。
-
-**bitmap位图索引**
-
-- 位图索引经常应用于列数据只有几个枚举值的情况（比如性别，或者我们经常开发中应用的代码字段）。这个时候使用bitmap位图索引，查询效率将会最快。
-
-**函数索引**
-
-- 比如经常对某个字段做查询的时候经常是带函数操作的，那么此时建一个函数索引就有价值了。
-  - 例如：TRIM(列)等字符串操作函数，这个时候可以建立函数索引来提升这种查询效率。
-
-**hash索引**
-
-- hash索引可能是访问数据库中数据的最快方法，但它也有自身的缺点。
-- 创建hash索引必须使用hash集群，相当于定义了一个hash集群键，通过这个集群键来告诉oracle来存储表。
-  - 因此，需要在创建hash集群的时候指定这个值。
-  - 存储数据时，所有相关集群键的行都存储在一个数据块当中，所以只要定位到hash键，就能快速定位查询到数据的物理位置。
-
-**reverse反向索引**
-
-- 这个索引不经常使用到，但是在特定的情况下，是使用该索引可以达到意想不到的效果。
-  - 如：某一列的值为{10000,10001,10021,10121,11000,....}，假如通过b-tree索引，大部分都密集分布在某一个叶子节点上，但是通过反向处理后的值将变成{00001,10001,12001,12101,00011,...}，很明显的发现他们的值变得比较随机，可以比较平均的分部在各个叶子节点上，而不是之前全部集中在某一个叶子节点上，这样子就可大大提高检索的效率。
-
-**分区索引和分区表的全局索引**
-
-- 这两个索引是应用在分区表上面的
-  - 前者的分区索引是对分区表内的单个分区进行数据索引
-  - 后者是对分区表的全表进行全局索引。
+| 索引的类型                     | 说明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| b-tree索引                     | create index创建的普通索引就是b-tree索引，没有特殊的必须应用在哪些数据上。 |
+| bitmap位图索引                 | 位图索引经常应用于列数据只有几个枚举值的情况，查询效率将会最快。 |
+| 函数索引                       | 适合对某个字段做查询的时候经常是带函数操作的。               |
+| hash索引                       | 创建hash索引必须使用hash集群，需要在创建hash集群的时候指定这个集群键值。<br />存储数据时，所有相关集群键的行都存储在一个数据块当中，只要定位到hash键，就能快速定位查询到数据的物理位置。 |
+| reverse反向索引                |                                                              |
+| 分区索引<br />分区表的全局索引 | 应用在分区表上面的索引。<br />分区索引是对分区表内的单个分区进行数据索引。<br />分区表的全局索引对分区表的全表进行全局索引。 |
 
 ### drop index 删除索引
 
@@ -3293,7 +1973,7 @@ drop index emp_last_name_index;
 alter index 旧索引名 rename to 新索引名;
 ```
 
-#### coalesce、rebuild 合并索引、重新构造索引
+#### coalesce 合并索引、rebuild 重新构造索引
 
 - 索引建好后，经过很长一段时间的使用，索引表中存储的空间会产生一些碎片，导致索引的查询效率会有所下降，此时考虑合并索引、按照索引规则重新分类存储、或选择删除索引重新构造索引。
 
@@ -3321,7 +2001,7 @@ alter index 索引名 rebuild;
 3. 简化数据库用户访问对象SQL语句。
 4. 当行使精细化访问控制时提供类似指定视图的访问限制。
 
-> SCOTT用户权限不足：登入SYSDBA授予同义词权限
+> SCOTT用户权限不足：登入sysdba授予同义词权限
 >
 > ```sql
 > grant create synonym to scott;
@@ -3349,393 +2029,6 @@ create synonym synonym_test for emp;
 ```sql
 drop [public] synonym 同义词;
 ```
-
-## 数据字典
-
-| 同义词         | 说明                                                         |
-| -------------- | ------------------------------------------------------------ |
-| user_sysnonyms | 当前用户所拥有的同义词                                       |
-| all_synonyms   | 当前用户所能使用的所有同义词                                 |
-| dba_synonyms   | 数据库中所有的同义词，包括每个用户创建的私有同义词和DBA创建的公共同义词<br />只有DBA能够访问，除了包含数据字典user_synonyms的所有列外，还有一个列owner代表同义词的创建者。 |
-
-| 序列           | 说明               |
-| -------------- | ------------------ |
-| user_sequences | 当前用户拥有的序列 |
-
-```sql
--- 若不将序列的值装入内存nocache可使用表user_SEQUENCES查看当前有效值
-select emp_seq.currval
-from user_SEQUENCES;
-```
-
-| 约束              | 说明 |
-| ----------------- | ---- |
-| user_constraints  |      |
-| user_cons_columns |      |
-
-```sql
-select constraint_name, constraint_type, search_condition, status
-from user_constraints
-where table_name = 'table1';
-```
-
-```sql
-select constraint_name, column_name
-from user_cons_columns
-where table_name = 'table1';
-```
-
-| 索引             | 说明 |
-| ---------------- | ---- |
-| user_indexes     |      |
-| user_ind_columns |      |
-
-```sql
-select *
-from user_indexes
-matural join user_ind_columns;
-```
-
-```sql
-select ic.index_name
-      ,ic.column_name
-      ,ic.column_position col_pos
-      ,ix.uniqueness
-from user_indexes ix
-    ,user_ind_columns ic
-where ic.index_name = ix.index_name
-  and ic.table_name = 'employees';
-```
-
-# 高级SQL
-
-## 分层查询(树查询)(递归查询)
-
-### 基本语法
-
-```sql
-SELECT [LEVEL],列,..
-FROM 表
-START WITH 列 = '值' --以满足条件的元组作为根节点 LEVEL=1
-CONNECT BY [NOCYCLE] PRIOR 父键 = 子键; 
---当子键（指定子节点的列）的值=父键（指定父节点的列）的值时，递归查找,会一层一层找下去,直到不符合这一规则,则查找停止
-```
-
-```sql
-SELECT id,data,NVL(TO_CHAR(pid),'NULL')
-FROM menu
-START WITH pid IS NULL --指定层次化查询的根节点
-CONNECT BY PRIOR id = pid;  --当前节点的pid等于上一层节点的id，如果满足条件,就加入到树结果集中
-```
-
-**STRAT WITH 选择根节点**
-
-- START WITH 一般用于指定层次化查询的开始节点(也就是树的最顶级节点)，找到最顶级节点,   然后按照一定的规则开始查找其剩余的子节点
-  - `START WITH 列 = '值'`用于确定由表选择的要用作根节点的行。
-- 由`列 = '值'`选择START WITH中满足条件的所有行都将成为树的根节点。
-  - 于是，结果集中潜在树的数量等于根节点的数量。
-- 因此，如果省略START WITH子句，则返回的每一行都是其自己树的根节点。
-
-**CONNECT BY 定义父/子关系**
-
-- CONNECT BY 用于查找剩余子节点的规则
-- 对于任何给定行，其父级和子级均由`CONNECT BY`子句确定。
-  - 带有PRIOR关键字标识的为父键，
-  - 即子节点的指定列的值要满足等于父节点的（带有PRIOR标识的）列的值，才可以继续分层。 
-- `CONNECT BY`子句必须由使用等号 (=) 进行比较的两个表达式组成。
-  - 这两个表达式必须有一个前面带有关键字PRIOR,
-
-**LEVEL 节点级别**
-
-- LEVEL是一个伪列，可在SELECT命令中列出现的任何位置使用
-- 伪列 LEVEL 返回这一行在树中的层次，根为第一层。
-  - 根节点的LEVEL为1。根节点的直接子级的LEVEL为2，依此类推
-- 对于结果集中的每一行，LEVEL返回一个非零整数值，指出由此行表示的节点在层次结构中的深度。
-
-### ORDER SIBLINGS BY 对同级排序 
-
-- 通过使用 `ORDER SIBLINGS BY`子句，可对结果集进行排序， 以便按所选列值的升序或降序显示同级。
-  - 这是 ORDER BY 子句的特例，只能用于分层查询。
-
-```sql
-SELECT LEVEL, LPAD (' ', 2 * (LEVEL - 1)) || ename "employee", empno, mgr
-FROM emp 
-START WITH mgr IS NULL
--- 以mgr为null的元组作为根节点，LEVEL=1
-CONNECT BY PRIOR empno = mgr
---连接条件为：子节点的mgr等于父节点的empno的元组
-ORDER SIBLINGS BY ename ASC；
---在结果集中按ename升序排列
-```
-
-```sql
-SELECT LEVEL
-      ,empno
-      ,ename
-      ,sal
-      ,mgr
-FROM emp
-CONNECT BY PRIOR empno = mgr
-START WITH mgr IS NULL
-ORDER BY 1;
-```
-
-### 回环CYCLE
-
-层次化查询会检测数据中是否存在回环(死循环)，如果存在回环，则会抛出 ORA-01436: CONNECT BY loop in user data . 的错误
-
-- 如果在CONNECT BY子句后面加上 NOCYCLE 则产生回环的最后一层的节点会被删除
-
-```sql
-SELECT id,data,NVL(TO_CHAR(pid),'NULL')
-FROM menu
-START WITH (data ='a' OR data= 'b')
-CONNECT BY NOCYCLE PRIOR id = pid; 
---产生回环的最后一层的节点会被删除,(可能并没有删除)
-```
-
-### CONNECT_BY_ISCYCLE / CONNECT_BY_ISLEAF / CONNECT_BY_ROOT
-
-1. CONNECT_BY_ISCYCLE 
-   - 当这一行有一个子节点同时也是它的祖先节点时返回 1 ，否则返回 0 。
-2. CONNECT_BY_ISLEAF 
-   - 当这一行是叶节点时返回 1 ，否则返回 0 。
-3. CONNECT_BY_ROOT 一元运算符，可用于限定列，以便根据当前行返回被视为根节点的行的列值
-   - CONECT_BY_ROOT查询操作符可以加在CONNECT BY之后的某个字段之前，表示获得这一行的根节点的该字段的值。
-   - CONNECT_BY_ROOT 运算符可在 SELECT 列表、WHERE 子句、GROUP BY 子句、HAVING 子句、ORDER BY 子句和 ORDER SIBLINGS BY 子句中使用，只要 SELECT 命令用于分层查询。
-   - CONNECT_BY_ROOT 运算符不能在分层查询的 CONNECT BY 子句或 START WITH 子句中使用。
-   - 可将 CONNECT_BY_ROOT 应用于一个涉及列的表达式,但这样做时,该表达式必须用圆括号括起，当应用于不带圆括号的表达式时,CONNECT_BY_ROOT运算符仅影响紧跟其后的一列
-
-```sql
---使用 CONNECT_BY_ROOT 运算符根据以员工 Zlotkey 和 King 开头的树，为结果集中列出的每个员工返回根节点的员工编号和员工名称。
---(查询管理者Zlotkey和King和所管理员工的last_name,employee_id,manager_id)
-SELECT LEVEL,
-       LPAD(' ',2 * (LEVEL - 1)) || last_name "employee",
-       employee_id,
-       manager_id,  
-       CONNECT_BY_ROOT employee_id "mgr_id",
-       CONNECT_BY_ROOT last_name "mgr_name"
-FROM employees
-START WITH last_name IN ('Zlotkey','King')
-CONNECT BY PRIOR employee_id = manager_id
-ORDER SIBLINGS BY last_name ASC;
-```
-
-```sql
---只生成一个以单个顶层级别员工开头的树
-SELECT LEVEL,LPAD(' ',2 * (LEVEL - 1)) ||last_name "name",employee_id,manager_id,
-       CONNECT_BY_ROOT employee_id "mgr_empno",
-       CONNECT_BY_ROOT last_name "mgr_ename"
-FROM employees
-START WITH manager_id IS NULL
-CONNECT BY PRIOR employee_id = manager_id
-ORDER SIBLINGS BY last_name ASC;
-```
-
-### SYS_CONNECT_BY_PATH检索路径
-
-**SYS_CONNECT_BY_PATH函数，在分层查询中用于检索在当前节点和根节点之间出现的指定列的值。**
-
-- SYS_CONNECT_BY_PATH (column, delimiter);    
-  - column 是位于分层查询中指定的表中且调用该函数的列的名称。
-  - delimiter 是 varchar 值，用于分隔指定列中的每个条目。
-- SYS_CONNECT_BY_PATH (exp,char) 
-  - 返回从根节点到这一行计算其中每个exp表达式的值，并把它们连接成字符串，
-  - 每个节点之间用char字符来分割。
-
-## 排名 
-
-### rank()
-
-| 函数           | 描述     | 说明                                                         |
-| -------------- | -------- | ------------------------------------------------------------ |
-| rank()         | 基本排名 | 如果出现两个相同的值，它会将其分为同一名，同时将下一个栏位所占名次空出来。<br>比如有两个相同的列，则他们的栏位都是2，那么下一个列的栏位就是4，而不是3 |
-| dense_rank()   |          | 如果出现两个相同的值，它会将其分为同一名，但并不会空出所占栏位数。<br>比如有两个相同的列，则他们的栏位都是2，那么下一个列的栏位还是3 |
-| row_number()   |          | 如果存在组内排序栏位的列值相同，则：仍然按次序排<br>比如有两个相同的列，则他们的栏位依次排列，如2，3 |
-| percent_rank() | 比例排名 | 以百分数形式给出排名                                         |
-| ntile(n)       | 桶排名   | 按指定的顺序取到每个分区中的元组，并把他们分成具有n个相同元组数目的桶，对于每个元组，编号由所在桶的编号决定。 |
-
-- RANK() OVER 用于指定条件后的进行排名.
-- 特点是对指定栏位的排名可以使用本函数,
-
-```sql
-SELECT RANK() OVER([PARTITION BY 分组栏位的列] ORDER BY 组内排序栏位的列 DESC|ASC)
-FROM 表;
-```
-
-- PARTITION BY：分区，按指定属性进行分组，再在各自分组内进行排名。
-
-```sql
---按工资给出排名
-select ename,rank() over(order by(sal) desc) sal_rank
-from emp;
-
-ENAME        SAL_RANK
----------- ----------
-KING                1
-FORD                2
-SCOTT               2
-JONES               4
-BLAKE               5
-CLARK               6
-ALLEN               7
-TURNER              8
-MILLER              9
-WARD               10
-MARTIN             10
-ADAMS              12
-JAMES              13
-SMITH              14
-```
-
-```sql
---各部门分别按工资给出部门内部员工排名
-select ename,rank() over(partition by deptno order by(sal) desc) sal_rank
-from emp;
-
-ENAME        SAL_RANK
----------- ----------
-KING                1
-CLARK               2
-MILLER              3
-SCOTT               1
-FORD                1
-JONES               3
-ADAMS               4
-SMITH               5
-BLAKE               1
-ALLEN               2
-TURNER              3
-MARTIN              4
-WARD                4
-JAMES               6
-```
-
-```sql
---高于各工资的员工比例
-select ename,sal,percent_rank() over(order by sal desc) sal_rank
-from emp;
-
-ENAME            SAL   SAL_RANK
----------- --------- ----------
-KING         5000.00          0
-FORD         3000.00 0.07692307
-SCOTT        3000.00 0.07692307
-JONES        2975.00 0.23076923
-BLAKE        2850.00 0.30769230
-CLARK        2450.00 0.38461538
-ALLEN        1600.00 0.46153846
-TURNER       1500.00 0.53846153
-MILLER       1300.00 0.61538461
-WARD         1250.00 0.69230769
-MARTIN       1250.00 0.69230769
-ADAMS        1100.00 0.84615384
-JAMES         950.00 0.92307692
-SMITH         800.00          1
-```
-
-```sql
---分成3个桶按工资给出排名
-select ename,ntile(3) over(order by(sal) desc) sal_rank
-from emp;
-
-ENAME        SAL_RANK
----------- ----------
-KING                1
-FORD                1
-SCOTT               1
-JONES               1
-BLAKE               1
-CLARK               2
-ALLEN               2
-TURNER              2
-MILLER              2
-WARD                2
-MARTIN              3
-ADAMS               3
-JAMES               3
-SMITH               3
-```
-
-### Top~n
-
-- TOP分析：查询一个列中最大/最小的n个值的集合
-
-**rownum 伪列**
-
-- Oracle不支持SELECT TOP语句;而是使用ORDER BY来进行TOP~n
-- **rownum行号 是一个伪列**，表上没有这一列，当做一些特殊操作的时候，Oracle自动加上。
-
-**注意**
-
-1. 行号永远按照默认的顺序生成；  
-2. **行号只能使用<,<=**，不能使用=,>,>=的符号。
-3. **对伪列ROWNUM起别名可以使用=,>,>=**
-
-```sql
-SELECT rownum,column1,column2
-FROM (
-      SELECT column1,column2
-      FROM table1
-      ORDER BY column1
-      )
-WHERE rownum <= 10; 
---/ FETCH FIRST 10 ROWS ONLY; 12c以上才可以使用FETCH语句
-```
-
-```sql
---对伪列ROWNUM起别名可以使用=,>,>=
-SELECT rn,column1,column2
-FROM (
-      SELECT rownum rn,column1,column2
-      FROM (
-           SELECT column1,column2
-           FROM table1
-           ORDER BY salary DESC
-            )
-      )
-WHERE rownum >= 10;
-```
-
-## 分窗
-
-- 在一定范围内的元组上计算聚集函数。趋势分析。
-
-```sql
-select 组函数(字段) over(order by 字段 asc|desc rows n|unbounded peceding)
-from 关系;
-```
-
-```sql
-rows n peceding --按指定顺序的前n个元组上计算组函数
-rows unbounded peceding --按指定顺序的前面所有的元组计算组函数
-rows between n1 preceding and n2 following --按指定顺序的前n1个到后n2个为止的元组上计算组函数
-rows between n1 preceding and current row --按指定顺序的前n1个到当前为止的元组上计算组函数
-```
-
-```sql
-select deptno,avg(sal) over(order by sal desc rows 3 preceding)
-from emp;
-
-DEPTNO AVG(SAL)OVER(ORDERBYSALDESCROW
------- ------------------------------
-    10                           5000
-    20                           4000
-    20               3666.66666666667
-    20                        3493.75
-    30                           3365
-    10                         3212.5
-    30               2982.14285714286
-    30                       2796.875
-    10               2630.55555555555
-    30                         2492.5
-    30               2379.54545454545
-    20               2272.91666666667
-    30               2171.15384615385
-    20               2073.21428571428
-```
-
-## 旋转
 
 # PL/SQL
 
@@ -3779,17 +2072,23 @@ begin
 end;
 ```
 
-### 字符分隔符 q'
+### 字符分隔符 q\'
 
 - `q'`操作符声明一个定界符。可以指定任何字符作为定界符，只要这个字符没有出现在字符串中。
+
+| 引号   | 使用位置                                                     |
+| ------ | ------------------------------------------------------------ |
+| 单引号 | 字符型：'hello' <br />日期型：'17-12月-80' <br />to\_char/to\_date(日期, \'YYYY-MM-DD HH24:MI:SS\') |
+| 双引号 | 列别名：select ename \"姓 名\" from emp;<br />to_char/to\_date(日期, \'YYYY\"年\"MM\"月\"DD\"日\" HH24:MI:SS\') |
+| 逃逸符 | 字符型、日期型等内部使用单引号时，使用两个连续的单引号\' \'来表示一个单引号。<br />第一个单引号为逃逸符，用来消除第二个单引号的特殊含义。 |
 
 > 定界符：用来在字符串中使用特殊字符（如：'）,在两个定界符中可以当作普通字符使用。
 >
 > | 简单定界符 |    含义    |
 > | :--------: | :--------: |
-> |     +      | 加法运算符 |
-> |     -      | 减法运算符 |
-> |     *      | 乘法运算符 |
+> |     \+     | 加法运算符 |
+> |     \-     | 减法运算符 |
+> |     \*     | 乘法运算符 |
 > |     /      | 除法运算符 |
 > |     =      | 相等操作符 |
 > |     ;      | 语句结束符 |
@@ -3797,13 +2096,13 @@ end;
 >
 > | 组合定界符 |      含义      |
 > | :--------: | :------------: |
-> |    `||`    |   连接操作符   |
+> |    \|\|    |   连接操作符   |
 > |     :=     |   赋值操作符   |
-> |     !=     |   不等运算符   |
-> |     <>     |   不等运算符   |
-> |     /*     | 开始注释定界符 |
-> |     */     | 结束注释定界符 |
-> |     --     |   单行注释符   |
+> |    \!=     |   不等运算符   |
+> |    \<\>    |   不等运算符   |
+> |    /\*     | 开始注释定界符 |
+> |    \*/     | 结束注释定界符 |
+> |    \-\-    |   单行注释符   |
 
 ```plsql
 declare
@@ -3951,7 +2250,7 @@ sql> select fname, lname, pcode from cust where id =:x;
 | BLOB     | 存储大的二级制对象，如图片、幻灯片等。<br />从数据库中提取这样的数据、向数据库中插入这样的数据时，数据库并不解释这些数据，使用这些数据的外部应用程序必须自己解释这些数据。 |
 | DBMS_LOB | 对于CLOB和BLOB数据类型的列，许多操作是不能直接使用Oracle的数据库命令来完成的。<br />维护LOB数据类型的列。 |
 | BFILE    | 在数据库外的操作系统文件中存储大的二级制对象，如电影胶片等。<br />与其他LOB数据类型不同，BFILE数据类型是外部数据类型。<br />BFILE类型的数据是存储在数据库之外的，他们可能是操作系统文件。实际上，数据库中只存储了BFILE的一个指针，因此定义为BFILE数据类型的列是不能通过Oracle的数据库命令来操作的，这些列只能通过操作系统命令或者第三方软件来维护。 |
-| NCLOB    | 存储NCHAR类型的单字节或定长字节的Unicode大数据对象。         |
+| NCLOB    | 存储Nchar类型的单字节或定长字节的Unicode大数据对象。         |
 
 ### （全局变量）宿主变量（主机变量）（替代变量和绑定变量）
 - 宿主变量：在调用PL/SQL程序的环境中声明、在PL/SQL中使用非PL/SQL的变量。
@@ -3972,7 +2271,7 @@ variable g_dog_weight NUMBER
 variable g_pioneer varchar2(25)
 ```
 
-- 当使用`SQL*Plus`客开发和执行一个PL/SQL程序是，`SQL*Plus`就成了这个PL/SQL程序的宿主环境。在`SQL*Plus`中声明的变量被称为宿主变量（绑定变量）。同理：Oracel Form。
+- 当使用`SQL*Plus`客开发和执行一个PL/SQL程序是，`SQL*Plus`就成了这个PL/SQL程序的宿主环境。在`SQL*Plus`中声明的变量被称为宿主变量（绑定变量）。同理：Oracel form。
 
 SQL Developer也可以引用绑定变量并通过使用PRINT命令显示这个绑定变量的值。可以通过在绑定变量之前冠以冒号(：)的方式在PL/SQL程序块中引用绑定变量。
 - 在PL/SQL中使用`SQL*Plus`的变量（绑定变量），必须冠以冒号。在PL/SQL程序段执行之后，这个变量仍然会存在。
@@ -4070,7 +2369,7 @@ end;
 #### 缺点
 
 1. 当然%TYPE属性也不例外。%TYPE属性是具有一定的额外开销的，因为为了获取数据库中列数据类型，PL/SOL隐含地发出了一个查询(select)语句。如果PL/SQL代码是存放在客户工具中的，那么在每次执行PL/SQL程序块时都必须执行这个查询语句。
-2. 如果PL/SQL程序代码是存储过程（也可以是存储函数），那么列的定义或变量的定义是作为P-code（parsed code)的一部B存储在数据库中的，因此也就没有以上所说的额外开销了。
+2. 如果PL/SQL程序代码是存储过程（也可以是存储函数），那么列的定义或变量的定义是作为p-code（parsed code)的一部b存储在数据库中的，因此也就没有以上所说的额外开销了。
 3. 然而，如果表的定义发生了变化，系统会强行重新编译相关的PL/SQL程序代码。在Oracle11g和Oracle12c中放宽了这一方面的限制，如果在修致表的定义时没有涉及到PL/SQL程序代码所使用的列，那么这个PL/SQL程序代码块仍然是有效的，因此也就不需要重新编译了。
 
 ### 布尔变量的声明与使用
@@ -4078,7 +2377,7 @@ end;
 #### 布尔变量的特性：
 
 - 只有值TRUE/FALSE/NULL可以赋给一个布尔变量
-- 可以通过AND/OR/NOT这些逻辑操作符对变量进行比较
+- 可以通过and/OR/NOT这些逻辑操作符对变量进行比较
 - 这些变量总是产生TRUE/FALSE/NULL
 - 数字，字符和日期表达式可以被用来返回一个布尔值
 
@@ -4097,7 +2396,7 @@ end;
 |   <  |
 |   <=  |
 |   <>  |
-|   BETWEEN ... AND ...  |
+|   between ... and ...  |
 |  IN(...)   |
 |   LIKE  |
 |  is NULL   |
@@ -4117,19 +2416,19 @@ end;
 
 #### 逻辑运算符
 
-##### AND:
+##### and:
 
 - FALSE > NULL > TRUE
 
-- FALSE AND NULL = FALSE
-- TRUE AND NULL = NULL
-- TRUE AND FALSE = FALSE
+- FALSE and NULL = FALSE
+- TRUE and NULL = NULL
+- TRUE and FALSE = FALSE
 
 ##### OR
 
 - TRUE > NULL > FALSE
-- FALSE AND NULL = NULL
-- TRUE AND NULL = TRUE
+- FALSE and NULL = NULL
+- TRUE and NULL = TRUE
 - TRUE OR FALSE = TRUE
 
 ##### NOT
@@ -4154,11 +2453,11 @@ end;
 
 ```plsql
 declare
- v_mumdog_sex CHAR(1) := 'F';
+ v_mumdog_sex char(1) := 'f';
  v_mumdog_weight NUMBER(5,2) := 63;
 begin
   declare
-   v_babydog_sex CHAR(1) := 'M';
+   v_babydog_sex char(1) := 'm';
    v_baby_dog_weight NUMBER(5,2) := 3.8;
   begin
     dbms_output.put_line(v_babydog_sex);
@@ -4173,7 +2472,7 @@ begin
 end;
     /*
 ORA-06550: 第 17 行, 第 26 列: 
-PLS-00201: 必须声明标识符 'V_BABY_DOG_SEX'
+PLS-00201: 必须声明标识符 'V_BAby_DOG_SEX'
 ORA-06550: 第 17 行, 第 5 列: 
 PL/SQL: Statement ignored
     */
@@ -4320,7 +2619,7 @@ begin
   
   IF v_emp_sal > 10000 then 
     dbms_output.put_line('salary >= 10000');
-  ELSIF v_emp_sal BETWEEN 5000 AND 10000 then 
+  ELSIF v_emp_sal between 5000 and 10000 then 
     dbms_output.put_line('5000 <= salary <= 10000');
   ELSE 
     dbms_output.put_line('salary < 5000');
@@ -4339,7 +2638,7 @@ begin
   
   IF v_emp_sal > 10000 then  
     v_temp := 'salary > 10000';
-  ELSIF v_emp_sal BETWEEN 5000 AND 10000 then 
+  ELSIF v_emp_sal between 5000 and 10000 then 
     v_temp := '5000 <= salary <= 10000';
   ELSE 
     v_temp := 'salary < 5000';
@@ -4405,10 +2704,10 @@ end;
 ```plsql
 /*
 查询122号员工的job_id，
-若其值为'IT_PROG' 则打印'A'
-       'AC_MGT' 则打印'B'
-       'AC_ACCOUNT' 则打印'C'
-       否则打印'D'
+若其值为'IT_PROG' 则打印'a'
+       'AC_MGT' 则打印'b'
+       'AC_account' 则打印'c'
+       否则打印'd'
 */
 
 declare
@@ -4421,10 +2720,10 @@ begin
   where employee_id = 122;
   v_temp :=
   CASE v_emp_job
-    when 'IT_PROG' then 'A'
-    when 'AC_MGT' then 'B'
-    when 'AC_ACCOUNT' then 'C'
-  ELSE 'D'
+    when 'IT_PROG' then 'a'
+    when 'AC_MGT' then 'b'
+    when 'AC_account' then 'c'
+  ELSE 'd'
   end;
   dbms_output.put_line(v_temp);
 end;
@@ -4496,7 +2795,7 @@ end CASE;
 - 使用循环：
    - 如果语句在循环中至少执行一次，一般使用LOOP
    - 如果在每次开始重复是都必须测试条件，一般使用WHILE
-   - 如果重复的次数已知，一般使用FOR
+   - 如果重复的次数已知，一般使用for
 
 #### 1)LOOP
 
@@ -4504,10 +2803,10 @@ end CASE;
 LOOP
 执行语句；
 ...
-EXIT [when 条件表达式];
---如果EXIT语句放在循环体后面，则必定先执行一次循环
+exit [when 条件表达式];
+--如果exit语句放在循环体后面，则必定先执行一次循环
 --在不满足条件时，也会多执行一次执行
---如果EXIT语句放在循环体前面，则先检查是否满足条件
+--如果exit语句放在循环体前面，则先检查是否满足条件
 end LOOP;
 ```
 
@@ -4519,7 +2818,7 @@ end LOOP;
 begin
   LOOP
     dbms_output.put_line(v_i);
-  EXIT when v_i >= 100;
+  exit when v_i >= 100;
   v_i := v_i + 1;
   end LOOP;
 end;
@@ -4531,7 +2830,7 @@ begin
   LOOP
     dbms_output.put_line(v_i);
     v_i := v_i + 1;
-  EXIT when v_i > 100;
+  exit when v_i > 100;
   end LOOP;
 end;
 ```
@@ -4568,22 +2867,22 @@ begin
     
     v_counter := v_counter + 1;
     
-    EXIT when v_counter > v_max_num;
+    exit when v_counter > v_max_num;
     
    end LOOP;
 end;
 ```
 
-#### 2)FOR
+#### 2)for
 
 ```plsql
-FOR 循环计数器 IN [REVERSE] 下限……上限 LOOP
+for 循环计数器 IN [REVERSE] 下限……上限 LOOP
 要执行的语句;
 end LOOP;
 ```
 
 - 每循环一次，循环变量自动加1；
-- 如果下限和上限不是整数，则自动四舍五入，如果四舍五入后，下限大于上限则FOR循环不会被执行
+- 如果下限和上限不是整数，则自动四舍五入，如果四舍五入后，下限大于上限则for循环不会被执行
 
 **原则**
 
@@ -4593,20 +2892,20 @@ end LOOP;
 
 ##### 关键字REVERSE
 
-- 反向FOR循环
+- 反向for循环
 - 使用关键字REVERSE，循环变量自动减1.
 - 跟在REVERSE后的数字必须是从小到大的顺序，且必须是整数，不能是变量或表达式
 
-##### 可以使用EXIT退出循环
+##### 可以使用exit退出循环
 
-- 只有EXIT when 表达式中表达式的结果是TRUE才会执行EXIT；
+- 只有exit when 表达式中表达式的结果是TRUE才会执行exit；
 - NULL或者FASLE不执行
 
 ```plsql
 begin
-  FOR i IN 最小..最大 LOOP
+  for i IN 最小..最大 LOOP
     循环体;
-    [EXIT [标号] when 条件;]
+    [exit [标号] when 条件;]
   end LOOP;
 end;
 ```
@@ -4614,7 +2913,7 @@ end;
 ```plsql
 --使用循环语句打印1~100
 begin
-  FOR i IN 1..100 LOOP
+  for i IN 1..100 LOOP
     dbms_output.put_line(i);
   end LOOP;
 end;
@@ -4625,9 +2924,9 @@ end;
 declare
   v_flag NUMBER(1) := 0;
 begin
-   FOR i IN 2 .. 100 LOOP
+   for i IN 2 .. 100 LOOP
        v_flag := 1;
-       FOR j IN 2 .. SQRT(i) LOOP
+       for j IN 2 .. SQRT(i) LOOP
            IF i MOD j = 0 then
               v_flag := 0;  
            end IF;        
@@ -4658,7 +2957,7 @@ CREATE table dept_p1
 
 CREATE SEQUENCE dept_no_seq
  START WITH 1
- INCREMENT BY 1
+ INCREMENT by 1
  MINVALUE 1
  MAXVALUE 99
  CYCLE
@@ -4715,8 +3014,8 @@ GOTO label;
 declare
  v_flag NUMBER(5) := 1;
 begin
-  FOR i IN 2 .. 100 LOOP
-    FOR j IN 2 .. SQRT(i) LOOP
+  for i IN 2 .. 100 LOOP
+    for j IN 2 .. SQRT(i) LOOP
       IF MOD(i,j) = 0 then v_flag := 0;
       GOTO label;
       end IF;
@@ -4734,7 +3033,7 @@ end;
 - 标号：`<<label>>`
    - 标号必须放在一个语句之前，可以是同一行
    - 在基本循环LOOP中，标号要放在关键字LOOP之前
-   - 在FOR和WHILE循环中，标号要放在关键字FOR和WHILE之前。
+   - 在for和WHILE循环中，标号要放在关键字for和WHILE之前。
    - 如果一个循环加上了标号，在end LOOP之后可以包含标号名（非强制）
 
 ```plsql
@@ -4745,7 +3044,7 @@ begin
  LOOP
   v_i := v_i + 1;
   dbms_output.put_line(v_i);
-  EXIT when v_i >= 10;
+  exit when v_i >= 10;
  end LOOP i_LOOP;
 end;
 ```
@@ -4758,13 +3057,13 @@ declare
  
 begin
   <<out_loop>>
-  FOR i IN 1..v_num LOOP
+  for i IN 1..v_num LOOP
     v_total := v_total + i;
     dbms_output.put_line('1~' || i || '的自然数之和为：' || v_total);
     
     <<inner_loop>>
-    FOR j IN 1..v_num LOOP
-      EXIT inner_loop when ( i + j > 4 );
+    for j IN 1..v_num LOOP
+      exit inner_loop when ( i + j > 4 );
       v_factorial := v_factorial * j;
       dbms_output.put_line(j || '的阶乘为：' || v_factorial);
     end LOOP inner_loop;
@@ -4789,7 +3088,7 @@ PL/SQL procedure successfully completed
 
 ```plsql
 begin
-  FOR i IN 最小..最大 LOOP
+  for i IN 最小..最大 LOOP
     循环体;
     [ConTINUE [标号] when 条件;]
   end LOOP;
@@ -4802,19 +3101,19 @@ declare
  v_sum NUMBER := 0;
  v_fac NUMBER := 1;
 begin
-  FOR i IN 1..v_max_num LOOP
+  for i IN 1..v_max_num LOOP
     v_sum := v_sum + i;
   end LOOP;
   dbms_output.put_line('1~' || v_max_num || '自然数的和为：' || v_sum);
   
-  FOR i IN 1..v_max_num LOOP
+  for i IN 1..v_max_num LOOP
     v_fac := v_fac * i;
   end LOOP;
   dbms_output.put_line('1~' || v_max_num || '自然数的阶乘为：' || v_fac);
   
   v_sum := 0;
   <<t_loop>>
-  FOR i IN 1..v_max_num LOOP
+  for i IN 1..v_max_num LOOP
     ConTINUE t_loop when ( MOD(i,2) = 0);
     v_sum := v_sum + i;
   end LOOP;
@@ -4829,13 +3128,13 @@ end;
 2. 集合
     - 将一组（集合）数据当作一个单独的单元来处理。
     
-- INDEX BY表
+- INDEX by表
 - 嵌套表
 - 变长数组
 
 - 注： 
    - 嵌套表和变长数组不属于PL/SQL的数据类型，是Oracle模式（用户）一级的表中有效的数据类型，
-   - 而不能在用户的表中定义INDEX BY表类型的列
+   - 而不能在用户的表中定义INDEX by表类型的列
 
 
 ### 记录类型record
@@ -4843,7 +3142,7 @@ end;
 一个记录即一组存储在若干字段中的相关联的数据，而记录中的每个字段都具有各自的名字和数据类型。
 
 特性：
-- 一定包含一个或多个被称为字段的组件。可以是任何的标量，记录或INDEX BY表的数据类型
+- 一定包含一个或多个被称为字段的组件。可以是任何的标量，记录或INDEX by表的数据类型
 - 与数据库中表的行不同
 - 每一个定义的记录可以根据实际需要有任意多个字段
 - 可以为记录赋初值或定义not null约束，没有初始化的默认值为null
@@ -5099,59 +3398,59 @@ begin
 end; 
 ```
 
-### INDEX BY表 （PL/SQL表）
+### INDEX by表 （PL/SQL表）
 
-- INDEX BY表时用户定义的一种组合（集合）数据类型，
+- INDEX by表时用户定义的一种组合（集合）数据类型，
 - INDEX表可以利用一个主键（下标）值作为索引的方式存储数据，而主键(下标)值不必是顺序的
-   - INDEX BY表就是一组关联的键值对
+   - INDEX by表就是一组关联的键值对
    
 
 **特性：**  
 
-- INDEX BY表由两个组件（两列）所组成
+- INDEX by表由两个组件（两列）所组成
    - 数据类型为BINARY_INTEGER或PLS_INTEGER的主键
    - 标量或记录(record)数据类型的列
-- INDEX BY表没有界限，大小可以动态的
+- INDEX by表没有界限，大小可以动态的
 
 **说明:**
 
 - 主键（下标）的数据类型一般是BINARY_INTEGER或PLS_INTEGER数据类型，
    - 因为与NUMBER类型的数据相比，BINARY_INTEGER或PLS INTEGER数据需要较少的存储空间。
    - BINARY_INTEGER或PLS_INTEGER是以一种紧资格式所表示的数字整型数，而且它们的算术操作是使用机器算法实现的，因此它们的算术运算也要比SUMBER类型的数据快。“主键”也可以使用变长字符(varchar2)类型或varchar2的子类型，但是效率方面要打折扣。
-- 在INDEX BY表中，用标量数据类型或记录数据类型的列来存储值，如果这一列是标量型，那么它就只能存储一个值。而如果这一列是记录型，那么它就可以存储多个值。实际上，这一列就相当于数组中的元素。
-- 虽然INDEX BY表的大小没有限制，但是BINARY_INTEGER或PLS_NTEGER类型的“主键”(下标)受限于BINARY_INTEGER或PLS_INTEGER类型数据的最大值，其取值范围为-2147483647~2147483647。要注意的是，“主键”既可以是正也可以是负，而且“主键”不一定是连续的。
+- 在INDEX by表中，用标量数据类型或记录数据类型的列来存储值，如果这一列是标量型，那么它就只能存储一个值。而如果这一列是记录型，那么它就可以存储多个值。实际上，这一列就相当于数组中的元素。
+- 虽然INDEX by表的大小没有限制，但是BINARY_INTEGER或PLS_NTEGER类型的“主键”(下标)受限于BINARY_INTEGER或PLS_INTEGER类型数据的最大值，其取值范围为-2147483647~2147483647。要注意的是，“主键”既可以是正也可以是负，而且“主键”不一定是连续的。
 
 
-**声明INDEX BY表数据类型和INDEX BY表型变量的语法：**
+**声明INDEX by表数据类型和INDEX by表型变量的语法：**
 
 ```plsql
 declare
  TYPE 数据类型名 is table OF 列数据类型|变量%TYPE|表%ROWTYPE
-     [INDEX BY PLS_INTEGER|BINARY_INTEGER|varchar2(20)];
+     [INDEX by PLS_INTEGER|BINARY_INTEGER|varchar2(20)];
 
  变量名 数据类型名；
 begin
   ...
 end;
 
-这里需要指出的是，创建一个NDEX BY表型变量需要两步：
-(1)声明一个INDEX BY表的数据类型
-(2)利用以上声明的NDEX BY表数据类型声明一个这一数据类型的变量。
+这里需要指出的是，创建一个NDEX by表型变量需要两步：
+(1)声明一个INDEX by表的数据类型
+(2)利用以上声明的NDEX by表数据类型声明一个这一数据类型的变量。
 ```
 
-- 在INDEX BY表上可以加not null约束，以防止将空值NULL赋于NDEX BY表中元素，要注意的是，在声明INDEX BY表时是不能对它进行初始化的。
-- 当INDEX BY表被创建时Oracle并不有自动填入任何值。必须在PL/SQL程序中以程序的方式为INDEX BY表赋值，然后才可以使用这个数组，
-- INDEX BY表中的元素可以是任何标量类型/记录类型。
-- INDEX BY表的大小是没有限制的，在INDEX BY表中，数据行（元素）的个数可以动态地增长，因此可以在INDEX BY表中添加新的数据行（元素）
-- 列(元素)可以属于任何变量或记录数据类型，而主键（下标）既可以是一个数字，也可以是一个字符串。不能在声明INDEX BY表时将其初始化，即在声明时不能为INDEX BY表赋值，此时它没有包含任何键（下标）也没有包含任何（元素）值。需要使用显示的执行语句为INDEX BY表赋值，其INDEX BY表的结构：
+- 在INDEX by表上可以加not null约束，以防止将空值NULL赋于NDEX by表中元素，要注意的是，在声明INDEX by表时是不能对它进行初始化的。
+- 当INDEX by表被创建时Oracle并不有自动填入任何值。必须在PL/SQL程序中以程序的方式为INDEX by表赋值，然后才可以使用这个数组，
+- INDEX by表中的元素可以是任何标量类型/记录类型。
+- INDEX by表的大小是没有限制的，在INDEX by表中，数据行（元素）的个数可以动态地增长，因此可以在INDEX by表中添加新的数据行（元素）
+- 列(元素)可以属于任何变量或记录数据类型，而主键（下标）既可以是一个数字，也可以是一个字符串。不能在声明INDEX by表时将其初始化，即在声明时不能为INDEX by表赋值，此时它没有包含任何键（下标）也没有包含任何（元素）值。需要使用显示的执行语句为INDEX by表赋值，其INDEX by表的结构：
 
 ```plsql
 declare
  TYPE name_table_type is table OF employees.last_name%TYPE
-      INDEX BY PLS_INTEGER;
+      INDEX by PLS_INTEGER;
       
  TYPE hire_date_table_type is table OF employees.hire_date%TYPE
-      INDEX BY BINARY_INTEGER;
+      INDEX by BINARY_INTEGER;
   
  name_table name_table_type;
  hire_date_table hire_date_table_type;
@@ -5159,15 +3458,15 @@ declare
  v_count NUMBER(6) := &p_count;
  
 begin
-  FOR i IN 1..v_count LOOP
-    name_table(i) := ConCAT(TO_CHAR(i),'号');
+  for i IN 1..v_count LOOP
+    name_table(i) := ConCAT(TO_char(i),'号');
     hire_date_table(i) := TO_DATE('1997-11-12','yyyy-mm-dd');
     dbms_output.put_line(name_table(i) || ': ' || hire_date_table(i));
   end LOOP;
 end;
 ```
 
-#### INDEX BY表的方法
+#### INDEX by表的方法
 
 ```
 表名.方法
@@ -5191,13 +3490,13 @@ end;
 ```plsql
 declare
  TYPE emp_num_type is table OF NUMBER
-      INDEX BY varchar(20);
+      INDEX by varchar(20);
  
  total_employees emp_num_type;
  i varchar2(20);
 
 begin
- -- 往INDEX BY表total_employees中插入数据
+ -- 往INDEX by表total_employees中插入数据
  
  select COUNT(*)
  into total_employees('10号部门')
@@ -5222,7 +3521,7 @@ begin
  dbms_output.put_line('按升序列出各部门名称和员工数：');
 
  WHILE i is not null LOOP
-   dbms_output.put_line(i || '的员工总数：' || TO_CHAR(total_employees(i)));
+   dbms_output.put_line(i || '的员工总数：' || TO_char(total_employees(i)));
    dbms_output.put_line('i的值: ' || i);
     
 -- 为 i 赋值为total_employees的当前下标的下一个下标  
@@ -5237,7 +3536,7 @@ begin
  dbms_output.put_line('按降序列出各部门名称和员工数：');
  
  WHILE i is not null LOOP
-   dbms_output.put_line(i || '的员工总数：' || TO_CHAR(total_employees(i)));
+   dbms_output.put_line(i || '的员工总数：' || TO_char(total_employees(i)));
    dbms_output.put_line('i的值: ' || i);
 
 -- 为 i 赋值为total_employees的当前下标的上一个下标  
@@ -5272,12 +3571,12 @@ PL/SQL procedure successfully completed
 ```
 declare
  TYPE dept_table_type is table OF departments%ROWTYPE
-      INDEX BY PLS_INTEGER;
+      INDEX by PLS_INTEGER;
  dept_table dept_table_type;
  v_count NUMBER := 5;
  j NUMBER;
 begin
-  FOR i IN 1..v_count LOOP
+  for i IN 1..v_count LOOP
     select *
     into dept_table(i * 10)
     from departments
@@ -5360,7 +3659,7 @@ paramenter_name[IN] datefile [{:=default}expression]
 
 **2)打开游标 就是执行游标所对应的select语句，将其查询结果放入工作区，并且指针指向工作区的首部，标记游标结果集合**
 
-- 如果游标查询语句中带有FOR UPDATE选项，OPEN语句还将锁定数据库表中游标结果集合对应的数据行
+- 如果游标查询语句中带有for UPDATE选项，OPEN语句还将锁定数据库表中游标结果集合对应的数据行
 - 格式 
 
 ```plsql
@@ -5441,7 +3740,7 @@ declare
               ,department_id
               ,salary
         from copy_emp
-        ORDER BY salary DESC;
+        ORDER by salary DESC;
 
  v_i NUMBER := 0;
 begin
@@ -5482,7 +3781,7 @@ declare
                      ,department_id
                      ,salary
               from copy_emp
-              ORDER BY salary DESC
+              ORDER by salary DESC
               );
 begin
   OPEN copy_emp_cursor;
@@ -5516,7 +3815,7 @@ declare
               ,department_id
               ,salary
         from copy_emp
-        ORDER BY salary DESC;
+        ORDER by salary DESC;
 
  v_i NUMBER := 0;
 begin
@@ -5524,7 +3823,7 @@ begin
   
   LOOP
     FETCH copy_emp_cursor into v_emp_id,v_emp_name,v_dept_id,v_salary;
-    EXIT when copy_emp_cursor%ROWCOUNT > 10 OR copy_emp_cursor%NOTFOUND OR copy_emp_cursor%NOTFOUND is NULL; 
+    exit when copy_emp_cursor%ROWCOUNT > 10 OR copy_emp_cursor%NOTFOUND OR copy_emp_cursor%NOTFOUND is NULL; 
     v_i := v_i + 1;
     dbms_output.put_line('第' || v_i ||'名'|| CHR(10)||
                          v_emp_id ||'号员工'|| CHR(10) ||
@@ -5547,7 +3846,7 @@ declare
  emp_rec emp_cursor%ROWTYPE;
  
  TYPE emp_table_type is table OF employees%ROWTYPE
-      INDEX BY PLS_INTEGER;
+      INDEX by PLS_INTEGER;
  
  v_emp_rec emp_table_type;
  n NUMBER(3) := 1;
@@ -5558,7 +3857,7 @@ begin
   LOOP
     FETCH emp_cursor into emp_rec;
     
-    EXIT when emp_cursor%NOTFOUND OR emp_cursor%NOTFOUND is NULL;
+    exit when emp_cursor%NOTFOUND OR emp_cursor%NOTFOUND is NULL;
     
     v_emp_rec(n) := emp_rec;
     n:= n + 1;
@@ -5567,8 +3866,8 @@ begin
   CLOSE emp_cursor;
   
   <<outer_loop>>
-  FOR i IN v_emp_rec.FIRST..v_emp_rec.LAST LOOP
-    FOR j IN v_emp_rec.FIRST..v_emp_rec.LAST LOOP
+  for i IN v_emp_rec.FIRST..v_emp_rec.LAST LOOP
+    for j IN v_emp_rec.FIRST..v_emp_rec.LAST LOOP
       IF v_emp_rec(i).employee_id = v_emp_rec(j).manager_id then
         dbms_output.put_line(v_emp_rec(i).last_name ||'手底下有人');
         
@@ -5626,7 +3925,7 @@ begin
            --取到值c_job%notfound 是false 
            --取不到值c_job%notfound 是true
            -- NULL：在第一次获取数据之前（执行FETCH语句之前）
-           EXIT when c_job%notfound OR c_job%NOTFOUND is NULL;
+           exit when c_job%notfound OR c_job%NOTFOUND is NULL;
             dbms_output.put_line(c_row.empno||'-'||c_row.ename||'-'||c_row.job||'-'||c_row.sal);
          end LOOP;
        --关闭游标
@@ -5634,26 +3933,26 @@ begin
 end;
 ```
 
-### 游标的FOR循环
+### 游标的for循环
 
--  PL/SQL语言提供了游标FOR循环语句，自动执行游标的OPEN、FETCH、CLOSE语句和循环语句的功能；
+-  PL/SQL语言提供了游标for循环语句，自动执行游标的OPEN、FETCH、CLOSE语句和循环语句的功能；
     - 不需要输入OPEN,FETCH,CLOSE；
-1. 当进入循环时，游标FOR循环语句自动打开游标，并提取第一行的游标数据；
-2. 当程序处理完当前所提取的数据而进行下一次循环时，游标FOR循环语句自动提取下一行数据供程序处理
+1. 当进入循环时，游标for循环语句自动打开游标，并提取第一行的游标数据；
+2. 当程序处理完当前所提取的数据而进行下一次循环时，游标for循环语句自动提取下一行数据供程序处理
 3. 当提取完结果集合中的所有数据后结束循环，并自动关闭游标。
 
 - 格式
 
 ```plsql
-FOR index_variable IN 游标名[vlaue[,value]……] LOOP
+for index_variable IN 游标名[vlaue[,value]……] LOOP
           --游标执行代码
 end LOOP;
 ```
 
-- 其中，index_variable为游标FOR循环语句隐含声明的索引变量，该变量为**记录变量**，其结构与游标查询语句返回的结构集合的结构相同。
+- 其中，index_variable为游标for循环语句隐含声明的索引变量，该变量为**记录变量**，其结构与游标查询语句返回的结构集合的结构相同。
    - 在程序中可以通过引用该索引记录变量来读取所提取的游标数据，
    - index_variable中各元素的名称与游标查询语句选择列表中所制定的列名相同
-- 如果再游标查询语句的选择列表中存在计算列，则必须为这些计算列指定别名后才能通过游标FOR循环语句中的索引变量来访问这些列数据。
+- 如果再游标查询语句的选择列表中存在计算列，则必须为这些计算列指定别名后才能通过游标for循环语句中的索引变量来访问这些列数据。
 
 ```plsql
 --打印出80号部门的所有员工的工资
@@ -5662,7 +3961,7 @@ declare
                          from employees
                          where department_id = 80;
 begin 
-  FOR i IN v_emp_cursor LOOP
+  for i IN v_emp_cursor LOOP
     dbms_output.put_line('employee_id:'||RPAD(i.salary,4,'*')||'  salary:'||LPAD(i.salary,7,'0'));
   end LOOP;
 end;
@@ -5705,13 +4004,13 @@ set salary = salary * (1 + DECODE(TRUNC(salary / 5000),0,0.05,
                                                        1,0.03,
                                                        2,0.02,
                                                        0.01));
--- 3)FOR循环
+-- 3)for循环
 declare 
   CURSOR emp_sal_cursor is select employee_id,salary
                            from employees;
   v_temp NUMBER(4,2);
 begin
-  FOR i IN emp_sal_cursor LOOP
+  for i IN emp_sal_cursor LOOP
     IF i.salary < 5000 then v_temp := 0.05;
     ELSIF i.salary < 10000 then v_temp := 0.03;
     ELSIF i.salary < 15000 then v_temp := 0.02;
@@ -5725,14 +4024,14 @@ end;
 ```
 ### 游标使用子查询
 
-#### 在游标的FOR循环中使用子查询
+#### 在游标的for循环中使用子查询
 
-- 如果使用子查询的游标FOR循环，不需要在声明段中声明游标，但是必须提供一个在循环体中本身可以确定活动集的select语句，用来定义游标。
-- 且如果在游标的FOR循环使用子查询，则不能显式的调用游标的属性，因为该游标没有被声明。
+- 如果使用子查询的游标for循环，不需要在声明段中声明游标，但是必须提供一个在循环体中本身可以确定活动集的select语句，用来定义游标。
+- 且如果在游标的for循环使用子查询，则不能显式的调用游标的属性，因为该游标没有被声明。
 
 ```plsql
 begin
-  FOR emp_rec IN (select * from employees) LOOP
+  for emp_rec IN (select * from employees) LOOP
     IF emp_rec.department_id = 20 then 
       dbms_output.put_line('20号部门: ' || emp_rec.employee_id);
     end IF;
@@ -5767,12 +4066,12 @@ declare
                     ,COUNT(*) count_num
                     ,department_id
               from employees
-              GROUP BY department_id
+              GROUP by department_id
               ) t
         where e.department_id = d.department_id
-          AND e.department_id = t.department_id;
+          and e.department_id = t.department_id;
 begin
-  FOR dept_rec IN dept_total_cursor LOOP
+  for dept_rec IN dept_total_cursor LOOP
     dbms_output.put_line('部门号: '||dept_rec.department_id || CHR(10)||
                         '部门名称: '||dept_rec.department_name||CHR(10)||
                         '人数: '||dept_rec.count_num ||CHR(10)||
@@ -5799,7 +4098,7 @@ declare
     temp NUMBER(4, 2);
 begin
           dbms_output.put_line('工资'|| CHR(9) || 'id' || CHR(9) ||'temp');    
-          FOR c IN emp_sal_cursor(sal => 4000, dept_id => 80) LOOP
+          for c IN emp_sal_cursor(sal => 4000, dept_id => 80) LOOP
           --dbms_output.put_line(c.id || ': ' || c.sal);
           IF c.sal <= 5000 then
              temp := 0.05;
@@ -5823,12 +4122,12 @@ declare
     select department_id id
           ,AVG(salary) avg_sal
     from employees
-    GROUP BY department_id
+    GROUP by department_id
     HAVING department_id = p_dept_id;
     
     v_dept_id NUMBER := &p_id;
 begin 
-  FOR dept_rec IN dept_avg_sal_cursor(v_dept_id) LOOP
+  for dept_rec IN dept_avg_sal_cursor(v_dept_id) LOOP
     dbms_output.put_line('部门号：' || dept_rec.id ||CHR(9)||
                          '平均工资: '|| dept_rec.avg_sal);
   end LOOP;
@@ -5851,10 +4150,10 @@ begin
 end;
 ```
 
-### FOR UPDATE子句
+### for UPDATE子句
 
-- FOR UPDATE 子句必须是select语句的最后一个子句。
-- 在查询多个表时，可以使用FOR UPDATE子句限制锁定特定表中的数据行(在OPEN时锁住)
+- for UPDATE 子句必须是select语句的最后一个子句。
+- 在查询多个表时，可以使用for UPDATE子句限制锁定特定表中的数据行(在OPEN时锁住)
    - 避免其他用户或进程的DML操作的冲突，在提取数据时，将所操作的数据行全部锁住。
    
 - 语法
@@ -5862,7 +4161,7 @@ end;
 ```plsql
 select ...
 from ...
-FOR UPDATE [OF 列名][NOWAIT | WAIT n];
+for UPDATE [OF 列名][NOWAIT | WAIT n];
 
 --[OF 列名] 只锁住包含该列的表中的数据行
 --[NOWAIT | WAIT n] 访问的数据行被其他会话锁住则返回一个错误。n为等待n秒
@@ -5876,7 +4175,7 @@ declare
               ,salary
         from copy_emp
         where department_id = 20
-        FOR UPDATE OF salary NOWAIT;
+        for UPDATE OF salary NOWAIT;
 begin
   OPEN copy_emp_cursor;
 end;
@@ -5885,9 +4184,9 @@ end;
 ### where CURRENT OF 子句
 
 - 可以通过where CURRENT OF 子句引用显式游标的当前行来标识要修改的数据行，
-- 要引用显式游标的当前行，where CURRENT OF子句需要与FOR UPDATE子句一起使用
-- 在UPDATE和DELETE语句中使用where CURRENT OF子句，而在游标声明时说明FOR UPDATE子句。
-- 必须在游标的查询语句中包含FOR UPDATE子句, 以便在打开这个游标时锁住访问的数据行
+- 要引用显式游标的当前行，where CURRENT OF子句需要与for UPDATE子句一起使用
+- 在UPDATE和DELETE语句中使用where CURRENT OF子句，而在游标声明时说明for UPDATE子句。
+- 必须在游标的查询语句中包含for UPDATE子句, 以便在打开这个游标时锁住访问的数据行
 
 ```
 where CURRENT OF 游标;
@@ -5899,9 +4198,9 @@ declare
    select *
    from copy_emp
    where department_id = 20
-   FOR UPDATE OF salary NOWAIT;
+   for UPDATE OF salary NOWAIT;
 begin
-  FOR emp_rec IN emp_cursor LOOP
+  for emp_rec IN emp_cursor LOOP
     UPDATE copy_emp
     set salary = emp_rec.salary * 0.15
     where CURRENT OF emp_cursor;
@@ -5944,11 +4243,11 @@ end;
 
 ```plsql
 create or replace TRIGGER 触发器名
-BEFORE|AFTER|INSTEAD OF
-INSERT|DELETE|UPDATE [OF COLUMN[列名]]
+BEforE|AFTER|INSTEAD OF
+INSERT|DELETE|UPDATE [OF colUMN[列名]]
 on [模式（用户名）.]表/视图
 [REFERENCING OLD AS 指定引用OLD的别名 | NEW AS 指定引用NEW的别名]
-[FOR EACH ROW] --行级触发器
+[for EACH ROW] --行级触发器
 [when 条件表达式] --只用于行级触发器
 触发器体; --PL/SQL块等
 ```
@@ -5963,13 +4262,13 @@ on [模式（用户名）.]表/视图
   - 一个特定的错误信息或任何错误信息
 - **触发时间** 
   - 即触发事件和该TRIGGER的操作顺序
-  - BEFORE 在触发事件(执行)之前执行触发器
+  - BEforE 在触发事件(执行)之前执行触发器
      - 决定所触发的语句是否应该允许被完成
      - 在完成一个INSERT或UPDATE语句之前导出原来列的值
      - 初始化全局变量，验证一些复杂的业务规则 
   - AFTER 在触发事件之后执行触发器
     - 在执行触发器之前先完成触发的语句 
-    - 在已经存在BEFORE触发器时，要在相同的触发语句上执行不同的操作  
+    - 在已经存在BEforE触发器时，要在相同的触发语句上执行不同的操作  
     - 如果触发语句完成后没有commit，则其他用户看见的还是没有执行触发器的结果
   - INSTEAD OF 替换触发事件的语句来执行触发器。
      - 被用于用其他方法不能修改的 **视图** （当不能通过SQL的DML语句直接修改视图时，可以在INSTEAD OF触发器的体中写DML语句在这个视图的基表上直接执行）
@@ -5981,17 +4280,17 @@ on [模式（用户名）.]表/视图
   - **行级触发器** 是指当某触发事件发生时，对受到该操作影响的每一行数据，触发器都执行一次
 - **触发器类型**
 
- | 语句级触发器    |  行级触发器   |
- | :-: | :-: |
- |  创建触发器的默认类型   |   创建触发器时使用FOR EACH ROW子句指定为行级触发器  |
- |  对于触发的事件只触发一次   |  对受触发事件影响的每行触发一次    |
- | 没有行受影响时也触发一次    |  触发事件未影响任何数据行就不触发   |
+| 语句级触发器    |  行级触发器   |
+| :-: | :-: |
+|  创建触发器的默认类型   |   创建触发器时使用for EACH ROW子句指定为行级触发器  |
+|  对于触发的事件只触发一次   |  对受触发事件影响的每行触发一次    |
+| 没有行受影响时也触发一次    |  触发事件未影响任何数据行就不触发   |
 
 ```pslql
 create or replace TRIGGER menu_test_trigger
-BEFORE 
+BEforE 
 DELETE on menu
-FOR EACH ROW
+for EACH ROW
 begin
   dbms_output.put_line('good');
 end;
@@ -5999,11 +4298,11 @@ end;
 
 ```plsql
 create or replace TRIGGER secure_emp_trigger
-BEFORE 
+BEforE 
 INSERT on copy_emp
 begin
-  IF(TO_CHAR(sysdate,'DY') IN ('SAT','SUN')) 
-   OR (TO_CHAR(sysdate,'HH24:MI') NOT BETWEEN '08:00' AND '18:00') then
+  IF(TO_char(sysdate,'DY') IN ('SAT','SUN')) 
+   OR (TO_char(sysdate,'HH24:MI') NOT between '08:00' and '18:00') then
     RAisE_APPLICATIon_ERROR(-20038,'非工作时间，拒绝输入数据');
   end IF;
 end;  
@@ -6013,17 +4312,17 @@ end;
 
 **一个单一的DML语句有可能触发以下四种触发器：**
 
-1. BEFORE语句触发器
+1. BEforE语句触发器
 2. AFTER语句触发器
-3. BEFORE行触发器
+3. BEforE行触发器
 4. AFTER行触发器
 
 - 在触发器中的触发事件或语句可能引起一个或多个完整性约束的检查，但是可以将约束的检查延迟到执行commit操作时。
 - Oracle服务器触发这四种触发器的方式如下。
 
-1. 执行所有的BEFORE STATEMENT(语句)触发器。
+1. 执行所有的BEforE STATEMENT(语句)触发器。
 2. 对受影响的每一行循环：
-   - 执行所有的BEFORE ROW(行)触发器。
+   - 执行所有的BEforE ROW(行)触发器。
    - 执行所有的DML语句并进行完整性约束的检查。
    - 执行所有的AFTER ROW(行)触发器。
 3. 执行所有的AFTER STATEMENT(语句)触发器。
@@ -6044,10 +4343,10 @@ end;
 
 create or replace TRIGGER emp_dept_fk_trg
 AFTER UPDATE OF department_id on employees
-FOR EACH ROW
+for EACH ROW
   begin
     INSERT into departments(department_id,department_name)
-    VALUES(:NEW.department_id,'新的部门:'||TO_CHAR(:NEW.department_id));
+    VALUES(:NEW.department_id,'新的部门:'||TO_char(:NEW.department_id));
   exception
     when DUP_VAL_on_INDEX then
       NULL;  --如果存在该异常，则不进行任何操作.
@@ -6072,9 +4371,9 @@ FOR EACH ROW
 
 ```plsql
 create or replace TRIGGER secure_emp_trigger
-BEFORE 
+BEforE 
 INSERT OR DELETE OR UPDATE on copy_emp
-FOR EACH ROW
+for EACH ROW
 begin
   IF INSERTING then
     RAisE_APPLICATIon_ERROR(-20001,'禁止插入数据');
@@ -6109,7 +4408,7 @@ end;
 create or replace TRIGGER update_emp_trigger
 AFTER 
  UPDATE on employees
-FOR EACH ROW
+for EACH ROW
 begin
   dbms_output.put_line('old_sal'||:OLD.salary||'new_sal'||:NEW.salary);
 end;
@@ -6117,8 +4416,8 @@ end;
 
 ```
 create or replace TRIGGER audit_emp_values
-BEFORE INSERT OR DELETE OR UPDATE on copy_emp
-FOR EACH ROW
+BEforE INSERT OR DELETE OR UPDATE on copy_emp
+for EACH ROW
   begin
     INSERT into user_test_table(user_name,old_id,new_id)
     VALUES (USER,:OLD.employee_id,:NEW.employee_id);
@@ -6132,7 +4431,7 @@ FOR EACH ROW
 ```
 create or replace TRIGGER test_trigger
 AFTER INSERT on user_test_table
-FOR EACH ROW
+for EACH ROW
   begin
     :NEW.new_id := 1;
   end;
@@ -6152,8 +4451,8 @@ ORA-04084: 无法更改此触发器类型的 NEW 值
    
 ```plsql
 create or replace TRIGGER set_com_pct
-BEFORE INSERT OR UPDATE on copy_emp
-FOR EACH ROW
+BEforE INSERT OR UPDATE on copy_emp
+for EACH ROW
 when (NEW.job_id = 'IT')
   begin
     IF INSERTING then
@@ -6189,7 +4488,7 @@ from copy_emp;
 ```
 create or replace TRIGGER new_emp_details
 INSTEAD OF INSERT OR UPDATE OR DELETE on copy_emp_details
-FOR EACH ROW
+for EACH ROW
   begin
     IF INSERTING then
     --直接往copy_emp表中插入数据
@@ -6220,17 +4519,17 @@ FOR EACH ROW
 - 当一个行级触发器试图修改或测试一个正在通过一个DML语句修改的表时，系统会产生一个变异表错误(ORA-4091)。使用触发器读写表中的数据时必须遵守一定的规则，但是这些规则只适用于行级触发器，而语句触发器并不受影响。其限制和限制的目的如下：
   - 发出触发语句的会话不能查询或修改变异表。
   - 这一限制防止一个触发器看到一个不一致的数据集。
-  - 这一限制适用于所有使用FOR EACH ROW子句的触发器。
+  - 这一限制适用于所有使用for EACH ROW子句的触发器。
   - 使用INSTEAD OF触发器正在修改的视图不被认为是变异的。
 
-被触发的表（触发器进行操作的表）本身是一个变异表，同样使用外键(FOREIGN KEY)约束引用的任何表也是变异表。正是这样的限制防止一个行触发器看到一个不一致的数据集合（正在修改的数据)。
+被触发的表（触发器进行操作的表）本身是一个变异表，同样使用外键(forEIGN KEY)约束引用的任何表也是变异表。正是这样的限制防止一个行触发器看到一个不一致的数据集合（正在修改的数据)。
 
 **例**
 
 ```
 create or replace TRIGGER check_salary
- BEFORE INSERT OR UPDATE OF salary,department_id on copy_emp
- FOR EACH ROW
+ BEforE INSERT OR UPDATE OF salary,department_id on copy_emp
+ for EACH ROW
 declare
  v_min_sal copy_emp.salary%TYPE;
  v_max_sal copy_emp.salary%TYPE;
@@ -6258,7 +4557,7 @@ ORA-04088: 触发器 'SCOTT.CHECK_SALARY' 执行过程中出错
 **解决**
 
 1. 将汇总数据（最低工资和最高工资）存储在另一个汇总表中，而该汇总表中的数据由其他的DML触发器进行持续的更新。
-2. 将汇总数据存储在一个PL/SQL软件包中，并在这个软件包中访问这些汇总数据。这可以通过BEFORE语句触发器中来实现
+2. 将汇总数据存储在一个PL/SQL软件包中，并在这个软件包中访问这些汇总数据。这可以通过BEforE语句触发器中来实现
 3. 复合触发器(compound trigger)。
 
 ### 复合触发器(compound trigger)
@@ -6280,9 +4579,9 @@ ORA-04088: 触发器 'SCOTT.CHECK_SALARY' 执行过程中出错
 
 |   (时机/时间点)Time Point   | (复合触发器的部分)Compound Trigger Section |
 | :------------------------: | :---------------------------------------: |
-|      在触发语句之前。       |             BEFORE STATEMENT              |
+|      在触发语句之前。       |             BEforE STATEMENT              |
 | 在触发语句影响的每一行之后。 |              AFTER STATEMENT              |
-| 在触发语句影响的每一行之前。 |              BEFORE EACH ROW              |
+| 在触发语句影响的每一行之前。 |              BEforE EACH ROW              |
 |      在触发语句之后。       |              AFTER EACH ROW               |
 
 - 每个时间点（程序）段必须按照表中所列的顺序出现在一个复合触发器的代码中。
@@ -6297,7 +4596,7 @@ ORA-04088: 触发器 'SCOTT.CHECK_SALARY' 执行过程中出错
     - 这段中的程序代码会在可选段中的任何代码执行之前执行。
 2. 为每一种可能的触发时间点定义代码的可选段。
     - 取决于是在一个表上还是在一个视图上定义复合触发器，这些触发时间点是不同的，并且这些触发时间点的程序代码必须按照顺序编写
-       - BEFORE STATEMENT --> AFTER STATEMENT --> BEFORE EACH ROW --> AFTER EACH ROW
+       - BEforE STATEMENT --> AFTER STATEMENT --> BEforE EACH ROW --> AFTER EACH ROW
     - 对于一个基于视图的复合触发器，唯一允许的程序段就INSTEAD OF EACH ROW子句开始的段。
 
 **语法**
@@ -6306,17 +4605,17 @@ ORA-04088: 触发器 'SCOTT.CHECK_SALARY' 执行过程中出错
 
 ```
 create or replace TRIGGER [用户.]触发器名
- FOR INSERT|UPDATE|DELETE on [用户.]表名
+ for INSERT|UPDATE|DELETE on [用户.]表名
  COMPOUND TRIGGER
 -- 初始段（不要declare)
  声明部分;
  子程序;
 -- 可选段
- BEFORE STATAMENT is
+ BEforE STATAMENT is
    语句;(PL/SQL代码块)
  AFTER STATEMENT is
    语句;
- BEFORE EACH ROW is
+ BEforE EACH ROW is
    语句;
  AFTER EACH ROW is
    语句;
@@ -6327,7 +4626,7 @@ end;
 
 ```
 create or replace TRIGGER [用户.]触发器名
- FOR INSERT|UPDATE|DELETE on [用户.]视图
+ for INSERT|UPDATE|DELETE on [用户.]视图
  COMPOUND TRIGGER
 --初始段
   声明部分;
@@ -6344,16 +4643,16 @@ end;
 - 一个复合触发器必须是一个DML触发器。
 - 一个复合触发器必须被定义在一个表上或者一个视图上。
 - 一个复合触发器体不能有初始化段，也不能有异常段。
-   - 在任何其他时间点程序段执行之前BEFORE STATEMENT程序段永远只执行一次。
+   - 在任何其他时间点程序段执行之前BEforE STATEMENT程序段永远只执行一次。
 - 在一个程序段中出现的一个异常必须在这个段中处理，复合触发器无法将异常的控制传递给其他段。
-- OLD、NEW和PARENT不能出现在声明段中，也不能出现在BEFORE STATEMENT和AFTER STATEMENT段中。
+- OLD、NEW和PARENT不能出现在声明段中，也不能出现在BEforE STATEMENT和AFTER STATEMENT段中。
 - 复合触发器的触发顺序是无法保证的，除非使用了FOLLOWS子句。
 
 #### 例 使用复合触发器解决变异表问题
 
 ```
 create or replace TRIGGER check_salary
- FOR INSERT OR UPDATE OF salary,job_id on copy_emp
+ for INSERT OR UPDATE OF salary,job_id on copy_emp
  when (NEW.job_id <> 'AA')
  COMPOUND TRIGGER
  
@@ -6365,26 +4664,26 @@ create or replace TRIGGER check_salary
  dept_id_list dept_id_type;
  
  TYPE dept_sal_type is table OF copy_emp.salary%TYPE
-   INDEX BY varchar2(38);
+   INDEX by varchar2(38);
  dept_min_sal dept_sal_type;
  dept_max_sal dept_sal_type;
 
-BEFORE STATEMENT is
+BEforE STATEMENT is
  begin
    select MIN(salary)
          ,MAX(salary)
          ,NVL(department_id,-1)
-   BULK COLLECT into min_sal
+   BULK colLECT into min_sal
                     ,max_sal
                     ,dept_id_list
    from copy_emp
-   GROUP BY department_id;
+   GROUP by department_id;
    
-   FOR i IN 1..dept_id_list.COUNT() LOOP
+   for i IN 1..dept_id_list.COUNT() LOOP
      dept_min_sal(dept_id_list(i)) := min_sal(i);
      dept_max_sal(dept_id_list(i)) := max_sal(i);
    end LOOP;
- end BEFORE STATEMENT;
+ end BEforE STATEMENT;
  
  AFTER EACH ROW is
    begin
@@ -6402,7 +4701,7 @@ end;
 
 #### DDL触发器
 
-- 除了DML语句之外，还可以指定一种或多种DDL语句来触发触发器（代码的执行）。可以为这些事件(DDL语句)在数据库上或模式上（需要指定模式即用户）创建触发器，还可以说明BEFORE和AFTER作为这类触发器的触发时机。Oracle数据库在现存的用户事务中存放这类触发器。
+- 除了DML语句之外，还可以指定一种或多种DDL语句来触发触发器（代码的执行）。可以为这些事件(DDL语句)在数据库上或模式上（需要指定模式即用户）创建触发器，还可以说明BEforE和AFTER作为这类触发器的触发时机。Oracle数据库在现存的用户事务中存放这类触发器。
   - 要注意的是，不能将通过一个PL/SQL过程执行的任何DDL操作说明为一个触发器的事件。
 - 只有所创建的对象是一个cluster(簇)、表、索引、表空间、视图、函数、过程、软件包、触发器、(数据)类型、序列(sequence)、同义词(synonym)、角色或用户时，DDL触发器才能触发。
 - 基于数据定义语言(DDL)语句上的触发器的触发器既可以定义在数据库一级，也可以定义在模式（用户）一级
@@ -6411,7 +4710,7 @@ end;
 
 ```
 create or replace TRIGGER 触发器名
- BEFORE|AFTER [DDL事件1[OR DDL事件2 OR..] on 数据库|模式
+ BEforE|AFTER [DDL事件1[OR DDL事件2 OR..] on 数据库|模式
  --DDL事件包括CREATE、ALTER和DROP语句等，
    触发器体(PL/SQL程序块)
 ```
@@ -6429,7 +4728,7 @@ create or replace TRIGGER 触发器名
 
 ```
 CREATE[OR REPLACE]TRIGGER触发器名
- BEFORE|AFTER [数据库事件1[OR数据库事件2OR..]] on DATABASE|SCHEMA
+ BEforE|AFTER [数据库事件1[OR数据库事件2OR..]] on database|SCHEMA
    触发器体
 ```
 
@@ -6439,15 +4738,15 @@ CREATE[OR REPLACE]TRIGGER触发器名
 | :---------------: | :-------------------: | :-------------------------------: |
 | AFTER SERVERERROR | 一个Oracle错误被抛出时 | 可以创建基于数据库或模式一级的触发器 |
 |    AFTER LOGon    |  一个用户登录数据库时   | 可以创建基于数据库或模式一级的触发器 |
-|   BEFORE LOGOFF   |  一个用户退出数据库时   | 可以创建基于数据库或模式一级的触发器 |
-|   AFTER STARTUP   |      开启数据库时      |     只能创建数据库一级的触发器      |
-|  BEFORE SHUTDOWN  |    正常关闭数据库时    |     只能创建数据库一级的触发器      |
+|   BEforE LOGOFF   |  一个用户退出数据库时   | 可以创建基于数据库或模式一级的触发器 |
+|   AFTER startup   |      开启数据库时      |     只能创建数据库一级的触发器      |
+|  BEforE shutdown  |    正常关闭数据库时    |     只能创建数据库一级的触发器      |
 
 
 **权限**
 
 - 仅仅拥有 `CREATE ANY TRIGGER`的权限是不够的，创建触发器(trigger)时，ORACLE有一个限制，触发器(trigger)的拥有者必须被显示(explicitly)授予访问触发器(trigger)中涉及到的对象的权限(也就是说这些权限不能由角色继承而来)。
-- 则创建数据库级触发器需要：`ADMINisTER DATABASE TRIGGER`权限
+- 则创建数据库级触发器需要：`ADMINisTER database TRIGGER`权限
 
 #### 例：用户登录'登出触发器
 
@@ -6457,7 +4756,7 @@ CREATE[OR REPLACE]TRIGGER触发器名
 --创建序列，当作编号log_id
 CREATE SEQUENCE log_onoff_seq
  START WITH 1
- INCREMENT BY 1
+ INCREMENT by 1
  MAXVALUE 99
  NOCACHE
  CYCLE;
@@ -6474,7 +4773,7 @@ CREATE table log_onoff_table
 --存放用户错误信息
 CREATE table error_table
 (
- user_name VACHAR2(20)
+ user_name VAchar2(20)
 ,error_time DATE
 ,error_msg varchar2(50)
 );
@@ -6495,7 +4794,7 @@ AFTER LOGon on SCHEMA
  
 --登出触发器 --有问题！！！无法写入
 create or replace TRIGGER log_off_trigger
-BEFORE LOGOFF on SCHEMA
+BEforE LOGOFF on SCHEMA
   begin
     INSERT into log_onoff_table
     VALUES(log_onoff_seq.NEXTVAL,USER,sysdate,'用户登出');
@@ -6514,8 +4813,8 @@ AFTER SERVERERROR on SCHEMA
 **数据库级触发器** 
 
 ```
---SYSDBA赋予scott ：ADMINisTER DATABASE TRIGGER权限
-GRANT ADMINisTER DATABASE TRIGGER TO scott;
+--sysdba赋予scott ：ADMINisTER database TRIGGER权限
+GRANT ADMINisTER database TRIGGER TO scott;
 
 --存放用户登入登出信息
 CREATE table system_log_onoff_table
@@ -6527,7 +4826,7 @@ CREATE table system_log_onoff_table
 
 --登入触发器
 create or replace TRIGGER sys_log_on_trigger
-AFTER LOGon on DATABASE
+AFTER LOGon on database
  begin 
    INSERT into system_log_onoff_table
    VALUES(USER,sysdate,'用户登入');
@@ -6535,7 +4834,7 @@ AFTER LOGon on DATABASE
  
 --登出触发器
 create or replace TRIGGER sys_log_off_trigger
- BEFORE LOGOFF on DATABASE
+ BEforE LOGOFF on database
   begin
     INSERT into system_log_onoff_table
     VALUES(USER,sysdate,'用户登出');
@@ -6545,7 +4844,7 @@ create or replace TRIGGER sys_log_off_trigger
 
 --开启数据库触发器
 create or replace TRIGGER sys_startup_database_trigger
- AFTER STARTUP on DATABASE
+ AFTER startup on database
    begin
      INSERT into system_log_onoff_table
      VALUES('orcl数据库',sysdate,'启动数据库');
@@ -6553,7 +4852,7 @@ create or replace TRIGGER sys_startup_database_trigger
    
 --关闭数据库触发器
 create or replace TRIGGER sys_startup_database_trigger
- BEFORE SHUTDOWN on DATABASE
+ BEforE shutdown on database
    begin
      INSERT into system_log_onoff_table
      VALUES('orcl数据库',sysdate,'关闭数据库');
@@ -6568,7 +4867,7 @@ create or replace TRIGGER sys_startup_database_trigger
 
 **报错** 创建数据库级触发器
 
-- ORA-04098: 触发器 'SYS.USER_LOG_on_TRIGGER' 无效且未通过重新验证
+- ORA-04098: 触发器 'sys.USER_LOG_on_TRIGGER' 无效且未通过重新验证
 
 
 **删除**
@@ -6580,7 +4879,7 @@ ALTER TRIGGER user_log_on_trigger DisABLE;
 DROP TIRGGER user_log_on_trigger;
 ```
 
-- 掀桌子 SYSDBA
+- 掀桌子 sysdba
 
 ```plsql
 SQL> DROP TRIGGER user_log_on_trigger;
@@ -6600,7 +4899,7 @@ from USER_TRIGGERS;
 
 ### CALL调用语句
 
-- 在触发器体中使用，调用一个存储过程（可看作一个PL/SQL程序块使用），该过程可以是PL/SQL，C，C++，Java语言。
+- 在触发器体中使用，调用一个存储过程（可看作一个PL/SQL程序块使用），该过程可以是PL/SQL，c，c++，Java语言。
 
 **语法：**
 
@@ -6625,8 +4924,8 @@ create or replace procedure update_sal_action
 
 --创建触发器并使用CALL调用过程
 create or replace TRIGGER update_sal_trigger
- BEFORE UPDATE OR INSERT OF salary on copy_emp
- FOR EACH ROW
+ BEforE UPDATE OR INSERT OF salary on copy_emp
+ for EACH ROW
  when (NEW.employee_id <> 1)
  --调用过程update_sal_action
  CALL update_sal_action
@@ -6713,7 +5012,7 @@ from USER_TRIGGERS;
 
 - 如果用户的触发器引用了如何不在用户模式中的对象，那么创建该触发器的用户必须在引用的过程，函数和软件包上具有执行权限，且该执行权限不是通过角色授予的。
 
-- 创建数据库级触发器 需要：`ADMINisTER DATABASE TRIGGER`权限
+- 创建数据库级触发器 需要：`ADMINisTER database TRIGGER`权限
 
 ### 触发器的具体应用场景
 
@@ -7033,7 +5332,7 @@ is
  is
  begin
    INSERT into log_table(user_id,log_date,employee_id)
-   VALUES(TO_CHAR(USER),sysdate,p_id);
+   VALUES(TO_char(USER),sysdate,p_id);
  end log_exec;
 begin
   DELETE from copy_emp
@@ -7057,7 +5356,7 @@ is
     ) 
     is
     begin
-      IF p_new_sal NOT BETWEEN p_max AND p_min then
+      IF p_new_sal NOT between p_max and p_min then
         RAisE error_sal;
       end IF;
     end check_sal;
@@ -7193,7 +5492,7 @@ begin
   user_test('1'); --use_name唯一性不可重复的异常
   user_test('2');
 end;
-ORA-00001: 违反唯一约束条件 (SCOTT.SYS_C0013141)
+ORA-00001: 违反唯一约束条件 (SCOTT.sys_C0013141)
 ORA-06512: 在 "SCOTT.USER_TEST", line 7
 ORA-06512: 在 line 3
 
@@ -7214,7 +5513,7 @@ USE_NAME                  USE_DATE    USE_ERRORS
   - 数据字典：user_objects
 
 ```plsql
-SQL> COL OBJECT_NAME FOR A20
+SQL> col OBJECT_NAME for a20
 --先设置显示格式
 
 select object_id
@@ -7224,7 +5523,7 @@ select object_id
 from user_objects
 where object_type = 'procedure';
 ```
-![](C:/Users/zjk10/oneDrive/NoteBook/pictures/54505115221047.png =402x)
+![](c:/users/zjk10/oneDrive/NoteBook/pictures/54505115221047.png =402x)
 
 - status属性：
    - VALID 表示可以被调用
@@ -7254,7 +5553,7 @@ CURSOR sal_cursor is
    where department_id = p_dept_id;
 begin
        v_sum_sal := 0;
-       FOR sal_rec IN sal_cursor LOOP
+       for sal_rec IN sal_cursor LOOP
            --dbms_output.put_line(sal_rec.salary);
            v_sum_sal := v_sum_sal + sal_rec.salary;
        end LOOP;       
@@ -7292,7 +5591,7 @@ is
        a NUMBER(4, 2) := 0;
 begin
        temp := 0;       
-       FOR c IN sal_cursor LOOP
+       for c IN sal_cursor LOOP
            a := 0;    
            IF c.hd < to_date('1995-1-1', 'yyyy-mm-dd') then
               a := 0.05;
@@ -7348,7 +5647,7 @@ end [函数名];
 
 - 虽然在函数中可以使用OUT和INOUT参数，但是这并不是一个良好的编程习惯，
     - 因为这样的函数有多个出口，所以它们很难调试和维护。
-    - 因此，如需要从一个函数返回多个值时，最好考虑使用组合数据类型，如PL/SQL的记录或INDEX BY表(PL/SQL的数组)。
+    - 因此，如需要从一个函数返回多个值时，最好考虑使用组合数据类型，如PL/SQL的记录或INDEX by表(PL/SQL的数组)。
 
 ```plsql
 create or replace FUNCTIon get_sal
@@ -7413,7 +5712,7 @@ ORA-01403: 未找到任何数据
 
 - select子句的列表
 - where子句和HEVING子句的条件
-- ConNECT BY和START WITH和ORDER BY和GROUP BY子句
+- connect by和START WITH和ORDER by和GROUP by子句
 - INSERT语句中的VALUES子句
 - UPDATE语句中的set子句
 
@@ -7458,8 +5757,8 @@ from employees;
    - 当从一个UPDATE/DELETE语句中调用一个函数时，该函数不能查询或更改这个语句正在操作的表。
    - 当从一个select、INSERT,UPDATE或DELETE语句中调用一个函数时，该函数不能直接地或通过子程序（或SQL)间接地执行事物控制语句，如：
        - 一个commit或rollback语句
-       - 一个会话控制语句（如set ROLE)
-       - 一个系统控制语句（如ALTER SYSTEM)
+       - 一个会话控制语句（如set role)
+       - 一个系统控制语句（如ALTER system)
        - 任何DDL语句（如CREATE)
        
 
@@ -7491,7 +5790,7 @@ SQL> select test_func(p_num2 => 4)
   - 数据字典：user_objects
 
 ```sql
-SQL> COL OBJECT_NAME FOR A20
+SQL> col OBJECT_NAME for a20
 --先设置显示格式
 
 select object_id
@@ -7502,7 +5801,7 @@ from user_objects
 where object_type = 'FUNCTIon';
 ```
 
-![](C:/Users/zjk10/oneDrive/NoteBook/pictures/Snipaste_2022-11-18_11-14-17.png =400x)
+![](c:/users/zjk10/oneDrive/NoteBook/pictures/Snipaste_2022-11-18_11-14-17.png =400x)
 
 - status属性：
    - VALID 表示可以被调用
@@ -7604,7 +5903,7 @@ CURSOR sal_cursor is select salary
                      where department_id = dept_id;
 v_sum_sal NUMBER(8) := 0;   
 begin
-       FOR c IN sal_cursor LOOP
+       for c IN sal_cursor LOOP
            v_sum_sal := v_sum_sal + c.salary;
        end LOOP;       
        --dbms_output.put_line('sum salary: ' || v_sum_sal);
@@ -7630,7 +5929,7 @@ CURSOR sal_cursor is select salary
 v_sum_sal NUMBER(8) := 0;   
 begin
        total_count := 0;
-       FOR c IN sal_cursor loop
+       for c IN sal_cursor loop
            v_sum_sal := v_sum_sal + c.salary;
            total_count := total_count + 1;
        end LOOP;       
@@ -8128,12 +6427,12 @@ end;
 **一个软件包组件的可见性是指这个组件是否可以被看见，即是否可以被其他的组件或对象所引用，软件包组件的可见性依赖于这些组件是声明为本地的还是全局的**
 
 - 本地变量在它们被声明的结构之中是可见的，例如：
-1. 在一个子程序中定义的变量只能在这个子程序中被引用，并且对于外部组件是不可见的，即本地变量local var只能在过程A中使用。
-2. 在一个软件包体中声明的私有软件包变量可以被同一软件包体中的其他组件所引用，但是它们对于软件包之外的任何子程序或对象都是不可见的，即在软件包体中的过程A和过程B是可以使用私有变量private var的，但是软件包之外的子程序或对象就不可以使用了。
+1. 在一个子程序中定义的变量只能在这个子程序中被引用，并且对于外部组件是不可见的，即本地变量local var只能在过程a中使用。
+2. 在一个软件包体中声明的私有软件包变量可以被同一软件包体中的其他组件所引用，但是它们对于软件包之外的任何子程序或对象都是不可见的，即在软件包体中的过程a和过程b是可以使用私有变量private var的，但是软件包之外的子程序或对象就不可以使用了。
 - 而全局声明的组件在软件包的内部和外部都是可见的，例如：
 1. 在一个软件包说明部分声明的一个公共变量可以在软件包之外引用和修改，即公共变量public_var可以在软件包之外引用。
-2. 在个软件包说明部分声明的一个软件包子程序可以被外部的程序代码所调用——过程A可以从软件包之外的一个环境中调用。
-- 私有子程序（如过程B)只能被该软件包中的公共子程序调用（如过程Λ）或者由被该软件包中的其他私有软件包结构所调用。
+2. 在个软件包说明部分声明的一个软件包子程序可以被外部的程序代码所调用——过程a可以从软件包之外的一个环境中调用。
+- 私有子程序（如过程b)只能被该软件包中的公共子程序调用（如过程Λ）或者由被该软件包中的其他私有软件包结构所调用。
 
 ### 软件包的开发
 
@@ -8183,7 +6482,7 @@ create or replace PACKAGE BODY salary_pkg is
     into   v_min_sal, v_max_sal
     from   salgrade
     where  grade = p_grade;
-    RETURN (p_sal BETWEEN v_min_sal AND v_max_sal);
+    RETURN (p_sal between v_min_sal and v_max_sal);
   end validate;
 
   procedure reset_salary
@@ -8302,14 +6601,14 @@ create or replace PACKAGE BODY dept_pkg is
 end dept_pkg;
 ```
 
-### STANDARD软件包与子程序重载
+### STandARD软件包与子程序重载
 
 - 定义了PL/SQL环境和PL/SQL程序可以自动获取的全局数据类型，异常和子程序的声明，在Oracle系统安装时自动安装。
 
-- 查看：DESC STANDARD
+- 查看：DESC STandARD
 
-- 如果在一个PL/SQL程序中重新声明了一个与内置函数同名的函数(如：`TO_CHAR()`)；则在调用内置函数时需要`STANDARD.TO_CHAR()`
-- 如果重新声明的与内置函数同名的是一个独立子程序，则在访问该子程序时需要`用户名.TO_CHAR()`
+- 如果在一个PL/SQL程序中重新声明了一个与内置函数同名的函数(如：`TO_char()`)；则在调用内置函数时需要`STandARD.TO_char()`
+- 如果重新声明的与内置函数同名的是一个独立子程序，则在访问该子程序时需要`用户名.TO_char()`
 
 
 ### 前向声明
@@ -8390,7 +6689,7 @@ create or replace PACKAGE BODY sal_pkg is
       from salgrade
       where grade = grade;
       
-      RETURN (p_sal BETWEEN v_min_sal AND v_max_sal);
+      RETURN (p_sal between v_min_sal and v_max_sal);
     end check_sal;
     
    procedure update_sal_emp
@@ -8479,7 +6778,7 @@ execute select_emp.emp_find(117);
 - PRAGMA代表这个语句是一个编译指令，由PRAGMA说明的语句是在编译期间处理的，而不是在运行时处理的。
 
 - PRAGMA SERIALLY_RESUABLE指令
-   - 这些指令并不影响一个程序的含义，它们仅仅将信息传输给编译器。如果在软件包说明中添加了PRAGMA SERIALLY_RESUABLE指令，那么Oracle数据库将软件包的变量存储在由多个用户会话共享的系统全局区(System GlobalArea,SGA)内存中。在这种情况下，软件包的状态被维护在一个子程序调用的生命周期中或对一个软件包结果的一个单一的引用生命周期中。如果想要节省内存并且如果不需要为每一个用户会话保持软件包的状态，那么SERIALLY_RESUABLE指令就非常有用。
+   - 这些指令并不影响一个程序的含义，它们仅仅将信息传输给编译器。如果在软件包说明中添加了PRAGMA SERIALLY_RESUABLE指令，那么Oracle数据库将软件包的变量存储在由多个用户会话共享的系统全局区(system GlobalArea,SGA)内存中。在这种情况下，软件包的状态被维护在一个子程序调用的生命周期中或对一个软件包结果的一个单一的引用生命周期中。如果想要节省内存并且如果不需要为每一个用户会话保持软件包的状态，那么SERIALLY_RESUABLE指令就非常有用。
 
 当一个软件包需要声明大量的临时工作区，但是这些临时工作区只使用一次而且在同一个会话中后续数据库调用也不再需要它们时，PRAGMA指令非常适合。可以将一个无体软件包标记为串行可重用。但是如果一个软件包具有说明和体两部分，就必须标记说明和体两部分，不能只标记体。
 
@@ -8525,7 +6824,7 @@ create or replace PACKAGE BODY emp_pkg is
    is
     v_emp_id employees.employee_id%TYPE;
    begin
-     FOR count IN emp_cursor LOOP
+     for count IN emp_cursor LOOP
        FETCH emp_cursor 
        into v_emp_id;
        
@@ -8554,7 +6853,7 @@ end emp_pkg;
 ```
 create or replace PACKAGE emp_dog is
  TYPE emp_table_type is table OF employees%ROWTYPE
-      INDEX BY PLS_INTEGER;
+      INDEX by PLS_INTEGER;
  
  procedure get_emp(p_emp OUT emp_table_type);
 end;
@@ -8568,7 +6867,7 @@ create or replace PACKAGE BODY emp_dog is
    is
     v_count BINARY_INTEGER := 1;
    begin
-     FOR emp_record IN (select * from employees) LOOP
+     for emp_record IN (select * from employees) LOOP
        p_emp(v_count) := emp_record;
        v_count := v_count + 1;
      end LOOP;
@@ -8622,26 +6921,26 @@ end;
 
 1. 引用集合元素的DML语句。
 2. 引用集合元素的SQL(查询)语句。
-3. 引用集合并使用RETURNING into子句的游标FOR循环。
+3. 引用集合并使用RETURNING into子句的游标for循环。
 
-### FORALL语句
-- FORALL关键字指示PL/SQL引擎在将集合发送给SQL语句之前批量绑定输入的集合。
-  - FORALL语句不是一个FOR循环（也不需要循环），而是一次性绑定所有的数据。 
+### forALL语句
+- forALL关键字指示PL/SQL引擎在将集合发送给SQL语句之前批量绑定输入的集合。
+  - forALL语句不是一个for循环（也不需要循环），而是一次性绑定所有的数据。 
 
 ```
-FORALL index IN 下限..上限
+forALL index IN 下限..上限
 [SAVE exceptionS]
   SQL语句;
 ```
 
 - SAVE exceptionS关键字是可选的。如果某些DML操作成功了而另外的一些失败了，那么可以利用它追踪或报告那些失败的操作。
     - 使用SAVE exceptionS关键字后造成失败的操作将被存储在一个名为%BULK_exceptionS的游标属性中，该属性是一个记录集合（数组)，而它会标出批量DML操作重复的次数和对应的错误号码。
-   - 为了管理异常和让批量绑定即使出现错误也能够完成，最好在FORALL语句上下限之后、DML语句之前添加上SAVE exceptionS关键字。
+   - 为了管理异常和让批量绑定即使出现错误也能够完成，最好在forALL语句上下限之后、DML语句之前添加上SAVE exceptionS关键字。
 
 - 在执行期间所有抛出的异常都存储在游标属性%BULK_exceptionS中，该属性是一个记录集合。每一个记录有如下两个字段：
-   1. %BULK_exceptionS(i).ERROR_INDEX：存储异常抛出期间FORALL语句“重复的次数”。
+   1. %BULK_exceptionS(i).ERROR_INDEX：存储异常抛出期间forALL语句“重复的次数”。
    2. %BULK_exceptionS(i).ERROR_CODE：存储对应的Oracle错误代码。
-- 存储在%BULK_exceptionS中的值引用的是最近执行的FORALL语句，其下标是从1到%BULK exceptionS.COUNT。
+- 存储在%BULK_exceptionS中的值引用的是最近执行的forALL语句，其下标是从1到%BULK exceptionS.COUNT。
 
 ```
 create or replace procedure my_raise_sal
@@ -8650,7 +6949,7 @@ create or replace procedure my_raise_sal
 ) 
 is
   TYPE idlist_type is table OF NUMBER
-    INDEX BY PLS_INTEGER;
+    INDEX by PLS_INTEGER;
     
   v_emp_id idlist_type;
 begin
@@ -8659,7 +6958,7 @@ begin
   v_emp_id(3) := 122;
   
 --完成批量绑定索引表v_emp_id
-  FORALL i IN v_emp_id.FIRST..v_emp_id.LAST
+  forALL i IN v_emp_id.FIRST..v_emp_id.LAST
     UPDATE copy_emp
     set salary = (1 + p_percent / 100) * salary
     where employee_id = v_emp_id(i);
@@ -8670,14 +6969,14 @@ end;
 
 为了方便DML操作，除了游标属性%BULK_exceptionS之外，PL/SQL还提供了另一个属性以支持批量操作(%BULK_ROWCOUNT)
 
-- %BULK_ROWCOUNT属性是一个复合结构，它是专门为FORALL语句的使用而设计的。
+- %BULK_ROWCOUNT属性是一个复合结构，它是专门为forALL语句的使用而设计的。
  - 其第n个元素存储的就是一个INSERT、UPDATE或DELETE语句的第n次执行时所处理的数据行数。
  - 如果第n次执行没有影响任何数据行，那么%BULK_ROWCOUNTO(i)就返回零。
 
 ```
 declare 
   TYPE name_list_type is table OF varchar2(20)
-    INDEX BY BINARY_INTEGER;
+    INDEX by BINARY_INTEGER;
   
   v_name_list name_list_type;
 begin
@@ -8685,10 +6984,10 @@ begin
   v_name_list(2) := '二号';
   v_name_list(3) := '三号';
   
-  FORALL i IN v_name_list.FIRST..v_name_list.LAST
+  forALL i IN v_name_list.FIRST..v_name_list.LAST
     INSERT into my_test(contain)
     VALUES(v_name_list(i));
-  FOR i IN v_name_list.FIRST..v_name_list.LAST LOOP
+  for i IN v_name_list.FIRST..v_name_list.LAST LOOP
     dbms_output.put_line('第' || i || '次操作的行数:'||SQL%BULK_ROWCOUNT(i));
   end LOOP;
 end; 
@@ -8733,8 +7032,8 @@ end;
 
 ********
 create or replace TRIGGER update_sal_tri
-BEFORE UPDATE OF salary on copy_emp
-FOR EACH ROW
+BEforE UPDATE OF salary on copy_emp
+for EACH ROW
 begin
   dbms_output.put_line('old_sal:'||:OLD.salary||CHR(10)||
                        'new_sal:'||:NEW.salary||CHR(10));
@@ -8754,7 +7053,7 @@ sal:    349.81
 PL/SQL procedure successfully completed
 ```
 
-#### 带有RETURNING和BULK COLLECT into 关键字的FORALL语句
+#### 带有RETURNING和BULK colLECT into 关键字的forALL语句
 
 ```
 create or replace procedure bulk_raise_sal
@@ -8763,9 +7062,9 @@ create or replace procedure bulk_raise_sal
 )
 is
  TYPE emp_id_list_type is table OF NUMBER
-  INDEX BY PLS_INTEGER;
+  INDEX by PLS_INTEGER;
  TYPE sal_list_type is table OF copy_emp.salary%TYPE
-  INDEX BY BINARY_INTEGER;
+  INDEX by BINARY_INTEGER;
  
  v_emp_id_list emp_id_list_type;
  v_sal_list sal_list_type;
@@ -8773,14 +7072,14 @@ begin
   v_emp_id_list(1) := 177;
   v_emp_id_list(2) := 122;
   
-  FORALL i IN v_emp_id_list.FIRST..v_emp_id_list.LAST
+  forALL i IN v_emp_id_list.FIRST..v_emp_id_list.LAST
     UPDATE copy_emp
     set salary = (1 + p_percent / 100) * salary
     where employeE_id = v_emp_id_list(i)
     RETURNING salary 
-    BULK COLLECT into v_sal_list;
+    BULK colLECT into v_sal_list;
     
-    FOR i IN 1..v_sal_list.COUNT LOOP
+    for i IN 1..v_sal_list.COUNT LOOP
       dbms_output.put_line(v_emp_id_list(i)||': '||v_sal_list(i));
     end LOOP;
 end;
@@ -8788,8 +7087,8 @@ end;
 
 #### 利用INDEX数组进行批量绑定
 
-- 在使用FORALL语句进行批量绑定的DML操作时，可以使用PLS_INTEGER或BINARY_INTEGER的下标集合，该集合的值（数组元素）是这个集合的下标。
-- 可以在一个FORALL语句中使用VALUES OF子句来处理批量的DML操作
+- 在使用forALL语句进行批量绑定的DML操作时，可以使用PLS_INTEGER或BINARY_INTEGER的下标集合，该集合的值（数组元素）是这个集合的下标。
+- 可以在一个forALL语句中使用VALUES OF子句来处理批量的DML操作
 
 ```
 CREATE table ins_emp
@@ -8805,19 +7104,19 @@ AS
  v_emp emp_tab_type;
  
  TYPE values_of_tab_type is table OF PLS_INTEGER
-   INDEX BY PLS_INTEGER;
+   INDEX by PLS_INTEGER;
  v_number values_of_tab_type;
  
 begin
   select *
-  BULK COLLECT into v_emp
+  BULK colLECT into v_emp
   from emp;
   
-  FOR i IN 1..v_emp.COUNT LOOP
+  for i IN 1..v_emp.COUNT LOOP
     v_number(i) := i;
   end LOOP;
   
-  FORALL i IN VALUES OF v_number
+  forALL i IN VALUES OF v_number
    INSERT into ins_emp
    VALUES v_emp(i);
    --VALUES(v_emp(i));
@@ -8853,25 +7152,25 @@ where 1=2;
 - 而在`VALUES(v_emp(i))`中的只是作为一列数据，即常规的VALUES子句，
    - 应该要改为像`VALUES (v_table(i).id,v_table(i).name)`的形式
 
-### BULK COLLECT into子句
+### BULK colLECT into子句
 
-- BULK COLLECT into关键字指示SQL引擎在将集合返回给PL/SQL引擎之前批量绑定输出的集合。
-    - BULK COLLECT （即将数据绑定为一个集合），into子句（将绑定的数据放入一个集合）  
+- BULK colLECT into关键字指示SQL引擎在将集合返回给PL/SQL引擎之前批量绑定输出的集合。
+    - BULK colLECT （即将数据绑定为一个集合），into子句（将绑定的数据放入一个集合）  
 - 可以在select into、FETCH into和RETURNING into子句中使用该语法。（这里没有INSERT into，功能类似)
 
 ```
 ...
-BULK COLLECT into 集合名1[,集合名2]
+BULK colLECT into 集合名1[,集合名2]
 ...
 ```
 
-#### select语句中使用BULK COLLECT into子句
+#### select语句中使用BULK colLECT into子句
 
-- 当在PL/SQL语句中使用一个select语句时，可以加上BULK COLLECT into子句。可以快速地获取一个数据行地集合而不再需要使用游标机制。
+- 当在PL/SQL语句中使用一个select语句时，可以加上BULK colLECT into子句。可以快速地获取一个数据行地集合而不再需要使用游标机制。
 
 ```
 select 列1,列2...
-BULK COLLEC into 集合名（索引表等）
+BULK colLEC into 集合名（索引表等）
 from 表
 ```
 
@@ -8888,12 +7187,12 @@ is
 
 begin
   select *
-  BULK COLLECT into v_emp_list
+  BULK colLECT into v_emp_list
   --将查询的结果放入集合中
   from copy_emp
   where department_id = p_dept_id;
   
-  FOR i IN v_emp_list.FIRST..v_emp_list.LAST LOOP
+  for i IN v_emp_list.FIRST..v_emp_list.LAST LOOP
     dbms_output.put_line('id:' ||CHR(9)||v_emp_list(i).employee_id ||CHR(10)||
                          'last:'||CHR(9)||v_emp_list(i).last_name||CHR(10)||
                          'dept:'||CHR(9)||v_emp_list(i).department_id||CHR(10)||
@@ -8914,9 +7213,9 @@ dept:   20
 PL/SQL procedure successfully completed
 ```
 
-#### 在游标的FETCH语句中使用BULK COLLECT into子句
+#### 在游标的FETCH语句中使用BULK colLECT into子句
 
-- 当在PL/SQL语句中使用游标时，可以在FETCH语句中加入BULK COLLECT into子句进行批量绑定
+- 当在PL/SQL语句中使用游标时，可以在FETCH语句中加入BULK colLECT into子句进行批量绑定
 
 ```
 create or replace procedure bulk_get_emps2
@@ -8934,8 +7233,8 @@ is
    where department_id = p_dept_id;
 begin
   OPEN emp_cursor;
-  FETCH emp_cursor BULK COLLECT into v_emp_list;
-  FOR i IN v_emp_list.FIRST..v_emp_list.LAST LOOP
+  FETCH emp_cursor BULK colLECT into v_emp_list;
+  for i IN v_emp_list.FIRST..v_emp_list.LAST LOOP
     dbms_output.put_line('id:  ' || v_emp_list(i).employee_id);
   end LOOP;
   CLOSE emp_cursor;
@@ -8977,7 +7276,7 @@ is
    from copy_emp
    where department_id = p_dept_id;
 begin
-  FOR c IN emp_cursor LOOP
+  for c IN emp_cursor LOOP
     dbms_output.put_line('id:  ' || c.employee_id);
   end LOOP;
 end;
@@ -9074,10 +7373,10 @@ create or replace procedure sal_between
   CURSOR emp_id_cursor is
    select employee_id
    from copy_emp
-   where salary BETWEEN v_min_sal AND v_max_sal;
+   where salary between v_min_sal and v_max_sal;
 
   begin
-    FOR c IN emp_id_cursor LOOP
+    for c IN emp_id_cursor LOOP
       dbms_output.put_line(c.employee_id);
     end LOOP;
     commit;
@@ -9211,9 +7510,9 @@ Oracle使用了一种叫做模糊(Obfuscation)或封装(wrapping)的技术来加
 
 |          功能           | DBMS_DDL | WARP |
 | :--------------------: | :------: | :--: |
-|     代码加密（模糊）    |    T     |   T  |
-|     动态加密（模糊）     |    T     |  F   |
-| 一次加密（模糊）多个程序 |    F     |  T   |
+|     代码加密（模糊）    |    t     |   t  |
+|     动态加密（模糊）     |    t     |  f   |
+| 一次加密（模糊）多个程序 |    f     |  t   |
 
 #### DBMS_DDL软件包
 
@@ -9319,13 +7618,13 @@ WRAP INAME=输入文件名 [onAME=输出文件名]
 ##### 例
 
 ```
-G:\sqlTest>WRAP INAME=wraptest.sql onAME=testout.pld;
+g:\sqlTest>WRAP INAME=wraptest.sql onAME=testout.pld;
 
 PL/SQL Wrapper: Release 11.2.0.1.0- 64bit Production on 星期六 10月 15 19:04:52 2022
 Copyright (c) 1993, 2009, Oracle.  All rights reserved.
 Processing wraptest.sql to testout.pld;
 
-G:\sqlTest>type testout.pld
+g:\sqlTest>type testout.pld
 create or replace procedure show_name wrapped
 a000000
 354
@@ -9350,7 +7649,7 @@ vyFRGoGq/9HR5cTR1Eu3tRhA6D0wg5nnm7+fMr2ywFwW/4WW0HIMRy5DJY8J523+x9IyXOfH
 dMAzuHRlJXxlUF0lXZt0iwm4wDL+0oYJpuEfSZqPMLVQyKlQLwDKSv4I0sc9qRF3oisJuIHH
 LcmmpvpLBBA=
 
-G:\sqlTest>notepad testout.pld
+g:\sqlTest>notepad testout.pld
 --记事本打开也是加密
 
 SQL> @G:\sqlTest\testout.pld
@@ -9429,3 +7728,4 @@ dropjava -user sys/sys@orcl 类名
 
 3. 通过创建的函数来调用Java程序
 
+# Oracle
