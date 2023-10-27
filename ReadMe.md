@@ -123,13 +123,19 @@
 
 [组函数](./Books/SQL/Group.md)
 
-[Sequence](./Books/SQL/Sequence.md)
+[Sequence 序列](./Books/SQL/Sequence.md)
 
-[Index](./Books/SQL/Index.md)
+[Index 索引](./Books/SQL/Index.md)
 
-[Synonym](./Books/SQL/Synonym.md)
+[Synonym 同义词](./Books/SQL/Synonym.md)
 
-### [扩展SQL](./Books/SQL/扩展SQL.md)
+[Cursor 游标](./Books/SQL/Cursor.md)
+
+[Trigger 触发器](./Books/SQL/Trigger.md)
+
+### 扩展SQL
+
+
 
 ## NoSQL
 
