@@ -26,7 +26,9 @@
 
 [Pattern 正则](./Pattern.md)
 
-[日期时间API](./Instant.md)
+[日期时间API](./Date.md)
+
+[format 格式化 ](./format.md)
 
 # 高级特性
 
