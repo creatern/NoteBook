@@ -1,6 +1,4 @@
-# MongoDB
-
-## SQL to MongoDB
+# SQL to MongoDB
 
 - MongoDB是基于分布式文件存储的数据库，所有存储在集合中的数据都是BSON格式（Binary JSON）。
 
@@ -14,7 +12,3 @@
 [SQL to MongoDB Mapping Chart](https://www.mongodb.com/docs/manual/reference/sql-comparison/)
 
 [MongoDB概述](../../../attach/Docs/了解 MongoDB 看这一篇就够了 - 美码师 - 博客园.html)
-
-# Cassandra
-
-# Redis
