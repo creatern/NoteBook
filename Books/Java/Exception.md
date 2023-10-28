@@ -245,26 +245,6 @@ public void regist(int id) throws Exception {
 }
 ```
 
-# 用户自定义异常类
-
-- 自定义异常类需要继承 Exception 类或其子类，如果自定义运行时异常类需继承 RuntimeException 类或其子类
-- 自定义异常类通常需要编写几个重载的构造器、提供serialVersionUID、通过throw抛出、应当可以根据名字判断异常类型。一般将自定义异常类的类名命名为XXXException，其中 XXX 用来代表该异常的作用。
-
-- 自定义异常类一般包含两个构造方法：无参的构造方法、以字符串的形式接收一个定制的异常消息并将该消息传递给超类的构造方法。
-
-```java
-public class MyException extends Exception {
-    static final long serialVersionUID = 1L; 
-
-    public IntegerRangeException() {
-        super();
-    }
-    public IntegerRangeException(String message) {
-        super(message);
-    }
-}
-```
-
 # assert 断言
 
 - java中提供了专门的assert语句，为java程序提供了一种错误检查机制。
@@ -315,4 +295,76 @@ public class AssertDemo {
 }
 ```
 
-# 
+# 用户自定义异常类
+
+- 自定义异常类需要继承 Exception 类或其子类，如果自定义运行时异常类需继承 RuntimeException 类或其子类
+- 自定义异常类通常需要编写几个重载的构造器、提供serialVersionUID、通过throw抛出、应当可以根据名字判断异常类型。一般将自定义异常类的类名命名为XXXException，其中 XXX 用来代表该异常的作用。
+
+- 自定义异常类一般包含两个构造方法：无参的构造方法、以字符串的形式接收一个定制的异常消息并将该消息传递给超类的构造方法。
+
+```java
+public class MyException extends Exception {
+    static final long serialVersionUID = 1L; 
+
+    public IntegerRangeException() {
+        super();
+    }
+    public IntegerRangeException(String message) {
+        super(message);
+    }
+}
+```
+
+| 抛出异常的常见位置 | 诱因                                                 |
+| ------------------ | ---------------------------------------------------- |
+| 框架内部           | 使用不合规                                           |
+| 数据层             | 外部服务器故障（服务器访问超时）                     |
+| 业务层             | 业务逻辑书写错误（遍历业务书写操作，导致索引异常）   |
+| 表现层             | 数据收集、校验等规则（不匹配的数据类型间导致异常）   |
+| 工具类             | 工具类书写不严谨不够健壮（必要释放的连接长期未释放） |
+
+- 所有的异常均抛出到表现层进行处理。
+- AOP思想进行处理异常。
+
+| 项目异常分类                  | 说明                                                       | 处理方案                                                     |
+| ----------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
+| 业务异常（BusinessException） | 规范的用户行为产生的异常<br>不规范的用户行为操作产生的异常 | 发送对应消息传递给用户，提醒规范操作                         |
+| 系统异常（SytemException）    | 项目运行过程中可预计且无法避免的异常                       | 发送固定消息给用户，安抚用户<br>发送特点消息给运维人员，提醒维护<br>记录日志 |
+| 其他异常（Exception）         | 编程人员未预期到的异常                                     | 发送固定消息传递给用户，安抚用户<br>发送特定消息给编程人员，提醒维护（纳入预期范围内）<br>记录日志 |
+
+```java
+public class SystemException extends RuntimeException {
+    private Integer code;
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public SystemException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    public SystemException(Integer code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
+
+}
+```
+
+```java
+if(id == 1){
+    throw new BusinessException(Code.BUSINESS_ERR,"业务异常");
+}
+//将可能出现的异常进行包装，转换成自定义异常
+try {
+    int i = 1 / 0;
+} catch (ArithmeticException e) {
+    throw new SystemException(Code.SYSTEM_TIMEOUT_ERR, "服务器访问超时。。。", e);
+}
+```
