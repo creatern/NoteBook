@@ -84,7 +84,107 @@
 
 [Spring Security](./Books/Spring/SpringSecurity.md)
 
-# [算法](./Books/算法.md)
+# 算法
+
+## 数据结构
+
+[线性结构](./Books/Arithmetic/线性结构.md)
+
+[树](./Books/Arithmetic/树.md)
+
+[图](./Books/Arithmetic/Graph.md)
+
+## 算法
+
+[算法复杂度](./Books/Arithmetic/算法复杂度.md)
+
+[查找算法](./Books/Arithmetic/查找算法.md)
+
+[排序算法](./Books/Arithmetic/排序算法.md)
+
+[贪心算法](./Books/Arithmetic/贪心算法.md)
+
+[分治策略](./Books/Arithmetic/分治策略.md)
+
+[概率算法](./Books/Arithmetic/概率算法.md)
+
+## UML
+
+- UML：可视化的面向对象的统一建模语言，软件开发过程中的分析设计阶段使用、支持面向对象、独立与软件的实现。
+
+[基本元素](./Books/Arithmetic/基本元素.md)
+
+[关系元素](./Books/Arithmetic/关系元素.md)
+
+[视图和图](./Books/Arithmetic/视图和图.md)
+
+[静态视图](./Books/Arithmetic/静态视图.md)
+
+[用例视图](./Books/Arithmetic/用例视图.md)
+
+[状态机视图](./Books/Arithmetic/状态机视图.md)
+
+[活动视图](./Books/Arithmetic/活动视图.md)
+
+[物理视图](./Books/Arithmetic/物理视图.md)
+
+[模型管理试图](./Books/Arithmetic/模型管理试图.md)
+
+[Rational Rose](./Books/Arithmetic/Rational_Rose.md)
+
+## 设计模式
+
+[设计原则](./Books/Arithmetic/设计原则.md)
+
+### 创建型
+
+[工厂模式](./Books/Arithmetic/Foctory.md)
+
+[单例模式](./Books/Arithmetic/SingleTon.md)
+
+[建造者模式](./Books/Arithmetic/Builder.md)
+
+### 结构型
+
+[适配器模式 Adapter](./Books/Arithmetic/Adapter.md)
+
+[桥接模式 Bridge](./Books/Arithmetic/Bridge.md)
+
+[装饰者模式 Decorator](./Books/Arithmetic/Decorator.md)
+
+[组合模式 Composite](./Books/Arithmetic/Composite.md)
+
+[外观模式 Facade](./Books/Arithmetic/Facade.md)
+
+[享元模式 Flyweight](./Books/Arithmetic/Flyweight.md)
+
+[代理模式 Proxy](./Books/Arithmetic/Proxy.md)
+
+### 行为型
+
+[模板方法模式 Template](./Books/Arithmetic/Template.md)
+
+[命令模式 Command](./Books/Arithmetic/Command.md)
+
+[访问者模式 Visitor](./Books/Arithmetic/Visitor.md)
+
+[迭代器模式 Iterator](./Books/Arithmetic/Iterator.md)
+
+[观察者模式 Observer](./Books/Arithmetic/Observer.md)
+
+[中介者模式 Mediator](./Books/Arithmetic/Mediator.md)
+
+[备忘录模式 Memento](./Books/Arithmetic/Memento.md)
+
+[解释器模式 Interpreter](./Books/Arithmetic/Interpreter.md)
+
+[状态模式 State](./Books/Arithmetic/State.md)
+
+[策略模式 Strategy](./Books/Arithmetic/Strategy.md)
+
+[职责链模式 Chain of Responsibility](./Books/Arithmetic/ChainOfResponsibility.md)
+
+## [多线程设计模式](../Books/Arithmetic/多线程设计模式.md)
 
 # Linux
 
@@ -159,11 +259,15 @@
 
 ## NoSQL
 
-[MongoDB](./Books/NoSQL/MongoDB.md)
+### MongoDB
 
-[Cassandra](./Books/NoSQL/Cassandra.md)
+[SQL to MongoDB Mapping Chart](./Books/NoSQL/MongoDB/SQL_to_MongoDB_Mapping.md)
 
-[Redis](./Books/NoSQL/Redis.md)
+### [Cassandra](./Books/NoSQL/Cassandra.md)
+
+### Redis
+
+[数据结构与编码](./Books/NoSQL/Redis/数据结构与编码.md)
 
 # [Android](./Books/Android/Android.md)
 
