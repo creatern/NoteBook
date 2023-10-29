@@ -30,5 +30,3 @@
 | TaobaoJVM                 | 基于OpenJDK的优化、深度定制且开源的高性能服务器版JVM。 <br />GCIH（GC invisible heap）：off-heap，将生命周期较长的Java对象移到heao之外，并且GC不能管理GCIH内部的Java对象，降低GC的回收频率、提高GC的回收效率。 <br />GCIH中的对象可以在多个JVM进程中实现共享。 <br />crc32指令实现JVM intrinsic，降低JNI的调用开销。 <br />严重依赖Intel的CPU。 |
 | Dalvik VM                 | 应用于Android系统的虚拟机，不是JVM：不遵循JVM规范。 <br />基于寄存器架构。 <br />不能直接执行Class文件，执行编译后的dex文件，执行效率高。 <br />dex文件：通过Class文件转化而来，使用Java语法。<br /> Android5.0 使用 提前编译（AOT）的ART VM替换Dalvik VM。 |
 | Graal VM                  | 跨语言全栈虚拟机。                                           |
-
-# 
