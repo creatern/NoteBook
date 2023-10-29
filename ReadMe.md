@@ -58,6 +58,8 @@
 
 # JVM
 
+<img src="./pictures/Snipaste_2023-05-17_16-08-46.png" width="800"/> 
+
 [JVM概述](./Books/JVM/JVM概述.md)
 
 [内存](./Books/JVM/内存.md)
