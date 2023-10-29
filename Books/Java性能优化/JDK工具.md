@@ -34,15 +34,19 @@ jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]]
 
 |option选项|说明|
 |--|--|
-|\-class|显示ClassLoader的相关信息|
-|\-gc|显示与GC相关的堆信息|
-|\-gccapacity|与\-gc基本相同，主要关注Java堆各个区域使用到的最大、最小空间|
-|\-gcutil|与\-gc基本相同，主要关注已使用空间占总空间的百分比|
-|\-gccause|与\-gc基本相同，额外输出导致最后一次或当前正在发生的GC的原因|
-|\-gcnew|显示新生代GC状况|
-|\-gcnewcapacity|与\-gcnew基本相同，主要关注使用到的最大、最小空间|
-|\-gcold|显示老年代GC状况|
-|\-gcoldcapacity|与\-gcold基本相同，主要关注使用到的最大、最小空间|
-|\-gcmetacapacity|显示元空间使用到的最大、最小空间|
-|\-compiler|显示JIT编译器编译信息|
-|\-printcompilation|输出已经被JIT编译的方法|
+|\-class|显示ClassLoader的相关信息<br />Loaded Bytes Unloaded Bytes Time|
+|\-gc|显示与GC相关的堆信息<br />S0C S1C S0U S1U EC EU OC OU MC MU CCSC CCSU YGC YGCT FGC FGCT CGC CGCT GCT|
+|\-gccapacity|与\-gc基本相同，主要关注Java堆各个区域使用到的最大、最小空间<br />NGCMN NGCMX NGC S0C S1C EC OGCMN OGCMX OGC <br />OC MCMN MCMX MC CCSMN CCSMX CCSC YGC  FGC CGC|
+|\-gcutil|与\-gc基本相同，主要关注已使用空间占总空间的百分比<br />S0 S1 E O M CCS YGC YGCT FGC FGCT CGC CGCT GCT|
+|\-gccause|与\-gcutil基本相同，额外输出导致最后一次或当前正在发生的GC的原因<br />S0 S1 E O M CCS YGC YGCT FGC FGCT CGC CGCT GCT LGC GCC|
+|\-gcnew|显示新生代GC状况<br />S0C S1C S0U S1U TT MTT DSS EC EU YGC YGCT|
+|\-gcnewcapacity|与\-gcnew基本相同，主要关注使用到的最大、最小空间<br />NGCMN NGCMX NGC S0CMX S0C S1CMX S1C ECMX EC YGC FGC CGC|
+|\-gcold|显示老年代GC状况<br />MC MU CCSC CCSU OC OU YGC FGC FGCT CGC CGCT GCT|
+|\-gcoldcapacity|与\-gcold基本相同，主要关注使用到的最大、最小空间<br />OGCMN OGCMX OGC OC YGC FGC FGCT CGC CGCT GCT|
+|\-gcmetacapacity|显示元空间使用到的最大、最小空间<br />MCMN MCMX MC CCSMN CCSMX CCSC YGC FGC FGCT CGC CGCT GCT|
+|\-compiler|显示JIT编译器编译信息<br />Compiled Failed Invalid Time FailedType FailedMethod|
+|\-printcompilation|输出已经被JIT编译的方法<br />Compiled Size Type Method|
+
+- 判断OOM：计算两次测量之间的GCT增量和Timestamp增量，GC时间占运行时间的比例 = GCT增量 / Timestamp增量。比例超过20%，则当前堆的压力较大；比例超过90%，则堆内几乎没有可用空间，随时可能OOM。
+
+- 判断内存泄漏：抽取多组OU中的最小值，若呈现上升趋势，则该Java进程的老年代内存已使用量不断上升，无法回收的对象在不断增加，可能存在内存泄漏。
