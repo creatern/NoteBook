@@ -56,17 +56,15 @@
 
 ## [JavaWeb（Servlet）](./Books/Spring/Servlet.md)
 
-# JVM
-
-<img src="./pictures/Snipaste_2023-05-17_16-08-46.png" width="800"/> 
+# JVM 
 
 [JVM概述](./Books/JVM/JVM概述.md)
 
 [内存](./Books/JVM/内存.md)
 
-[字节码和类的加载](./Books/JVM/字节码和类的加载.md)
+[GC](./Books/JVM/GC.md)
 
-[性能监控与调优](./Books/JVM/性能监控与调优.md)
+[字节码和类的加载](./Books/JVM/字节码和类的加载.md)
 
 # Spring
 
@@ -85,6 +83,27 @@
 [Spring Data](./Books/Spring/SpringData.md)
 
 [Spring Security](./Books/Spring/SpringSecurity.md)
+
+# Java性能优化
+
+## JVM性能监控与调优
+
+| 性能评价指标  | 说明                                 |
+| ------------- | ------------------------------------ |
+| 停顿/响应时间 | -                                    |
+| 吞吐量        | 单位时间内完成的工作量               |
+| 并发数        | 同一时刻，对服务器有实际交互的请求数 |
+| 内存占用      | Java堆区所占内存                     |
+
+[JDK工具](./Books/Java性能优化/JDK工具.md)
+
+[JVM参数](./Books/Java性能优化/JVM参数.md)
+
+### 调优工具
+
+### [GC日志](./Books/Java性能优化/GC日志.md)
+
+### [OOM](./Books/Java性能优化/OOM.md)
 
 # 算法
 
