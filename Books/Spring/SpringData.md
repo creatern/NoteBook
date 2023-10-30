@@ -12,25 +12,34 @@
 | schema\.sql  | src/main/resources/schema\.sql。<br />模式定义，若应用的根路径下存在该文件，则应用启动时会基于数据库执行该文件。 |
 | data\.sql    | src/main/resources/data.sql。<br />预加载数据，同上，在数据源bean初始化时执行，适用于任何关系型数据库。 |
 
-| 角色                                        | 类/接口           |
-| ------------------------------------------- | ----------------- |
-| pojo                                        | Xxx               |
-| 存储库接口                                  | XxxRepository     |
-| 存储库实现<br />（@Reposity、JdbcTemplate） | JdbcXxxRepository |
+## [JDBC](./JDBC.md)
 
-# Repository 存储库
+## [Cassandra](./Cassandra.md)
 
-- 基于存储库规范接口自动创建存储库，而不需要编写其实现类。
+## [MongoDB](./MongoDB.md)
+
+# Spring Data Commons
+
+## Repository 存储库接口
+
+> org.springframework.data.repository.Repository;
+
+- Repository是Spring Data数据库操作的最顶级父类，继承该接口会基于存储库规范接口自动创建存储库，而不需要编写实现类。
+
+<img src="../../pictures/RepositorySystemIdea.png" width="1000"/>
 
 ```java
 Xxx extends Repository<持久化对象类型,持久化对象ID类型>{}
 ```
 
-- CrudRepository：为存储库规范接口提供一些常用的操作。
-
-> 持久化对象对应的类（领域类）。
-
 > 数据预加载：CommandLineRunner、ApplicationRunner接口，对关系型、非关系型数据库均有效。
+
+| 常用接口               | 存储库规范接口操作             |
+| ---------------------- | ------------------------------ |
+| CrudRepository         | 常用的CRUD                     |
+| PagingAndSortRpository | 分页、排序                     |
+| JpaRepository          | 关系型数据库                   |
+| SimpleJpaRepository    | 关系型数据库的Repository实现类 |
 
 ## 自定义查询
 
@@ -55,16 +64,16 @@ public Interface TacoOrder extends CrudRepository{
 | 作用 | 指明方法调用时执行的查询，而不是根据方法签名。 |
 | 参数 | SQL查询语句<br />（JPA中可以使用JPA查询）      |
 
-# 使用方式
+# ORM框架
 
-## [JDBC](./JDBC.md)
+- ORM（Object Relation Mapping）对象注解映射关系。
 
 ## [JPA](./JPA.md)
 
-
-## [Cassandra](./Cassandra.md)
-
-## [MongoDB](./MongoDB.md)
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+```
 
 ## [MyBatis](./MyBatis.md)
 

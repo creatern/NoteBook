@@ -1,8 +1,4 @@
 
-```xml
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-data-jpa</artifactId>
-```
 
 | 领域类注解                | 说明                                                         |
 | ------------------------- | ------------------------------------------------------------ |
@@ -11,3 +7,4 @@
 | @GeneratedValue(strategy) | 生成ID值。<br />strategy：生成策略。                         |
 | @ManyToMany()             | 该属性（对应的类型）和类是多对多的关系。                     |
 | @OneToMany(cascade)       | 所有的该属性（对应的类型）都属于该类（一对多）。<br />cascade：级联范围。 |
+

@@ -206,7 +206,7 @@
 
 [物理视图](./Books/Arithmetic/物理视图.md)
 
-[模型管理试图](./Books/Arithmetic/模型管理试图.md)
+[模型管理视图](./Books/Arithmetic/模型管理视图.md)
 
 [Rational Rose](./Books/Arithmetic/Rational_Rose.md)
 
