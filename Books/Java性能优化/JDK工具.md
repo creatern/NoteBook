@@ -50,3 +50,41 @@ jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]]
 - 判断OOM：计算两次测量之间的GCT增量和Timestamp增量，GC时间占运行时间的比例 = GCT增量 / Timestamp增量。比例超过20%，则当前堆的压力较大；比例超过90%，则堆内几乎没有可用空间，随时可能OOM。
 
 - 判断内存泄漏：抽取多组OU中的最小值，若呈现上升趋势，则该Java进程的老年代内存已使用量不断上升，无法回收的对象在不断增加，可能存在内存泄漏。
+
+# jinfo
+
+- jinfo：调整、查看虚拟机参数配置。
+
+```shell
+jinfo <option> <pid>
+```
+
+| option选项|说明|
+|--|--|
+|-flag \<name\>     | 输出对应名称的参数 |
+|-flag \[\+\|\-\]\<name\> | 打开/关闭指定名称的参数 |
+|-flag \<name\>=\<value\> |设置指定名称的参数|
+|-flags               |输出全部的参数|
+|-sysprops         | 输出系统属性 |
+|\<no option\>       | 输出全部的参数和系统属性 |
+
+- 只有标记为manageable的参数才能动态修改。
+
+```shell
+# 查看所有标记为manageable的参数
+java -XX:+PrintFlagsFinal -version | grep manageable
+```
+
+## JVM参数信息
+
+```shell
+# 查看所有JVM参数启动的初始值
+java -XX:+PrintFlagsInitial
+
+# 查看所有JVM参数的最终值
+java -XX:+PrintFlagsFinal
+
+# 查看已经被用户修改、被JVM设置过的参数名称和值
+java -XX:+PrintCommandLineFLags
+```
+
