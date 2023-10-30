@@ -34,8 +34,8 @@
 ```
 
 - 设置年轻代Parallel Scavenge GC的线程数，一般最好与CPU数相等。
-  - 当CPU数量小于8，PrallelGCThreads值 = CPU_COUNT。
-  - 当CPU数量大于8，PrallelGCThreads值 = 3 + [5 * CPU_COUNT / 8]。
+  - 当CPU数量小于8，PrallelGCThreads值 = CPU\_COUNT。
+  - 当CPU数量大于8，PrallelGCThreads值 = 3 \+ \[5 \* CPU\_COUNT / 8\]。
 
 ```
 -XX:ParallelGCThreads
@@ -47,9 +47,9 @@
 -XX:MaxGCPauseMillis
 ```
 
-- GC时间占总时间的比例： 1 / (N + 1)。
+- GC时间占总时间的比例： 1 / \(N \+ 1\)。
   - 取值范围：（0，100）。默认99，即GC时间不超过1%。
-  - -XX:MaxGCPauseMillis值越大，-XX:GCTimeRatio越容易超过设定的比例。
+  - \-XX:MaxGCPauseMillis值越大，\-XX:GCTimeRatio越容易超过设定的比例。
 
 ```
 -XX:GCTimeRatio

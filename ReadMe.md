@@ -98,7 +98,7 @@
 
 [CMS GC](./Books/JVM/GMS.md)
 
-[G1 GC][./Books/JVM/G1.md]
+[G1 GC](./Books/JVM/G1.md)
 
 ## 字节码和类的加载
 
