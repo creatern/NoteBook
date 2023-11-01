@@ -1,15 +1,14 @@
 # SpEL
 
-| EL表达式 | 表达式                                                       |
-| -------- | ------------------------------------------------------------ |
-| @\{\}    | 链接资源<br />默认根目录为static                             |
-| \$\{\}   | （Model中的）变量                                            |
-| \*\{\}   | 选定对象（th:object）而不是整个上下文评估表达式<br />若没有选定对象，则等同于`${}`。 |
-| \#\{\}   | 消息表达（文本外部化）：读取配置文件                         |
+## @\{\} 链接表达式
+
+- @\{\}链接资源地址，默认根目录为static。
+
+## \$\{\} 变量表达式
+
+- \$\{\}可选择的变量为Model中的变量。
 
 ```html
-<!--${}变量表达式-->
-
 <!--普通字符串-->
 <p th:text="${name}"></p>
 <!--POJO类型 person(name,age)-->
@@ -34,6 +33,10 @@
 </tr>
 ```
 
+## \*\{\} 选择变量表达式
+
+- \*\{\}选定对象（th:object）而不是整个上下文评估表达式，若没有选定对象，则等同于\$\{\}。
+
 ```html
 <!--*{}选择变量表达式-->
 <div th:object="${user}">
@@ -43,6 +46,10 @@
 </div>
 ```
 
+## \#\{\} 消息表达式
+
+- #\{\}消息表达（文本外部化），读取配置文件，用于国际化。
+
 ```html
 <!--#{}消息表达-->
 <!--配置文件：/resources/test.properties-->
@@ -50,34 +57,56 @@
 <span th:text="#{tom.name}"></span>
 ```
 
-# th标签
+# \#工具类
 
-| 替换               | -                         |
-| ------------------ | ------------------------- |
-| th:id              | id                        |
-| th:text            | 文本                      |
-| th:utext           | html文本                  |
-| th:src             | 资源                      |
-| th:href            | 超链接                    |
-| th:object          | 选定对象（搭配`*{}`使用） |
-| th:value           | 值                        |
-| **流程控制**       | **-**                     |
-| th:if<br>th:unless | 判断                      |
-| th:each            | 循环                      |
-| **检验**           | **-**                     |
-| th:errors          | 异常（搭配validation）    |
-| **取值**           | **-**                     |
-| th:field           | 输入域<br />#fields       |
+# th:
+
+| 普通替换 | 替换内容 |
+| -------- | -------- |
+| th:id    | id       |
+| th:text  | 文本     |
+| th:utext | html文本 |
+| th:src   | 资源     |
+| th:href  | 超链接   |
+| th:value | 值       |
+| th:field | 分组     |
+
+## th:object 对象替换
+
+- th:object所在元素的子元素可以使用\*\{\}来选择th:object选定的对象的属性，而不是直接从上下文中获取。
+
+```html
+<tr th:each="user:${users}" th:object="${user}">
+    <td th:text="*{id}"></td>
+    <td th:text="*{name}"></td>
+    <td th:text="*{age}"></td>
+</tr>
+```
+
+## th:if 判断
+
+## th:each 迭代
 
 ```html
 <!--List循环-->
 <td th:each="user:${userList}" th:text="${user}"></td>
 
 <!--Map循环-->
-<table>
-    <tr th:each="person:${personMapper}">
-        <td th:text="${person.key}"></td>
-        <td th:text="${person.value}"></td>
-    </tr>
-</table>
+<tr th:each="person:${personMapper}">
+    <td th:text="${person.key}"></td>
+    <td th:text="${person.value}"></td>
+</tr>
+```
+
+## th:errors 校验
+
+- th:errors通常搭配validation校验数据的正确性。
+
+```html
+<label for="ccNumber">Create Card #: </label>
+<input type="text" th:field="*{ccNumber}"/>
+<span class = "validationError" 
+      th:if="${#fields.hasErrors('ccNumber')}"
+      th:errors="*{ccNumber}">CC Num Error</span>
+<!--显示的错误信息：检验注解的message-->
 ```

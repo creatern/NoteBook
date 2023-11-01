@@ -1,5 +1,3 @@
-
-
 | 领域类注解                | 说明                                                         |
 | ------------------------- | ------------------------------------------------------------ |
 | @Entity                   | 声明JPA实体（类）。<br />（JPA需要实体带有空参构造器）       |
@@ -14,7 +12,7 @@
 
 - Repository是Spring Data数据库操作的最顶级父类，继承该接口会基于存储库规范接口自动创建存储库，而不需要编写实现类。
 
-<img src="/home/zjk/Desktop/note-book/pictures/RepositorySystemIdea.png" width="1000"/>
+<img src="../../pictures/RepositorySystemIdea.png" width="1000"/>
 
 ```java
 Xxx extends Repository<持久化对象类型,持久化对象ID类型>{}
@@ -46,8 +44,6 @@ Xxx extends Repository<持久化对象类型,持久化对象ID类型>{}
 ## DQM 方法名创建及语法
 
 - Spring Data在生成存储库实现时，检查存储库接口的所有方法，解析方法的名称，并基于被持久化的对象来试图推测方法的目的（DSL 领域特定语言）。持久化的细节都是通过存储库方法的签名实现的。
-
-> Spring Data会忽略大多数的主题单词。
 
 ```java
 public Interface TacoOrder extends CrudRepository{

@@ -78,7 +78,11 @@
 | DI       | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
 | AOP      | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
 
-### [Spring](./Books/Spring/Spring.md)
+### Spring
+
+[IOC 控制反转（DI 依赖注入）](./Books/Spring/IOC.md)
+
+[AOP 面向切面](./Books/Spring/AOP.md)
 
 ### [Spring MVC](./Books/Spring/SpringMVC.md)
 
@@ -86,9 +90,9 @@
 
 | Initializr结构                              | 说明                                           |
 | ------------------------------------------- | ---------------------------------------------- |
-| `@SpringBootApplication`                    | SpringBoot启动类。<br />默认所在包为扫描路径。 |
-| `/static`                                   | 静态资源                                       |
-| `/templates`                                | 模板文件                                       |
+| @SpringBootApplication                      | SpringBoot启动类。<br />默认所在包为扫描路径。 |
+| /static                                     | 静态资源                                       |
+| /templates                                  | 模板文件                                       |
 | application.properties<br />application.yml | 配置文件                                       |
 
 - Starter依赖管理：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
@@ -103,6 +107,35 @@ spring-boot-starter
 
 #### [Lombok](./Books/Spring/Lombok.md)
 
+- Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
+
+> IDE中需要安装相应的Lombok插件。
+
+```xml
+<groupId>org.projectlombok</groupId>
+<artifactId>lombok</artifactId>
+
+```
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                    </exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
 #### 视图模板库
 
 - pom.xml中存在对应模板库依赖（Thymeleaf等）时，Spring Boot会探测到对应视图模板库并配置相应的Bean（Thymeleaf Bean等）。在`/classpath:/templates（src/main/resources/tempaltes）`编写模板即可。
@@ -110,16 +143,18 @@ spring-boot-starter
 
 > @ResponseBody、@RestController（@Controller+@ResponseBody）返回值作为响应内容，而不是视图名。
 
-- 模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。
+- 模板缓存，模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。
 
 > Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
 
-| 模板             | 启用/禁用缓存属性（默认ture）<br />application.properties |
-| ---------------- | --------------------------------------------------------- |
-| FreeMarker       | spring.freemarker.cache                                   |
-| Groovy Templates | spring.groovy.template.cache                              |
-| Mustache         | spring.mustache.cache                                     |
-| Thymeleaf        | spring.thymeleaf.cache                                    |
+| 模板             | application.yml启用/禁用缓存属性（默认ture） |
+| ---------------- | -------------------------------------------- |
+| FreeMarker       | spring.freemarker.cache                      |
+| Groovy Templates | spring.groovy.template.cache                 |
+| Mustache         | spring.mustache.cache                        |
+| Thymeleaf        | spring.thymeleaf.cache                       |
+
+- 前端数据封装实体类，需要将HTML元素的name属性赋值为需要封装的对象的属性名。
 
 ##### [Thymeleaf](./Books/Spring/Thymeleaf.md)
 
@@ -136,11 +171,6 @@ spring-boot-starter
 ```
 
 ### [Spring Data](./Books/Spring/SpringData.md)
-
-| 自动脚本文件 | 说明                                                         |
-| ------------ | ------------------------------------------------------------ |
-| schema\.sql  | src/main/resources/schema\.sql。<br />模式定义，若应用的根路径下存在该文件，则应用启动时会基于数据库执行该文件。 |
-| data\.sql    | src/main/resources/data.sql。<br />预加载数据，同上，在数据源bean初始化时执行，适用于任何关系型数据库。 |
 
 ```xml
 <!--H2DB 嵌入式-->

@@ -7,13 +7,3 @@
 | @CreditCardNumber | 属性 | 合法的信用卡号                                               |
 | @Pattern          | 属性 | 正则<br />regexp                                             |
 | @Digits           | 属性 | integer：整数位数上限<br />fraction：小数位数上限            |
-
-```html
-<!--Thymeleaf渲染检验信息-->
-<label for="ccNumber">Create Card #: </label>
-<input type="text" th:field="*{ccNumber}"/>
-<span class = "validationError" 
-      th:if="${#fields.hasErrors('ccNumber')}"
-      th:errors="*{ccNumber}">CC Num Error</span>
-<!--显示的错误信息：检验注解的message-->
-```
