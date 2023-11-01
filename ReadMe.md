@@ -526,9 +526,9 @@ spring-boot-starter
 
 [系统总线](./Books/Computer/系统总线.md)
 
-[存储器](./Books/Computer/Memory.md)
+[数据的表示](./Books/Computer/数据的表示.md)
 
-[数据的机器层次表示](./Books/Computer/数据的机器层次表示.md)
+[存储器](./Books/Computer/Memory.md)
 
 ## 网络结构
 
