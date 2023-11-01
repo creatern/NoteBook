@@ -88,12 +88,12 @@
 
 ### Spring Boot
 
-| Initializr结构                              | 说明                                           |
-| ------------------------------------------- | ---------------------------------------------- |
-| @SpringBootApplication                      | SpringBoot启动类。<br />默认所在包为扫描路径。 |
-| /static                                     | 静态资源                                       |
-| /templates                                  | 模板文件                                       |
-| application.properties<br />application.yml | 配置文件                                       |
+| Initializr结构                                               | 说明                                           |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类。<br />默认所在包为扫描路径。 |
+| /static                                                      | 静态资源                                       |
+| /templates                                                   | 模板文件                                       |
+| application.properties<br />application.yml                  | 配置文件                                       |
 
 - Starter依赖管理：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
 
@@ -101,20 +101,21 @@
 spring-boot-starter
 ```
 
+- [Spring DevTools](./Books/Spring/DevTools.md)
+
 #### [配置属性](./Books/Spring/properties.md)
 
 <img src="./pictures/Spring-SpringBoot-属性源-数据源.drawio.svg" width="600"/> 
 
 #### [Lombok](./Books/Spring/Lombok.md)
 
-- sLombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
+- Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
 
 > IDE中需要安装相应的Lombok插件。
 
 ```xml
 <groupId>org.projectlombok</groupId>
 <artifactId>lombok</artifactId>
-
 ```
 
 ```xml
