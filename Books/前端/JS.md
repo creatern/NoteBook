@@ -1,273 +1,4 @@
-# HTML
-
-- HTML（超文本标记语言）是解释型的标记语言，标签不区分大小写，且浏览器是容错的。后缀.html、.htm。
-
-> **W3C标准** 网页主要由以下三个部分：
->
-> 1. 结构：HTML
-> 2. 表现：CSS
-> 3. 行为：Javascript
-
-| HTML的基本元素    | 说明                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `<!DOCTYPE html>` | 文档类型                                                     |
-| `<html></html>`   | 根元素                                                       |
-| `<head>`          | 信息容器  <br>包含所有想包含在 HTML 页面中但不在 HTML 页面中显示的内容 |
-| `<body>`          | 页面内容                                                     |
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
-
-    </body>
-</html>
-```
-
-| 原义字符  | 等价字符引用 |
-| :-------- | :----------- |
-| `<`       | `&lt;`       |
-| `>`       | `&gt;`       |
-| `"`       | `&gt;`       |
-| `'`       | `&apos;`     |
-| `&`       | `&amp;`      |
-| `>=`      | `&ge;`       |
-| `<=`      | `&le;`       |
-| 注册商标® | `&reg;`      |
-| 版权符号© | `&copy;`     |
-| 空格      | `&nbsp;`     |
-
-## 普通元素
-
-| 普通元素                                   | 作用                                 |
-| :----------------------------------------- | :----------------------------------- |
-| `<br>`                                     | 换行                                 |
-| `<p></p>`                                  | 段落<br />段前和段后各添加一个空行。 |
-| `<h1></h1>`                                | 标题<br />`<h1>~<h6>`                |
-| `<span></span>`                            | 无语义                               |
-| `<b></b>`  <br/>`<i></i>`  <br/>`<u></u> ` | 字体加粗<br />字体倾斜<br />下划线   |
-| `<center></center>`                        | 居中显示                             |
-| `<sub></sub>` <br/> `<sup></sup> `         | 下标<br />上标                       |
-| `<hr>`                                     | 水平分割线                           |
-| `<button>`                                 | 按钮                                 |
-
-### `<li></li>` 列表
-
-| 列表        | 说明     |
-| ----------- | -------- |
-| `<li></li>` | 列表选项 |
-| `<ol></ol>` | 有序列表 |
-| `<ul></ul>` | 无序列表 |
-
-```html
-<ul>
-  <li>豆浆</li>
-  <li>油条</li>
-</ul>
-```
-
-### `<a></a>` 超链接
-
-| `<a></a>` | 锚点（超链接）                                               |
-| :-------- | :----------------------------------------------------------- |
-| href      | 链接url                                                      |
-| title     | 链接提示信息                                                 |
-| target    | 窗口打开方式<br />`_self` 默认在本窗口打开<br/>`_blank` 打开一个新的标签页<br/>`_parent` 在父窗口打开<br/>`_top` 在顶层窗口打开 |
-
-- 块级链接：任何内容（包括块级内容）都可以是链接资源。
-
-```html
-<a href="https://developer.mozilla.org/zh-CN/">
-  <img src="mdn_logo.svg" alt="MDN Web 文档主页" />
-</a>
-```
-
-| 多媒体嵌入        | 说明                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `<img/>`          | 图片<br />src：url<br>alt：提示<br>title：标题               |
-| `<audio></audio>` | 音频支持MP3、WAV、OGG<br>src：url<br>controls：播放控件<br>标签内容：提示 |
-| `<video></video>` | 视频支持MP4、WebM、OGG<br>src：url<br/>controls：播放控件<br/>标签内容：提示 |
-
-### `<div></div>` 盒子
-
-### `<table></table>` 表格
-
-| 表格                | 名称                                            |
-| --------------------- | ----------------------------------------------- |
-| `<table></table>`     | 表格（可嵌套）                                  |
-| `<caption></caption>` | 标题                                            |
-| `<th></th>`           | 表头<br />scope表头类型：col 、row              |
-| `<tr></tr>`           | 行                                              |
-| `<td></td>`           | 列<br />rowspan：跨行合并<br/>colspan：跨列合并 |
-
-````html
-<table>
-    <th>
-    	<td></td>
-    </th>
-	<tr>
-		<td></td>
-	</tr>
-</table>
-````
-
-## 网站布局
-
-| 典型布局            | 名称                                                         |
-| ------------------- | ------------------------------------------------------------ |
-| `<header></header>` | 页眉：简介形式的内容。<br>作为`<body>`子元素：网站的全局页眉<br>作为`<section>`、`<article>`子元素：部分的页眉 |
-| `<nav></nav>`       | 导航栏                                                       |
-| `<main></main>`     | 主内容，存放每个页面独有的内容。每个页面上只能用一次。       |
-| `<aside></aside>`   | 侧边栏：间接信息（术语条目、作者简介、相关链接，等等）       |
-| `<footer></footer>` | 页脚                                                         |
-
-## `<form></form>`  表单
-
-| form属性 | 说明                                             |
-| -------- | ------------------------------------------------ |
-| action   | 服务器响应url。                                  |
-| name     | 表单名称<br />name指定后服务器才能收到表单内容。 |
-| value    | 发送给服务器的值。                               |
-| method   | 请求类型。<br />get、post...                     |
-
-### `<input/>` 输入
-
-| type属性 | 类型                                                         |
-| :------- | :----------------------------------------------------------- |
-| text     | 文本框                                                       |
-| password | 密码域                                                       |
-| file     | 文件域                                                       |
-| radio    | 单选按钮<br />单选组的name必须一致                           |
-| checkbox | 复选框                                                       |
-| submit   | 提交按钮                                                     |
-| reset    | 重置按钮<br />恢复到默认状态（不等于清空）                   |
-| button   | 普通按钮                                                     |
-| hidden   | 隐藏域<br />隐藏域不会在页面显示，但提交表单时会一起被提交。 |
-| image    | 图像域                                                       |
-
-```html
-<form action="demo04.html">
-    昵称：<input type="text" name="nicName"/><br/><br/>
-    密码：<input type="password" name="pwd"/><br><br/>
-    性别：<input type="radio" name="gender" value="male"/> 男
-         <input type="radio" name="gender" value="female" checked/> 女<br/><br/>
-    爱好：<input type="checkbox" name="hobby" value="basketball"/> 篮球
-         <input type="checkbox" name="hobby" value="football"/> 足球
-          <input type="checkbox" name="hobby" value="ping-pong"/> 乒乓球 <br/><br/>
-    星座：<select name="start">
-              <option value="1">据星</option>
-              <option value="2" selected>明星</option>
-              <option value="3">后星</option>
-              </select><br/><br/>
-    备注：<textarea name="remark" rows="4" cols="50"></textarea><br/><br/>
-    <input type="submit" value="注册"/>
-    <input type="reset" value="重置"/>
-    <input type="button" value="普通按钮"/>
-</form>
-```
-
-<form action="demo04.html">
-    昵称：<input type="text" name="nicName"/><br/><br/>
-    密码：<input type="password" name="pwd"/><br><br/>
-    性别：<input type="radio" name="gender" value="male"/> 男
-         <input type="radio" name="gender" value="female" checked/> 女<br/><br/>
-    爱好：<input type="checkbox" name="hobby" value="basketball"/> 篮球
-         <input type="checkbox" name="hobby" value="football"/> 足球
-          <input type="checkbox" name="hobby" value="ping-pong"/> 乒乓球 <br/><br/>
-    星座：<select name="start">
-              <option value="1">据星</option>
-              <option value="2" selected>明星</option>
-              <option value="3">后星</option>
-              </select><br/><br/>
-    备注：<textarea name="remark" rows="4" cols="50"></textarea><br/><br/>
-    <input type="submit" value="注册"/>
-    <input type="reset" value="重置"/>
-    <input type="button" value="普通按钮"/>
-</form>
-
-### `<textarea></textarea>` 多行文本框
-
-### `<label></label>` 标签
-
-# CSS
-
- <img src="../../pictures/rendering.svg" width="600"/>
-
-| 类型       | 网页导入                                                     |
-| ---------- | ------------------------------------------------------------ |
-| 外部样式表 | `<link rel="stylesheet" href="css文件路径">`                 |
-| 内部样式表 | `<style>css代码</style>`                                     |
-| 内联样式表 | HTML元素的style属性：`<span style="font-size:60px";>HELLO</span>` |
-
-## 样式表
-
-- 浏览器解析CSS规则时，若遇到无法解析的属性/值，则忽略并继续解析之后的CSS规则。当遇到无法解析的选择器的时候，会直接忽略整个选择器规则并解析下一个CSS选择器。
-
-| 专一性   | 说明                                               |
-| -------- | -------------------------------------------------- |
-| 级联规则 | 相同的选择器，后面的样式会覆盖之前相同属性的样式。 |
-| 专用规则 | id选择器 &gt; 类选择器 &gt; 类型选择器。           |
-
-- CSS由声明和选择器组成。声明放在声明块`{}`内，并且声明可以是多条，区分大小写。每条声明由一对属性和值组成，属性和值之间用冒号`:`分开，每条声明以分号`;`结尾。
-
-```css
-body h1 + p .special {
-  color: yellow;
-  background-color: black;
-  padding: 5px;
-}
-```
-
-### 选择器
-
-| 选择器       | 说明                                    |
-| :----------- | :-------------------------------------- |
-| HTML元素     | 标签选择器                              |
-| `.class属性` | 类选择器                                |
-| `#id属性`    | ID选择器                                |
-| `*`          | 全局选择器<br />文档/父元素中的所有内容 |
-
-#### 属性选择器
-
-| 存否和值选择器 | 元素匹配                                                     |
-| :------------- | :----------------------------------------------------------- |
-| `[属性]`       | 带有某属性的元素<br />`a[title]`                             |
-| `[属性=值]`    | 带有某属性和值的元素<br />`a[href="https://example.com"]`    |
-| `[属性~=值]`   | 带有某属性和值的元素，该属性的值至少有1个和该值匹配。<br>在一列中的好几个值，是用空格隔开的。<br />`p[class~="special"]` |
-| `[属性|=值]`   | 带有某属性和值的元素、或其中的值开头为该值。<br />`div[lang|="zh"]` |
-
-| 子字符串匹配选择器 | 匹配的元素                                      |
-| :----------------- | :---------------------------------------------- |
-| `[attr^=value]`    | `li[class^="a"]`：任何值开头为`a`的。           |
-| `[attr$=value]`    | `li[class$="a"]`：任何值结尾为`a`的。           |
-| `[attr*=value]`    | `li[class*="a"]`：任何值中出现`a`的。           |
-| i                  | `li[class^="a" i] `：以大小写不敏感的方式匹配。 |
-
-#### 关系选择器
-
-| 选择器 | 关系选择器                                                   | 示例 |
-| ------ | :----------------------------------------------------------- | ---- |
-| ` `    | 后代选择器<br />`ul li`                                      |      |
-| `>`    | 子代关系选择器<br />`ul > li`                                |      |
-| `+`    | 邻接兄弟选择器<br />`p + img`                                |      |
-| `~`    | 通用兄弟关系选择器<br />`p ~ img`：选中所有的`p元素后任何地方的img元素 |      |
-
-#### 伪类、伪元素
-
-| 选择器 | 说明                                   |
-| ------ | -------------------------------------- |
-| 伪类   | 选择处于特定状态的元素。<br />`:focus` |
-| 伪元素 | `::after`                              |
-
-## 盒子模型
-
-## 定位
-
-# JavaScript
+# JS概述
 
 | JS                 | 说明                                                         |
 | ------------------ | ------------------------------------------------------------ |
@@ -295,11 +26,9 @@ body h1 + p .special {
 | async | 异步，js和html一同加载；但无法控制脚本的运行次序 |
 | defer | 按上下顺序控制脚本的运行次序                     |
 
-## Js
+# 基础语法
 
-### 基础语法
-
-#### 变量
+## 变量
 
 - JavaScript区分大小写，并使用Unicode字符集。
 
@@ -327,7 +56,7 @@ let number = 1;
 alert(number); //33 全局变量number被更改
 ```
 
-##### var 变量提升
+### var 变量提升
 
 | 变量      | 说明                                                         |
 | --------- | ------------------------------------------------------------ |
@@ -344,7 +73,7 @@ let y = 3;
 
 - 一个函数中所有的var语句应尽可能地放在接近函数顶部的地方，避免变量提升。
 
-##### 解构赋值
+### 解构赋值
 
 | 解构赋值目标             | 说明                                                         |
 | ------------------------ | ------------------------------------------------------------ |
@@ -356,7 +85,7 @@ let y = 3;
 let [x,y] = [1,2]
 ```
 
-##### 基本数据类型
+### 基本数据类型
 
 | 类型      | 名称   | 说明                                                         |
 | :-------- | :----- | :----------------------------------------------------------- |
@@ -398,7 +127,7 @@ parseInt(str);
 var number = +true;
 ```
 
-##### 运算符、操作符 
+### 运算符、操作符 
 
 | 运算符 | 说明                                     | 示例              |
 | :----- | :--------------------------------------- | ----------------- |
@@ -419,11 +148,11 @@ var number = +true;
 
 > delete不会改变数组的元素个数， 数组中删除的元素的位置会被设置为 undefined，并且它的位置不会被重新分配。
 
-#### 流程控制
+## 流程控制
 
-##### 条件语句
+### 条件语句
 
-###### if..else
+#### if..else
 
 - 
 
@@ -433,7 +162,7 @@ if ((x = y)) {
 }
 ```
 
-###### switch
+#### switch
 
 ```javascript
 switch (expression) {
@@ -449,9 +178,9 @@ switch (expression) {
 }
 ```
 
-##### 循环
+### 循环
 
-###### for、for..in、for..of
+#### for、for..in、for..of
 
 ```javascript
 for ([initialExpression]; [condition]; [incrementExpression]){
@@ -482,7 +211,7 @@ for (let i of arr) {
 }
 ```
 
-###### while、do..while
+#### while、do..while
 
 - do..while：statement在检查条件之前会执行一次。
 
@@ -498,7 +227,7 @@ while (condition){
 }
 ```
 
-###### continue、break
+#### continue、break
 
 | 关键字   | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
@@ -521,15 +250,15 @@ for (var i = 0 ; i < 10 ; i++){
 alert(num); // 输出 55
 ```
 
-#### 异常处理
+## 异常处理
 
-##### throw
+### throw
 
 ```javascript
 throw new UserException("Value too high");
 ```
 
-##### try-catch-finally
+### try-catch-finally
 
 ```javascript
 openMyFile();
@@ -544,7 +273,7 @@ try {
 }
 ```
 
-##### Error对象
+### Error对象
 
 | Error属性 | 说明                                               |
 | :-------- | :------------------------------------------------- |
@@ -555,7 +284,7 @@ try {
 throw (new Error('The message'));
 ```
 
-#### 函数
+## 函数
 
 - 定义函数：形参不需要数据类型，返回值也不需要定义类型，如果需要返回值，直接return相应的数据即可。
 
@@ -615,7 +344,7 @@ alert(add(1,2,3)); //3 多余的参数不接收
 alert(add(1)); //NaN
 ```
 
-##### 匿名函数
+### 匿名函数
 
 - 声明一个函数，相当于创建了一个函数对象，将这个对象的引用赋值给变量。
 
@@ -626,7 +355,7 @@ var 变量 = function(参数1, 参数2) {
 };
 ```
 
-##### 立即函数
+### 立即函数
 
 - 立即函数：立刻调用执行。
 
@@ -636,7 +365,7 @@ var 变量 = function(参数1, 参数2) {
 })(1, 2);
 ```
 
-##### 事件绑定
+### 事件绑定
 
 | 事件绑定方式                                      | 说明                         |
 | ------------------------------------------------- | ---------------------------- |
@@ -649,9 +378,9 @@ document.getElementById("H1").onclick = function (){
 }
 ```
 
-#### 对象
+## 对象
 
-##### 自定义对象
+### 自定义对象
 
 - 自定义对象：属性/方法会被之后的同名属性/方法覆盖。
 
@@ -708,7 +437,7 @@ person?.(eat("apple"));
 | 在函数外面 | window对象（当前浏览器窗口） |
 | 在函数里面 | 调用函数的对象               |
 
-##### 系统对象
+### 系统对象
 
 | 对象   | 说明         |
 | :----- | :----------- |
@@ -718,7 +447,7 @@ person?.(eat("apple"));
 | Math   | 数学处理     |
 | Number | number       |
 
-###### Array 数组
+#### Array 数组
 
 - Array数组是变长变类型的，下标从0开始。
 
@@ -757,7 +486,7 @@ alert(arr.length); //11
 alert(arr[9]); //undefined
 ```
 
-###### String 字符串
+#### String 字符串
 
 ```javascript
 var 变量 = new String(""); 
@@ -777,7 +506,7 @@ let name = "Tom";
 let str = `hello ${name}`; //hello Tom
 ```
 
-###### RegExp 正则表达式 
+#### RegExp 正则表达式 
 
 ```javascript
 //正则表达式对象
@@ -794,7 +523,7 @@ var reg = new RegExp("正则")
 ```
 
 
-### BOM 浏览器对象模型
+# BOM 浏览器对象模型
 
 - Browser Object Model：JavaScript将浏览器的各个组成部分封装为对象。
 
@@ -808,7 +537,7 @@ var reg = new RegExp("正则")
 | Navigator | 浏览器对象     |
 | Screen    | 屏幕对象       |
 
-#### Window 浏览器窗口对象
+## Window 浏览器窗口对象
 
 - 直接使用window对象，`window.`可以省略
 
@@ -847,7 +576,7 @@ setInterval(function (){
 },1000);
 ```
 
-#### history 历史记录对象
+## history 历史记录对象
 
 | window.history()<br />history | 获取历史记录对象<br />加载history列表的内容 |
 | :---------------------------- | :------------------------------------------ |
@@ -856,7 +585,7 @@ setInterval(function (){
 | forward()                     | 下一个 URL。                                |
 | go()                          | 某个具体页面。                              |
 
-#### location 地址栏对象
+## location 地址栏对象
 
 | window.location()<br />location | 获取地址栏对象           |
 | :------------------------------ | :----------------------- |
@@ -876,7 +605,7 @@ location.href = "https://www.baidu.com";
 ```
 
 
-### DOM 文档对象模型
+# DOM 文档对象模型
 
 - DOM定义了访问HTML和xml文档的标准：W3C（万维网联盟）标准。
 
@@ -898,7 +627,7 @@ location.href = "https://www.baidu.com";
 | Attr     | 属性 | HTML标签内的属性 |
 | Comment  | 注释 | 注释             |
 
-#### Element 元素对象
+## Element 元素对象
 
 | 获取Element对象                          | 说明                                     |
 | :--------------------------------------- | :--------------------------------------- |
@@ -926,7 +655,7 @@ location.href = "https://www.baidu.com";
 | :------ | :--------------------------------------- |
 | write() | 向文档写文本、HTML表达式、JavaScript代码 |
 
-##### 自定义属性
+### 自定义属性
 
 - html5：data-自定义属性，在标签上一律以data-开头，在DOM对象上一律以dataset对象方式获取。
 
@@ -937,7 +666,7 @@ let div = document.querySelector('div')
 console.log(div.dataset.id)
 ```
 
-#### Core DOM操作节点
+## Core DOM操作节点
 
 | 访问节点              | 说明                               |
 | :-------------------- | :--------------------------------- |
@@ -968,7 +697,7 @@ console.log(div.dataset.id)
 | removeChild(node)             | 删除指定的节点             |
 | replaceChild(newNode,oldNode) | 用其他的节点替换指定的节点 |
 
-#### HTML DOM
+## HTML DOM
 
 | table对象   | 说明                           |
 | ----------- | ------------------------------ |
@@ -995,155 +724,4 @@ console.log(div.dataset.id)
 | align         | 设置或返回单元格内部数据的水平排列方式 |
 | className     | 设置或返回元素的class属性              |
 
-## AJAX
-
-- AJAX（Asynchronous JavaScript And XML）：异步的JavaScript和XML。
-
-| AJAX作用             | 说明                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| 与服务器进行数据交换 | 给服务器发送请求，服务器将数据直接响应回给浏览器。<br />AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面。 |
-| 异步交互             | 不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术 |
-
-<img src="../../pictures/Snipaste_2023-03-24_18-27-13.png" width="800"/>  
-
-### XMLHttpRequest（xhr）
-
-- XMLHttpRequest：Ajax的本质核心。
-
-<img src="../../pictures/ajax.gif" width=600x/>
-
-```javascript
-//1.创建核心对象
-var xhttp;
-if (window.XMLHttpRequest) {
-    xhttp = new XMLHttpRequest();
-} else {
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-}
-//2.发送请求 url使用全路径
-xmlhttp.open("GET", "http://localhost:8080/ajaxServlet");
-xmlhttp.send();
-//3.获取响应
-xmlhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-        alert(this.responseText);
-        // document.getElementById("demo").innerHTML = this.responseText;
-    }
-}
-```
-
-| 请求方法                   | 描述                                                         |
-| :----------------------- | :----------------------------------------------------------- |
-| open() | method：请求类型（GET、POST）<br>url：服务器（文件）位置 <br>async：true（异步）、 false（同步） |
-| send()                   | 向服务器发送GET、POST请求                                   |
-| setRequestHeader() | 向请求添加 HTTP 头部<br>header：头部名称<br>value：头部值 |
-
-| 响应属性               | 描述                                                         |
-| :--------------------- | :----------------------------------------------------------- |
-| onreadystatechange     | 定义readyState属性发生改变时所调用的函数。                   |
-| readyState             | 保存XMLHttpRequest的状态。 <br>0: 请求未初始化 <br>1: 服务器连接已建立  <br>2: 请求已接收  <br>3: 正在处理请求   <br>4: 请求已完成且响应已就绪 |
-| status<br />statusText | 请求状态码（200、404..）<br />返回状态文本（ "OK"、"Not Found"） |
-
-### jQuery `$`
-
-| 参数    | 说明                     |
-| ------- | ------------------------ |
-| url     | 待载入页面的URL。        |
-| data    | 待发送的数据（键值对）。 |
-| success | 回调函数。               |
-
-```js
-function home() {
-    $.post({
-        url: "/",
-        data: {"name": $("#userName").val()},
-        success: function (data, status) {
-            console.log(data);
-            console.log(status);
-        }
-    });
-
-    $("textName").val();
-}
-```
-
-```js
-$(function () {
-    $("#btnData").click(function () {
-        $.post("/", function (data) {
-            var html = "";
-            for (var i = 0; i < data.length; i++) {
-                html += "<tr>" +
-                    "<td>" + data[i].name + "</td>" +
-                    "<td>" + data[i].age + "</td>"
-                    + "</tr>";
-
-            }
-            $("#content").html(html);
-        })
-    })
-})
-```
-
-## axios
-
-- axios异步框架：对原生的AJAX进行封装，简化书写。
-
-### axios()
-
-| axios()             | 发送异步请求，使用js对象传递请求相关的参数。                 |
-| ------------------- | ------------------------------------------------------------ |
-| **属性**            | **说明**                                                     |
-| method              | 请求方式（get、post）。                                      |
-| url                 | 资源路径。<br> `get` ： `url?参数名=参数值&参数名2=参数值2`。 |
-| data                | 请求体发送的数据。<br>`post` ：数据需要作为 `data` 属性的值。 |
-| **方法**            | **说明**                                                     |
-| **then(回调函数) ** | 回调函数在发送请求时不会被调用，而是在成功响应后调用的函数。<br />resp：对响应的数据进行封装的对象， `resp.data` 获取到响应的数据。 |
-
-```js
-axios({
-    method:"post",
-    url="http://localhost:8080/aJAXDemo1",
-    data:"username=zjk"
-}).then(function(resp){
-    alert(resp.data);
-})
-```
-
-### axios实例
-
-- axios.create([config])
-
-```js
-const instance = axios.create({
-  baseURL: 'https://some-domain.com/api/',
-  timeout: 1000,
-  headers: {'X-Custom-Header': 'foobar'}
-});
-```
-
-### 请求别名
-
-| 请求    | 别名                            |
-| :------ | :------------------------------ |
-| get     | axios.get(url[,config])         |
-| delete  | axios.delete(url[,config])      |
-| head    | axios.head(url[,config])        |
-| options | axios.option(url[,config])      |
-| post    | axios.post(url[,data[,config])  |
-| put     | axios.put(url[,data[,config])   |
-| patch   | axios.patch(url[,data[,config]) |
-
-```javascript
-axios.post('/user', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
-  })
-  .then(response => {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-```
 

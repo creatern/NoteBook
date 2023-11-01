@@ -107,7 +107,7 @@ spring-boot-starter
 
 #### [Lombok](./Books/Spring/Lombok.md)
 
-- Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
+- sLombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
 
 > IDE中需要安装相应的Lombok插件。
 
@@ -289,6 +289,22 @@ spring-boot-starter
 
 [OOM](./Books/Java性能优化/OOM.md)
 
+> - Jprofiler启动项设置，解决分辨率不匹配问题
+>
+> ```shell
+> if [ "$has_space_options" = "true" ]; then
+> $INSTALL4J_JAVA_PREFIX exec "$app_java_home/bin/java" -server "-splash:$app_home/.install4j/s_1jq1qhc.png" "-Dsun.java2d.noddraw=true" "-Dsun.java2d.uiScale=2" "-Djava.net.preferIPv4Stack=true" "$vmov_1" "$vmov_2" "$vmov_3" "$vmov_4" "$vmov_5" $INSTALL4J_ADD_VM_PARAMS "$quoted_specific_0" "$quoted_specific_1" -classpath "$local_classpath" install4j.com.jprofiler.frontend.FrontendApplication  "$@"
+> return_code=$?
+> else
+> $INSTALL4J_JAVA_PREFIX exec "$app_java_home/bin/java" -server "-splash:$app_home/.install4j/s_1jq1qhc.png" "-Dsun.java2d.uiScale=2" "-Djava.net.preferIPv4Stack=true" $INSTALL4J_ADD_VM_PARAMS "$quoted_specific_0" "$quoted_specific_1" -classpath "$local_classpath" install4j.com.jprofiler.frontend.FrontendApplication  "$@"
+> return_code=$?
+> fi
+> ```
+>
+> ```
+> "-Dsun.java2d.uiScale=2"
+> ```
+
 # 算法
 
 ## 数据结构
@@ -406,6 +422,33 @@ spring-boot-starter
 [Kernel](./Books/Linux/Kernel.md)
 
 # [前端](./Books/前端/前端.md)
+
+>**W3C标准** 网页主要由以下三个部分：
+>
+>1. 结构：HTML
+>2. 表现：CSS
+>3. 行为：Javascript
+
+## [HTML](./Books/前端/HTML.md)
+
+- HTML（超文本标记语言）是解释型的标记语言，标签不区分大小写，且浏览器是容错的。后缀.html、.htm。
+
+## [CSS](./Books/前端/CSS.md)
+
+## [JS](./Books/前端/JS.md)
+
+### [AJAX](./Books/前端/AJAX.md)
+
+- AJAX（Asynchronous JavaScript And XML）：异步的JavaScript和XML。
+
+| AJAX作用             | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| 与服务器进行数据交换 | 给服务器发送请求，服务器将数据直接响应回给浏览器。<br />AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面。 |
+| 异步交互             | 不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术 |
+
+<img src="./pictures/Snipaste_2023-03-24_18-27-13.png" width="700"/> 
+
+### [Vue](./Books/前端/Vue.md)
 
 # 数据库
 

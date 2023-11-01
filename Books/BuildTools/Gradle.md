@@ -199,6 +199,3 @@ def run(Closure closure){
     closure(2);
 }
 ```
-
-
-# 
