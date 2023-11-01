@@ -478,27 +478,6 @@ public String getById(@PathVariable Integer id){
 
 > Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
 
-```java
-public interface Model {
-    Model addAttribute(String attributeName, @Nullable Object attributeValue);
-
-    Model addAttribute(Object attributeValue);
-
-    Model addAllAttributes(Collection<?> attributeValues);
-
-    Model addAllAttributes(Map<String, ?> attributes);
-
-    Model mergeAttributes(Map<String, ?> attributes);
-
-    boolean containsAttribute(String attributeName);
-
-    @Nullable
-    Object getAttribute(String attributeName);
-
-    Map<String, Object> asMap();
-}
-```
-
 - Model 接口的实现类：Spring MVC默认使用ExtendedModelMap（继承 LinkedHashMap），可用于存储和检索数据。
 
 ```java
@@ -515,11 +494,11 @@ public String hello(Model model){
 | 注解 | @ModelAttribute                                              |
 | ---- | ------------------------------------------------------------ |
 | 位置 | 形参、方法注解                                               |
-| 方法 | 返回值存入Model的属性。<br />（如果同时被@XxxMapping注解，则返回值不再是视图名，而是Model的一个属性） |
+| 方法 | 返回值存入Model的属性。                                      |
 | 形参 | 数据绑定，该形参的值将由model中取得。<br />如果model中找不到，那么该参数会先被实例化，然后被添加到model中。<br />（在model中存在以后，请求中所有名称匹配的参数都会填充到该参数中） |
 | 属性 | name：添加/匹配到model的属性名称（默认为当前标注的参数名称）。 |
 
-> 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。
+- 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。且如果同时被@XxxMapping注解，则返回值不再是视图名，而是Model的一个属性。
 
 ```java
 //默认将方法的返回值存入Model

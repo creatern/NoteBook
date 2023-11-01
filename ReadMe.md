@@ -2,6 +2,8 @@
 
 ## Java基础
 
+### 基础卷
+
 [配置与简述](./Books/Java/配置与简述.md)
 
 [基础语法](./Books/Java/基础语法.md)
@@ -32,7 +34,7 @@
 
 [format 格式化 ](./Books/Java/format.md)
 
-## 高级特性
+### 高级卷
 
 [泛型](./Books/Java/泛型.md)
 
@@ -52,11 +54,130 @@
 
 [Socket 网络](./Books/Java/Socket.md)
 
-## [单元测试](./Books/Java/单元测试.md)
+[Junit 单元测试](./Books/Java/单元测试.md)
 
 ## [JavaWeb（Servlet）](./Books/Spring/Servlet.md)
 
-# JVM
+## 环境与构建工具
+
+[Git](./Books/BuildTools/Git.md)
+
+[Maven](./Books/BuildTools/Maven.md)
+
+[Gradle](./Books/BuildTools/Gradle.md)
+
+[Docker](./Books/BuildTools/Docker.md)
+
+## Spring
+
+<img src="./pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
+
+| 基本思想 | 名词         | 说明                                                     |
+| -------- | ------------ | -------------------------------------------------------- |
+| IoC      | 控制反转     | 将创造Bean的权利交给Spring进行管理                       |
+| DI       | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
+| AOP      | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
+
+### [Spring](./Books/Spring/Spring.md)
+
+### [Spring MVC](./Books/Spring/SpringMVC.md)
+
+### Spring Boot
+
+| Initializr结构                              | 说明                                           |
+| ------------------------------------------- | ---------------------------------------------- |
+| `@SpringBootApplication`                    | SpringBoot启动类。<br />默认所在包为扫描路径。 |
+| `/static`                                   | 静态资源                                       |
+| `/templates`                                | 模板文件                                       |
+| application.properties<br />application.yml | 配置文件                                       |
+
+- Starter依赖管理：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
+
+```xml
+spring-boot-starter
+```
+
+#### [配置属性](./Books/Spring/properties.md)
+
+<img src="./pictures/Spring-SpringBoot-属性源-数据源.drawio.svg" width="600"/> 
+
+#### [Lombok](./Books/Spring/Lombok.md)
+
+#### 视图模板库
+
+- pom.xml中存在对应模板库依赖（Thymeleaf等）时，Spring Boot会探测到对应视图模板库并配置相应的Bean（Thymeleaf Bean等）。在`/classpath:/templates（src/main/resources/tempaltes）`编写模板即可。
+- 控制器不能带有`@ResponseBody、@RestController`，由Controller方法的String返回值（视图名）进行页面跳转。
+
+> @ResponseBody、@RestController（@Controller+@ResponseBody）返回值作为响应内容，而不是视图名。
+
+- 模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。
+
+> Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
+
+| 模板             | 启用/禁用缓存属性（默认ture）<br />application.properties |
+| ---------------- | --------------------------------------------------------- |
+| FreeMarker       | spring.freemarker.cache                                   |
+| Groovy Templates | spring.groovy.template.cache                              |
+| Mustache         | spring.mustache.cache                                     |
+| Thymeleaf        | spring.thymeleaf.cache                                    |
+
+##### [Thymeleaf](./Books/Spring/Thymeleaf.md)
+
+```xml
+<!--html头部声明和使用Thymeleaf-->
+<html xmlns:th="http://www.thymeleaf.org">
+```
+
+#### [validation 校验（JSR-303）](./Books/Spring/validation.md)
+
+```xml
+<groupId>org.springframwork.boot</groupId>
+<artifactId>spring-boot-starter-validation</artifactId>
+```
+
+### [Spring Data](./Books/Spring/SpringData.md)
+
+| 自动脚本文件 | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| schema\.sql  | src/main/resources/schema\.sql。<br />模式定义，若应用的根路径下存在该文件，则应用启动时会基于数据库执行该文件。 |
+| data\.sql    | src/main/resources/data.sql。<br />预加载数据，同上，在数据源bean初始化时执行，适用于任何关系型数据库。 |
+
+```xml
+<!--H2DB 嵌入式-->
+<groupId>com.h2database</groupId>
+<artifactId>h2</artifactId>
+<scope>runtime</scope>
+```
+
+[JDBC](./Books/Spring/JDBC.md)
+
+[Cassandra](./Books/Spring/Cassandra.md)
+
+[MongoDB](./Books/Spring/MongoDB.md)
+
+#### ORM框架
+
+- ORM（Object Relation Mapping）对象注解映射关系。
+
+##### [JPA](./Books/Spring/JPA.md)
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+```
+
+##### [MyBatis](./Books/Spring/MyBatis.md)
+
+#### [Spring Data REST](./Books/Spring/SpringDataREST.md)
+
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-rest</artifactId>
+```
+
+### [Spring Security](./Books/Spring/SpringSecurity.md)
+
+## JVM
 
 <img src="./pictures/Snipaste_2023-05-17_16-08-46.png" width="1000"/> 
 
@@ -71,9 +192,7 @@
 | 执行     | 执行Java程序：执行的是Java虚拟机的进程。                     |
 | 退出     | 1.程序正常执行结束。<br />2.程序在执行过程中异常、错误。<br />3.操作系统出错。<br />4.线程调用Runtime类、System类：exit()、halt()；且Java安全管理器也允许本次调用。<br />5.JNI加载、卸载JVM。 |
 
-## [JVM概述](./Books/JVM/JVM概述.md)
-
-## 内存
+### 内存
 
 [运行时数据区 Runtime Data Areas](./Books/JVMRuntimeDataAreas.md)
 
@@ -87,7 +206,7 @@
 
 [字符串常量池 StringTable](./Books/JVM/StringTable.md)
 
-## GC 垃圾回收
+### GC 垃圾回收
 
 > 哪些内存需要回收？什么时候回收？如何回收？
 
@@ -99,9 +218,9 @@
 
 - GC工作的区域：Java堆、方法区。  频繁收集Young区、较少收集Old区、基本不动Perm区/Metaspase。
 
-### [GC算法](./Books/JVM/GC算法.md)
+#### [GC算法](./Books/JVM/GC算法.md)
 
-### 垃圾收集器
+#### 垃圾收集器
 
 [垃圾回收器概述](./Books/JVM/垃圾回收器概述.md)
 
@@ -113,7 +232,7 @@
 
 [G1 GC](./Books/JVM/G1.md)
 
-## 字节码和类的加载
+### 字节码和类的加载
 
 [class文件](./Books/JVM/classFile.md)
 
@@ -123,27 +242,7 @@
 
 [类加载器 ClassLoader](./Books/JVM/ClassLoader.md)
 
-# Spring
-
-[Git](./Books/Spring/Git.md)
-
-[Maven](./Books/Spring/Maven.md)
-
-[Docker](./Books/Spring/Docker.md)
-
-[Spring](./Books/Spring/Spring.md)
-
-[Spring MVC](./Books/Spring/SpringMVC.md)
-
-[Spring Boot](./Books/Spring/SpringBoot.md)
-
-[Spring Data](./Books/Spring/SpringData.md)
-
-[Spring Security](./Books/Spring/SpringSecurity.md)
-
-# Java性能优化
-
-## JVM性能监控与调优
+## Java性能优化
 
 | 性能评价指标  | 说明                                 |
 | ------------- | ------------------------------------ |
@@ -156,11 +255,9 @@
 
 [JVM参数](./Books/Java性能优化/JVM参数.md)
 
-### 调优工具
+[GC日志](./Books/Java性能优化/GC日志.md)
 
-### [GC日志](./Books/Java性能优化/GC日志.md)
-
-### [OOM](./Books/Java性能优化/OOM.md)
+[OOM](./Books/Java性能优化/OOM.md)
 
 # 算法
 

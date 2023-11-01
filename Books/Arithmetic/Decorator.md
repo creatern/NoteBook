@@ -2,9 +2,7 @@
 
 <img src="../../pictures/设计模式-Decorator.drawio.svg" width="600"/> 
 
-> IO流中的套接：
->
-> <img src="../../pictures/207913315221148.png" width="500"/> 
+> IO流中的套接
 >
 > <img src="../../pictures/设计模式-Decorator-IO.drawio.svg" width="1200"/>
 
