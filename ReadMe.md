@@ -60,29 +60,34 @@
 
 ## 环境与构建工具
 
-[Git](./Books/BuildTools/Git.md)
+### [Git](./Books/BuildTools/Git.md)
 
-[Maven](./Books/BuildTools/Maven.md)
+### [Maven](./Books/BuildTools/Maven.md)
 
-[Gradle](./Books/BuildTools/Gradle.md)
+### [Gradle](./Books/BuildTools/Gradle.md)
 
-[Docker](./Books/BuildTools/Docker.md)
+### [Docker](./Books/BuildTools/Docker.md)
+
+```shell
+# mysql5.7启动
+docker run -it --name mysql5.7 \
+-p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_UNIX_SOCKET=/tmp/mysql.sock \
+-d mysql:5.7
+```
 
 ## Spring
 
 <img src="./pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
 
-| 基本思想 | 名词         | 说明                                                     |
-| -------- | ------------ | -------------------------------------------------------- |
-| IoC      | 控制反转     | 将创造Bean的权利交给Spring进行管理                       |
-| DI       | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
-| AOP      | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
-
 ### Spring
 
-[IOC 控制反转（DI 依赖注入）](./Books/Spring/IOC.md)
-
-[AOP 面向切面](./Books/Spring/AOP.md)
+| 基本思想                     | 名词         | 说明                                                     |
+| ---------------------------- | ------------ | -------------------------------------------------------- |
+| [IoC](./Books/Spring/IOC.md) | 控制反转     | 将创造Bean的权利交给Spring进行管理                       |
+| [DI](./Books/Spring/IOC.md)  | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
+| [AOP](./Books/Spring/AOP.md) | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
 
 ### [Spring MVC](./Books/Spring/SpringMVC.md)
 
@@ -148,21 +153,14 @@ spring-boot-starter
 
 > Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
 
-| 模板             | application.yml启用/禁用缓存属性（默认ture） |
-| ---------------- | -------------------------------------------- |
-| FreeMarker       | spring.freemarker.cache                      |
-| Groovy Templates | spring.groovy.template.cache                 |
-| Mustache         | spring.mustache.cache                        |
-| Thymeleaf        | spring.thymeleaf.cache                       |
+| 模板                                     | application.yml启用/禁用缓存属性（默认true） |
+| ---------------------------------------- | -------------------------------------------- |
+| FreeMarker                               | spring.freemarker.cache                      |
+| Groovy Templates                         | spring.groovy.template.cache                 |
+| Mustache                                 | spring.mustache.cache                        |
+| [Thymeleaf](./Books/Spring/Thymeleaf.md) | spring.thymeleaf.cache                       |
 
 - 前端数据封装实体类，需要将HTML元素的name属性赋值为需要封装的对象的属性名。
-
-##### [Thymeleaf](./Books/Spring/Thymeleaf.md)
-
-```xml
-<!--html头部声明和使用Thymeleaf-->
-<html xmlns:th="http://www.thymeleaf.org">
-```
 
 #### [validation 校验（JSR-303）](./Books/Spring/validation.md)
 

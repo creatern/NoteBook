@@ -115,7 +115,7 @@ ResourceLoaderAware {
 
 ## SQL映射文件 Mapper.xml
 
-### Mapper接口 代理开发 
+### Mapper接口 代理开发
 
 1. 定义与SQL映射文件同名的Mapper接口，并将Mapper接口和SQL映射文件分别放置在java和resources中对应的mapper目录（`classpath*:/mapper/**/*.xml`）。
 2. 设置SQL映射文件的nameSpace属性为Mapper接口全限定名。
