@@ -171,7 +171,7 @@ spring-boot-starter
 <artifactId>spring-boot-starter-validation</artifactId>
 ```
 
-### [Spring Data](./Books/Spring/SpringData.md)
+### Spring Data
 
 ```xml
 <!--H2DB 嵌入式-->
@@ -208,7 +208,7 @@ spring-boot-starter
 
 ### [Spring Security](./Books/Spring/SpringSecurity.md)
 
-## JVM
+## JVM（HotSpot VM）
 
 <img src="./pictures/Snipaste_2023-05-17_16-08-46.png" width="1000"/> 
 
@@ -282,7 +282,28 @@ spring-boot-starter
 | 并发数        | 同一时刻，对服务器有实际交互的请求数 |
 | 内存占用      | Java堆区所占内存                     |
 
-[JDK工具](./Books/Java性能优化/JDK工具.md)
+| [JDK工具](./Books/Java性能优化/JDK工具.md) | 说明        |
+| ------------------------------------------ | ----------- |
+| jps                                        | 进程查看    |
+| jstat                                      | 进程信息    |
+| jinfo                                      | 参数信息    |
+| jmap                                       | Heap Dump   |
+| jstat                                      | Thread Dump |
+| jcmd                                       | 多功能      |
+
+```shell
+# 指定Dump文件位置（不指定该参数，则默认当前目录），需要搭配以下命令
+-XX:HeapDumpPath=<file>
+
+# 出现OOM后自动输出堆存储文件
+-XX:+HeapDumpOnOutOfMemoryError
+
+# FullGC之前自动输出堆存储文件
+-XX:+HeapDumpBeforeFullGC
+```
+
+- Visual VM
+- MAT（Memory Analyzer Tool）：Java堆内存分析器，查找内存泄漏和内存消耗情况。
 
 [JVM参数](./Books/Java性能优化/JVM参数.md)
 
@@ -412,7 +433,7 @@ spring-boot-starter
 
 [Vim](./Books/Linux/Vim.md)
 
-[基本服务与管理](基本服务与管理.md)
+[基本服务与管理](./Books/Linux/基本服务与管理.md)
 
 [服务器配置](./Books/Linux/服务器配置.md)
 

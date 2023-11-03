@@ -77,41 +77,6 @@ protected void finalize() throws Throwable { }
 
 <img src="../../pictures/JVM-finalize执行判断.svg" width="600"/> 
 
-## GC Roots溯源
-
-### HeapDump文件
-
-#### jmap
-
-```
-jmap -dump:format=b,live,file=输出文件名.bin 进程号
-```
-
-#### visulvm
-
-<img src="../../pictures/Snipaste_2023-06-03_13-10-21.png" width="1400"/>
-
-#### MAT
-
-- MemoryAnalyzer.ini：如果当前Jdk版本不适合，添加代码，参考以下：
-
-```ini
--vm
-D:/Java/jdk-18.0.1.1/bin
-```
-
-<img src="../../pictures/Snipaste_2023-06-03_13-46-31.png" width="1400"/>
-
-#### JProfiler
-
-### OOM
-
-- 设置出现OOM时生成HeapDump文件：
-
-```
--XX:+HeapDumpOnOutOfMemoryError
-```
-
 # 清除阶段
 
 ## 标记-清除算法 Mark-Sweep

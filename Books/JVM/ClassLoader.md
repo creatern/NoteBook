@@ -170,6 +170,15 @@ ClassLoader.getPlatformClassLoader();
 ClassLoader.getSystemClassLoader();
 ```
 
+# ClassLoaderData（CLD）
+
+- 类加载器的相关数据存放在CLD，每一个类加载器都有一个对应的CLD，主要包含了一些与类加载相关的全局状态信息。HotSpot VM中CLD承担维护命名空间的角色。每当一个新的类被加载到JVM中时，就会生成一个新的CLD实例，并将其添加到全局的CLD列表（ClassLoaderDataGraph）。
+
+1. 每个CLD实例都会维护一个已加载过的类列表，确保在同一个CLD实例中不会出现两个全限定名相同的类。
+2. 每个CLD实例都会记录自己的父加载器，从而实现了类加载器之间的委托机制。
+
+<img src="../../pictures/JVM-CLDGraph-struct.drawio.svg" width="700"/> 
+
 # 双亲委派机制
 
 - 双亲委派机制：如果一个类加载器收到类加载的请求，则将这个请求委托给父类的加载器执行，如果父类加载器存在其父类加载器，则依次向上委托，请求最终到达顶层的启动类加载器。如果父类加载器可以完成类加载器，就成功返回；否则由子加载器尝试加载。
@@ -212,5 +221,4 @@ ClassLoader.getSystemClassLoader();
 - JDK1.6引入域（Domain）的概念。JVM将所有代码加载到不同的系统和应用域。系统域部分专门负责与关键资源交互，而各个应用域部分则通过系统域的部分代理来对各种需要的资源进行访问。JVM中不同的受保护域（Protected Domain）对应不同的权限（Permission）。存在于不同域的类文件就具有了当前域的全部权限。
 
 <img src="../../pictures/JVM-sandbox-JDK6.drawio.svg" width="500"/> 
-
 

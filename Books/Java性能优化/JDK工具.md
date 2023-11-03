@@ -128,12 +128,6 @@ jmap -dump:<dump-options> <pid>
 | format=b      | 二进制                                 |
 | file=\<file\> | 目标文件                               |
 
-```shell
-# JVM选项 出现OOM后自动输出堆存储文件
--XX:+HeapDumpOnOutOfMemoryError
--XX:HeapDumpPath=<file>
-```
-
 > jhat（JVM Heap Analysis Tool）用于分析堆存储文件，内置微型的HTTP/HTML服务器（http://localhost:7000/），在浏览器中查看分析结果。在JDK9之后被移除。
 
 # jstack 线程快照
@@ -163,5 +157,28 @@ jstack [-l][-e] <pid>
 ```java
 //获取所有线程的信息
 Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
+```
+
+# jcmd 多功能命令
+
+```shell
+jcmd <pid | main class> <command ...|PerfCounter.print|-f file>
+jcmd -l
+```
+
+| 参数          | 说明                                    |
+| ------------- | --------------------------------------- |
+| pid           | 若pid为0，则该命令应用于所有Java进程    |
+| \[none\]、\-l | 列出所有Java进程                        |
+| command       | help：列出当前进程支持的命令（command） |
+
+# jstatd 远程信息收集
+
+- jstatd命令是一个RMI服务端程序，建立本地主机和远程监控工具的通信。
+
+# jconsole 可视化监控
+
+```shell
+jconsole [ -interval=n ] [ -notile ] [ -pluginpath <path> ] [ -version ] [ connection ... ]
 ```
 
