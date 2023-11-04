@@ -42,8 +42,6 @@
 
 [@interface Annotation 注解](./Books/Java/Annotation.md)
 
-[Thread 多线程](./Books/Java/Thread.md)
-
 [Lamdba 对象表达式](./Books/Java/Lambda.md)
 
 [Stream 流](./Books/Java/Stream.md)
@@ -76,6 +74,10 @@ docker run -it --name mysql5.7 \
 -e MYSQL_UNIX_SOCKET=/tmp/mysql.sock \
 -d mysql:5.7
 ```
+
+## 并发编程
+
+[Thread 多线程](./Books/Java/Thread.md)
 
 ## Spring
 
