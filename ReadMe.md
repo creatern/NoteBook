@@ -81,8 +81,6 @@ docker run -it --name mysql5.7 \
 
 <img src="./pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
 
-### Spring
-
 | 基本思想                     | 名词         | 说明                                                     |
 | ---------------------------- | ------------ | -------------------------------------------------------- |
 | [IoC](./Books/Spring/IOC.md) | 控制反转     | 将创造Bean的权利交给Spring进行管理                       |
@@ -106,7 +104,7 @@ docker run -it --name mysql5.7 \
 spring-boot-starter
 ```
 
-- [Spring DevTools](./Books/Spring/DevTools.md)
+- [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
 
 #### [配置属性](./Books/Spring/properties.md)
 

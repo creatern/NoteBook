@@ -1,4 +1,16 @@
-# DispatcherServlet
+# 控制器
+
+| 名称 | @Controller                                                  |
+| ---- | ------------------------------------------------------------ |
+| 类型 | 类注解                                                       |
+| 作用 | 设定SpringMVC的控制器bean<br />返回值放入模型中，并传递给视图渲染 |
+
+| 注解 | @RestController              |
+| ---- | ---------------------------- |
+| 位置 | 类注解                       |
+| 作用 | @Controller \+ @ResponseBody |
+
+## DispatcherServlet
 
 - DispatcherServlet：基于Java Servlet API的前端控制器，它是整个Spring Web MVC框架的核心组件，负责接收、处理和转发所有的HTTP请求。
 
@@ -8,33 +20,48 @@
 4. 响应处理阶段：处理器处理完请求后，通常会返回一个 ModelAndView 对象，DispatcherServlet会根据这个对象的内容生成响应并发送回客户端。
 5. 销毁阶段：在服务器关闭或者应用程序退出时，DispatcherServlet会清理资源并销毁WebApplicationContext。
 
+## Handle 处理器
 
+- Model的查找和执行在DispatcherServlet中是解耦的。控制器负责通过HandlerMapping查找Handler，再交由HandlerAdapter处理。
 
-# @Controller 控制器
+### HandlerMapping 映射器
 
-| 名称 | @Controller                                                  |
-| ---- | ------------------------------------------------------------ |
-| 类型 | 类注解                                                       |
-| 作用 | 设定SpringMVC的控制器bean<br />返回值放入模型中，并传递给视图渲染 |
+<img src="../../pictures/MatchableHandlerMapping.png" width="1000"/>
 
-## @RestController REST控制器
+#### URL直接映射
 
-| 注解 | @RestController              |
-| ---- | ---------------------------- |
-| 位置 | 类注解                       |
-| 作用 | @Controller \+ @ResponseBody |
+- SimpleUrlHandlerMapping提供了一种简单的方式来定义URL和处理程序之间的映射关系，将特定的URL与特定的处理程序类或方法进行关联，当有请求匹配到指定的URL时，就会调用相应的处理程序进行处理。
 
-## @ResponseBody  响应体
+```java
+@Bean
+public SimpleUrlHandlerMapping simpleUrlHandlerMapping(MyHandle myHandle){
+    SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+    mapping.setOrder(1);
+    mapping.setUrlMap(Collections.singletonMap("/simpleUrl",myHandle));
+    return mapping;
+}
+```
 
-| 注解       | @ResponseBody                                   |
-| ---------- | ----------------------------------------------- |
-| 位置       | 类、方法注解                                    |
-| 作用       | 返回值直接写入响应体                            |
-| **返回值** | **说明**                                        |
-| String     | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
-| 对象       | 对象转换成JSON响应给前端。                      |
+#### BeanName映射
 
-## @XxxMapping 请求映射
+- BeanNameUrlHandlerMapping将URL与bean名称映射，使用bean名称作为映射的key，将URL与bean名称存储在一个Map中。在处理请求时，它会根据URL查找相应的处理程序bean，并调用处理程序的方法来处理请求。（相当于通过URL来调用该bean）
+
+```java
+@Bean(name="/beanNameUrl") //http://localhost:8080/beanNameUrl
+public HttpRequestHandler beanNameUrlHandler(){
+    return (req,resp) ->{
+        resp.getWriter().println("beanNameUrl");
+    };
+}
+```
+
+> - Bean名称映射是指通过在Spring配置文件中指定Bean的名称与其他组件的依赖关系，来实现通过名称来调用Bean的功能。通过在配置文件中设置Bean的名称和依赖关系，可以在代码中通过Bean的名称来获取对应的Bean对象，而无需了解具体的Bean的URL。 
+> - 而通过URL来调用Bean是指通过在Web应用中的URL来访问特定的Bean。通过在Web应用的URL中设置特定的参数，可以定位到特定的Bean对象。  
+> - BeanNameUrlHandlerMapping是一个实现了Web请求处理器接口的类，它可以根据URL来获取相应的处理Bean。通过将Bean的名称和URL的映射关系定义在配置文件中，可以使用URL来调用对应的Bean。因此，BeanNameUrlHandlerMapping的bean名称映射可以被认为是通过URL来调用该bean的一种方式。
+
+#### @XxxMapping
+
+- RequestMappingHandlerMapping负责解析HTTP请求的URL，并将其与注解（如 @RequestMapping）上定义的逻辑进行匹配，然后将请求交给相应的处理方法进行处理。
 
 | 注解           | @RequestMapping                                              |
 | -------------- | ------------------------------------------------------------ |
@@ -42,7 +69,7 @@
 | 作用           | 设置当前控制器方法请求访问路径。<br />@RequestMapping注解控制器类时，作为请求路径的前置。 |
 | **注解**       | **@GetMapping、@PostMapping、@PutMapping、@DeleteMapping**   |
 | 位置           | 方法注解                                                     |
-| 作用           | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作。 |
+| 作用           | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作。<br />只要访问路径或请求动作有一个不同，就可以使用多个该注解。 |
 | **参数**       | **说明**                                                     |
 | value/path     | 请求映射路径（默认根路径"/"）                                |
 | method         | 指定请求方法                                                 |
@@ -103,6 +130,130 @@ public class UserController {
     }
 }
 ```
+
+### Handler 处理器执行
+
+#### HttpRequestHandler
+
+<img src="../../pictures/HttpRequestHandler.png" width="600"/>
+
+- HttpRequestHandler接口的实现类可以处理 HTTP 请求并将响应返回给客户端。实现类需要实现handleRequest()方法，该方法接受一个HttpServletRequest对象和一个HttpServletResponse对象作为参数，并且没有返回值。
+
+- 仅实现了HttpRequestHandler接口的Handler，其查找和执行是分离的，需要被注册到对应的Mapping中，才能生效。
+
+```java
+public class MyHttpRequestHandler implements HttpRequestHandler {
+
+    @Override
+    public void handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        if (httpServletRequest.getMethod().equals("GET")) {
+            httpServletResponse.setContentType("text/html;charset=utf-8");
+            httpServletResponse.getWriter().write("<h1>Hello World</h1>");
+        } else if (httpServletRequest.getMethod().equals("POST")) {
+            httpServletResponse.setContentType("text/html;charset=utf-8");
+            httpServletResponse.getWriter().write("<h1>Hello World</h1>");
+        } else {
+            httpServletResponse.setContentType("text/html;charset=utf-8");
+            httpServletResponse.getWriter().write("<h1>Hello World</h1>");
+        }
+    }
+}
+```
+
+#### Controller接口
+
+- org\.springframework\.web\.servlet\.mvc\.Controller用于定义处理 HTTP 请求的控制器类（不是@Controller）。实现Controller接口的类可以接收HTTP请求并生成HTTP响应。Spring Web MVC 框架会自动将符合特定规则的控制器类处理的方法注册为处理特定URL的处理方法。其中handleRequest()方法接收HttpServletRequest和HttpServletResponse对象作为参数，并返回一个ModelAndView对象（用于将数据模型和视图名称返回给Servlet容器）。
+
+```java
+@Component("/myController") //通过BeanNameUrlHandlerMapping调用
+public class MyHttpRequestHandler implements org.springframework.web.servlet.mvc.Controller {
+    @Override
+    public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+        Map<String,Object> model = new HashMap<>();
+        model.put("name","Tom");
+        return new ModelAndView("testView",model);
+    }
+}
+```
+
+#### HandlerMethod
+
+- HandlerMethod封装处理请求的Handler方法（一般是@XxxMapping标注的方法），包含了Handler方法的Method对象、Handler类的Class对象、Handler方法的参数类型等信息。
+- RequestMappingHandlerMapping会扫描并封装被@Controller标注的类中被@XxxMapping标注的方法为HandlerMethod。
+
+1. 请求参数自动绑定：请求参数可以自动绑定到方法参数内。
+2. Model模型自动绑定：如果在方法参数中声明了Map类型的model，则由RequestMappingHandlerAdapter自动生成Modle模型并绑定到该参数。
+3. 视图自动查找（没有@ResponseBody标注）：返回String类型的视图名，由RequestMappingHandlerAdapter自动查找相应名称的视图，并自动与参数中的Model绑定（如果存在Model参数）。
+
+> Controller接口方式返回的是ModelAndView，并没有以上三种特性，需要通过req.getParameter("name")的方式来获取参数。
+
+### HandlerInterceptor 拦截器
+
+- 拦截器是HandlerInterceptor的实现类。在查找处理器时，HandlerMapping并不直接返回Handler，而是Handler的执行链HandlerExecutionChain，其封装需要应用到该Handler上的所有拦截器。
+
+1. 定位拦截器：Spring MVC首先会扫描所有的拦截器，并将它们存储在一个列表中。  
+2. 实现拦截器逻辑：每个拦截器都需要实现preHandle()方法、postHandle()方法、afterCompletion()方法。preHandle()方法在控制器方法调用之前执行，postHandle()方法在控制器方法调用之后执行，afterCompletion()方法在控制器方法抛出异常时执行。  
+3. 执行控制器方法：当所有的拦截器都执行完毕后，Spring MVC会调用控制器方法。
+4. 回收：在控制器方法返回结果之后，Spring MVC会执行所有的postHandle()方法、afterCompletion()方法，然后拦截器链执行完毕。
+
+- 定义拦截器之后，还需要将其通过WebMvcConfigurer\#addInterceptors\(\.\.\)、@Intercepts等方式注册到Spring MVC环境中，才能生效。
+
+<img src="../../pictures/Spring-HandlerInterceptor-run.drawio.svg" width="600"/> 
+
+| 注解     | @Order                                                       |
+| -------- | ------------------------------------------------------------ |
+| 位置     | 拦截器类                                                     |
+| 作用     | 标注拦截器的执行顺序，如果两个拦截器的Order值相同，会根据它们的实现类名称的字母顺序来确定它们的执行顺序 |
+| **注解** | **@Intercepts**                                              |
+| 位置     | 拦截器类                                                     |
+| 作用     | 指定一个URL路径、或包含一个FilterRegistrationBean对象被拦截器拦截，可用于配置更多的拦截器参数<br />（仅SpringMVC中存在） |
+| **注解** | **@Filter**                                                  |
+| 位置     | 拦截器类                                                     |
+| 作用     | 指定一个URL路径，该路径将被拦截器拦截，只能配置一个拦截器<br />（仅SpringMVC中存在） |
+
+```java
+@Order(1)
+@Intercepts(@Filter("/login"))
+public class ProjectInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { 
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod(); //获得原始执行方法
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        if(ex != null){
+            ex.printStack();
+        }
+    }
+}
+```
+
+### HandlerExecutionChain 处理器执行链
+
+- HandlerExecutionChain包含了处理器方法中的HandlerMethod对象、Handler层次结构、Interceptors（拦截器）的顺序。
+
+1. 在处理请求时，Spring MVC会通过RequestMappingHandlerMapping来寻找处理器，RequestMappingHandlerMapping会根据请求的路径来匹配处理器方法，并返回一个HandlerExecutionChain。
+2. 接着，Spring MVC会通过HandlerAdapter来执行处理器方法，HandlerAdapter会根据请求的类型和处理器方法的方法signature来执行对应的方法，并返回处理结果。
+3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。
+
+# 1
+
+## @ResponseBody  响应体
+
+| 注解       | @ResponseBody                                   |
+| ---------- | ----------------------------------------------- |
+| 位置       | 类、方法注解                                    |
+| 作用       | 返回值直接写入响应体                            |
+| **返回值** | **说明**                                        |
+| String     | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
+| 对象       | 对象转换成JSON响应给前端。                      |
 
 ## @CrossOrigin 跨域资源访问
 
@@ -336,6 +487,61 @@ public void populateModel(@RequestParam String number, Model model) {
 
 ## BindingResult 捕获绑定和验证过程中的错误信息
 
+# WebMvcConfigurer
+
+- WebMvcConfigurer接口定义了多个Spring MVC的配置方法（default），所有配置类都可以实现该接口并覆盖其方法。
+
+| WebMvcConfigurer方法        | 说明                     |
+| --------------------------- | ------------------------ |
+| addViewControllers          | 添加需要跳转的视图控制器 |
+| addArgumentResolvers        | 添加请求参数解析器       |
+| addViewResolvers            | 添加视图解析器           |
+| addInterceptors             | 添加拦截器               |
+| configureMessageConverters  | 配置消息转换器           |
+| addResourceHandlers         | 添加静态资源处理器       |
+| configurePathMatch          | 配置路径匹配方式         |
+| configureContentNegotiation | 配置内容协商             |
+| configureHandlerMapping     | 配置处理器映射器         |
+| configureHandlerAdapter     | 配置处理器适配器         |
+
+<img src="../../pictures/WebMvcConfigurer.png" width="1000"/>
+
+## addViewControllers 注册视图控制器
+
+```java
+public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addViewController("/").setViewName("home");
+}
+```
+
+- addViewController("/myUrl") 设置视图控制器，可以设置多层url映射（如 "/\*\*"）。当请求路径为"myUrl"时，Spring MVC将该请求转发给该视图控制器处理，进行视图渲染等操作。setViewName("/myView") 设置显示的视图，渲染该视图到响应中返回给客户端。
+
+<img src="../../pictures/Spring-view-url.drawio.svg" width="600"/> 
+
+## addInterceptors 注册拦截器
+
+```java
+@Autowired
+private MyInterceptor myInterceptor;
+
+@Override
+public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(myInterceptor).addPathPatterns("/books","/books/**");
+}
+```
+
+## addResourceHandlers 静态资源处理器
+
+```java
+protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    //当访问/pages/*时，走/pages目录下的内容
+    registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
+    registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+    registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+    registry.addResourceHandler("/plugins/**").addResourceLocations("/plugins/");
+}
+```
+
 # MVC功能扩展
 
 | 名称 | @EnableWebMvc                                                |
@@ -343,73 +549,6 @@ public void populateModel(@RequestParam String number, Model model) {
 | 类型 | 类注解                                                       |
 | 位置 | 配置类定义上方                                               |
 | 作用 | 自行配置SpringMVC多项辅助功能<br />（不建议开启，会导致部分自动配置失效） |
-
-## SpringMvcSuport
-
-- WebMvcConfigurer接口：定义了多个Spring MVC的配置方法（default），所有配置类都可以实现该接口并覆盖其方法。
-
-```java
-@Configuration
-@ComponentScan("com.zjk.controller")
-@EnableWebMvc
-public class SpringMvcConfig implements WebMvcConfigurer {
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-    }
-
-    //拦截器
-    @Autowired
-    private ProjextInterceptor projextInterceptor;
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
-    }
-
-    //视图控制器
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("home");
-    }
-}
-```
-
-- WebMvcConfigurationSupport：WebMvcConfigurer接口的实现类。
-
-```java
-public class SpringMvcSupport extends WebMvcConfigurationSupport {
-    @Autowired
-    private ProjextInterceptor projextInterceptor;
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        //当调用/book请求时，使用拦截器
-        registry.addInterceptor(projextInterceptor).addPathPatterns("/books","/books/**");
-    }
-}
-```
-
-```java
-@Configuration
-public class SpringMvcSupport extends WebMvcConfigurationSupport {
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //当访问/pages/*时，走/pages目录下的内容
-        registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/plugins/**").addResourceLocations("/plugins/");
-    }
-}
-```
-
-```java
-public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
-    //部分方法
-
-    protected String[] getServletMappings() {
-        return new String[]{"/"}; //拦截路径
-    }
-}
-```
 
 ## ServletInitializer 前端控制器
 
@@ -484,43 +623,6 @@ public interface Converter<S, T> {
 ```
 
 - HttpMessageConvert接口的内部通过Converter接口（HttpMessageConvert接口）的实现类完成类型转换（pojo \-\> json、Collection \-\> json）。
-
-## HandlerInterceptor 拦截器
-
-- 拦截器（Interceptor）：动态拦截控制器（Controller）方法的执行。在指定的方法调用前/后执行预先设定的代码、或阻止原始方法的执行。
-
-> 拦截器链：拦截器链的运行顺序按照拦截器的添加顺序先后执行。当拦截器中出现对原始处理器的拦截，后面的拦截器均终止运行。
-
-| HandlerInterceptor        | 拦截器接口                                                   |
-| ------------------------- | ------------------------------------------------------------ |
-| **方法**                  | **说明**                                                     |
-| preHandle()               | 在方法执行之前进行校验。<br />返回false则终止原方法操作。    |
-| postHandle()              | 在方法执行之后进行校验。                                     |
-| afterCompletion()         |                                                              |
-| **参数**                  | **说明**                                                     |
-| handler                   | class org.springframework.web.method.HandlerMethod<br />原方法的反射（Method）。 |
-| ModelAndView modelAndView | 页面跳转                                                     |
-| Exception ex              | 抛出的异常对象                                               |
-
-```java
-@Component
-public class ProjectInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { //
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod(); //获得原始执行方法
-        return true;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-    }
-}
-```
 
 ## @RestControllerAdvice 异常处理器
 
