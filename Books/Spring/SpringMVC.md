@@ -243,178 +243,18 @@ public class ProjectInterceptor implements HandlerInterceptor {
 2. 接着，Spring MVC会通过HandlerAdapter来执行处理器方法，HandlerAdapter会根据请求的类型和处理器方法的方法signature来执行对应的方法，并返回处理结果。
 3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。
 
-# 1
+# Model 模型
 
-## @ResponseBody  响应体
+<img src="../../pictures/ExtendedModelMap.png" width="800"/> 
 
-| 注解       | @ResponseBody                                   |
-| ---------- | ----------------------------------------------- |
-| 位置       | 类、方法注解                                    |
-| 作用       | 返回值直接写入响应体                            |
-| **返回值** | **说明**                                        |
-| String     | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
-| 对象       | 对象转换成JSON响应给前端。                      |
+- Model对应于一次用户的请求处理（一个请求内所有的Model操作都是同一个实例），负责控制器和视图之间的数据传递，Model属性中的数据被复制到Servlet Request属性。
 
-## @CrossOrigin 跨域资源访问
-
-| 注解 | @CrossOrigin                                         |
-| ---- | ---------------------------------------------------- |
-| 位置 | 类注解                                               |
-| 作用 | 跨域资源共享（Cross Origin Resource Sharing，RCORS） |
-
-## @ResponseStatus 响应状态码
-
-| 注解 | @ResponseStatus      |
-| ---- | -------------------- |
-| 位置 | 方法注解             |
-| 作用 | 返回指定的响应状态码 |
-| 参数 | HttpStatus.XXX       |
-
-# 数据传递
-
-| 注解          | 区别：接收参数                     | 应用                                                      |
-| ------------- | ---------------------------------- | --------------------------------------------------------- |
-| @RequestBody  | url地址/表单传参                   | 发送请求参数超过1个时，以json格式为主。                   |
-| @RequestParam | json数据                           | 发送非json格式数据，接收请求参数。                        |
-| @PathVariable | 路径参数，\{参数名称\}描述路径参数 | RESTful，参数数量较少时，接收请求路径变量，通常传递id值。 |
-
-## 参数类型
-
-| 参数类型 | 传递方式                                                     |
-| -------- | ------------------------------------------------------------ |
-| 值       | url地址传参，地址参数名与形参变量名相同时，自动接收参数。    |
-| POJO     | 请求参数名与形参对象属性名相同时，自动接收参数。             |
-| 嵌套POJO | 请求参数名与形参对象属性名相同时，按照对象层次结构关系接收嵌套POJO属性参数。 |
-| 数组     | 请求参数名与形参对象属性名相同且请求参数为多个，定义数组类型即可接收参数 |
-| 集合     | 同名请求参数可以使用@RequestParam注解映射到对应名称的集合对象中作为数据 |
-
-### POJO参数
-
-```java
-//http://localhost:8080/user/userParam?id=9&name=zjk&age=18
-@RequestMapping("/userParam")
-@ResponseBody
-public String commonParam(User user){ //id、name、age
-    return "{'info':'userParam'}";
-}
-```
-
-### 嵌套POJO参数
-
-- 按照对象层次结构关系：作为属性的POJO.属性。
-
-```java
-@RequestMapping("/userParam")
-@ResponseBody
-public String commonParam(User user){ //User:id,name,age,address(Address:province,city)
-    return "{'info':'userParam'}";
-}
-```
-
-### 数组参数
-
-- 数组名必须一致才能封装到一个数组中。
-
-```java
-@RequestMapping("/arrParam")
-@ResponseBody
-public String arrParam(String[] infos) {
-    return "{'info':'arrParam'}";
-}
-```
-
-### 日期参数 @DateTimeFormat
-
-| 注解     | @DateTimeFormat                 |
-| -------- | ------------------------------- |
-| 位置     | 形参注解                        |
-| 作用     | 设定日期时间型数据格式          |
-| 相关属性 | pattern：指定日期时间格式字符串 |
-
-```java
-@RequestMapping("/dateParam")
-@ResponseBody
-public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
-                        @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss") Date date2){
-    return "{'info':'date'}";
-}
-```
-
-## @RequestParam 请求参数
-
-| 注解 | @RequestParam                                                |
-| ---- | ------------------------------------------------------------ |
-| 位置 | 形参注解                                                     |
-| 作用 | 绑定形参和地址参数。<br />（形参与地址参数名不一致时，需要该注解指定） |
-| 参数 | required：是否为必传参数 <br>defaultValue：参数默认值        |
-
-```java
-//http://localhost:8080/user/userParam?id=9&name=zjk&age=18
-@RequestMapping("/commonParam")
-@ResponseBody
-public String commonParam(@RequestParam("name") String userName,
-                          @RequestParam("age") Integer age){
-    System.out.println(userName);
-    System.out.println(age);
-    return "{'info':'commonParam'}";
-}
-
-@RequestMapping("/listParam")
-@ResponseBody
-public String listParam(@RequestParam List<String> list) {
-    return "{'info':'arrParam'}";
-}
-```
-
-## @RequestBody 请求体
-
-| 注解 | @RequestBody                                                 |
-| ---- | ------------------------------------------------------------ |
-| 位置 | 形参注解                                                     |
-| 作用 | 将请求中请求体所包含的数据传递给请求参数<br />一个方法只能使用存在一个该注解。 |
-
-```java
-@RequestMapping("/userParamForJson")
-@ResponseBody
-public String userParamForJson(@RequestBody User user) {
-    return "{'info':'userParamForJson'}";
-}
-
-@RequestMapping("/listParamForJson")
-@ResponseBody
-public String listParamForJson(@RequestBody List<String> list) {
-    return "{'info':'listParamForJson'}";
-}
-
-@RequestMapping("/userListParamForJson")
-@ResponseBody
-public String userListParamForJson(@RequestBody List<User> list) {
-    return "{'info':'userListParamForJson'}";
-}
-```
-
-## @PathVariable 路径参数绑定
-
-| 注解 | @PathVariable                                  |
-| ---- | ---------------------------------------------- |
-| 位置 | 形参注解                                       |
-| 作用 | 绑定路径参数和形参，路径参数名与形参名一一对应 |
-
-```java
-@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-@ResponseBody
-public String getById(@PathVariable Integer id){
-    return "{'module':'user getById'}";
-}
-```
-
-# Model
-
-- Model对象负责控制器和视图之间的数据传递，Model属性中的数据被复制到Servlet Request属性中。
-
-> Controller 将数据存储在 Model（或者 Map）对象中，再将视图名称和 Model 对象返回给 DispatcherServlet，DispatcherServlet 根据视图名称找到对应的视图（View），并将 Model 对象传递给它。（在方法的参数中声明一个 Model（或者 Map）类型的变量，然后在方法中通过该变量来存储数据）
-
-- ModelMap是Model接口的实现类，Spring MVC默认使用ExtendedModelMap（继承 LinkedHashMap），可用于存储和检索数据。
+| 模型相关类型       | 说明                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| Map                | 模型数据存储的基本类型，视图渲染时也使用该类型              |
+| Model              | SpringMVC对模型数据操作的抽象，可通过asMap(..)方法转换为Map |
+| RedirectAttributes | addFlashAttribute(..)方法来添加重定向可用的Map参数          |
+| ExtendedModelMap   | @XxxMapping处理前，SpringMVC自动绑定ExtendedModelMap        |
 
 ```java
 @GetMapping("/thymeleafHello")
@@ -425,67 +265,81 @@ public String hello(Model model){
 }
 ```
 
-## ModelAndView
+## 模型数据绑定
 
-- ModelAndView同时封装模型数据和视图信息，设置模型数据和视图名称，并将其返回给 DispatcherServlet，然后由 DispatcherServlet 进行视图的解析和渲染。
+### ExtendedModelMap自动绑定
+
+- SpringMVC自动为@XxxMapping标志的方法绑定ExtendedModelMap。ExtendedModelMap的子类或父类（大部分可以）实现以下操作：
+
+1. 方法参数声明为该类型的，会自动绑定模型数据，只要不返回就不会对原有的模型数据造成影响。
+2. 方法内部声明为该类型的，返回的模型数据会对原有的模型数据造成影响，且视图为@XxxMapping指定的URL路径。
 
 ```java
-@Controller
-public class UserController {
-    @RequestMapping("/user")
-    public ModelAndView getUser() {
-        User user = userService.getUser();  // 假设从数据库中获取到了用户数据
+@GetMapping("/showUser")
+public String showUser(Model model){
+    model.addAttribute("username","Tom");
+    return "showUser";
+}
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", user);  // 将用户数据添加到模型
-        modelAndView.setViewName("user");  // 设置视图名称
-
-        return modelAndView;
-    }
+@GetMapping("/showUser")
+public Model showUser(){
+    Model model<String,Object> = new ExtendedModelMap();
+    model.addAttribute("username","Tom");
+    return model;
 }
 ```
 
-## @ModelAttribute
+### @ModelAttribute
 
 | 注解 | @ModelAttribute                                              |
 | ---- | ------------------------------------------------------------ |
 | 位置 | 形参、方法注解                                               |
-| 方法 | 返回值存入Model。                                            |
-| 形参 | 数据绑定，该形参的值将由model中取得（方法内对该参数的修改不影响Model内的值）。<br />如果model中找不到，那么该参数会先被实例化，然后被添加到model中。<br />（在model中存在以后，请求中所有名称匹配的参数都会填充到该参数中） |
+| 方法 | 返回值自动存入ExtendedModelMapModel                          |
+| 形参 | 数据绑定，该形参的值从模型取得，对该参数的修改不影响模型内的值。<br />若模型中找不到名称匹配的，则该参数会先被实例化（必须能够实例化），然后被添加到模型中。 |
 | 属性 | name：添加/匹配到model的属性名称（默认为当前标注的参数名称）。 |
 
-- 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。且如果同时被@XxxMapping注解，则返回值不再是视图名，而是Model的一个属性。
+- 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。（如果同时被@XxxMapping和@ModelAttribute标注，则返回值不再是视图名，而是Model的一个属性）
 
 ```java
-//默认将方法的返回值存入Model
-@ModelAttribute
-public Account addAccount(@RequestParam String number) {
-    return accountManager.findAccount(number);
+@GetMapping("/showUser")
+@ModelAttribute("username")
+public String showUser(){
+    return "Tom";
 }
 
-//通过addAttribute()，向Model中存入多个数据。
-@ModelAttribute
-public void populateModel(@RequestParam String number, Model model) {
-    model.addAttribute(accountManager.findAccount(number));
-    // add more ...
+@GetMapping("/showUser")
+@ModelAttribute("username")
+public String showUser(@ModelAttribute("username") String username){
+    //从模型中获取的username仍然是空的，为什么？？？
+    username = "Tom";
+    return username;
 }
 ```
 
-## @SessionAttributes
+### ModelAndView
 
-| 注解 | @SessionAttributes                                           |
-| ---- | ------------------------------------------------------------ |
-| 位置 | 控制器类                                                     |
-| 作用 | 注解类中存放到Model中的属性在会话中会一直保持。<br />搭配@ModelAttribute使用。 |
+- ModelAndView同时封装模型数据和视图信息，设置模型数据和视图名称，并将其返回给 DispatcherServlet，然后由 DispatcherServlet 进行视图的解析和渲染。
 
-> SessionStatus 接口会话状态
->
-> ```java
-> //将当前处理程序的会话处理标记为完成，允许清理会话属性。
-> sessionStatus.setComplete();
-> ```
+```java
+@RequestMapping("/user")
+public ModelAndView getUser() {
+    User user = userService.getUser();  // 假设从数据库中获取到了用户数据
+
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.addObject("user", user);  // 将用户数据添加到模型
+    modelAndView.setViewName("user");  // 设置视图名称
+
+    return modelAndView;
+}
+```
+
+### RedirectAttributes
+
+- RedirectAttributes只对重定向视图有效。
 
 ## BindingResult 捕获绑定和验证过程中的错误信息
+
+# View 视图
 
 # WebMvcConfigurer
 
@@ -658,3 +512,182 @@ public class ProjectExceptionAdvice {
     }
 }
 ```
+
+# 1
+
+## @ResponseBody  响应体
+
+| 注解       | @ResponseBody                                   |
+| ---------- | ----------------------------------------------- |
+| 位置       | 类、方法注解                                    |
+| 作用       | 返回值直接写入响应体                            |
+| **返回值** | **说明**                                        |
+| String     | 文本内容响应给前端（而不是Mapping的页面跳转）。 |
+| 对象       | 对象转换成JSON响应给前端。                      |
+
+## @CrossOrigin 跨域资源访问
+
+| 注解 | @CrossOrigin                                         |
+| ---- | ---------------------------------------------------- |
+| 位置 | 类注解                                               |
+| 作用 | 跨域资源共享（Cross Origin Resource Sharing，RCORS） |
+
+## @ResponseStatus 响应状态码
+
+| 注解 | @ResponseStatus      |
+| ---- | -------------------- |
+| 位置 | 方法注解             |
+| 作用 | 返回指定的响应状态码 |
+| 参数 | HttpStatus.XXX       |
+
+# 数据传递
+
+| 注解          | 区别：接收参数                     | 应用                                                      |
+| ------------- | ---------------------------------- | --------------------------------------------------------- |
+| @RequestBody  | url地址/表单传参                   | 发送请求参数超过1个时，以json格式为主。                   |
+| @RequestParam | json数据                           | 发送非json格式数据，接收请求参数。                        |
+| @PathVariable | 路径参数，\{参数名称\}描述路径参数 | RESTful，参数数量较少时，接收请求路径变量，通常传递id值。 |
+
+## 参数类型
+
+| 参数类型 | 传递方式                                                     |
+| -------- | ------------------------------------------------------------ |
+| 值       | url地址传参，地址参数名与形参变量名相同时，自动接收参数。    |
+| POJO     | 请求参数名与形参对象属性名相同时，自动接收参数。             |
+| 嵌套POJO | 请求参数名与形参对象属性名相同时，按照对象层次结构关系接收嵌套POJO属性参数。 |
+| 数组     | 请求参数名与形参对象属性名相同且请求参数为多个，定义数组类型即可接收参数 |
+| 集合     | 同名请求参数可以使用@RequestParam注解映射到对应名称的集合对象中作为数据 |
+
+### POJO参数
+
+```java
+//http://localhost:8080/user/userParam?id=9&name=zjk&age=18
+@RequestMapping("/userParam")
+@ResponseBody
+public String commonParam(User user){ //id、name、age
+    return "{'info':'userParam'}";
+}
+```
+
+### 嵌套POJO参数
+
+- 按照对象层次结构关系：作为属性的POJO.属性。
+
+```java
+@RequestMapping("/userParam")
+@ResponseBody
+public String commonParam(User user){ //User:id,name,age,address(Address:province,city)
+    return "{'info':'userParam'}";
+}
+```
+
+### 数组参数
+
+- 数组名必须一致才能封装到一个数组中。
+
+```java
+@RequestMapping("/arrParam")
+@ResponseBody
+public String arrParam(String[] infos) {
+    return "{'info':'arrParam'}";
+}
+```
+
+### 日期参数 @DateTimeFormat
+
+| 注解     | @DateTimeFormat                 |
+| -------- | ------------------------------- |
+| 位置     | 形参注解                        |
+| 作用     | 设定日期时间型数据格式          |
+| 相关属性 | pattern：指定日期时间格式字符串 |
+
+```java
+@RequestMapping("/dateParam")
+@ResponseBody
+public String dateParam(@DateTimeFormat(pattern = "yyyy-mm-dd") Date date1,
+                        @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss") Date date2){
+    return "{'info':'date'}";
+}
+```
+
+## @RequestParam 请求参数
+
+| 注解 | @RequestParam                                                |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 形参注解                                                     |
+| 作用 | 绑定形参和地址参数。<br />（形参与地址参数名不一致时，需要该注解指定） |
+| 参数 | required：是否为必传参数 <br>defaultValue：参数默认值        |
+
+```java
+//http://localhost:8080/user/userParam?id=9&name=zjk&age=18
+@RequestMapping("/commonParam")
+@ResponseBody
+public String commonParam(@RequestParam("name") String userName,
+                          @RequestParam("age") Integer age){
+    System.out.println(userName);
+    System.out.println(age);
+    return "{'info':'commonParam'}";
+}
+
+@RequestMapping("/listParam")
+@ResponseBody
+public String listParam(@RequestParam List<String> list) {
+    return "{'info':'arrParam'}";
+}
+```
+
+## @RequestBody 请求体
+
+| 注解 | @RequestBody                                                 |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 形参注解                                                     |
+| 作用 | 将请求中请求体所包含的数据传递给请求参数<br />一个方法只能使用存在一个该注解。 |
+
+```java
+@RequestMapping("/userParamForJson")
+@ResponseBody
+public String userParamForJson(@RequestBody User user) {
+    return "{'info':'userParamForJson'}";
+}
+
+@RequestMapping("/listParamForJson")
+@ResponseBody
+public String listParamForJson(@RequestBody List<String> list) {
+    return "{'info':'listParamForJson'}";
+}
+
+@RequestMapping("/userListParamForJson")
+@ResponseBody
+public String userListParamForJson(@RequestBody List<User> list) {
+    return "{'info':'userListParamForJson'}";
+}
+```
+
+## @PathVariable 路径参数绑定
+
+| 注解 | @PathVariable                                  |
+| ---- | ---------------------------------------------- |
+| 位置 | 形参注解                                       |
+| 作用 | 绑定路径参数和形参，路径参数名与形参名一一对应 |
+
+```java
+@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+@ResponseBody
+public String getById(@PathVariable Integer id){
+    return "{'module':'user getById'}";
+}
+```
+
+## @SessionAttributes
+
+| 注解 | @SessionAttributes                                           |
+| ---- | ------------------------------------------------------------ |
+| 位置 | 控制器类                                                     |
+| 作用 | 注解类中存放到Model中的属性在会话中会一直保持。<br />搭配@ModelAttribute使用。 |
+
+> SessionStatus 接口会话状态
+>
+> ```java
+> //将当前处理程序的会话处理标记为完成，允许清理会话属性。
+> sessionStatus.setComplete();
+> ```
