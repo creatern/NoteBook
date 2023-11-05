@@ -224,3 +224,4 @@ public boolean isInterrupted() {
 2. 如果不存在，则查找父线程的ThreadLocalMap，直到找到该对象或者到达根线程（即主线程）。
 3. 如果仍然没有找到该对象，则根据ThreadLocal对象的初始值来返回对应的值。
 
+<img src="../../pictures/Thread-ThreadLocalMap.drawio.svg" width="1000"/> 
