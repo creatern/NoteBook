@@ -79,7 +79,11 @@ docker run -it --name mysql5.7 \
 
 [Thread 线程类](./Books/Java/Thread.md)
 
-[并发相关](./Books/Java/AboutComplication.md)
+CAS
+
+Unsafe
+
+[ThreadLocalRandom](./Books/Java/ThreadLocalRandom.md)
 
 ## Spring
 
