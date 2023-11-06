@@ -225,3 +225,14 @@ public boolean isInterrupted() {
 3. 如果仍然没有找到该对象，则根据ThreadLocal对象的初始值来返回对应的值。
 
 <img src="../../pictures/Thread-ThreadLocalMap.drawio.svg" width="1000"/> 
+
+<img src="../../pictures/Thread-setandget-threadLocal.drawio.svg" width="1000"/>
+
+```java
+//Thread的构造器中：
+if (inheritThreadLocals && parent.inheritableThreadLocals != null)
+    this.inheritableThreadLocals =
+        ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);
+//只要父线程中有inheritThreadLocals，则子线程的inheritThreadLocals就一定不为null
+```
+
