@@ -20,7 +20,7 @@
 
 [包装类](./Books/Java/包装类.md)
 
-[String 字符串](./Books/Java/String.md)
+[String 字符串](./Books/JVM/StringTable.md)
 
 [System 系统](./Books/Java/System.md)
 
@@ -237,7 +237,7 @@ spring-boot-starter
 
 ### 内存
 
-[运行时数据区 Runtime Data Areas](./Books/JVMRuntimeDataAreas.md)
+[运行时数据区 Runtime Data Areas](./Books/JVM/RuntimeDataAreas.md)
 
 [本地方法接口 JNI](./Books/JVM/JNI.md)
 
@@ -252,12 +252,8 @@ spring-boot-starter
 ### GC 垃圾回收
 
 > 哪些内存需要回收？什么时候回收？如何回收？
-
-- 垃圾：运行程序中没有任何指针指向的对象。如果不对这些垃圾进行回收，所占用的空间会一直保留到程序结束而无法被其他对象使用，甚至内存溢出。
-
+>
 > 早期的垃圾回收，内存泄漏问题。：一处内存区间由于程序员编码的问题而忘记被回收，就会产生内存泄漏，垃圾对象永远无法被清除，随着系统运行时间的不断增长，垃圾对象所耗内存可能持续上升，直到内存溢出并造成应用程序崩溃。 
-
-> Java自动内存管理：黑匣子问题，实施必要的监控和调节。
 
 - GC工作的区域：Java堆、方法区。  频繁收集Young区、较少收集Old区、基本不动Perm区/Metaspase。
 

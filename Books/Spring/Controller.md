@@ -221,6 +221,7 @@ headers = "Accept: text/*"
 ##### 内容类型 Content\-Type \& Accept
 
 - Content\-Tyep和Accept请求头的值的规范都遵循MimeType的标准定义格式，在HTTP请求的数据传输中使用MediaType（MimeType的扩展集）。
+- MediaType枚举类内封装了MediaType的大部分类型。
 
 ```
 类型/子类型(;参数名=参数值)*n
@@ -235,15 +236,17 @@ text/html;name=value
 application/xhtml+xml
 ```
 
+1. 类型、子类型部分支持\*代表所有类型，若类型为\*，则子类型也必须是\*。
+2. 子类型带\+的，若\+前为\*，表示所有子类型中\+前的任意类型。
+3. 标准的q属性（质量因子 quality）0\~1，1最好、0不接受。
 
-
-###### consumes （Accept）
+###### consumes
 
 - consumes属性指定处理方法能够接受的请求内容类型（请求的Content\-Type），即处理器是否消费该类型，匹配Accept请求头的值。
 
+- consumes的整个条件构成MediaRange。
 
-
-###### produces Content\-Type
+###### produces
 
 - produces属性指定处理方法能够返回的响应内容类型（响应的Content\-Type），即处理器是否生产该类型。
 
