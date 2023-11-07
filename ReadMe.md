@@ -95,7 +95,15 @@ docker run -it --name mysql5.7 \
 | [DI](./Books/Spring/IOC.md)  | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
 | [AOP](./Books/Spring/AOP.md) | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
 
-### [Spring MVC](./Books/Spring/SpringMVC.md)
+### Spring MVC
+
+[WebMvcConfigurer 配置](./Books/Spring/WebMvcConfigurer.md)
+
+[Controller 控制器](./Books/Spring/Controller.md)
+
+[Model 模型](./Books/Spring/Model.md)
+
+[View 视图](./Books/Spring/View.md)
 
 ### Spring Boot
 
