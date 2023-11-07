@@ -68,18 +68,12 @@ public HttpRequestHandler beanNameUrlHandler(){
 | **注解**       | **@GetMapping、@PostMapping、@PutMapping、@DeleteMapping**   |
 | 位置           | 方法注解                                                     |
 | 作用           | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作。<br />只要访问路径或请求动作有一个不同，就可以使用多个该注解。 |
-| **参数**       | **说明**                                                     |
-| value/path     | 请求映射路径（默认根路径"/"）                                |
-| method         | 指定请求方法                                                 |
-| produces       | 限定能够处理的请求                                           |
 | **返回值**     | **说明**                                                     |
 | String         | 响应的视图名称、重定向到的URL。                              |
 | void           | 不需要返回任何响应。                                         |
 | ModelAndView   | 响应的视图和模型数据的容器。                                 |
 | ResponseEntity | 带有自定义HTTP头和状态代码的HTTP响应。                       |
 | 其他类型       | 响应的序列化数据类型。                                       |
-
-> @RequestMapping("/home")搭配@XxxMapping("/design")：请求映射为/home/design。
 
 ```java
 @RestController
@@ -154,6 +148,8 @@ public class UserController {
 
 // 匹配/path1或/path2的请求
 @Request({"path1","path2"})
+
+//类@RequestMapping("/home")搭配方法@XxxMapping("/design")：请求映射为/home/design。
 ```
 
 - 路径模式支持方法和类级别的注解，同时出现时，对二者进行合并。
