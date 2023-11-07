@@ -21,7 +21,7 @@ protected int next(int bits) {
     do {
         oldseed = seed.get();
         nextseed = (oldseed * multiplier + addend) & mask;
-    } while (!seed.compareAndSet(oldseed, nextseed));
+    } while (!seed.compareAndSet(oldseed, nextseed)); //CAS操作 
     return (int)(nextseed >>> (48 - bits));
 }
 ```

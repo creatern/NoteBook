@@ -236,3 +236,9 @@ if (inheritThreadLocals && parent.inheritableThreadLocals != null)
 //只要父线程中有inheritThreadLocals，则子线程的inheritThreadLocals就一定不为null
 ```
 
+# volatile关键字
+
+1. 内存可见性：当一个线程修改了volatile变量的值，该变量的新值会立即被写回主内存，并通知其他线程所修改的值。其他线程读取该变量的值时会从主内存中重新加载，而不是从线程私有的缓存中读取。
+2. 禁止指令重排序：编译器和处理器不会对volatile变量的读写操作进行指令重排序，保证了操作的顺序性。
+
+3. 并不能保证原子性：如果一个操作依赖于变量的当前值，并且在多个线程之间进行修改，volatile仍然无法保证线程安全。
