@@ -369,11 +369,58 @@ spring-boot-starter
 
 ## 数据结构
 
-[线性结构](./Books/Arithmetic/线性结构.md)
+- 线性表（线性结构）：数据元素之间存在一对一的线性关系，包括数组、队列、链表、栈。
+- 非线性结构：二维数组、多维数组、广义表、树、图。
 
-[树](./Books/Arithmetic/树.md)
+### 线性结构
 
-[图](./Books/Arithmetic/Graph.md)
+[数组 Array](./Books/Arithmetic/Array.md)
+
+[链表 LinkedList](./Books/Arithmetic/LinkedList.md)
+
+[栈 Stack](./Books/Arithmetic/Stack.md)
+
+[队列 Queue](./Books/Arithmetic/Queue.md)
+
+### 树 Tree
+
+[树 Tree 概述](./Books/Arithmetic/Tree.md)
+
+[二叉树 Binary Tree](./Books/Arithmetic/BinaryTree.md)
+
+[森林 Forest](./Books/Arithmetic/Forest.md)
+
+[哈夫曼树 Huffman Tree](./Books/Arithmetic/HuffmanTree.md)
+
+[字典树（前缀树） Trie Tree](./Books/Arithmetic/TrieTree.md)
+
+[平衡二叉树](./Books/Arithmetic/BalancedBinaryTree.md)
+
+[二叉排序树](./Books/Arithmetic/SortedBinaryTree.md)
+
+线索二叉树
+
+B树
+
+B-tree
+
+B+tree
+
+B*tree
+
+红黑树
+
+### 图 Graph
+
+[图 概述](./Books/Arithmetic/Graph.md)
+
+[图的实现](./Books/Arithmetic/图的实现.md)
+
+[图的遍历 DFS、BFS](./Books/Arithmetic/GraphDFSBFS.md)
+
+[查询模式](./Books/Arithmetic/图的查询模式.md)
+
+[有向无环图 DAG](./Books/Arithmetic/DAG.md)
 
 ## 算法
 
@@ -419,11 +466,11 @@ spring-boot-starter
 
 ### 创建型
 
-[工厂模式](./Books/Arithmetic/Foctory.md)
+[工厂模式 Foctory](./Books/Arithmetic/Foctory.md)
 
-[单例模式](./Books/Arithmetic/SingleTon.md)
+[单例模式 SingleTon](./Books/Arithmetic/SingleTon.md)
 
-[建造者模式](./Books/Arithmetic/Builder.md)
+[建造者模式 Builder](./Books/Arithmetic/Builder.md)
 
 ### 结构型
 
@@ -587,7 +634,7 @@ spring-boot-starter
 
 [数据的表示](./Books/Computer/数据的表示.md)
 
-[存储器](./Books/Computer/Memory.md)
+[存储器 Memory](./Books/Computer/Memory.md)
 
 ## 网络结构
 
