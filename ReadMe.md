@@ -243,7 +243,7 @@ spring-boot-starter
 
 [对象实例化](./Books/JVM/对象实例化.md)
 
-[直接内存](./Books/JVM/直接内存.md)
+[直接内存 DirectMemory](./Books/JVM/DirectMemory.md)
 
 [执行引擎 ExecutionEngine](./Books/JVM/ExecutionEngine.md)
 
