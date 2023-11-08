@@ -257,7 +257,31 @@ spring-boot-starter
 
 - GC工作的区域：Java堆、方法区。  频繁收集Young区、较少收集Old区、基本不动Perm区/Metaspase。
 
-#### [GC算法](./Books/JVM/GC算法.md)
+#### GC算法
+
+##### 标记阶段
+
+- 垃圾标记阶段：对象存活判断（死亡对象，即一个对象不再被任何的存活对象引用）。
+
+[引用计数算法](./Books/JVM/ReferenceCountingAlgorithm.md)
+
+[可达性分析算法 GC Roots](./Books/JVM/GCRoots.md)
+
+[对象终止机制 finalization](./Books/JVM/finalization.md)
+
+##### 清除阶段
+
+[标记-清除算法 Mark-Sweep](./Books/JVM/MarkSweep.md)
+
+[复制算法](./Books/JVM/ReplicationAlgorithms.md)
+
+[标记-压缩（整理）算法  Mark-Compact](./Books/JVM/MarkCompact.md)
+
+[分代收集算法](./Books/JVM/GenerationalCollectionAlgorithms.md)
+
+[增量收集算法](./Books/JVM/IncrementalCollectionAlgorithms.md)
+
+[分区算法](./Books/JVM/PartitioningAlgorithms.md)
 
 #### 垃圾收集器
 
