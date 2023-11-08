@@ -220,7 +220,7 @@ headers = "Accept: text/*"
 
 ##### 内容类型 Content\-Type \& Accept
 
-- Content\-Tyep和Accept请求头的值的规范都遵循MimeType的标准定义格式，在HTTP请求的数据传输中使用MediaType（MimeType的扩展集）。
+- Content\-Type和Accept请求头的值的规范都遵循MimeType的标准定义格式，在HTTP请求的数据传输中使用MediaType（MimeType的扩展集）。
 - MediaType枚举类内封装了MediaType的大部分类型。
 
 ```
@@ -250,7 +250,66 @@ application/xhtml+xml
 
 - produces属性指定处理方法能够返回的响应内容类型（响应的Content\-Type），即处理器是否生产该类型。
 
+#### RequestMappingInfo 属性条件
 
+- RequestMappingInfo是RequestCondition\<RequestMappingInfo\>的实现类，包含了@RequestMapping的所有属性条件。
+
+```java
+public interface RequestCondition<T> {
+    //合并
+    T combine(T var1);
+
+    //匹配顺序
+    @Nullable
+    T getMatchingCondition(HttpServletRequest var1);
+    
+    //比较
+    int compareTo(T var1, HttpServletRequest var2);
+}
+```
+
+- RequestMappingInfo对请求进行匹配时，依次获取以下每个条件的匹配结果，只要有一个返回null，则该RequestMappingInfo对应的@RequestMapping与该请求不匹配。
+
+```java
+@Nullable
+private final String name;
+@Nullable
+private final PathPatternsRequestCondition pathPatternsCondition;
+@Nullable
+private final PatternsRequestCondition patternsCondition; //path
+private final RequestMethodsRequestCondition methodsCondition; //method
+private final ParamsRequestCondition paramsCondition; //params
+private final HeadersRequestCondition headersCondition; //headers
+private final ConsumesRequestCondition consumesCondition; //consumers
+private final ProducesRequestCondition producesCondition; //produces
+private final RequestConditionHolder customConditionHolder; //自定义条件
+```
+
+- @RequestMapping的方法注解和类注解的合并就是RequestMappingInfo的合并，对所有条件的同类条件执行合并。每个条件都继承自AbstractRequestCondition，带有各自的combine(..)方法。
+
+```java
+//分别调用每个条件的combine(..)方法实现合并
+public RequestMappingInfo combine(RequestMappingInfo other)
+```
+
+- RequestMappingInfo的匹配请求规则为methods、params、headers、consumes、produces、pathPatterns、patterns、custom。
+
+```java
+//匹配条件的顺序
+public RequestMappingInfo getMatchingCondition(HttpServletRequest request)
+```
+
+- 多个@RequestMapping对同一个请求匹配时，RequestMappingInfo的排序规则为path、params、headers、consumes、produces、method、custom。
+
+```java
+//多个匹配的@RequestMapping的排序
+public int compareTo(RequestMappingInfo other, HttpServletRequest request){
+    //如果请求方法是HEAD，则优先判断method。
+    if (HttpMethod.HEAD.matches(request.getMethod())) {...}
+    
+    //常规的排序规则path、params、headers、consumes、produces、method、custom。
+}
+```
 
 ### HttpRequestHandler
 

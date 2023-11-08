@@ -106,3 +106,32 @@ class MyClass{
 }
 ```
 
+# 操作对象字段
+
+## getInt、getIntVolatile、getIntAcquire 获取
+
+- getXxx(Object o, long offset)：在给定偏移量处获取给定对象 o 中的字段或数组元素。除非满足以下情况之一，否则结果未定义：
+
+1. 偏移量是从某个Java字段的Field通过objectFieldOffset(..)获取的，且引用的对象（o）的类型与该字段的Field兼容。
+2. 偏移量和对象引用o（null 或非 null）都是通过staticFieldOffset(..)和staticFieldBase(..)（分别） 从某些 Java 字段的反射获得的Field。
+3. 引用的对象是一个数组，偏移量是满足B\+N\*S模式的整数。（N 是数组的有效索引、B由arrayBaseOffset(...)从该数组类型获取、S由arrayIndexScale(..)从该数组类型获取）
+
+- public native int getInt(Object o, long offset)：从指定的内存地址读取一个普通的 int 类型的数据。它不对内存访问进行额外的控制，仅仅是简单地读取指定地址上的值并返回。
+
+- public native int getIntVolatile(Object o, long offset)：从指定内存地址读取一个 volatile int 类型的值。可见性和有序性的特性，对 volatile 变量的读操作将会获取最新的值，并且读操作不会被重排序。
+- public final int getIntAcquire(Object o, long offset) ：从指定的内存地址读取一个 int 类型的数据，并且具有获取操作的语义（底层调用public native int getIntVolatile(Object o, long offset)）。确保在读取该数据之前，不会发生其他内存访问的重排序，从而确保获取到的数据是最新的。
+
+## getAndXxxYyy 操作并返回
+
+| 原子操作之后，返回操作后的值                          | 底层原理                  |
+| ----------------------------------------------------- | ------------------------- |
+| getAndXxxYyy(Object o, long offset, int delta)        | getIntVolatile(o, offset) |
+| getAndXxxYyyRelease(Object o, long offset, int delta) | getInt(o, offset)         |
+| getAndXxxYyyAcquire(Object o, long offset, int delta) | getIntAcquire(o ,offset)  |
+
+```java
+//对于浮点数类型，需要保证精度和范围
+expectedBits = getIntVolatile(o, offset);
+v = Float.intBitsToFloat(expectedBits);
+```
+
