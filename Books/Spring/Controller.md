@@ -295,7 +295,7 @@ public RequestMappingInfo combine(RequestMappingInfo other)
 - RequestMappingInfo的匹配请求规则为methods、params、headers、consumes、produces、pathPatterns、patterns、custom。
 
 ```java
-//匹配条件的顺序
+//匹配条件
 public RequestMappingInfo getMatchingCondition(HttpServletRequest request)
 ```
 
@@ -365,6 +365,10 @@ public class MyHttpRequestHandler implements org.springframework.web.servlet.mvc
 
 > Controller接口方式返回的是ModelAndView，并没有以上三种特性，需要通过req.getParameter("name")的方式来获取参数。
 
+## HandlerAdapter 处理器解析
+
+- 
+
 ## HandlerInterceptor 拦截器
 
 - 拦截器是HandlerInterceptor的实现类。在查找处理器时，HandlerMapping并不直接返回Handler，而是Handler的执行链HandlerExecutionChain，其封装需要应用到该Handler上的所有拦截器。
@@ -419,4 +423,4 @@ public class ProjectInterceptor implements HandlerInterceptor {
 
 1. 在处理请求时，Spring MVC会通过RequestMappingHandlerMapping来寻找处理器，RequestMappingHandlerMapping会根据请求的路径来匹配处理器方法，并返回一个HandlerExecutionChain。
 2. 接着，Spring MVC会通过HandlerAdapter来执行处理器方法，HandlerAdapter会根据请求的类型和处理器方法的方法signature来执行对应的方法，并返回处理结果。
-3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。
+3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。D
