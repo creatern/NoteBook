@@ -273,7 +273,7 @@ spring-boot-starter
 
 ### 字节码和类的加载
 
-[class文件](./Books/JVM/classFile.md)
+[\.class 字节码文件](./Books/JVM/classFile.md)
 
 [字节码指令集](./Books/JVM/字节码指令集.md)
 
