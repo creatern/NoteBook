@@ -1,6 +1,6 @@
 # @SpringBootApplication
 
-- @SpringBootApplication：SpringBoot启动类。
+- @SpringBootApplication：SpringBoot启动类，默认所在包为扫描路径。
 
 ```java
 @SpringBootApplication

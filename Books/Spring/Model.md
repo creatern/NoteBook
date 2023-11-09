@@ -1,4 +1,4 @@
-# Model 模型 概述
+# 模型相关类型
 
 <img src="../../pictures/ExtendedModelMap.png" width="800"/> 
 
@@ -91,5 +91,3 @@ public ModelAndView getUser() {
 ## RedirectAttributes
 
 - RedirectAttributes只对重定向视图有效。
-
-# BindingResult 捕获绑定和验证过程中的错误信息

@@ -115,3 +115,15 @@
       th:errors="*{ccNumber}">CC Num Error</span>
 <!--显示的错误信息：检验注解的message-->
 ```
+
+# ThymeleafResolver
+
+- 引入spring-boot-starter-thymeleaf依赖后，Spring Boot自动配置生成ThymeleafResolver到Spring MVC中，控制器可以引用此视图解析器。
+
+```yaml
+spring: 
+	thymeleaf: 
+    	prefix: classpath:/templates/
+    	suffix: .html
+```
+

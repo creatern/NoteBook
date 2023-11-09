@@ -1,8 +1,6 @@
-# View 视图 概述
+# 视图类型
 
 - org.springframework.web.servlet.View封装了所有的视图实现，该接口的render(..)方法依据传入的Map类型的model对视图文件进行渲染，并传入到Responce完成处理。控制器只负责调用视图的渲染方法，将视图与Model绑定；而视图的渲染则是由视图的实现来执行。
-
-# 视图类型
 
 ## 内部资源视图 InternalResourceView
 
@@ -71,16 +69,7 @@ public View beanNameView(){
 
 ## 模板引擎视图解析
 
-### ThymeleafViewResolver
-
-- 引入spring-boot-starter-thymeleaf依赖后，Spring Boot自动配置生成ThymeleafResolver到Spring MVC中，控制器可以引用此视图解析器。
-
-```yaml
-spring: 
-	thymeleaf: 
-    	prefix: classpath:/templates/
-    	suffix: .html
-```
+### [ThymeleafViewResolver](./Thymeleaf.md)
 
 ## 内部资源视图解析 InternalResourceViewResolver
 

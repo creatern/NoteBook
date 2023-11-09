@@ -54,7 +54,7 @@
 
 [Junit 单元测试](./Books/Java/单元测试.md)
 
-## [JavaWeb（Servlet）](./Books/Java/Servlet.md)
+## [Servlet](./Books/Java/Servlet.md)
 
 ## 环境与构建工具
 
@@ -87,44 +87,34 @@ docker run -it --name mysql5.7 \
 
 ## Spring
 
-<img src="./pictures/Snipaste_2023-04-01_12-36-39.png" width="1200"/>
+| 基本思想                              | 说明                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                           |
+| [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
+| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
 
-| 基本思想                     | 名词         | 说明                                                     |
-| ---------------------------- | ------------ | -------------------------------------------------------- |
-| [IoC](./Books/Spring/IOC.md) | 控制反转     | 将创造Bean的权利交给Spring进行管理                       |
-| [DI](./Books/Spring/IOC.md)  | 依赖注入     | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入。   |
-| [AOP](./Books/Spring/AOP.md) | 面向切面编程 | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面。 |
-
-### Spring MVC
+| Spring MVC                                        | 说明   |
+| ------------------------------------------------- | ------ |
+| [Controller 控制器](./Books/Spring/Controller.md) | 控制层 |
+| [Model 模型](./Books/Spring/Model.md)             | 模型层 |
+| [View 视图](./Books/Spring/View.md)               | 视图层 |
 
 [WebMvcConfigurer 配置](./Books/Spring/WebMvcConfigurer.md)
 
-[Controller 控制器](./Books/Spring/Controller.md)
-
-[Model 模型](./Books/Spring/Model.md)
-
-[View 视图](./Books/Spring/View.md)
-
 ### Spring Boot
 
-| Initializr结构                                               | 说明                                           |
-| ------------------------------------------------------------ | ---------------------------------------------- |
-| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类。<br />默认所在包为扫描路径。 |
-| /static                                                      | 静态资源                                       |
-| /templates                                                   | 模板文件                                       |
-| application.properties<br />application.yml                  | 配置文件                                       |
+| Initializr结构                                               | 说明             |
+| ------------------------------------------------------------ | ---------------- |
+| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类 |
+| /static                                                      | 静态资源         |
+| /templates                                                   | 模板文件         |
+| application.properties<br />application.yml                  | 配置文件         |
 
-- Starter依赖管理：Spring对依赖包的集中描述。本身不包含库代码，而是传递性地拉取其他库。
-
-```xml
-spring-boot-starter
-```
+- Starter依赖管理（spring\-boot\-starter）：Spring对依赖包的集中描述，本身不包含库代码，而是传递性地拉取其他库。
 
 - [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
 
-#### [配置属性](./Books/Spring/properties.md)
-
-<img src="./pictures/Spring-SpringBoot-属性源-数据源.drawio.svg" width="600"/> 
+- [配置属性](./Books/Spring/properties.md)：Spring从各个属性源获取数据并注入到各个Bean。
 
 #### [Lombok](./Books/Spring/Lombok.md)
 
@@ -132,47 +122,16 @@ spring-boot-starter
 
 > IDE中需要安装相应的Lombok插件。
 
-```xml
-<groupId>org.projectlombok</groupId>
-<artifactId>lombok</artifactId>
-```
+#### [视图模板库](./Books/Spring/View.md)
 
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-                <excludes>
-                    <exclude>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                    </exclude>
-                </excludes>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
+> 模板缓存：模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
 
-#### 视图模板库
-
-- pom.xml中存在对应模板库依赖（Thymeleaf等）时，Spring Boot会探测到对应视图模板库并配置相应的Bean（Thymeleaf Bean等）。在`/classpath:/templates（src/main/resources/tempaltes）`编写模板即可。
-- 控制器不能带有`@ResponseBody、@RestController`，由Controller方法的String返回值（视图名）进行页面跳转。
-
-> @ResponseBody、@RestController（@Controller+@ResponseBody）返回值作为响应内容，而不是视图名。
-
-- 模板缓存，模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。
-
-> Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
-
-| 模板                                     | application.yml启用/禁用缓存属性（默认true） |
-| ---------------------------------------- | -------------------------------------------- |
-| FreeMarker                               | spring.freemarker.cache                      |
-| Groovy Templates                         | spring.groovy.template.cache                 |
-| Mustache                                 | spring.mustache.cache                        |
-| [Thymeleaf](./Books/Spring/Thymeleaf.md) | spring.thymeleaf.cache                       |
+| 模板                                     | 启用/禁用缓存属性（默认true） |
+| ---------------------------------------- | ----------------------------- |
+| FreeMarker                               | spring.freemarker.cache       |
+| Groovy Templates                         | spring.groovy.template.cache  |
+| Mustache                                 | spring.mustache.cache         |
+| [Thymeleaf](./Books/Spring/Thymeleaf.md) | spring.thymeleaf.cache        |
 
 - 前端数据封装实体类，需要将HTML元素的name属性赋值为需要封装的对象的属性名。
 
