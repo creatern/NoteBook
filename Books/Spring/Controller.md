@@ -42,6 +42,10 @@ public SimpleUrlHandlerMapping simpleUrlHandlerMapping(MyHandle myHandle){
 
 - BeanNameUrlHandlerMapping将URL与bean名称映射，使用bean名称作为映射的key，将URL与bean名称存储在一个Map中。在处理请求时，它会根据URL查找相应的处理程序bean，并调用处理程序的方法来处理请求。（相当于通过URL来调用该bean）
 
+>Bean名称映射：指定Bean的名称与其他组件的依赖关系，而无需了解具体的Bean的URL。 
+>
+>通过URL来调用Bean：BeanNameUrlHandlerMapping的bean名称映射可以被认为是通过URL来调用该bean的一种方式。
+
 ```java
 @Bean(name="/beanNameUrl") //http://localhost:8080/beanNameUrl
 public HttpRequestHandler beanNameUrlHandler(){
@@ -50,10 +54,6 @@ public HttpRequestHandler beanNameUrlHandler(){
     };
 }
 ```
-
-> - Bean名称映射是指通过在Spring配置文件中指定Bean的名称与其他组件的依赖关系，来实现通过名称来调用Bean的功能。通过在配置文件中设置Bean的名称和依赖关系，可以在代码中通过Bean的名称来获取对应的Bean对象，而无需了解具体的Bean的URL。 
-> - 而通过URL来调用Bean是指通过在Web应用中的URL来访问特定的Bean。通过在Web应用的URL中设置特定的参数，可以定位到特定的Bean对象。  
-> - BeanNameUrlHandlerMapping是一个实现了Web请求处理器接口的类，它可以根据URL来获取相应的处理Bean。通过将Bean的名称和URL的映射关系定义在配置文件中，可以使用URL来调用对应的Bean。因此，BeanNameUrlHandlerMapping的bean名称映射可以被认为是通过URL来调用该bean的一种方式。
 
 ### [@RequestMapping](./RequestMapping.md)
 
@@ -142,11 +142,14 @@ public class MyHttpRequestHandler implements HttpRequestHandler {
 
 ### Controller接口
 
-- org\.springframework\.web\.servlet\.mvc\.Controller用于定义处理 HTTP 请求的控制器类（不是@Controller）。实现Controller接口的类可以接收HTTP请求并生成HTTP响应。Spring Web MVC 框架会自动将符合特定规则的控制器类处理的方法注册为处理特定URL的处理方法。其中handleRequest()方法接收HttpServletRequest和HttpServletResponse对象作为参数，并返回一个ModelAndView对象（用于将数据模型和视图名称返回给Servlet容器）。
+- org\.springframework\.web\.servlet\.mvc\.Controller用于定义处理 HTTP 请求的控制器类（不是@Controller）。实现Controller接口的类可以接收HTTP请求并生成HTTP响应。Spring Web MVC 框架会自动将符合特定规则的控制器类处理的方法注册为处理特定URL的处理方法。
 
 ```java
 @Component("/myController") //通过BeanNameUrlHandlerMapping调用
 public class MyHttpRequestHandler implements org.springframework.web.servlet.mvc.Controller {
+    
+    // 接收HttpServletRequest和HttpServletResponse对象作为参数
+    // 返回一个ModelAndView对象（用于将数据模型和视图名称返回给Servlet容器）
     @Override
     public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         Map<String,Object> model = new HashMap<>();
@@ -156,22 +159,10 @@ public class MyHttpRequestHandler implements org.springframework.web.servlet.mvc
 }
 ```
 
-### HandlerMethod
-
-- HandlerMethod封装处理请求的Handler方法（一般是@XxxMapping标注的方法），包含了Handler方法的Method对象、Handler类的Class对象、Handler方法的参数类型等信息。
-- RequestMappingHandlerMapping会扫描并封装被@Controller标注的类中被@XxxMapping标注的方法为HandlerMethod。
-
-1. 请求参数自动绑定：请求参数可以自动绑定到方法参数内。
-2. Model模型自动绑定：如果在方法参数中声明了Map类型的model，则由RequestMappingHandlerAdapter自动生成Modle模型并绑定到该参数。
-3. 视图自动查找（没有@ResponseBody标注）：返回String类型的视图名，由RequestMappingHandlerAdapter自动查找相应名称的视图，并自动与参数中的Model绑定（如果存在Model参数）。
-
-> Controller接口方式返回的是ModelAndView，并没有以上三种特性，需要通过req.getParameter("name")的方式来获取参数。
-
 ## HandlerAdapter 适配器
 
 - SpringMVC为@RequestMapping标注的处理器方法设置了参数自动解析。DispatcherServlet获取到处理器方法后，先执行拦截器的preHandler逻辑，若返回true，则当前的处理器Handler可以交给该Handler的HandlerAdapter（适配器）执行。
-
-- 参数解析：HandlerAdapter（适配器）执行HandlerMethod（处理器方法）前，遍历当前处理器方法中的所有参数签名，根据每个参数签名自动从请求信息或当前应用信息中获取最合适的值，执行时传递给该处理器方法，作为执行处理器方法的参数列表。
+- [HandlerMethodArgumentResolver](./RequestMapping.md#HandlerMethodArgumentResolver)（参数解析）：HandlerAdapter（适配器）执行HandlerMethod（处理器方法）前，遍历当前处理器方法中的所有参数签名，根据每个参数签名自动从请求信息或当前应用信息中获取最合适的值，执行时传递给该处理器方法，作为执行处理器方法的参数列表。
 
 ## HandlerInterceptor 拦截器
 
@@ -227,4 +218,4 @@ public class ProjectInterceptor implements HandlerInterceptor {
 
 1. 在处理请求时，Spring MVC会通过RequestMappingHandlerMapping来寻找处理器，RequestMappingHandlerMapping会根据请求的路径来匹配处理器方法，并返回一个HandlerExecutionChain。
 2. 接着，Spring MVC会通过HandlerAdapter来执行处理器方法，HandlerAdapter会根据请求的类型和处理器方法的方法signature来执行对应的方法，并返回处理结果。
-3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。D
+3. 最后，Spring MVC会通过HandlerInterceptor来执行拦截器，在处理器方法执行前后进行一些操作。
