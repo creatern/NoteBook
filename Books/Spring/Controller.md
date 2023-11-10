@@ -162,7 +162,7 @@ public class MyHttpRequestHandler implements org.springframework.web.servlet.mvc
 ## HandlerAdapter 适配器
 
 - SpringMVC为@RequestMapping标注的处理器方法设置了参数自动解析。DispatcherServlet获取到处理器方法后，先执行拦截器的preHandler逻辑，若返回true，则当前的处理器Handler可以交给该Handler的HandlerAdapter（适配器）执行。
-- [HandlerMethodArgumentResolver](./RequestMapping.md#HandlerMethodArgumentResolver)（参数解析）：HandlerAdapter（适配器）执行HandlerMethod（处理器方法）前，遍历当前处理器方法中的所有参数签名，根据每个参数签名自动从请求信息或当前应用信息中获取最合适的值，执行时传递给该处理器方法，作为执行处理器方法的参数列表。
+- [HandlerMethodArgumentResolver 参数解析](./RequestMapping.md#HandlerMethodArgumentResolver)：HandlerAdapter（适配器）执行HandlerMethod（处理器方法）前，遍历当前处理器方法中的所有参数签名，根据每个参数签名自动从请求信息或当前应用信息中获取最合适的值，执行时传递给该处理器方法，作为执行处理器方法的参数列表。
 
 ## HandlerInterceptor 拦截器
 

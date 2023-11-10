@@ -213,7 +213,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter i
 }
 ```
 
-## <span name="HandlerMethodArgumentResolver">HandlerMethodArgumentResolver 参数解析</span>
+## HandlerMethodArgumentResolver 参数解析
 
 ```java
 public interface HandlerMethodArgumentResolver {
@@ -234,6 +234,61 @@ public List<HandlerMethodArgumentResolver> getArgumentResolvers() {
     // RequestMappingHandlerAdapter处理适配器解析方法中的参数时
     // 遍历customArgumentResolvers并调用每个元素的supportsParameter(MethodParameter var1)
     return this.argumentResolvers != null ? this.argumentResolvers.getResolvers() : null;
+}
+```
+
+### @PathVariable 路径变量
+
+| 注解            | @PathVariable                                                |
+| --------------- | ------------------------------------------------------------ |
+| 位置            | 形参注解                                                     |
+| 作用            | 绑定路径参数和形参，路径参数名与形参名一一对应，<br />获取的参数值为String类型 |
+| **属性**        | **说明**                                                     |
+| value<br />name | 指定参数解析的路径变量名，默认参数名                         |
+| required        | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+
+```java
+@RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
+@ResponseBody
+public String getById(@PathVariable Integer id){
+    return "{'module':'user getById'}";
+}
+```
+
+### @MatrixVariable 矩阵变量
+
+- 矩阵变量依赖于路径变量而存在，**尽量别使用**。
+
+| 注解            | @MatrixVariable                                              |
+| --------------- | ------------------------------------------------------------ |
+| 位置            | 形参注解                                                     |
+| 作用            | 绑定参数和路径中的矩阵变量                                   |
+| **属性**        | **说明**                                                     |
+| value<br />name | 指定该参数解析的矩阵变量名                                   |
+| pathVar         | 当存在多个路径段时，选择指定的路径变量中的矩阵变量<br />@PathVariable，通常不用指定该参数 |
+| required        | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| defaultValue    | 若找不到参数值，则使用该默认值，支持属性占位符               |
+
+> `"\n\t\t\n\t\t\n\ue000\ue001\ue002\n\t\t\t\t\n";`仅用于表示null，运行时会替换为null。
+
+- MultiValueMap复合矩阵变量，将所有路径段的矩阵变量按key-value存入。
+
+1. 若多个路径段存在相同的矩阵变量，则这些相同的矩阵变量的值转为一个List存入MultiValueMap。
+2. 可通过pathVar来指定存入MultiValueMap的路径段。
+3. 可声明为Map类型，但当一个矩阵变量对应多个值时，只会保留第一个值，其余丢失。
+
+```java
+// 目前有问题
+// /users/year/66;hobbies=computer,math;year=1992/things/11;year=2002
+@GetMapping("/users/year/{userId}/things/{thingId}")
+@ResponseBody
+public void findUserByIdWithYear(@MatrixVariable MultiValueMap<String,String> multiVars,
+                                 @PathVariable("userId") String userId,
+                                 @MatrixVariable(name = "hobbies", defaultValue = "null") String hobbies,
+                                 @MatrixVariable(name = "year", pathVar = "userId") String year,
+                                 HttpServletResponse resp) throws IOException {
+    resp.getWriter().write("userId is " + userId +", hobbies=" + hobbies + ", year=" + year +
+                           " multiValueMap " + multiVars);
 }
 ```
 

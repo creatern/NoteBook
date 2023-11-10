@@ -63,3 +63,16 @@ public Interface TacoOrder extends CrudRepository{
 | 位置 | 查询方法                                       |
 | 作用 | 指明方法调用时执行的查询，而不是根据方法签名。 |
 | 参数 | SQL查询语句（JPA中可以使用JPA查询）            |
+
+### JPA-QL
+
+```java
+@Repository
+public interface UserRepo extends CrudRepository<User, Integer> {
+    @Query("select u from User u where u.account = :account and u.password = :password")
+    // User是@Entity标注的实体类
+    List<User> findByAccountAndPassword(@Param("account") String account,
+                                        @Param("password") String password);
+}
+```
+
