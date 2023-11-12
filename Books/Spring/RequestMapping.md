@@ -239,13 +239,13 @@ public List<HandlerMethodArgumentResolver> getArgumentResolvers() {
 
 ### @PathVariable 路径变量
 
-| 注解            | @PathVariable                                                |
-| --------------- | ------------------------------------------------------------ |
-| 位置            | 形参注解                                                     |
-| 作用            | 绑定路径参数和形参，路径参数名与形参名一一对应，<br />获取的参数值为String类型 |
-| **属性**        | **说明**                                                     |
-| value<br />name | 指定参数解析的路径变量名，默认参数名                         |
-| required        | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| 注解        | @PathVariable                                                |
+| ----------- | ------------------------------------------------------------ |
+| 位置        | 形参注解                                                     |
+| 作用        | 绑定路径参数和形参，路径参数名与形参名一一对应，<br />获取的参数值为String类型 |
+| **属性**    | **说明**                                                     |
+| value、name | 指定参数解析的路径变量名，默认参数名                         |
+| required    | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
 
 ```java
 @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
@@ -259,15 +259,15 @@ public String getById(@PathVariable Integer id){
 
 - 矩阵变量依赖于路径变量而存在，**尽量别使用**。
 
-| 注解            | @MatrixVariable                                              |
-| --------------- | ------------------------------------------------------------ |
-| 位置            | 形参注解                                                     |
-| 作用            | 绑定参数和路径中的矩阵变量                                   |
-| **属性**        | **说明**                                                     |
-| value<br />name | 指定该参数解析的矩阵变量名                                   |
-| pathVar         | 当存在多个路径段时，选择指定的路径变量中的矩阵变量<br />@PathVariable，通常不用指定该参数 |
-| required        | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
-| defaultValue    | 若找不到参数值，则使用该默认值，支持属性占位符               |
+| 注解         | @MatrixVariable                                              |
+| ------------ | ------------------------------------------------------------ |
+| 位置         | 形参注解                                                     |
+| 作用         | 绑定参数和路径中的矩阵变量                                   |
+| **属性**     | **说明**                                                     |
+| value、name  | 指定该参数解析的矩阵变量名                                   |
+| pathVar      | 当存在多个路径段时，选择指定的路径变量中的矩阵变量<br />@PathVariable，通常不用指定该参数 |
+| required     | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| defaultValue | 若找不到参数值，则使用该默认值，支持属性占位符               |
 
 > `"\n\t\t\n\t\t\n\ue000\ue001\ue002\n\t\t\t\t\n";`仅用于表示null，运行时会替换为null。
 
@@ -285,10 +285,160 @@ public String getById(@PathVariable Integer id){
 public void findUserByIdWithYear(@MatrixVariable MultiValueMap<String,String> multiVars,
                                  @PathVariable("userId") String userId,
                                  @MatrixVariable(name = "hobbies", defaultValue = "null") String hobbies,
-                                 @MatrixVariable(name = "year", pathVar = "userId") String year,
-                                 HttpServletResponse resp) throws IOException {
-    resp.getWriter().write("userId is " + userId +", hobbies=" + hobbies + ", year=" + year +
-                           " multiValueMap " + multiVars);
+                                 @MatrixVariable(name = "year", pathVar = "userId") String year) throws IOException {
+    return "userId is " + userId +", hobbies=" + hobbies + ", year=" + year +
+                           " multiValueMap " + multiVars;
+}
+```
+
+### @RequestParam 请求参数
+
+- @RequestParam通过Request\.getParameter()方法获取请求参数值的解析，包括URL上的请求参数`?`、请求体的表单参数。解析处理器时，若方法参数未出现其他可被参数解析器解析的注解，且参数类型为Java中定义的类型，则视为隐式指定@RequestParam。
+- 若@RequestParam标注的参数类型为Map\<String, String\>、MultiValueMap\<String, String\>，且未指定name属性，则将当前请求的所有请求参数绑定到该参数。同一个请求参数有多个值时，Map\<String, String\>只保留第一个。
+
+| 注解         | @RequestParam                                                |
+| ------------ | ------------------------------------------------------------ |
+| 位置         | 形参注解                                                     |
+| 作用         | 绑定形参和地址参数。<br />（形参与地址参数名不一致时，需要该注解指定） |
+| **属性**     | **说明**                                                     |
+| value、name  | 指定请求参数名，默认方法参数名                               |
+| required     | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| defaultValue | 参数默认值，支持占位符                                       |
+
+```java
+// /user/userParam?id=9&name=zjk&age=18
+@RequestMapping("/commonParam")
+@ResponseBody
+public String commonParam(@RequestParam("name") String userName,
+                          @RequestParam("age") Integer age){
+    System.out.println(userName);
+    System.out.println(age);
+    return "{'info':'commonParam'}";
+}
+
+// /products/12345?q=1&r=2
+@GetMapping("/products/{productId}")
+@ResponseBody
+public String getProductDetails(@PathVariable("productId") String productId,
+                                @RequestParam MultiValueMap<String, String> multiVars) {
+    StringBuffer stringBuffer = new StringBuffer(productId + " Values: ");
+    stringBuffer.append(multiVars.get("q"));
+    stringBuffer.append(multiVars.get("r"));
+    return stringBuffer.toString();
+}
+```
+
+### @RequestHeader 请求头
+
+- @RequestHeader解析参数值为请求头的值，通过Request\.getHeader()方法获取请求头的值。
+- @RequestHeader和@RequestParam一样支持Map和MultiValueMap类型，此外，还支持HttpHeaders类型。SpringMVC提供的默认类型转换策略识别逗号分割的多值请求头（如Accept），转换为数组或Collect类型。
+
+| 注解         | @RequestHeader                                               |
+| ------------ | ------------------------------------------------------------ |
+| 位置         | 方法参数                                                     |
+| 作用         | 绑定方法参数值为请求头的值                                   |
+| **属性**     | **说明**                                                     |
+| value、name  | 指定该参数解析的请求头（不区分大小写）                       |
+| required     | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| defaultValue | 参数默认值，支持占位符                                       |
+
+```java
+// curl -H 'Accept: application/json' http://localhost:8080/getAccept
+@GetMapping("getAccept")
+@ResponseBody
+public String getAccept(@RequestHeader("ACCEPT") List<String> accept) {
+    return "accept: " + accept;
+}
+```
+
+### @CookieValue Cookie值
+
+- @CookieValue为请求参数绑定Cookie值，通过Request\.getCookies()方法获取Cookie值。额外支持Cookie类型的参数。
+
+> Cookie值通过HTTP请求的请求头传递。
+
+| 注解         | @CookieValue                                                 |
+| ------------ | ------------------------------------------------------------ |
+| 位置         | 方法参数                                                     |
+| 作用         | 绑定方法参数值为Cookie的值                                   |
+| **属性**     | **说明**                                                     |
+| value、name  | 指定该参数解析的Cookie名                                     |
+| required     | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+| defaultValue | 参数默认值，支持占位符                                       |
+
+```java
+// curl http://localhost:8080/getCookie --cookie 'JSESSIONID=12345'
+@GetMapping("getCookie")
+@ResponseBody
+public String getCookie(@CookieValue("JSESSIONID") String jsessionId) {
+    return "JSESSIONID: " + jsessionId;
+}
+```
+
+### @RequestBody 请求体
+
+- @RequestBody直接将整个请求体转换。请求体数据以二进制流的形式传输，通过Request\.getInputStream()方法获取，Spring MVC通过HttpMessageConverter自动转换为对应的类型。@RequestBody的参数解析器中维护着HttpMessageConverter的列表，处理不同的类型（请求体内容格式），通过HttpMessageConvert的canRead()方法，由请求体中的Content-Type、方法的类型信息来判断使用。
+- @RequestBody标注的参数可通过[@Validated](./Books/Spring/validation.md)来检验数据的正确性。
+
+| 注解     | @RequestBody                                                 |
+| -------- | ------------------------------------------------------------ |
+| 位置     | 方法参数注解                                                 |
+| 作用     | 将请求中请求体所包含的数据传递给请求参数<br />一个方法只能使用存在一个该注解。 |
+| **属性** | **说明**                                                     |
+| required | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+
+```java
+// curl -H 'Content-Type: application/json' -d '{"username": "Tom","account": "1001","password": "1234"}' http://localhost:8080/postUser
+@PostMapping("postUser")
+@ResponseBody
+public String postUser(@Validated @RequestBody User user,
+                       BindingResult result) {
+    if (result.hasErrors()) return "some errors happened !!!";
+    return user.toString();
+}
+```
+
+### HttpEntity\<T\> 请求头与请求体
+
+- HttpEntity\<T\>及其子类RequestEntity\<T\>可以直接在方法参数中使用，SpringMVC自动为其绑定数据，泛型T为请求头要转换的目标类型。不支持参数检验，若声明了BindingResult类型的参数，会报错提示无可解析的绑定结果类型数据。
+
+```java
+// curl -H 'Content-Type: application/json' -d '{"username": "Tom","account": "1001","password": "1234"}' http://localhost:8080/postUser
+@PostMapping("postUser")
+@ResponseBody
+public String postUser(HttpEntity<User> userHttpEntity) {
+    return "headers: " + userHttpEntity.getHeaders()
+        + "user: " + userHttpEntity.getBody();
+}
+```
+
+### @RequestPart 请求块
+
+- 对于`Content-Type: mutilpart/form-data`类型的请求，Servlet API封装了以下两种方法来获取表单数据。
+
+1. Request\.getPart(name)方法根据请求块属性名，返回请求块的封装类型（javax.servlet.http.Part），对于有相同数据名的多个请求块，只返回第一个请求块。而Request\.getParts()方法获取Part的Collection集合。
+2. Request\.getParameter()方法也可以获取multipart类型的表单参数。在请求块的filename不存在的情况下，请求块会被添加到请求的ParameterMap中，便于Request\.getParameter()方法获取。
+
+3. Spring MVC提供MultipartFile类型，封装多块请求中类型为文件的Part。
+
+- @RequestPart支持的参数为：原始的javax.servlet.http.Part类型及其数组和Collection、MultipartFile类型及其数组和Collection、其他任意可被消息转换器（HttpMessageConverter）转换的类型（@RequestPart对于基本数据类型没有相应的消息转换器HttpMediaTypeNoSupporrtException）。
+
+| 注解        | @RequestPart                                                 |
+| ----------- | ------------------------------------------------------------ |
+| 位置        | 方法参数                                                     |
+| 作用        | 绑定方法参数值为请求块的值                                   |
+| **属性**    | **说明**                                                     |
+| value、name | 指定该参数解析的请求块属性名                                 |
+| required    | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+
+```java
+// curl -X POST -F 'firstName=Zheng' -F 'lastName=Jikai' -F 'picture=@/home/zjk/Pictures/Screenshot.png' http://localhost:8080/demo/multipartForm
+@PostMapping("demo/multipartForm")
+@ResponseBody
+public String postMultipartForm(@RequestPart String firstName,
+                                @RequestPart String lastName,
+                                @RequestPart("picture") MultipartFile picture) {
+    return firstName + lastName + picture.getOriginalFilename();
 }
 ```
 

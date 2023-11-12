@@ -97,7 +97,7 @@
 <td th:each="user:${userList}" th:text="${user}"></td>
 
 <!--Map循环-->
-<tr th:each="person:${personMapper}">
+<tr th:each="person:${personMap}">
     <td th:text="${person.key}"></td>
     <td th:text="${person.value}"></td>
 </tr>
