@@ -194,3 +194,44 @@ vim -O file1 file2
 # Shell交互
 
 # 插件管理
+
+### Vundle
+
+```shell
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+```
+
+```shell
+vim ~/.vimrc
+```
+
+```
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+call vundle#end()
+filetype plugin indent on
+```
+
+```
+:PuginInstall
+```
+
+```
+Plugin 'scrooloose/nerdtree'
+Plugin 'golygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+```
+
+```shell
+# 本地安装
+git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree
+git clone git@github.com:godlygeek/tabular.git ~/.vim/bundle/tabular
+git clone git@github.com:preservim/vim-markdown.git ~/.vim/bundle/vim-markdown
+```
+
