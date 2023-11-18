@@ -401,4 +401,3 @@
     又16KB存储器为16Kx8位，需要位扩展8/4=2。<br/>
     而需要字扩展16K/4K=2<sup>2</sup>，则需要2根高位地址线，则选择A<sub>2</sub>A<sub>3</sub>，而不是A<sub>0</sub>A<sub>1</sub>
 </details>
-
