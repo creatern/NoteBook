@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-11-19T15:49:39.667Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="ByVbCyBrwD_q4f26v_Yd" version="21.4.0" type="device" pages="51">
+<mxfile host="Electron" modified="2023-11-19T15:49:48.338Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="l7fgvBOCDin1pnKEwTNc" version="21.4.0" type="device" pages="51">
   <diagram name="计算机组成" id="JjSI2vkphjXBTYphS9rt">
     <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -12227,7 +12227,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="PFB7RCDW_KyC7pKh6ZRC" name="SSD固态硬盘结构">
-    <mxGraphModel dx="177" dy="128" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="920" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -12301,7 +12301,7 @@
           <mxGeometry x="140" y="190" width="50" height="30" as="geometry" />
         </mxCell>
         <mxCell id="rUWSYdBpvQhGPPDjq7K7-31" value="I/O总线" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="350" y="110" width="60" height="30" as="geometry" />
+          <mxGeometry x="300" y="145" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="rUWSYdBpvQhGPPDjq7K7-35" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="376" y="145" width="5" height="20" as="geometry" />
