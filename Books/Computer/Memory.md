@@ -444,9 +444,7 @@
 
 ### 磁盘设备的组成
 
-<img src="../../pictures/20231120121760.png" width="500"/> 
-
-<img src="../../pictures/v2-f4f68a5c7983ca2b89ecb3c42878f079_r.png" width="300"/> 
+<img src="../../pictures/20231120121760.png" width="700"/> 
 
 - 硬盘存储器由磁盘驱动器、磁盘控制器、盘片组成。
 
