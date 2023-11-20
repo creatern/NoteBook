@@ -144,7 +144,7 @@
 
 > 采用QAM的[有效离散位](#有效离散位)数量 = m个相位 x n种幅度。
 
-<img src="../../pictures/aHR0cDovL3N0b3JhZ2UucWluaXUuYXNwaS50ZWNoLyVFNiU5QyU4MCVFNSU5RiVCQSVFNiU5QyVBQyVFNyU5QSU4NCVFNCVCOCU4OSVFNyVBNyU4RCVFOCVCMCU4MyVFNSU4OCVCNiVFNiU5NiVCOSVFNiVCMyU5NS5wbmc.png" width="600"/> 
+<img src="../../pictures/aHR0cDovL3N0b3JhZ2UucWluaXUuYXNwaS50ZWNoLyVFNiU5QyU4MCVFNSU5RiVCQSVFNiU5QyVBQyVFNyU5QSU4NCVFNCVCOCU4OSVFNyVBNyU4RCVFOCVCMCU4MyVFNSU4OCVCNiVFNiU5NiVCOSVFNiVCMyU5NS5wbmc.png" width="400"/> 
 
 ### 模拟数据编码为数字信号
 
@@ -296,7 +296,7 @@
 
 ## 同轴电缆
 
-<img src="../../pictures/tongzhoudianlang.png" width="600"/> 
+<img src="../../pictures/tongzhoudianlang.png" width="350"/> 
 
 - 同轴电缆由内导体、绝缘层、网状编织层、塑料外层构成。按照特性抗阻数值的不同，通常分为50Ω同轴电缆和75Ω同轴电缆。
 
@@ -373,7 +373,7 @@
 
 ## 集线器 Hub
 
-<img src="../../pictures/ac4bd11373f082028ab2b95949fbfbedab641bb7.png" width="200"/> 
+<img src="../../pictures/ac4bd11373f082028ab2b95949fbfbedab641bb7.png" width="150"/> 
 
 - 集线器实质上是一个多端口的中继器。当集线器工作时，一个端口接收到数据信号后，由于信号在从端口到集线器的过程中已有衰减，所以集线器将该信号进行整形放大，使之再生（恢复）到发送时的状态，紧接着转发到其他所有（除输入端口外）处于工作状态的端口。集线器在网络中只起信号放大和转发作用，目的是扩大网络的传输范围，而不具备信号的定向传送能力，即信息传输的方向是固定的，是标准的共享式设备。
 
