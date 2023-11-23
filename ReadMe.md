@@ -603,11 +603,27 @@ B\*tree
 
 [数据链路层 Data Link Layer](./Books/Computer/DataLinkLayer.md)
 
+## 操作系统
+
 # 数学逻辑与数学基础
+
+## 高等数学
+
+## 线性代数
 
 ## 运筹学
 
+[线性规划](./Books/Mathematics/线性规划.md)
+
+[对偶理论与敏感性分析](./Books/Mathematics/对偶理论与敏感性分析.md)
+
 [运输问题](./Books/Mathematics/运输问题.md)
+
+## 概率论与统计
+
+## 统计学
+
+## 离散数学
 
 # [Android](./Books/Android/Android.md)
 
