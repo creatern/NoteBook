@@ -625,5 +625,17 @@ B\*tree
 
 ## 离散数学
 
-# [Android](./Books/Android/Android.md)
+# 其他
+
+## 物流 Logistics
+
+[物流管理概述](./Books/Logistics/物流管理概述.md)
+
+[供应链管理概述](./Books/Logistics/供应链管理概述.md)
+
+[物流运输管理](./Books/Logistics/物流运输管理.md)
+
+[库存管理](./Books/Logistics/库存管理.md)
+
+## [Android](./Books/Android/Android.md)
 
