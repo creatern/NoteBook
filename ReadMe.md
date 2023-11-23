@@ -619,9 +619,11 @@ B\*tree
 
 [运输问题](./Books/Mathematics/运输问题.md)
 
-## 概率论与统计
+## 概率论与数理统计
 
 ## 统计学
+
+# 图论
 
 ## 离散数学
 
@@ -636,6 +638,10 @@ B\*tree
 [物流运输管理](./Books/Logistics/物流运输管理.md)
 
 [库存管理](./Books/Logistics/库存管理.md)
+
+## 信息管理
+
+[信息管理系统 MIS](./Books/MIS/MIS.md)
 
 ## [Android](./Books/Android/Android.md)
 
