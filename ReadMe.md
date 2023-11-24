@@ -629,6 +629,10 @@ B\*tree
 
 # 其他
 
+## 信息管理
+
+[信息管理系统 MIS](./Books/MIS/MIS.md)
+
 ## 物流 Logistics
 
 [物流管理概述](./Books/Logistics/物流管理概述.md)
@@ -639,9 +643,15 @@ B\*tree
 
 [库存管理](./Books/Logistics/库存管理.md)
 
-## 信息管理
+## 运营管理
 
-[信息管理系统 MIS](./Books/MIS/MIS.md)
+[运营系统的竞争优势](./Books/OperationsManagement/运营系统的竞争优势.md)
+
+[运营系统的规划与设计](./Books/OperationsManagement/运营系统的规划与设计.md)
+
+[运营系统的运行与控制](./Books/OperationsManagement/运营系统的运行与控制.md)
+
+[运营系统的更新与改善](./Books/OperationsManagement/运营系统的更新与改善.md)
 
 ## [Android](./Books/Android/Android.md)
 
