@@ -621,7 +621,9 @@ B\*tree
 
 ## 概率论与数理统计
 
-## 统计学
+## 统计学 Statistics
+
+[统计学 Statistics](./Books/Statistics/Statistics.md)
 
 # 图论
 
@@ -652,6 +654,10 @@ B\*tree
 [运营系统的运行与控制](./Books/OperationsManagement/运营系统的运行与控制.md)
 
 [运营系统的更新与改善](./Books/OperationsManagement/运营系统的更新与改善.md)
+
+## 公司理财
+
+[投资决策](./Books/CorporateFinance/投资决策.md)
 
 ## [Android](./Books/Android/Android.md)
 
