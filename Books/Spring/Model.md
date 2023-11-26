@@ -51,7 +51,7 @@ public Model showUser(){
 | 位置 | 形参、方法注解                                               |
 | 方法 | 返回值自动存入ExtendedModelMapModel                          |
 | 形参 | 数据绑定，该形参的值从模型取得，对该参数的修改不影响模型内的值。<br />若模型中找不到名称匹配的，则该参数会先被实例化（必须能够实例化），然后被添加到模型中。 |
-| 属性 | name：添加/匹配到model的属性名称（默认为当前标注的参数名称）。 |
+| 属性 | value、name：添加/匹配到model的属性名称（默认为当前标注的参数名称）。<br />binding()：指定是否把请求参数值和路径参数绑定到模型属性实例中的内部属性，即参数的修改会更新到模型内的属性。 |
 
 - 同个控制器内的@ModelAttribute方法先于@RequestMapping方法被调用。（如果同时被@XxxMapping和@ModelAttribute标注，则返回值不再是视图名，而是Model的一个属性）
 

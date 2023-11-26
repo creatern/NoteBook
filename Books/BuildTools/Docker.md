@@ -20,6 +20,15 @@
 
 > portainer 界面工具。
 
+```shell
+# mysql5.7启动
+docker run -it --name mysql5.7 \
+-p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_UNIX_SOCKET=/tmp/mysql.sock \
+-d mysql:5.7
+```
+
 ## image Docker镜像
 
 > UnionFS（联合文件系统）：分层、轻量级、高性能的文件系统，是Docker镜像的基础（所有镜像都基于其基础镜像）。

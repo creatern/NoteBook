@@ -57,62 +57,6 @@ public HttpRequestHandler beanNameUrlHandler(){
 
 ### [@RequestMapping](./RequestMapping.md)
 
-| 注解           | @RequestMapping                                              |
-| -------------- | ------------------------------------------------------------ |
-| 位置           | 类、方法注解                                                 |
-| 作用           | 设置当前控制器方法请求访问路径。<br />@RequestMapping注解控制器类时，与方法上的@XxxMapping的信息合并。 |
-| **注解**       | **@GetMapping、@PostMapping、@PutMapping、@DeleteMapping**   |
-| 位置           | 方法注解                                                     |
-| 作用           | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作。<br />只要访问路径或请求动作有一个不同，就可以使用多个该注解。 |
-| **返回值**     | **说明**                                                     |
-| String         | 响应的视图名称、重定向到的URL。                              |
-| void           | 不需要返回任何响应。                                         |
-| ModelAndView   | 响应的视图和模型数据的容器。                                 |
-| ResponseEntity | 带有自定义HTTP头和状态代码的HTTP响应。                       |
-| 其他类型       | 响应的序列化数据类型。                                       |
-
-```java
-@RestController
-@RequestMapping("/users")
-public class UserController {
-
-//    @RequestMapping(value = "/users", method = RequestMethod.POST)
-    @PostMapping
-    public String save() {
-        System.out.println("user save...");
-        return "{'module':'user save'}";
-    }
-
-//    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id) {
-        System.out.println("user delete..." + id);
-        return "{'module':'user delete'}";
-    }
-
-//    @RequestMapping(value = "/users", method = RequestMethod.PUT)
-    @PutMapping
-    public String update(@RequestBody User user) {
-        System.out.println("user update..." + user);
-        return "{'module':'user update'}";
-    }
-
-//    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    @GetMapping("/{id}")
-    public String getById(@PathVariable Integer id) {
-        System.out.println("user getById..." + id);
-        return "{'module':'user getById'}";
-    }
-
-//    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    @GetMapping
-    public String getAll() {
-        System.out.println("user getAll...");
-        return "{'module':'user getAll'}";
-    }
-}
-```
-
 ### HttpRequestHandler
 
 <img src="../../pictures/HttpRequestHandler.png" width="600"/>

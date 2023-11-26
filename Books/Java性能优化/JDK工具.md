@@ -130,6 +130,17 @@ jmap -dump:<dump-options> <pid>
 
 > jhat（JVM Heap Analysis Tool）用于分析堆存储文件，内置微型的HTTP/HTML服务器（http://localhost:7000/），在浏览器中查看分析结果。在JDK9之后被移除。
 
+```shell
+# 指定Dump文件位置（不指定该参数，则默认当前目录），需要搭配以下命令
+-XX:HeapDumpPath=<file>
+
+# 出现OOM后自动输出堆存储文件
+-XX:+HeapDumpOnOutOfMemoryError
+
+# FullGC之前自动输出堆存储文件
+-XX:+HeapDumpBeforeFullGC
+```
+
 # jstack 线程快照
 
 - jstack（JVM Stack Trace）用于生成虚拟机指定线程当前时刻的线程快照（虚拟机堆栈跟踪），当前虚拟机内指定进程的每一条线程正在执行的方法堆栈的集合。（线程长时间停顿时，定位其原因）

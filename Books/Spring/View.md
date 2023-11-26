@@ -16,7 +16,14 @@ return "forward:/user"; //服务器内部转发
 return "redirect:/user"; //服务器重定向
 ```
 
-## 模板引擎视图 [Thymeleaf](./Books/Spring/Thymeleaf.md)
+## 模板引擎视图
+
+| 模板引擎                                 | 启用/禁用缓存属性（默认true） |
+| ---------------------------------------- | ----------------------------- |
+| FreeMarker                               | spring.freemarker.cache       |
+| Groovy Templates                         | spring.groovy.template.cache  |
+| Mustache                                 | spring.mustache.cache         |
+| [Thymeleaf](./Books/Spring/Thymeleaf.md) | spring.thymeleaf.cache        |
 
 # 视图解析 ViewResolver
 

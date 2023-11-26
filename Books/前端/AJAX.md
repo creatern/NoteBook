@@ -1,3 +1,14 @@
+# AJAX概述
+
+- AJAX（Asynchronous JavaScript And XML）：异步的JavaScript和XML。
+
+| AJAX作用             | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| 与服务器进行数据交换 | 给服务器发送请求，服务器将数据直接响应回给浏览器。<br />AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面。 |
+| 异步交互             | 不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术 |
+
+<img src="../../pictures/Snipaste_2023-03-24_18-27-13.png" width="700"/> 
+
 # XMLHttpRequest（xhr）
 
 - XMLHttpRequest：Ajax的本质核心。

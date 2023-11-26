@@ -7,3 +7,9 @@
 | @CreditCardNumber | 属性 | 合法的信用卡号                                               |
 | @Pattern          | 属性 | 正则<br />regexp                                             |
 | @Digits           | 属性 | integer：整数位数上限<br />fraction：小数位数上限            |
+
+```xml
+<groupId>org.springframwork.boot</groupId>
+<artifactId>spring-boot-starter-validation</artifactId>
+```
+

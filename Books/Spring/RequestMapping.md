@@ -1,7 +1,65 @@
+# @RequestMapping
+
+| 注解           | @RequestMapping                                              |
+| -------------- | ------------------------------------------------------------ |
+| 位置           | 类、方法注解                                                 |
+| 作用           | 设置当前控制器方法请求访问路径。<br />@RequestMapping注解控制器类时，与方法上的@XxxMapping的信息合并。 |
+| **注解**       | **@GetMapping、@PostMapping、@PutMapping、@DeleteMapping**   |
+| 位置           | 方法注解                                                     |
+| 作用           | 设置当前控制器方法请求访问路径与请求动作，每种对应一个请求动作。<br />只要访问路径或请求动作有一个不同，就可以使用多个该注解。 |
+| **返回值**     | **说明**                                                     |
+| String         | 响应的视图名称、重定向到的URL。                              |
+| void           | 不需要返回任何响应。                                         |
+| ModelAndView   | 响应的视图和模型数据的容器。                                 |
+| ResponseEntity | 带有自定义HTTP头和状态代码的HTTP响应。                       |
+| 其他类型       | 响应的序列化数据类型。                                       |
+
+```java
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+//    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @PostMapping
+    public String save() {
+        System.out.println("user save...");
+        return "{'module':'user save'}";
+    }
+
+//    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Integer id) {
+        System.out.println("user delete..." + id);
+        return "{'module':'user delete'}";
+    }
+
+//    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    @PutMapping
+    public String update(@RequestBody User user) {
+        System.out.println("user update..." + user);
+        return "{'module':'user update'}";
+    }
+
+//    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
+    public String getById(@PathVariable Integer id) {
+        System.out.println("user getById..." + id);
+        return "{'module':'user getById'}";
+    }
+
+//    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @GetMapping
+    public String getAll() {
+        System.out.println("user getAll...");
+        return "{'module':'user getAll'}";
+    }
+}
+```
+
 # HandlerMethod 处理器方法
 
 - HandlerMethod封装处理请求的Handler方法（一般是@RequestMapping标注的方法），包含了Handler方法的Method对象、Handler类的Class对象、Handler方法的参数类型等信息。
-- RequestMappingHandlerMapping会扫描并封装被@Controller标注的类中被@XxxMapping标注的方法为HandlerMethod。
+- RequestMappingHandlerMapping会扫描并封装被@Controller标注的类中被@RequestMapping标注的方法为HandlerMethod。
 
 1. 请求参数自动绑定：请求参数可以自动绑定到方法参数内。
 2. Model模型自动绑定：如果在方法参数中声明了Map类型的model，则由RequestMappingHandlerAdapter自动生成Modle模型并绑定到该参数。
@@ -136,7 +194,7 @@ headers = "Accept: text/*"
 ```
 
 - 子类型为RFC 2046标准定义的类型值，可使用"\+"（类型家族\+格式类型）
-- 参数可以没有，可以多个（使用`;`分割）；参数值可以放在\"\"、\'\'、或直接表示。
+- 参数可以没有，可以多个（使用`;`分割）；参数值可以放在\" \"、\' \'、或直接表示。
 - 除了参数值，其他的都不区分大小写。
 
 ```
@@ -255,7 +313,7 @@ public String getById(@PathVariable Integer id){
 }
 ```
 
-### @MatrixVariable 矩阵变量
+#### @MatrixVariable 矩阵变量
 
 - 矩阵变量依赖于路径变量而存在，**尽量别使用**。
 
@@ -421,8 +479,6 @@ public String postUser(HttpEntity<User> userHttpEntity) {
 
 3. Spring MVC提供MultipartFile类型，封装多块请求中类型为文件的Part。
 
-- @RequestPart支持的参数为：原始的javax.servlet.http.Part类型及其数组和Collection、MultipartFile类型及其数组和Collection、其他任意可被消息转换器（HttpMessageConverter）转换的类型（@RequestPart对于基本数据类型没有相应的消息转换器HttpMediaTypeNoSupporrtException）。
-
 | 注解        | @RequestPart                                                 |
 | ----------- | ------------------------------------------------------------ |
 | 位置        | 方法参数                                                     |
@@ -430,6 +486,12 @@ public String postUser(HttpEntity<User> userHttpEntity) {
 | **属性**    | **说明**                                                     |
 | value、name | 指定该参数解析的请求块属性名                                 |
 | required    | 参数值是否必要，若找不到参数值，true则报错，false则null<br />参数可以使用Optional类型，对应的该属性都是false |
+
+- @RequestPart支持的参数为：
+
+1. 原始的javax.servlet.http.Part类型及其数组和Collection
+2. MultipartFile类型及其数组和Collection
+3. 其他任意可被消息转换器（HttpMessageConverter）转换的类型（@RequestPart对于基本数据类型没有相应的消息转换器HttpMediaTypeNoSupporrtException）。建议使用@RequestParam标记或不标记，已直接获取参数值；而@RequestPart需要经过消息转换器处理。
 
 ```java
 // curl -X POST -F 'firstName=Zheng' -F 'lastName=Jikai' -F 'picture=@/home/zjk/Pictures/Screenshot.png' http://localhost:8080/demo/multipartForm
@@ -442,3 +504,15 @@ public String postMultipartForm(@RequestPart String firstName,
 }
 ```
 
+- @RequestPart标记的非Part或非MultipartFile类型的参数都可以标记Valid相关的注解，利用Erros或BindingResult类型的参数以绑定校验结果。
+
+### FlashMap 重定向属性
+
+- 重定向时，有两种参数传递方案：（1）通过重定向的URL参数；（2）通过Session临时存储。而FlashMap在重定向之前将一些需要使用的Model属性放入参数，重定向之后再取出这些参数并从Session移除，完成了重定向参数的自动管理（FlashMapManager）。
+
+- 在处理器方法中引入类型为RedirectAttributes的参数
+
+1. 利用RedirectAttributes的addFlashAttribute方法来添加这种重定向属性，重定向结束后自动将这些属性添加回Model
+2. 而addAttribute方法添加的属性，则会被添加到重定向的URL中，作为URL的查询参数，使用时通过请求参数来获传递的参数值。
+
+### [@ModelAttribute 模型属性](./Model.md)

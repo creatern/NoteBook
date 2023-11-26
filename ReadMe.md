@@ -1,6 +1,8 @@
+# C/C++
+
 # Java
 
-## Java基础
+## Java
 
 ### 基础卷
 
@@ -42,40 +44,23 @@
 
 [@interface Annotation 注解](./Books/Java/Annotation.md)
 
-[Lamdba 对象表达式](./Books/Java/Lambda.md)
-
-[Stream 流](./Books/Java/Stream.md)
-
 [IO 输入/输出](./Books/Java/IO.md)
 
 [JDBC](./Books/Java/JDBC.md)
 
 [Socket 网络](./Books/Java/Socket.md)
 
+#### 函数式编程
+
+[Lamdba 对象表达式](./Books/Java/Lambda.md)
+
+[Stream 流](./Books/Java/Stream.md)
+
+#### 单元测试
+
 [Junit 单元测试](./Books/Java/单元测试.md)
 
-## [Servlet](./Books/Java/Servlet.md)
-
-## 环境与构建工具
-
-### [Git](./Books/BuildTools/Git.md)
-
-### [Maven](./Books/BuildTools/Maven.md)
-
-### [Gradle](./Books/BuildTools/Gradle.md)
-
-### [Docker](./Books/BuildTools/Docker.md)
-
-```shell
-# mysql5.7启动
-docker run -it --name mysql5.7 \
--p 3306:3306 \
--e MYSQL_ROOT_PASSWORD=root \
--e MYSQL_UNIX_SOCKET=/tmp/mysql.sock \
--d mysql:5.7
-```
-
-## JUC 并发编程
+#### JUC 并发编程
 
 [Thread 线程类](./Books/Java/Thread.md)
 
@@ -85,114 +70,9 @@ docker run -it --name mysql5.7 \
 
 [ThreadLocalRandom](./Books/Java/ThreadLocalRandom.md)
 
-## Spring
-
-| 基本思想                              | 说明                                                         |
-| ------------------------------------- | ------------------------------------------------------------ |
-| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                           |
-| [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
-| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
-
-| Spring MVC                                        | 说明   |
-| ------------------------------------------------- | ------ |
-| [Controller 控制器](./Books/Spring/Controller.md) | 控制层 |
-| [Model 模型](./Books/Spring/Model.md)             | 模型层 |
-| [View 视图](./Books/Spring/View.md)               | 视图层 |
-
-[WebMvcConfigurer 配置](./Books/Spring/WebMvcConfigurer.md)
-
-### Spring Boot
-
-| Initializr结构                                               | 说明             |
-| ------------------------------------------------------------ | ---------------- |
-| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类 |
-| /static                                                      | 静态资源         |
-| /templates                                                   | 模板文件         |
-| application.properties<br />application.yml                  | 配置文件         |
-
-- Starter依赖管理（spring\-boot\-starter）：Spring对依赖包的集中描述，本身不包含库代码，而是传递性地拉取其他库。
-
-- [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
-
-- [配置属性](./Books/Spring/properties.md)：Spring从各个属性源获取数据并注入到各个Bean。
-
-#### [Lombok](./Books/Spring/Lombok.md)
-
-- Lombok：编译期自动生成类的方法（@Data）。（生成jar、war时自动剔除Lombok）
-
-> IDE中需要安装相应的Lombok插件。
-
-#### [视图模板库](./Books/Spring/View.md)
-
-> 模板缓存：模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）。
-
-| 模板                                     | 启用/禁用缓存属性（默认true） |
-| ---------------------------------------- | ----------------------------- |
-| FreeMarker                               | spring.freemarker.cache       |
-| Groovy Templates                         | spring.groovy.template.cache  |
-| Mustache                                 | spring.mustache.cache         |
-| [Thymeleaf](./Books/Spring/Thymeleaf.md) | spring.thymeleaf.cache        |
-
-- 前端数据封装实体类，需要将HTML元素的name属性赋值为需要封装的对象的属性名。
-
-#### [validation 校验（JSR-303）](./Books/Spring/validation.md)
-
-```xml
-<groupId>org.springframwork.boot</groupId>
-<artifactId>spring-boot-starter-validation</artifactId>
-```
-
-### Spring Data
-
-```xml
-<!--H2DB 嵌入式-->
-<groupId>com.h2database</groupId>
-<artifactId>h2</artifactId>
-<scope>runtime</scope>
-```
-
-[JDBC](./Books/Spring/JDBC.md)
-
-[Cassandra](./Books/Spring/Cassandra.md)
-
-[MongoDB](./Books/Spring/MongoDB.md)
-
-#### ORM框架
-
-- ORM（Object Relation Mapping）对象注解映射关系。
-
-##### [JPA](./Books/Spring/JPA.md)
-
-```xml
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-data-jpa</artifactId>
-```
-
-##### [MyBatis](./Books/Spring/MyBatis.md)
-
-#### [Spring Data REST](./Books/Spring/SpringDataREST.md)
-
-```xml
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-data-rest</artifactId>
-```
-
-### [Spring Security](./Books/Spring/SpringSecurity.md)
-
 ## JVM（HotSpot VM）
 
-<img src="./pictures/Snipaste_2023-05-17_16-08-46.png" width="1000"/> 
-
-| 指令集架构 | 架构模型说明                                                 |
-| ---------- | ------------------------------------------------------------ |
-| 基于栈     | 1. 设计、实现更简单，适用资源受限的系统<br/>2. 跨平台性，不需要硬件支持，可移植性好<br/>3. 指令集小，零地址指令方式分配，执行过程依赖于操作栈 |
-| 基于寄存器 | 1. 性能优秀，执行高效<br/>2. 完全依赖硬件，可移植性差<br/>3. 操作需要的指令少，通常以一地址指令、二地址指令、三地址指令为主 |
-
-| 生命周期 | 虚拟机阶段说明                                               |
-| -------- | ------------------------------------------------------------ |
-| 启动     | BootClassloader创建（由虚拟机具体实现指定的）初始类（initial class） |
-| 执行     | 执行Java程序（JVM的进程）                                    |
-| 退出     | 1.正常执行结束<br />2.执行过程异常、错误<br />3.操作系统出错<br />4.Java安全管理器允许线程调用Runtime/System的exit()/halt()<br />5.JNI加载、卸载JVM。 |
+[JVM概述](./Books/JVM/JVM概述.md)
 
 ### 内存结构
 
@@ -209,12 +89,6 @@ docker run -it --name mysql5.7 \
 [字符串常量池 StringTable](./Books/JVM/StringTable.md)
 
 ### GC 垃圾回收
-
-> 哪些内存需要回收？什么时候回收？如何回收？
->
-> 早期的垃圾回收，内存泄漏问题。：一处内存区间由于程序员编码的问题而忘记被回收，就会产生内存泄漏，垃圾对象永远无法被清除，随着系统运行时间的不断增长，垃圾对象所耗内存可能持续上升，直到内存溢出并造成应用程序崩溃。 
-
-- GC工作的区域：Java堆、方法区。  频繁收集Young区、较少收集Old区、基本不动Perm区/Metaspase。
 
 #### GC算法
 
@@ -268,37 +142,18 @@ docker run -it --name mysql5.7 \
 
 | 性能评价指标  | 说明                                 |
 | ------------- | ------------------------------------ |
-| 停顿/响应时间 | -                                    |
+| 停顿/响应时间 |                                      |
 | 吞吐量        | 单位时间内完成的工作量               |
 | 并发数        | 同一时刻，对服务器有实际交互的请求数 |
 | 内存占用      | Java堆区所占内存                     |
 
-### 检测分析工具
+| 检测分析工具                               | 说明                                         |
+| ------------------------------------------ | -------------------------------------------- |
+| [JDK工具](./Books/Java性能优化/JDK工具.md) | JDK自带工具                                  |
+| Visual VM                                  | 综合分析                                     |
+| MAT（Memory Analyzer Tool）                | Java堆内存分析器，查找内存泄漏和内存消耗情况 |
 
-| [JDK工具](./Books/Java性能优化/JDK工具.md) | 说明        |
-| ------------------------------------------ | ----------- |
-| jps                                        | 进程查看    |
-| jstat                                      | 进程信息    |
-| jinfo                                      | 参数信息    |
-| jmap                                       | Heap Dump   |
-| jstat                                      | Thread Dump |
-| jcmd                                       | 多功能      |
-
-```shell
-# 指定Dump文件位置（不指定该参数，则默认当前目录），需要搭配以下命令
--XX:HeapDumpPath=<file>
-
-# 出现OOM后自动输出堆存储文件
--XX:+HeapDumpOnOutOfMemoryError
-
-# FullGC之前自动输出堆存储文件
--XX:+HeapDumpBeforeFullGC
-```
-
-- Visual VM
-- MAT（Memory Analyzer Tool）：Java堆内存分析器，查找内存泄漏和内存消耗情况。
-
-### OQL
+OQL
 
 [JVM参数](./Books/Java性能优化/JVM参数.md)
 
@@ -306,23 +161,81 @@ docker run -it --name mysql5.7 \
 
 [OOM](./Books/Java性能优化/OOM.md)
 
-> - Jprofiler启动项设置，解决分辨率不匹配问题
->
-> ```shell
-> if [ "$has_space_options" = "true" ]; then
-> $INSTALL4J_JAVA_PREFIX exec "$app_java_home/bin/java" -server "-splash:$app_home/.install4j/s_1jq1qhc.png" "-Dsun.java2d.noddraw=true" "-Dsun.java2d.uiScale=2" "-Djava.net.preferIPv4Stack=true" "$vmov_1" "$vmov_2" "$vmov_3" "$vmov_4" "$vmov_5" $INSTALL4J_ADD_VM_PARAMS "$quoted_specific_0" "$quoted_specific_1" -classpath "$local_classpath" install4j.com.jprofiler.frontend.FrontendApplication  "$@"
-> return_code=$?
-> else
-> $INSTALL4J_JAVA_PREFIX exec "$app_java_home/bin/java" -server "-splash:$app_home/.install4j/s_1jq1qhc.png" "-Dsun.java2d.uiScale=2" "-Djava.net.preferIPv4Stack=true" $INSTALL4J_ADD_VM_PARAMS "$quoted_specific_0" "$quoted_specific_1" -classpath "$local_classpath" install4j.com.jprofiler.frontend.FrontendApplication  "$@"
-> return_code=$?
-> fi
-> ```
->
-> ```
-> "-Dsun.java2d.uiScale=2"
-> ```
+# Web
 
-# C
+## 环境与构建工具
+
+[Git](./Books/BuildTools/Git.md)
+
+[Maven](./Books/BuildTools/Maven.md)
+
+[Gradle](./Books/BuildTools/Gradle.md)
+
+[Docker](./Books/BuildTools/Docker.md)
+
+## Servlet API
+
+[Servlet](./Books/Java/Servlet.md)
+
+## Spring
+
+| 基本思想                              | 说明                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                           |
+| [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
+| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
+
+| MVC框架                                           | [WebMvcConfigurer 配置](./Books/Spring/WebMvcConfigurer.md) |
+| ------------------------------------------------- | ----------------------------------------------------------- |
+| [Controller 控制器](./Books/Spring/Controller.md) | 控制层，[@RequestMapping](./Books/Spring/RequestMapping.md) |
+| [Model 模型](./Books/Spring/Model.md)             | 模型层                                                      |
+| [View 视图](./Books/Spring/View.md)               | 视图层                                                      |
+
+### Spring Boot
+
+| Initializr结构                                               | 说明             |
+| ------------------------------------------------------------ | ---------------- |
+| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类 |
+| /static                                                      | 静态资源         |
+| /templates                                                   | 模板文件         |
+| application.properties<br />application.yml                  | 配置文件         |
+
+- Starter依赖管理（spring\-boot\-starter）：Spring对依赖包的集中描述，本身不包含库代码，而是传递性地拉取其他库。
+- [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
+- [配置属性](./Books/Spring/properties.md)：Spring从各个属性源获取数据并注入到各个Bean。
+
+| 依赖库                                     | 功能                                                         |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| [Lombok](./Books/Spring/Lombok.md)         | 编译期自动生成类的方法（@Data），生成jar、war时自动剔除Lombok |
+| [视图模板库](./Books/Spring/View.md)       | [Thymeleaf](./Books/Spring/Thymeleaf.md)                     |
+| [validation](./Books/Spring/validation.md) | 校验（JSR-303）                                              |
+
+> 模板缓存：模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）：spring.thymeleaf.cache。
+>
+
+### Spring Data
+
+| 依赖库                                               | 说明                       |
+| ---------------------------------------------------- | -------------------------- |
+| [JDBC](./Books/Spring/JDBC.md)                       |                            |
+| [JPA](./Books/Spring/JPA.md)                         | 适用于SQL和NoSQL           |
+| [Cassandra](./Books/Spring/Cassandra.md)             |                            |
+| [MongoDB](./Books/Spring/MongoDB.md)                 |                            |
+| [Spring Data REST](./Books/Spring/SpringDataREST.md) | 基于储存库自动生成REST API |
+
+## [MyBatis](./Books/Spring/MyBatis.md)
+
+## 前端网页
+
+| W3C标准 | 网页主要由以下三个部分组成   |
+| ------- | ---------------------------- |
+| 结构    | [HTML](./Books/前端/HTML.md) |
+| 表现    | [CSS](./Books/前端/CSS.md)   |
+| 行为    | [JS](./Books/前端/JS.md)     |
+
+[AJAX](./Books/前端/AJAX.md) 
+
+[Vue](./Books/前端/Vue.md)
 
 # 算法
 
@@ -397,8 +310,6 @@ B\*tree
 
 ## UML
 
-- UML：可视化的面向对象的统一建模语言，软件开发过程中的分析设计阶段使用、支持面向对象、独立与软件的实现。
-
 [基本元素](./Books/Arithmetic/基本元素.md)
 
 [关系元素](./Books/Arithmetic/关系元素.md)
@@ -422,6 +333,8 @@ B\*tree
 ## 设计模式
 
 [设计原则](./Books/Arithmetic/设计原则.md)
+
+[多线程设计模式](./Books/Arithmetic/多线程设计模式.md)
 
 ### 创建型
 
@@ -471,8 +384,6 @@ B\*tree
 
 [职责链模式 Chain of Responsibility](./Books/Arithmetic/ChainOfResponsibility.md)
 
-## [多线程设计模式](../Books/Arithmetic/多线程设计模式.md)
-
 # Linux
 
 [Vim](./Books/Linux/Vim.md)
@@ -486,35 +397,6 @@ B\*tree
 [Shell](./Books/Linux/Shell.md)
 
 [Kernel](./Books/Linux/Kernel.md)
-
-# [前端](./Books/前端/前端.md)
-
->**W3C标准** 网页主要由以下三个部分：
->
->1. 结构：HTML
->2. 表现：CSS
->3. 行为：Javascript
-
-## [HTML](./Books/前端/HTML.md)
-
-- HTML（超文本标记语言）是解释型的标记语言，标签不区分大小写，且浏览器是容错的。后缀.html、.htm。
-
-## [CSS](./Books/前端/CSS.md)
-
-## [JS](./Books/前端/JS.md)
-
-### [AJAX](./Books/前端/AJAX.md)
-
-- AJAX（Asynchronous JavaScript And XML）：异步的JavaScript和XML。
-
-| AJAX作用             | 说明                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| 与服务器进行数据交换 | 给服务器发送请求，服务器将数据直接响应回给浏览器。<br />AJAX和服务器进行通信，以达到使用 HTML+AJAX来替换JSP页面。 |
-| 异步交互             | 不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术 |
-
-<img src="./pictures/Snipaste_2023-03-24_18-27-13.png" width="700"/> 
-
-### [Vue](./Books/前端/Vue.md)
 
 # 数据库
 
@@ -583,7 +465,7 @@ B\*tree
 
 [数据结构与编码](./Books/NoSQL/Redis/数据结构与编码.md)
 
-# 计算机
+# 计算机理论
 
 ## 组成原理
 
@@ -605,59 +487,33 @@ B\*tree
 
 ## 操作系统
 
+## 数据库原理
+
 # 数学逻辑与数学基础
 
-## 高等数学
+高等数学
 
-## 线性代数
+线性代数
 
-## 运筹学
+[运筹学](./Books/Mathematics/Operations.md)
 
-[线性规划](./Books/Mathematics/线性规划.md)
+概率论与数理统计
 
-[对偶理论与敏感性分析](./Books/Mathematics/对偶理论与敏感性分析.md)
+[统计学 Statistics](./Books/Mathematics/Statistics.md)
 
-[运输问题](./Books/Mathematics/运输问题.md)
+离散数学
 
-## 概率论与数理统计
-
-## 统计学 Statistics
-
-[统计学 Statistics](./Books/Statistics/Statistics.md)
-
-# 图论
-
-## 离散数学
+图论
 
 # 其他
 
-## 信息管理
-
 [信息管理系统 MIS](./Books/MIS/MIS.md)
 
-## 物流 Logistics
+[物流基础 Logistics](./Books/Others/Logistics.md)
 
-[物流管理概述](./Books/Logistics/物流管理概述.md)
+[运营管理](./Books/Others/OperationsManagement.md)
 
-[供应链管理概述](./Books/Logistics/供应链管理概述.md)
+[公司理财](./Books/Others/CorporateFinance.md)
 
-[物流运输管理](./Books/Logistics/物流运输管理.md)
-
-[库存管理](./Books/Logistics/库存管理.md)
-
-## 运营管理
-
-[运营系统的竞争优势](./Books/OperationsManagement/运营系统的竞争优势.md)
-
-[运营系统的规划与设计](./Books/OperationsManagement/运营系统的规划与设计.md)
-
-[运营系统的运行与控制](./Books/OperationsManagement/运营系统的运行与控制.md)
-
-[运营系统的更新与改善](./Books/OperationsManagement/运营系统的更新与改善.md)
-
-## 公司理财
-
-[投资决策](./Books/CorporateFinance/投资决策.md)
-
-## [Android](./Books/Android/Android.md)
+[Android](./Books/Android/Android.md)
 

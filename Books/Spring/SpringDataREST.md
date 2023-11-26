@@ -1,5 +1,10 @@
 - Spring Data REST：基于储存库自动生成REST API，尝试使用相关实体类的复数来创建端点。Spring Data REST暴露了一个主资源，包含所有端点的链接。
 
+```xml
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-data-rest</artifactId>
+```
+
 ```properties
 # 设置API的基础路径
 spring.data.rest.base-path=/
