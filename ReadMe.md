@@ -495,7 +495,7 @@ B\*tree
 
 线性代数
 
-[运筹学](./Books/Mathematics/Operations.md)
+[运筹学 Operations](./Books/Mathematics/Operations.md)
 
 概率论与数理统计
 
@@ -511,9 +511,9 @@ B\*tree
 
 [物流基础 Logistics](./Books/Others/Logistics.md)
 
-[运营管理](./Books/Others/OperationsManagement.md)
+[运营管理 Operations Management](./Books/Others/OperationsManagement.md)
 
-[公司理财](./Books/Others/CorporateFinance.md)
+[公司理财 Corporate Finance](./Books/Others/CorporateFinance.md)
 
 [Android](./Books/Android/Android.md)
 
