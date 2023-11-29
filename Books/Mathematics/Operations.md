@@ -364,10 +364,24 @@
 2. 原问题的最优解恰好对应对偶问题最终单纯形表的检验系数
 3. 原问题最终单纯形表的检验系数乘以（-1）恰好对应对偶问题的最优解
 
+### 对称性
+
 - 对称性：对偶问题的对偶问题即为原问题
+
+### 弱对偶性
+
 - 弱对偶性：若$\overline{X}$是原问题的任一可行解，$\overline{Y}$是对偶问题的任一可行解，则有C$\overline{X}$&le;$\overline{Y}$b
+
+### 最优性
+
 - 最优性：若$\hat{X}$、$\hat{Y}$分别是问题（P）和（D）的一个可行解，且满足C$\hat{X}$=$\hat{Y}$b，则它们分别是问题（P）和（D）的最优解。
+
+### 最优对偶解
+
 - 最优对偶解：若B为原问题（P）的最优基，则$\hat{Y}$=C<sub>B</sub>B<sup>-1</sup>是对偶问题（D）的最优解。
+
+### 互补松弛性
+
 - 互补松弛性：若$\hat{X}$、$\hat{Y}$分别是如下标准形式的原问题和对偶问题的可行解，则$\hat{X}$、$\hat{Y}$是两个问题的最优解的充分必要条件是$\hat{Y}$X<sub>S</sub>=0 且 Y<sub>S</sub>$\hat{X}$ = 0
 
 <img src="../../pictures/20231124185857.png" width="450"/> 
@@ -391,179 +405,14 @@
 - 线性规划约束右边项（b<sub>i</sub>）发生变化（&Delta;b）时，问题的可行域发生变化，但目标函数及其等值线方向保持不变。若变化之后，存在基变量x对应的b&lt;0，则需要进行换基迭代。
 - 最终单纯形表中对应的约束方程式是在最初方程式的基础上左乘B<sup>-1</sup>得到的，可以直接从最终单纯形表中读出基阵的逆矩阵。
 
-<table>
-    <tr>
-        <td colspan="3">c<sub>j</sub>&rarr;</td>
-        <td>80</td>
-        <td>100</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>C<sub>B</sub></td>
-        <td>基</td>
-        <td>b</td>
-        <td>x<sub>1</sub></td>
-        <td>x<sub>2</sub></td>
-        <td>x<sub>3</sub></td>
-        <td>x<sub>4</sub></td>
-        <td>x<sub>5</sub></td>
-        <td>x<sub>6</sub></td>
-        <td>&theta;<sub>i</sub></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>5</sub></td>
-        <td>72.5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.6875</td>
-        <td>0</td>
-        <td>1</td>
-        <td>-2.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>4</sub></td>
-        <td>5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td>1</td>
-        <td>0</td>
-        <td>-0.75</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>100</td>
-        <td>x<sub>2</sub></td>
-        <td>5</td>
-        <td>0</td>
-        <td>1</td>
-        <td>-0.125</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.25</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>80</td>
-        <td>x<sub>1</sub></td>
-        <td>42.5</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0.1875</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>0</td>
-        <td>0</td>
-        <td>-2.5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-15</td>
-        <td></td>
-    </tr>
-</table>
+<img src="../../pictures/20231128234821.png" width="800"/> 
 
 <img src="../../pictures/20231124200128.png" width="550"/> 
 
 - 将该基解带入原先的最终单纯形表：
 
-<table>
-    <tr>
-        <td colspan="3">c<sub>j</sub>&rarr;</td>
-        <td>80</td>
-        <td>100</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>C<sub>B</sub></td>
-        <td>基</td>
-        <td>b</td>
-        <td>x<sub>1</sub></td>
-        <td>x<sub>2</sub></td>
-        <td>x<sub>3</sub></td>
-        <td>x<sub>4</sub></td>
-        <td>x<sub>5</sub></td>
-        <td>x<sub>6</sub></td>
-        <td>&theta;<sub>i</sub></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>5</sub></td>
-        <td>157.5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.6875</td>
-        <td>0</td>
-        <td>1</td>
-        <td>-2.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>4</sub></td>
-        <td>35</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td>1</td>
-        <td>0</td>
-        <td>-0.75</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>100</td>
-        <td>x<sub>2</sub></td>
-        <td>-5</td>
-        <td>0</td>
-        <td>1</td>
-        <td>[-0.125]</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.25</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>80</td>
-        <td>x<sub>1</sub></td>
-        <td>47.5</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0.1875</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>0</td>
-        <td>0</td>
-        <td>-2.5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-15</td>
-        <td></td>
-    </tr>
-</table>
+<img src="../../pictures/20231128235238.png" width="800"/> 
+
 
 - 判断约束条件的右边项，x<sub>2</sub>对应的b&lt;0，显然需要继续换基迭代。
 
@@ -571,90 +420,8 @@
 
 - 决策变量的目标函数发生变化只可能导致等值线的方向发生变化，并不影响到线性问题的可行域。只有各非基变量检验数均非正，最优解就不发生变化。
 
-<table>
-    <tr>
-        <td colspan="3">c<sub>j</sub>&rarr;</td>
-        <td>80+r<sub>1</sub></td>
-        <td>100+r<sub>2</sub></td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>C<sub>B</sub></td>
-        <td>基</td>
-        <td>b</td>
-        <td>x<sub>1</sub></td>
-        <td>x<sub>2</sub></td>
-        <td>x<sub>3</sub></td>
-        <td>x<sub>4</sub></td>
-        <td>x<sub>5</sub></td>
-        <td>x<sub>6</sub></td>
-        <td>&theta;<sub>i</sub></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>5</sub></td>
-        <td>157.5</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.6875</td>
-        <td>0</td>
-        <td>1</td>
-        <td>-2.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>0</td>
-        <td>x<sub>4</sub></td>
-        <td>35</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td>1</td>
-        <td>0</td>
-        <td>-0.75</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>100+r<sub>2</sub></td>
-        <td>x<sub>2</sub></td>
-        <td>-5</td>
-        <td>0</td>
-        <td>1</td>
-        <td>-0.125</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0.25</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>80+r<sub>1</sub></td>
-        <td>x<sub>1</sub></td>
-        <td>47.5</td>
-        <td>1</td>
-        <td>0</td>
-        <td>0.1875</td>
-        <td>0</td>
-        <td>0</td>
-        <td>-0.125</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>0</td>
-        <td>0</td>
-        <td>-2.5-0.1875r<sub>1</sub>+0.125r<sub>2</sub></td>
-        <td>0</td>
-        <td>0</td>
-        <td>-15+0.125r<sub>1</sub>-0.25r<sub>2</sub></td>
-        <td></td>
-    </tr>
-</table>
+<img src="../../pictures/20231128235520.png" width="800"/> 
+
 <img src="../../pictures/20231124204705.png" width="700"/> 
 
 # 运输问题
@@ -696,3 +463,63 @@
 2. 最低需求不能由假想产地供给，运价为M（无穷大）
 
 ### 产大于销
+
+# 整数规划
+
+## 引入0-1变量
+
+### 互斥计划 
+
+总投资预算为700万元，至少投资一项电子商务，至多投资一项搜索引擎，投资第5个公司的前提是投资第1个公司，模型如下：
+
+<img src="../../pictures/20231129134905.png" width="600"/> 
+
+<img src="../../pictures/20231129121717.png" width="460"/> 
+
+- 固定成本（引入0-1变量）、可变成本（不引入）
+
+某公司生产三种尺寸的容器如表，每种容器售出一只的利润为4万元、5万元、6万元；只要有制造某种容器，不管数量多少都要支付一个固定成本为100万元/月、150万元/月、200万元/月；可使用的资源为金属板500吨/月、劳动力300人/月、机器100台/月。则该月度计划的模型为：
+
+<img src="../../pictures/20231129135748.png" width="340"/> 
+
+<img src="../../pictures/20231129121415.png" width="500"/> 
+
+### 互斥约束条件 
+
+<img src="../../pictures/20231129121225.png" width="440"/>  
+
+- 可使用y<sub>j</sub>来划分约束条件组，同一组的约束条件使用相同y<sub>j</sub>，以此实现约束条件组之间的互斥。
+
+### 指派问题
+
+<img src="../../pictures/20231129140229.png" width="400"/> 
+
+<img src="../../pictures/20231129121037.png" width="600"/> 
+
+1. 存在空闲人员，引入全为0的任务列（休息）：假定去除R任务，则人员多了一名，于是处理如下
+
+<img src="../../pictures/20231129140418.png" width="400"/> 
+
+2. 人员不足以任务，若不特别指定，则引入每列的最优人员数值为一行（虚拟人员）：假定去除人员丁，则需要有一个人员来完成两个任务（通过虚拟人员来确定由哪个人员来完成），于是处理如下
+
+<img src="../../pictures/20231129140652.png" width="400"/>  
+
+- 一行或一列同时变化相同的数值，不影响最优基的选择。根据该定理，可先化简指派表，减去该行/列的最小元素，将每行/列独立的0（十字）进行圈零，并划去相同行和列上的0（&empty;），查看是否符合条件数量，判断该指派问题；
+
+<img src="../../pictures/20231129142131.png" width="500"/> 
+
+<img src="../../pictures/20231129142243.png" width="500"/> 
+
+- 若不满足，则按如下步骤执行：
+
+1. 对没有圈零的行打&radic;，对已打&radic;的行中所有含&empty;的列打&radic;，对所有打有&radic;的列中含圈零的行打&radic;
+2. 重复第1步，直到没有可以打&radic;的为止
+3. 对没有打&radic;的行和打上&radic;的列划线，此时所有的0都被覆盖
+
+<img src="../../pictures/20231129142244.png" width="530"/>  
+
+4. 在剩下的没有划线的元素中找出最小元素值，并将这些元素减去该最小元素值，将划线的列（非零元素）加上该最小元素值。
+
+<img src="../../pictures/20231129143005.png" width="530"/> 
+
+5. 重新进行判断。
