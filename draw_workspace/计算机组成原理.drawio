@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-12-01T09:10:06.809Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="wKe6Em9k3jh_G1A58Fm-" version="21.4.0" type="device" pages="81">
+<mxfile host="Electron" modified="2023-12-01T10:32:52.333Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="f9FwNO1zAWwMLzDjRPFM" version="21.4.0" type="device" pages="82">
   <diagram name="计算机组成" id="JjSI2vkphjXBTYphS9rt">
     <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -15773,7 +15773,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="S-_yjqm4gwEi65ijS69X" name="基址寻址">
-    <mxGraphModel dx="1004" dy="698" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1193" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -15991,6 +15991,105 @@
               <mxPoint x="763" y="255" />
             </Array>
           </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="G5RRKRD0l-2nJCPEUtk_" name="变址寻址">
+    <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-1" value="&lt;b&gt;OP&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="130" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-2" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#CCCCCC;" vertex="1" parent="1">
+          <mxGeometry x="210" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-3" value="&lt;b&gt;A&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-4" value="寻址特征" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="215" y="110" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-5" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.149;entryY=1.032;entryDx=0;entryDy=0;entryPerimeter=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="HyuzTabE8uBlNrqlT1DG-6" target="HyuzTabE8uBlNrqlT1DG-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-6" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;rotation=-90;size=0.5;" vertex="1" parent="1">
+          <mxGeometry x="320" y="150" width="20" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-7" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="240" y="100" width="20" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-8" value="&lt;b&gt;操作数&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="340" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-9" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="370" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-10" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="230" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-11" value="主存" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="425" y="200" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-12" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="290" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-13" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;labelBackgroundColor=default;strokeColor=default;fontFamily=Helvetica;fontSize=11;fontColor=default;shape=connector;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="449" y="335" as="sourcePoint" />
+            <mxPoint x="449" y="295" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-14" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="237" y="278" width="110" height="55.5" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-15" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=Helvetica;fontSize=11;fontColor=default;strokeWidth=2;rotation=-180;size=30;" vertex="1" parent="HyuzTabE8uBlNrqlT1DG-14">
+          <mxGeometry y="1" width="110" height="54.5" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-16" value="" style="group;rotation=-360;fontFamily=Helvetica;fontSize=11;fontColor=default;" vertex="1" connectable="0" parent="HyuzTabE8uBlNrqlT1DG-14">
+          <mxGeometry x="27.25" width="55.5" height="55.5" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-17" value="" style="triangle;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;rotation=-270;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="HyuzTabE8uBlNrqlT1DG-16">
+          <mxGeometry x="10.5" y="-8" width="34" height="46.79" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-18" value="" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=default;shape=connector;entryX=0.703;entryY=-0.021;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.876;exitY=0.488;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="HyuzTabE8uBlNrqlT1DG-16" source="HyuzTabE8uBlNrqlT1DG-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="27" y="33.02479338842976" as="sourcePoint" />
+            <mxPoint x="52" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-19" value="" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=default;shape=connector;exitX=0.903;exitY=0.498;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="HyuzTabE8uBlNrqlT1DG-16" source="HyuzTabE8uBlNrqlT1DG-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="24.75" y="29.5" as="sourcePoint" />
+            <mxPoint x="4.75" y="-0.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-20" value="ALU" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontFamily=Helvetica;fontColor=default;fontStyle=1" vertex="1" parent="HyuzTabE8uBlNrqlT1DG-14">
+          <mxGeometry x="25" y="27.479338842975267" width="60" height="27.520661157024794" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-21" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="HyuzTabE8uBlNrqlT1DG-20" target="HyuzTabE8uBlNrqlT1DG-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-22" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.849;entryY=0.991;entryDx=0;entryDy=0;entryPerimeter=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=2;fontFamily=Helvetica;fontSize=11;fontColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="HyuzTabE8uBlNrqlT1DG-23" target="HyuzTabE8uBlNrqlT1DG-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="320" />
+              <mxPoint x="214" y="320" />
+              <mxPoint x="214" y="259" />
+              <mxPoint x="254" y="259" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-23" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;strokeWidth=2;rotation=-90;size=0.5;container=0;" vertex="1" parent="1">
+          <mxGeometry x="140" y="253.5" width="20" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-24" value="&lt;div style=&quot;text-align: left;&quot;&gt;IX&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;container=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="110" y="253.5" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HyuzTabE8uBlNrqlT1DG-25" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="260" width="100" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
