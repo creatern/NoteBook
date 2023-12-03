@@ -185,11 +185,7 @@ OQL
 | [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
 | [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
 
-| MVC框架                                           | [WebMvcConfigurer 配置](./Books/Spring/WebMvcConfigurer.md) |
-| ------------------------------------------------- | ----------------------------------------------------------- |
-| [Controller 控制器](./Books/Spring/Controller.md) | 控制层，[@RequestMapping](./Books/Spring/RequestMapping.md) |
-| [Model 模型](./Books/Spring/Model.md)             | 模型层                                                      |
-| [View 视图](./Books/Spring/View.md)               | 视图层                                                      |
+[MVC框架](./Books/Spring/MVC.md)
 
 ### Spring Boot
 
