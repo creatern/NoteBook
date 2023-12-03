@@ -336,7 +336,7 @@
 
 - Flash（闪存）在EPROM和EEPROM发展而来，可长期断电保存信息。位价低、集成度高，可擦除重写，且速度快，可作为辅存。
 
-#### SSD 固态硬盘 Solid State Drives
+#### SSD 固态硬盘
 
 - SSD（固态硬盘 Solid State Drives）基于Flash，由固态电子存储芯片阵列制成的硬盘，由控制单元和存储单元（Flash）组成。
 
@@ -558,6 +558,8 @@
 - 重合法：通过X、Y两个方向的选择线来选择一个存储单元的各位。
 
 <img src="../../pictures/计算机组成原理-重合法.drawio.svg" width="600"/> 
+
+## [存储器的校验](./DataLinkLayer.md#汉明码)
 
 # 外部存储器
 
