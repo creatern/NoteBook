@@ -405,11 +405,14 @@
 
 根据单纯形表的最优性判断准则，一定有：
 
+<img src="../../pictures/20231205001824.png" width="160"/> 
 
+如果令<img src="../../pictures/20231205001910.png" width="100"/>，上述条件为：
 
+<img src="../../pictures/20231205001948.png" width="100"/> 
 
+因此，<img src="../../pictures/20231205002017.png" width="28"/>即为对偶问题的一个可行解，且<img src="../../pictures/20231205002126.png" width="120"/>
 
-<img src="../../pictures/1701668210767.png" width="500"/> 
 
 ### 互补松弛性
 
