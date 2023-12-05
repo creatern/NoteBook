@@ -377,41 +377,40 @@
 1. 原问题中任一可行解所对应的目标函数值都构成对偶问题任一可行解对应函数值的下界；
 2. 对偶问题中任一可行解所对应的目标函数值都构成原问题任一可行解对应函数值的上界。
 
-<img src="../../pictures/20231204121331.png" width="550"/> 
+<details>
+    <summary>证明</summary>
+    <img src="../../pictures/20231204121331.png" width="550"/>
+</details> 
 
 ### 最优性
 
 - 最优性：若$\hat{X}$、$\hat{Y}$分别是问题（P）和（D）的一个可行解，且满足$C\hat{X} = \hat{Y}b$，则它们分别是问题（P）和（D）的最优解。
-
 - 若原问题和对偶问题中分别找到了一个可行解，它们对应的目标函数值相等，则这两个可行解即为最优解。
 
-若$C\hat{X}=\hat{Y}b$，根据弱对偶性可知：对偶问题的所有可行解$\overline{Y}$都存在$\overline{Y}b \ge C\hat{X}$，因$C\hat{X}=\hat{Y}b$，所有$\overline{Y}b \ge \hat{Y}b$。可见$\hat{Y}$是使目标函数取值最小的可行解，故是最优解。
-
-同样可证明：对于原问题的所有可行解$\overline{X}$，存在$C\hat{X}=\hat{Y}b \ge C\overline{X}$。
-
-所以$\hatX$是最优解
+<details>
+    <summary>证明</summary>
+    若<img src="../../pictures/20231205102217.png" width=78>，根据弱对偶性可知：对偶问题的所有可行解<img src="../../pictures/overliney.png" width="20"/>都存在<img src="../../pictures/20231205102732.png" width="73"/>，因<img src="../../pictures/20231205102217.png" width=78/>，所有<img src="../../pictures/20231205102825.png" width="72"/>。可见<img src="../../pictures/haty.png" width="20"/>是使目标函数取值最小的可行解，故是最优解。<br/>同样可证明：对于原问题的所有可行解<img src="../../pictures/overlinex.png" width="20"/>，存在<img src="../../pictures/20231205102929.png" width="125"/>。<br/>所以<img src="../../pictures/haty.png" width="20"/>是最优解
+</details>
 
 ### 最优对偶解
 
 - 最优对偶解：若B为原问题（P）的最优基，则$\hat{Y}$=C<sub>B</sub>B<sup>-1</sup>是对偶问题（D）的最优解。
 
-对于原问题（P），引入松弛变量（X<sub>s</sub>），其等价变形为：
+1. 原问题的最优目标函数值刚好等于对偶问题的可行解$\hat{Y}$所对应的目标函数值（$C_B B^{-1} b = \hat{Y} b$），因此由最优性，$\hat{Y}$即为对偶问题的最优解。
+2. 若原问题（P）和对偶问题（D）均有可行解，则两者均有有界最优解，且最优目标函数值相等。
 
-<img src="../../pictures/20231204134452.png" width="204"/> 
-
-将X<sub>s</sub>作为初始基变量，其初始和最终的单纯形表如下：
-
-<img src="../../pictures/20231204135136.png" width="400"/> 
-
-根据单纯形表的最优性判断准则，一定有：
-
-<img src="../../pictures/20231205001824.png" width="160"/> 
-
-如果令<img src="../../pictures/20231205001910.png" width="100"/>，上述条件为：
-
-<img src="../../pictures/20231205001948.png" width="100"/> 
-
-因此，<img src="../../pictures/20231205002017.png" width="28"/>即为对偶问题的一个可行解，且<img src="../../pictures/20231205002126.png" width="120"/>
+<details>
+    <summary>证明</summary>
+    对于原问题（P），引入松弛变量（X<sub>s</sub>），其等价变形为：<br/>
+<img src="../../pictures/20231204134452.png" width="204"/> <br/>
+将X<sub>s</sub>作为初始基变量，其初始和最终的单纯形表如下：<br/>
+<img src="../../pictures/20231204135136.png" width="400"/><br/> 
+根据单纯形表的最优性判断准则，一定有：<br/>
+<img src="../../pictures/20231205001824.png" width="160"/> <br/>
+如果令<img src="../../pictures/20231205001910.png" width="100"/>，上述条件为：<br/>
+<img src="../../pictures/20231205001948.png" width="100"/> <br/>
+因此，<img src="../../pictures/haty.png" width="20"/>即为对偶问题的一个可行解，且<img src="../../pictures/20231205002126.png" width="120"/>
+</details>
 
 
 ### 互补松弛性
@@ -419,6 +418,23 @@
 - 互补松弛性：若$\hat{X}$、$\hat{Y}$分别是如下标准形式的原问题和对偶问题的可行解，则$\hat{X}$、$\hat{Y}$是两个问题的最优解的充分必要条件是$\hat{Y}$X<sub>S</sub>=0 且 Y<sub>S</sub>$\hat{X}$ = 0
 
 <img src="../../pictures/20231124185857.png" width="450"/> 
+
+- 在原资源配置问题（P）中，资源i存在剩余时（$\hat{x}_{n+i} \gt 0$），可知其对应的对偶解一定为零；反之，若某个资源对应的对偶解取指为正，则该资源一定对应于系统的瓶颈资源（$\hat{x}_{n+i} = 0$）。意味着：
+
+<img src="../../pictures/20231205104346.png" width="300"/> 
+
+<details>
+    <summary>证明</summary>
+    <img src="../../pictures/20231205104919.png" width="600"/>
+</details>
+
+<details>
+    <summary>已知线性规划问题：<br/>
+        <img src="../../pictures/20231205104622.png" width="300"/><br/>
+        已知其对偶问题的最优解为y<sub>1</sub><sup>*</sup>=4/5，y<sub>2</sub><sup>*</sup>=3/5，z=5。试用对偶理论找出原问题的最优解。
+    </summary>
+    <img src="../../pictures/20231205104808.png" width="700"/>
+</details>
 
 ## 对偶单纯形法
 
