@@ -21,6 +21,8 @@
 
 [Index 索引](./Books/SQL/Index.md)
 
+# PL/SQL
+
 [Synonym 同义词](./Books/SQL/Synonym.md)
 
 [Cursor 游标](./Books/SQL/Cursor.md)
@@ -28,8 +30,6 @@
 [子程序](./Books/SQL/ProcedureAndFunction.md)
 
 [Trigger 触发器](./Books/SQL/Trigger.md)
-
-# 扩展SQL
 
 [扩展SQL基本语法](./Books/SQL/扩展SQL.md)
 
