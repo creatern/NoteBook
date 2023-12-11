@@ -269,9 +269,29 @@ const vm = new Vue({
 1. 所有被Vue管理的函数，应该写成普通函数，此时，this指向Vue的实例。
 2. 所有不被Vue管理的函数（定时器的回调函数等），应该写成箭头函数（即箭头函数的this从外层找），此时，this仍然指向Vue。定时器的回调函数的this原本应该是window，而箭头函数使得其从外层查找this，也就是Vue实例，所以该箭头函数内的this仍然指向Vue。
 
-## 绑定样式
+## 绑定样式 v-bind:
 
-### 绑定class样式
+### 绑定class样式 :class
+
+- 动态指定样式的类名
+
+```html
+<div :class="tipsMessage" @click="showTips()"></div>
+
+<script>
+    const vm = new Vue({
+        el: '#formContainer',
+        data:{
+            tipsMessage: 'tipsMessageHidden'
+        },
+        methods:{
+            showTips(){
+                this.tipsMessage = 'tipsMessageShow';
+            }
+        }
+    });
+</script>
+```
 
 
 
