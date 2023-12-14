@@ -4,7 +4,7 @@
 
 # [JVM（HotSpot VM）](./JVM.md)
 
-# Web
+# Java Web
 
 ## 环境与构建工具
 
@@ -16,85 +16,35 @@
 
 [Docker](./Books/BuildTools/Docker.md)
 
-## Servlet API
-
-[Servlet](./Books/Java/Servlet.md)
+## [Servlet API](./Books/Java/Servlet.md)
 
 ## [Spring](./Spring.md)
 
 ## 前端网页
 
-| W3C标准 | 网页组成                     |
-| ------- | ---------------------------- |
-| 结构    | [HTML](./Books/前端/HTML.md) |
-| 表现    | [CSS](./Books/前端/CSS.md)   |
-| 行为    | [JS](./Books/前端/JS.md)     |
-
-[AJAX](./Books/前端/AJAX.md) 
+[HTML](./Books/前端/HTML.md)
 
 [Vue](./Books/前端/Vue.md)
 
-# 算法
-
-## 数据结构
-
-[线性表 Linear List](./Books/Arithmetic/LinearList.md)
-
-[树 Tree](./Books/Arithmetic/Tree.md)
-
-[图 Graph](./Books/Arithmetic/Graph.md)
-
-## 算法
-
-[算法复杂度](./Books/Arithmetic/算法复杂度.md)
-
-[排序与查找算法](./Books/Arithmetic/排序与查找算法.md)
-
-[贪心算法](./Books/Arithmetic/贪心算法.md)
-
-[分治策略](./Books/Arithmetic/分治策略.md)
-
-[概率算法](./Books/Arithmetic/概率算法.md)
-
-## UML
-
-[基本元素](./Books/Arithmetic/基本元素.md)
-
-[关系元素](./Books/Arithmetic/关系元素.md)
-
-[视图和图](./Books/Arithmetic/视图和图.md)
-
-[静态视图](./Books/Arithmetic/静态视图.md)
-
-[用例视图](./Books/Arithmetic/用例视图.md)
-
-[状态机视图](./Books/Arithmetic/状态机视图.md)
-
-[活动视图](./Books/Arithmetic/活动视图.md)
-
-[物理视图](./Books/Arithmetic/物理视图.md)
-
-[模型管理视图](./Books/Arithmetic/模型管理视图.md)
-
-[Rational Rose](./Books/Arithmetic/Rational_Rose.md)
-
-## [设计模式](./DesignPattern.md)
-
 # Linux
 
-[Vim](./Books/Linux/Vim.md)
+## [Vim](./Books/Linux/Vim.md)
+
+## 运维
 
 [基本服务与管理](./Books/Linux/基本服务与管理.md)
 
-[服务器配置](./Books/Linux/服务器配置.md)
-
 [系统功能与监测](./Books/Linux/系统功能与监测.md)
 
-[Shell](./Books/Linux/Shell.md)
+[服务器配置](./Books/Linux/服务器配置.md)
 
-[Kernel](./Books/Linux/Kernel.md)
+## [Shell](./Books/Linux/Shell.md)
+
+## [Kernel](./Books/Linux/Kernel.md)
 
 # 数据库
+
+## 数据库原理
 
 ## SQL
 
@@ -138,7 +88,31 @@
 
 ## 操作系统
 
-## 数据库原理
+## 编程思想
+
+### 算法
+
+#### 数据结构
+
+[线性表 Linear List](./Books/Arithmetic/LinearList.md)
+
+[树 Tree](./Books/Arithmetic/Tree.md)
+
+[图 Graph](./Books/Arithmetic/Graph.md)
+
+#### 算法
+
+[算法复杂度](./Books/Arithmetic/算法复杂度.md)
+
+[排序与查找算法](./Books/Arithmetic/排序与查找算法.md)
+
+[贪心算法](./Books/Arithmetic/贪心算法.md)
+
+[分治策略](./Books/Arithmetic/分治策略.md)
+
+[概率算法](./Books/Arithmetic/概率算法.md)
+
+### [设计模式](./DesignPattern.md)
 
 # 数学逻辑与数学基础
 
