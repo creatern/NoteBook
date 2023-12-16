@@ -30,9 +30,7 @@
 
 ## [Vim](./Books/Linux/Vim.md)
 
-## 运维
-
-[基本服务与管理](./Books/Linux/基本服务与管理.md)
+## [运行与维护](./Books/Linux/运行与维护.md)
 
 [系统功能与监测](./Books/Linux/系统功能与监测.md)
 
@@ -48,7 +46,9 @@
 
 ## SQL
 
-[Oracle](./Oracle.md)
+### [Oracle](./Oracle.md)
+
+### MySQL
 
 ## NoSQL
 

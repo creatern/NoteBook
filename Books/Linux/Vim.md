@@ -191,8 +191,6 @@ vim -O file1 file2
 
 - 以下操作在操作目录时生效：p、P、t、u、U、x、v、o、r、s。
 
-# Shell交互
-
 # 插件管理
 
 ### Vundle
