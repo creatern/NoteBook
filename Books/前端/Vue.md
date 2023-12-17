@@ -273,16 +273,30 @@ const vm = new Vue({
 
 ### 绑定class样式 :class
 
-- 动态指定样式的类名
+- :class：动态指定样式的类名（class）
 
 ```html
-<div :class="tipsMessage" @click="showTips()"></div>
+<!--字符串写法-->
+<div class="basic" :class="tipsMessage" @click="showTips()"></div>
+<!--相当于 class="basic tipsMessage"-->
+
+<!--字符串数组写法-->
+<div class="basic" :class="tipArr" @click="showTips()"></div>
+
+<!--对象写法-->
+<div class="basic" :class="tipObj" @click="showTips()"></div>
 
 <script>
     const vm = new Vue({
         el: '#formContainer',
         data:{
-            tipsMessage: 'tipsMessageHidden'
+            tipsMessage: 'tipsMessageHidden',
+            tipArr: ['hidden','show','other'],
+            tipObj: {
+                hidden: false, //不使用hidden类名
+                show:true, //使用show类名
+                other:false
+            }
         },
         methods:{
             showTips(){
@@ -293,6 +307,148 @@ const vm = new Vue({
 </script>
 ```
 
+### 绑定style样式 :style
 
+```html
+<!--样式对象写法-->
+<div id="test" class="basic" :style="styleObj"></div>
 
-### 绑定style样式
+<!--对象数组写法-->
+<div id="test" class="basic" :style="styleArr"></div>
+
+<script>
+    const vm = new Vue({
+        el: '#test',
+        data:{
+            styleObj:{
+                fontSize:'40px',
+                color:'red',
+                backgroudColor:'orange'
+            },
+            styleArr:[
+                {
+                    fontSize:'40px',
+                    color:'red'
+                },
+                {
+                    backgroudColor:'orange'
+                }
+            ]
+        }
+    });
+</script>
+```
+
+## 条件渲染
+
+### v-show=
+
+- `v-show="boolean值"`：ture表示可视；false则不可视，实质上是`display:none`
+
+```html
+<p v-show="false">
+    Hello
+</p>
+```
+
+### v-if=、v-else-if=、v-else
+
+- `v-if="boolean值"`：true表示该部分结构可用；false则不生成该部分结构，相当于从html文档中暂时删除
+
+- `v-if=、v-else-if=、v-else`，若一起使用，则它们所在的标签必须是紧密相邻的，否则报错
+
+```html
+<div v-if="n === 1">n=1</div>
+<div v-else-if="n === 2">n=2</div>
+<div v-else>n=other</div>
+```
+
+### \<template>\</template\>
+
+- \<template>\</template\>可以搭配`v-if=`使用，避免对css渲染的干扰；但不能和`v-show=`一起使用
+
+## 列表渲染
+
+### v-for=
+
+- `v-for=`：遍历可遍历对象（数组、对象、字符串、指定次数等）
+
+```html
+<div id='test'>
+    <ol>
+        <li v-for="n in news" :key="n.id"></li>
+        <!-- <li v-for="(n, i) in news" :key="i"></li> i为数组的下标-->
+    </ol>
+</div>
+
+<script>
+    const vm = new Vue({
+        el: '#test',
+        data:{
+            news:[
+                {id:'N1001',author:'作者',context:'内容',date:'日期'},
+                {id:'N1002',author:'作者',context:'内容',date:'日期'}
+            ]
+        }
+    });
+</script>
+```
+
+### :key
+
+- `:key`：虚拟DOM（Vnodes）的标识，而不会显示到html文档（真实DOM）；数据发生变化时，Vue根据新数据生成新的虚拟DOM并与旧的虚拟DOM对比（基于key）
+
+1. 旧的虚拟DOM中找到与新的虚拟DOM相同的key；若虚拟DOM中的内容没变，则直接使用之前的真实DOM；若改变，则创建新的真实DOM，并替换原先的真实DOM
+2. 旧的虚拟DOM中找不到与新的虚拟DOM相同的key，则创建新的真实DOM，随后渲染到页面
+
+<img src="../../pictures/20231217145830.png" width="700"/> 
+
+ <img src="../../pictures/20231217145907.png" width="700"/> 
+
+### 列表过滤与排序
+
+- watch
+- computer
+
+```html
+<div id="test">
+    <input type="text" placeholder="过滤条件" v-model="keyWord"/>
+    <button @click="sortType=0">原顺序</button>
+    <button @click="sortType=-1">降序</button>
+    <button @click="sortType=1">升序</button>
+    <ol>
+        <li v-for="p in filPersons" :key="p.id">{{ p.name }} - {{ p.age }}</li>
+    </ol>
+</div>
+
+<script>
+    const vue = new Vue({
+        el: '#test',
+        data: {
+            keyWord: '', // 过滤条件
+            persons: [
+                {id: '1001', name: '张三', age: 18},
+                {id: '1002', name: '李四', age: 22},
+                {id: '1003', name: '王五', age: 20}
+            ],
+            sortType: 0 //0原顺序，-1降序，1升序
+        },
+        computed: {
+            filPersons() {
+                const tmpArr = this.persons.filter((p) => {
+                    //执行过滤操作
+                    return p;
+                });
+
+                if (this.sortType !== 0) {
+                    tmpArr.sort((o1, o2) => {
+                        return this.sortType === 1 ? o2.age - o1.age : o1.age - o2.age;
+                    });
+                }
+                return tmpArr;
+            }
+        }
+    });
+</script>
+```
+
