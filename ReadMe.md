@@ -32,8 +32,6 @@
 
 ## [运行与维护](./Books/Linux/运行与维护.md)
 
-[系统功能与监测](./Books/Linux/系统功能与监测.md)
-
 [服务器配置](./Books/Linux/服务器配置.md)
 
 ## [Shell](./Books/Linux/Shell.md)
