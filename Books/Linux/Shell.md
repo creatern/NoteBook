@@ -1,4 +1,4 @@
-# shell
+# shell概述
 
 ## bash
 
@@ -28,7 +28,7 @@ echo $BASH_SUBSHELL
 | `命令; 命令`          | 命令列表                                                     |
 | `{命令; 命令}`        | coproc协程                                                   |
 
-# 命令相关
+# shell相关命令
 
 ## alias 命令别名
 
@@ -56,17 +56,43 @@ unalias 别名
 | 内建命令 | 不需要子进程执行，已和shell编译成一体；不需要借助外部程序文件来执行 |
 | 外部命令 | 存在于bash shell之外的程序，并不是shell程序的一部分；执行时会创建一个子shell（衍生）<br />外部命令通常位于/bin、/usr/bin、/usr/sbin |
 
-### type 查看是否为内建命令
+### type 查看命令类型
 
-### which 显示外部命令的文件
+<table><tbody><tr><th>常用类型</th><th>信息说明</th></tr><tr><td>builtin</td><td>内部指令</td></tr><tr><td>file</td><td>文件</td></tr><tr><td>function</td><td>函数</td></tr><tr><td>keyword</td><td>关键字</td></tr><tr><td>alias</td><td>别名</td></tr><tr><td>unfound</td><td>没有找到</td></tr></tbody></table>
 
-- which：对于有多种方式实现的命令，如果需要指定为外部命令的方式实现，可以通过which找到相应的文件，直接执行该文件即可。
+```shell
+type ls
+# ls is aliased to `ls --color=auto'
+
+type mv
+# mv is /usr/bin/mv
+
+type source
+# source is a shell builtin
+```
+
+### which 查找命令文件
+
+- which：查找命令文件，能够快速搜索二进制程序所对应的位置。
+- 如果我们既不关心同名文件（find与locate），也不关心命令所对应的源代码和帮助文件（whereis），仅仅是想找到命令本身所在的路径，那么这个which命令就太合适了。
+- 对于有多种方式实现的命令，如果需要指定为外部命令的方式实现，可以通过which找到相应的文件，直接执行该文件即可。
+
+<table><tbody><tr><td>-a</td><td>显示PATH变量中所有匹配的可执行文件</td></tr><tr><td>-n</td><td>设置文件名长度（不含路径）</td></tr><tr><td>-p</td><td>设置文件名长度（含路径）</td></tr><tr><td>-V</td><td>显示版本信息</td></tr><tr><td>-w&nbsp;</td><td>设置输出时栏位的宽度</td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--read-functions</td><td>从标准输入中读取Shell函数定义</td></tr><tr><td>--show-tilde</td><td>使用波浪线代替路径中的家目录</td></tr><tr><td>--skip-dot</td><td>跳过PATH变量中以点号开头的目录</td></tr></tbody></table>
+
+```shell
+# 查找多个指定命令文件的位置
+which ls who
+#/usr/bin/ls
+#/usr/bin/who  
+```
 
 ## history 历史命令
 
 - history：查看历史命令记录
 - `$HISTSIZE`：最大保存的历史命令条数（默认1000条）
 - \~/\.bash\_history：历史命令文件；bash命令的历史记录先放在内存中，bash退出时才被写入到历史文件
+
+<table><tbody><tr><td>-a</td><td>保存命令记录</td></tr><tr><td>-c</td><td>清空命令记录</td></tr><tr><td>-d</td><td>删除指定序号的命令记录</td></tr><tr><td>-n</td><td>读取命令记录</td></tr><tr><td>-r</td><td>读取命令记录到缓冲区</td></tr><tr><td>-s</td><td>添加命令记录到缓冲区</td></tr><tr><td>-w</td><td>将缓冲区信息写入到历史文件</td></tr></tbody></table>
 
 ```shell
 # 查看指定的历史命令记录
@@ -127,14 +153,44 @@ ll /etc | grep "*.config"
 | 2\>    | 错误输出重定向<br />若`2>`后面的文件不存在，则创建该文件；若存在，则将内容覆盖到该文件。<br />如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件；即使没有错误信息也会创建/覆盖。 |
 | 2\>\>  | 追加错误输出重定向<br />若`2>>`后面的文件不存在，则创建该文件；若存在，则将内容追加到该文件。<br />如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件中；即使没有错误信息也会创建/追加。 |
 
-- 重定向操作符可以混合使用。
-
 ```shell
-# 将标准输出和标准错误输出重定向到同一个文件
+# 重定向操作符可以混合使用，如将标准输出和标准错误输出重定向到同一个文件
 ls >myOutAndErr.txt 2>&
 ```
 
-# 语法规范
+## 脚本执行
+
+### 直接执行
+
+- 需要可执行权限（x），在当前shell内开启一个子shell执行脚本，脚本结束时关闭子shell并回到父shell
+
+```shell
+./test.sh
+```
+
+### bash/sh shell命令语言解释器
+
+- sh（shell）：sh是bash的别名命令，不需要执行权限，在当前shell中开启一个子shell执行脚本，脚本结束时关闭子shell并回到父shell
+
+```shell
+bash test.sh
+
+sh test.sh
+```
+
+<table><tbody><tr><td>-c</td><td>从字符串中读取命令</td></tr><tr><td>-i </td><td>实现脚本交互 </td></tr><tr><td>-n </td><td>进行语法检查 </td></tr><tr><td>-v</td><td>显示执行过程详细信息</td></tr><tr><td>-x </td><td>实现逐条语句的跟踪 </td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--version</td><td>显示版本信息</td></tr></tbody></table>
+
+### . source 从指定文件中读取和执行命令
+
+- source（. 点命令）：用于从指定文件（不需要执行权限）中读取和执行命令，通常用于被修改过的文件，使之新参数能够立即生效，而不必重启整台服务器。使脚本内容在当前shell里执行，而无需打开子shell
+
+```shell
+. test.sh
+
+source test.sh
+```
+
+# shell script语法规范
 
 ## 基础规范
 
@@ -152,12 +208,6 @@ END
 # 执行的命令
 echo "Hello World"
 ```
-
-| 执行方式      | 说明                                                         |
-| ------------- | ------------------------------------------------------------ |
-| 直接执行      | 需要可执行权限（x）。<br />在当前shell内开启一个子shell执行脚本，脚本结束时关闭子shell并回到父shell。<br />`./test.sh` |
-| 解释器        | 不需要执行权限<br />在当前shell中开启一个子shell执行脚本，脚本结束时关闭子shell并回到父shell。<br />`bash test.sh`、`sh test.sh` |
-| .<br />source | 使脚本内容在当前shell里执行，而无需打开子shell。<br />`. test.sh`、`source test.sh` |
 
 ### 单引号、双引号与反引号
 
@@ -373,6 +423,8 @@ echo "sqrt(100)" | bc
 
 ### 条件判断
 
+#### \[\]
+
 ```shell
 test 条件表达式
 
@@ -411,6 +463,8 @@ test 条件表达式
 | 正则           | 支持=\~                                | 不支持             |
 | 运算           | 允许使用\(\)                           | 仅支持部分         |
 | \<<br />\>     | 排序操作<br />（本地的locale语言顺序） |                    |
+
+#### test
 
 ## 流程控制
 
@@ -540,6 +594,17 @@ do
     echo $i
 done
 ```
+
+#### until
+
+```shell
+until [ condition ]
+do
+    程序段落
+done
+```
+
+
 
 ## 自定义函数
 
