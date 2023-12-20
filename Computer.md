@@ -21,29 +21,3 @@
 [网络层 Network Layer](./Books/Computer/NetworkLayer.md)
 
 ## 操作系统
-
-## 编程思想
-
-### 算法
-
-#### 数据结构
-
-[线性表 Linear List](./Books/Arithmetic/LinearList.md)
-
-[树 Tree](./Books/Arithmetic/Tree.md)
-
-[图 Graph](./Books/Arithmetic/Graph.md)
-
-#### 算法
-
-[算法复杂度](./Books/Arithmetic/算法复杂度.md)
-
-[排序与查找算法](./Books/Arithmetic/排序与查找算法.md)
-
-[贪心算法](./Books/Arithmetic/贪心算法.md)
-
-[分治策略](./Books/Arithmetic/分治策略.md)
-
-[概率算法](./Books/Arithmetic/概率算法.md)
-
-### [设计模式](./DesignPattern.md)

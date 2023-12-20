@@ -4,7 +4,7 @@
 
 ### [Oracle](./Oracle.md)
 
-### MySQL
+### [MySQL](./Books/MySQL/MySQL.md)
 
 ## NoSQL
 
