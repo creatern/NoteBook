@@ -32,7 +32,7 @@ echo $BASH_SUBSHELL
 
 ## alias 命令别名
 
-- alias：设置指令的别名，对应的文件为/etc/bashrc
+- alias：设置指令的别名并写入/etc/bashrc（Ubuntu：/etc/bash.bashrc）
 
 ```shell
 # 查看已经设置的别名
@@ -42,7 +42,7 @@ alias -p
 # 检查别名是否已被使用
 type 别名
 
-# 设置别名，多条命令之间使用分号分隔
+# 设置/更改别名，多条命令之间使用分号分隔
 alias 别名='命令1;命令2'
 
 # 撤销别名，未更改/etc/bashrc
