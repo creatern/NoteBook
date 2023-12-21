@@ -28,11 +28,23 @@ echo $BASH_SUBSHELL
 | `命令; 命令`          | 命令列表                                                     |
 | `{命令; 命令}`        | coproc协程                                                   |
 
+## bashrc
+
+### /etc/bashrc 
+
+- <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。
+
+### \~/.bashrc 
+
+- \~/.bashrc：专属于个人bash shell的信息；用户登录以及每次打开一个新的shell时，执行这个文件；在这个文件里可以自定义用户专属的个人信息。
+
 # shell相关命令
 
-## alias 命令别名
+##  命令别名
 
-- alias：设置指令的别名并写入/etc/bashrc（Ubuntu：/etc/bash.bashrc）
+### alias 别名
+
+- alias：设置指令的别名，只在当前shell起作用，未更改[/etc/bashrc](#bashrc)；对于个人专用的命令别名，应该在[\~/.bashrc](#bashrc)设置。
 
 ```shell
 # 查看已经设置的别名
@@ -45,7 +57,7 @@ type 别名
 # 设置/更改别名，多条命令之间使用分号分隔
 alias 别名='命令1;命令2'
 
-# 撤销别名，未更改/etc/bashrc
+# 撤销别名，只在当前shell起作用，未更改/etc/bashrc
 unalias 别名
 ```
 
