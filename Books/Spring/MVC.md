@@ -25,6 +25,12 @@
 
 <img src="../../pictures/WebMvcConfigurer.png" width="1000"/>
 
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+}
+```
+
 ## addViewControllers 注册视图控制器
 
 ```java
@@ -45,7 +51,10 @@ private MyInterceptor myInterceptor;
 
 @Override
 public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(myInterceptor).addPathPatterns("/books","/books/**");
+    registry.addInterceptor(myInterceptor)
+        .addPathPatterns("/books","/books/**") //设置拦截的路径
+        .excludePathPatterns("/books/1"); //排除拦截的路径
+    // registry.addInterceptor(new MyInterceptor()).addPathPatterns("/books","/books/**");
 }
 ```
 

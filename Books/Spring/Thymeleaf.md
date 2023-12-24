@@ -90,6 +90,12 @@
 
 ## th:if 判断
 
+- `th:if`：在HTML模板中进行条件判断的属性，允许根据给定条件为true/false来添加或删除部分的HTML代码。
+
+```html
+<div th:if="${isFlag}"></div>
+```
+
 ## th:each 迭代
 
 ```html
@@ -115,6 +121,31 @@
       th:errors="*{ccNumber}">CC Num Error</span>
 <!--显示的错误信息：检验注解的message-->
 ```
+
+## th:fragment 片段
+
+```html
+<!--准备好的HTML片段-->
+<div th:fragment="navbar">
+    <!--待被插入的HTML片段-->
+</div>
+```
+
+```html
+<!--需要被插入的HTML片段-->
+
+<div th:include="/fragments/navbar.html :: navbar"></div>
+
+<div th:replace="/fragments/navbar.html :: navbar"></div>
+```
+
+### th:include 包含
+
+- `th:include`：包含另一个模板的指定部分到当前模板中，即作为当前模板的内部内容。被包含的模板的内容将被插入到当前模板的指定位置，但保留当前模板的标签结构。
+
+### th:replace 替换
+
+- `th:replace`：替换当前模板的整个元素（包括其自身的标签）而不是仅仅替换元素的内容，即被替换的模板的HTML标签将替换当前模板的相应标签。
 
 # ThymeleafResolver
 
