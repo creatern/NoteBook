@@ -80,10 +80,6 @@ Stream.generate(() -> "Echo")
 
 > 并行流使用fork-join池来操作流的各个部分。
 
-```java
-
-```
-
 # 管道（转换流）
 
 - 流的转换会产生新的流，其元素派生自另一个流的元素。
@@ -297,5 +293,3 @@ Stream.of(Locale.getAvailableLocales())
                            Collectors.maxBy(String::compareTo))))
     .forEach((k, v) -> System.out.println(k + ":" + v.orElse("none")));
 ```
-
-# 
