@@ -412,5 +412,3 @@ mvn archetype:generate -DgroupId=com.zjk -DartifactId=web-project -DarchetypeArt
 # 分模块开发与设计
 
 ## 模块拆分思想
-
-# 

@@ -15,4 +15,3 @@ C/C++
 [数学逻辑与数学基础](./Mathematics.md)
 
 [其他/杂项](./Others.md)
-

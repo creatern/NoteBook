@@ -196,6 +196,18 @@ select 字段
         <td>默认以升序排序<code>asc</code>（ascending），可选降序<code>desc</code>（descending）</td>
     </tr>
 </table>
+### null
+
+<table>
+    <tr>
+        <th>使用null值</th>
+        <th>运算结果</th>
+    </tr>
+    <tr>
+    </tr>
+</table>
+
+
 
 ## update
 
