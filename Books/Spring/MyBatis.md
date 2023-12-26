@@ -178,7 +178,7 @@ sqlSession.close();
 
 <table>
     <tr>
-        <th width="15%">方法参数类型</th>\
+        <th width="15%">方法参数类型</th>
         <th width="85%" colspan="2">传递方式</th>
     </tr>
     <tr>
@@ -195,7 +195,7 @@ sqlSession.close();
     </tr>
     <tr>
         <td width="10%">key</td>
-        <td width="75%">sql参数占位符的参数名，默认arg0、param1作为key分别开始存放值</td>
+        <td width="75%">sql参数占位符的参数名，默认从arg0和param1作为key分别开始存放值</td>
     </tr>
     <tr>
         <td>value</td>
@@ -206,23 +206,24 @@ sqlSession.close();
     </tr>
 </table>
 
+
 ```java
-//散装参数 @Param("")
+// 散装参数 @Param("")
 List<Brand> selectByCondition(@Param("status") int status, @Param("brandName") String brandName, @Param("companyName") String companyName);
 
-//对象参数
+// 对象参数
 List<Brand> selectByCondition(Brand brand);
 
-//map集合参数
+// map集合参数
 List<Brand> selectByCondition(Map map);
 ```
 
 ```java
-//此时修改后的键名为：param1\~n、id、name（arg<n>被替换）
-map.put("id",值1);
-map.put("name",值2);
-map.put("param1",值1);
-map.put("param2",值2);
+// 此时修改后的键名为：param1\~n、id、name（arg<n>被替换）
+map.put("id", 值1);
+map.put("name", 值2);
+map.put("param1", 值1);
+map.put("param2", 值2);
 ```
 
 ### [动态 SQL](https://mybatis.net.cn/dynamic-sql.html)
@@ -232,14 +233,14 @@ map.put("param2",值2);
 #### if 条件判断
 
 ```xml
-<if test="逻辑表达式">  该逻辑表达式中的变量为#{}内的参数名称
+<if test="逻辑表达式"> <!--该逻辑表达式中的变量为#{}内的参数名称-->
     部分sql语句
 </if>
 ```
 
 #### choose 单项选择
 
-- choose只会有一个满足条件的部分sql语句生效，当所有when的条件都满足时，只会选择第一个满足的when。（case\-when）
+- choose：只会有一个满足条件的部分sql语句生效，当所有when的条件都满足时，只会选择第一个满足的when。（case\-when）
 
 ```xml
 <choose>
@@ -249,7 +250,7 @@ map.put("param2",值2);
     <when test="逻辑表达式">
         部分sql语句
     </when>
-    <otherwise>  可以省略
+    <otherwise><!--可省略该部分-->
         部分sql语句
     </otherwise>
 </choose>
@@ -280,8 +281,8 @@ map.put("param2",值2);
 #### foreach 循环
 
 ```xml
+<!--collection 传入的数组 | item 数组内的属性 | separator 分隔符 | open\close 开始\结束符-->
 <foreach collection="ids" item="id" separator="," open="(" close=")">
-    collection 传入的数组 | item 数组内的属性 | separator 分隔符 | open\close 开始\结束符
     #{id}
 </foreach>
 ```
@@ -293,7 +294,6 @@ map.put("param2",值2);
     DELETE FROM tb_brand
     WHERE id IN
     <foreach collection="ids" item="id" separator="," open="(" close=")">
-           collection 传入的数组 | item 数组内的属性 | separator 分隔符 | open\close 开始\结束符
         #{id}
     </foreach>
 </delete>
@@ -303,33 +303,14 @@ map.put("param2",值2);
 
 ```java
 int deleteByIds(@Param("ids") int[] ids); 
-//MyBatis默认将数组参数封装为一个Map集合，默认为array = 数组
-//可以通过@Param("新的key")的方式来将array修改为新的key，在<foreach>中的collection使用
-```
-
-
-#### trim 自定义标签
-
-- `<where>`的自定义类型`<trim>`
-
-```xml
-<trim prefix="WHERE" prefixOverrides="AND |OR ">
-    
-</trim>
-```
-
-- `<set>`的自定义类型`<trim>`
-
-```xml
-<trim prefix="SET" suffixOverrides=",">
-    
-</trim>
+// MyBatis默认将数组参数封装为一个Map集合，默认为array = 数组
+// 可以通过@Param("新的key")的方式来将array修改为新的key，在<foreach>中的collection使用
 ```
 
 #### where 谓词替代
 
-- `<where>`替代sql语句中的WHERE子句：if（条件判断）通常搭配`<where>`来避免不满足条件而造成一些特殊sql语句的报错。或者`WHERE 1 = 1` 作为WHERE语句的第一条，避免第一条WHERE子句的特殊性。
-- where元素只会在子元素返回任何内容的情况下才插入 “WHERE” 子句。而且，若子句的开头为 “AND” 或 “OR”，where 元素也会将它们去除。
+- `<where>`替代sql语句中的WHERE子句：if（条件判断）通常搭配`<where>`来避免不满足条件而造成一些特殊sql语句的报错；或者`WHERE 1 = 1` 作为WHERE语句的第一条，避免第一条WHERE子句的特殊性。
+- `<where>`只会在子元素返回任何内容的情况下才插入 “WHERE” 子句，如果允许插入的第一个 “WHERE” 子句的开头为 “AND” 或 “OR”，则`<where>`会将这些不合法的 “AND” 或 “OR” 去除。
 
 ```xml
 <select id="selectByCondition" resultMap="brandResultMap">
@@ -351,7 +332,25 @@ int deleteByIds(@Param("ids") int[] ids);
 
 #### set 动态更新
 
-- set 元素可以用于动态包含需要更新的列，忽略其它不更新的列
+- `<set>`可以用于动态包含需要更新的列，忽略其它不更新的列
+
+#### trim 自定义标签
+
+- `<where>`的自定义类型`<trim>`
+
+```xml
+<trim prefix="WHERE" prefixOverrides="AND | OR ">
+    
+</trim>
+```
+
+- `<set>`的自定义类型`<trim>`
+
+```xml
+<trim prefix="SET" suffixOverrides=",">
+    
+</trim>
+```
 
 ## Mapper映射接口
 

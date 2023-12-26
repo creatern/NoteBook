@@ -37,23 +37,39 @@ Comparator<Integer> comparator = (o1, o2) -> Integer.compare(o1, o2);
 
 - 不继承父类的属性。
 
-**变量遮蔽与捕获**
-
-- 变量遮蔽：内层作用域中声明的变量会覆盖外层作用域中同名的变量。
-
-  - 只能隐藏和其它作用域中的变量名相同的变量，而不能创建一个同名的新变量。
-
-- 变量捕获：隐式的引用外部作用域变量，而不是使用同名局部变量。
-
-  1. 捕获局部变量：值传递，捕获变量的值不能修改。
-
-  - 局部变量应该声明为final 。
-  - 局部变量和 Lambda 表达式中的参数不能同名。
-  - 引用类型的局部变量（数组等）：lambda可以对其属性内容进行修改。
-
-  2. 捕获实例变量和静态变量：引用
-
-  - 线程安全问题：如果 Lambda 表达式中需要修改实例变量或静态变量，必须使用 `Atomic` 类或者 `synchronized` 方法来保证线程安全，或者将变量作为参数传递给 Lambda 表达式中进行修改。
+<table>
+    <tr>
+        <th width="15%" rowspan="2">变量遮蔽</th>
+        <th colspan="2">内层作用域中声明的变量会覆盖外层作用域中同名的变量</th>
+    </tr>
+    <tr>
+        <td colspan="2">只能隐藏和其它作用域中的变量名相同的变量，而不能创建一个同名的新变量</td>
+    </tr>
+    <tr>
+        <th rowspan="7">变量捕获</th>
+        <td colspan="2">隐式的引用外部作用域变量，而不是使用同名局部变量</td>
+    </tr>
+    <tr>
+        <th width="25%">捕获局部变量</th>
+        <td>值传递，捕获变量的值不能修改</td>
+    </tr>
+    <tr>
+        <td colspan="2">1. 局部变量应该声明为final</td>
+    </tr>
+    <tr>
+        <td colspan="2">2. 局部变量和Lambda表达式中的参数不能同名</td>
+    </tr>
+    <tr>
+        <td colspan="2">3. 引用类型的局部变量（数组等），lambda可以对其属性内容进行修改</td>
+    </tr>
+    <tr>
+        <th>捕获实例变量和静态变量</th>
+        <td>引用</td>
+    </tr>
+    <tr>
+        <td colspan="2">线程安全问题：如果Lambda表达式中需要修改实例变量或静态变量，必须使用Atomic类或者synchronized方法来保证线程安全，或者将变量作为参数传递给Lambda表达式中进行修改</td>
+    </tr>
+</table>
 
 - this、super：lambda体中的this指向的是lambda体外层环境的类对象、类对象的父类，而不是引用自身。
 
@@ -277,5 +293,3 @@ void bar(DoubleFunction<String> f){}
 bar((IntFunction<String>) String::valueOf());
 bar((DoubleFunction<String>) String::valueOf());
 ```
-
-# 
