@@ -1,39 +1,7 @@
-# 基础操作
-
-```shell
-# 连接MySQL
-mysql [-h 主机地址] [-u 用户 -p] [数据库名]
-```
-
-<table>
-    <tr>
-        <th>连接选项</th>
-        <th>意义</th>
-    </tr>
-    <tr>
-        <td>[-h 主机地址</td>
-        <td>指定连接的服务器主机地址；若忽略，则使用本地地址</td>
-    </tr>
-    <tr>
-        <td>[-u 用户 -p]</td>
-        <td>指定通过用户密码方式登录；若忽略，则尝试匿名登录</td>
-    </tr>
-    <tr>
-        <td><span name="连接时指定数据库">[数据库名]</span></td>
-        <td>选择待会使用的数据库；若忽略，则需要通过<code>use database</code>选择使用的数据库</td>
-    </tr>
-</table>
-
-
-```mysql
--- 断开连接的3种方式
-exit
-quit
-\q
-```
+# MySQL命令行
 
 <table><colgroup><col style="width: 10%"><col style="width: 80%"></colgroup><thead><tr>
-          <th>迅速的</th>
+          <th>提示符</th>
           <th>意义</th>
         </tr></thead><tbody><tr>
           <td><code class="literal">mysql&gt;</code></td>
@@ -54,6 +22,57 @@ quit
           <td><code class="literal">/*&gt;</code></td>
           <td>等待下一行，等待以 开头的评论完成<code class="literal">/*</code></td>
 </tr></tbody></table>
+
+```shell
+# 连接MySQL
+mysql [-h 主机地址] [-u 用户 -p] [数据库名] [< 文件 | 文件 | 文件] [> 文件]
+```
+
+<table>
+    <tr>
+        <th width="20%">连接选项</th>
+        <th width="80%">意义</th>
+    </tr>
+    <tr>
+        <td>-h 主机地址</td>
+        <td>指定连接的服务器主机地址；若忽略，则使用本地地址</td>
+    </tr>
+    <tr>
+        <td>-u 用户 -p</td>
+        <td>指定通过用户密码方式登录；若忽略，则尝试匿名登录</td>
+    </tr>
+    <tr>
+        <td><span name="连接时指定数据库">数据库名</span></td>
+        <td>选择待会使用的数据库；若忽略，则需要通过<code>use database</code>选择使用的数据库</td>
+    </tr>
+    <tr>
+        <td rowspan="3">&lt; 文件 | 文件 | 文件</td> 
+        <td>批处理模式，MySQL从该文件中读取要执行的命令</td>
+    </tr>
+    <tr>
+        <td><code>mysql -t</code>：以批处理模式获取交互式输出格式</td>
+    </tr>
+    <tr>
+        <td><code>mysql -v</code>将执行的语句回显到输出中</td>
+    </tr>
+    <tr>
+        <td>&gt; 文件</td>
+        <td>捕获输出到指定文件</td>
+    </tr>
+</table>
+
+```mysql
+-- 断开连接的3种方式
+exit
+quit
+\q
+```
+
+```mysql
+-- MySQL执行脚本文件的两种方式
+source 文件
+\. 文件
+```
 
 # database
 
@@ -173,6 +192,7 @@ select 字段
 [from 数据源]
 [where 谓词]
 [order by 排序字段,排序字段 asc|desc]
+[limit n]
 ```
 
 <table>
@@ -195,19 +215,91 @@ select 字段
     <tr>
         <td>默认以升序排序<code>asc</code>（ascending），可选降序<code>desc</code>（descending）</td>
     </tr>
+    <tr>
+        <td>limit n</td>
+        <td>限定只要前n行数据</td>
+    </tr>
 </table>
+
 ### null
+
+- `null`：缺失的未知值
 
 <table>
     <tr>
-        <th>使用null值</th>
-        <th>运算结果</th>
+        <th width="20%">使用null值</th>
+        <th width="80%" colspan="2">结果</th>
     </tr>
     <tr>
+        <td>is [not] null</td>
+        <td colspan="2">正确的结果</td>
+    </tr>
+    <tr>
+        <td>算术比较符</td>
+        <td colspan="2">与null的任何算术比较的结果只会是null</td>
+    </tr>
+    <tr>
+        <td rowspan="3">布尔运算 and or</td>
+        <td><code>0 and null</code>：0</td>
+        <td><code>1 and null</code>：null</td>
+    </tr>
+    <tr>
+        <td><code>0 or null</code>：null</td>
+        <td><code>1 or null</code>：1</td>
+    </tr>
+    <tr>
+        <td>order by</td>
+        <td colspan="2">在<code>asc</code>排序下，null优先显示；而<code>desc</code>相反</td>
     </tr>
 </table>
 
+### like
 
+- `like`：模式匹配
+
+<table>
+    <tr>
+        <td rowspan="2" width="10%"><code>[not] like</code></td>
+        <td width="80%"><code>_</code>匹配任何单个字符</td>
+    </tr>
+    <tr>
+        <td><code>%</code>匹配任意数量字符</td>
+    </tr>
+    <tr>
+        <td>regexp_like()</td>
+        <td rowspan="3">正则扩展</td>
+    </tr>
+    <tr>
+        <td>regexp</td>
+    </tr>
+    <tr>
+        <td>rlike</td>
+    </tr>
+</table>
+
+```mysql
+select name from sys_menu where regexp_like(name, '^..管理');
+```
+
+### 常用的几个查询函数
+
+<table>
+    <tr>
+        <td width="15%"><code>count()</code></td>
+        <td width="85%">计算行数，间接地表示某种类型的数据在表中出现的频率</td>
+    </tr>
+    <tr>
+        <td><code>max()</code></td>
+        <td>列的最大值</td>
+    </tr>
+    <tr></tr>
+</table>
+
+### join
+
+### limit
+
+### group by
 
 ## update
 
@@ -256,4 +348,29 @@ where 谓词
 select name, timestampdiff(year, birth_day, curdate()) as age
 from pet;
 ```
+
+## 窗口函数
+
+<table>
+    <tr>
+        <th width="35%">函数</th>
+        <th width="65%" colspan="2">意义</th>
+    </tr>
+    <tr>
+        <td rowspan="3" width="35%"><code>partion by 列 order by 列 asc|desc</code></td>
+        <td colspan="2" width="65%">提供分窗函数需要的参数</td>
+    </tr>
+    <tr>        
+        <td width="25%"><code>partion by</code></td>
+        <td wdith="40%">分窗的标准</td>
+    </tr>
+    <tr>
+        <td>order by</td>
+        <td>每个窗口内部的排序规则</td>
+    </tr>
+    <tr>
+        <td><code>rank over(参数)</code></td>
+        <td colspan="2">分窗</td>
+    </tr>
+</table>
 

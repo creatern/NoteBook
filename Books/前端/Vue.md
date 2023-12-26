@@ -1,10 +1,14 @@
-# Vue安装与入门
+# npm
 
-## Vue安装
+```shell
+# 使用cnpm
+sudo npm install -g cnpm --registry=https://registry.npm.taobao.org
 
-### npm
+# npm下载vue-cli（脚手架）
+sudo cnpm install -g vue-cli
+```
 
-## Vue入门
+# Vue入门
 
 ```html
 <!DOCTYPE html>

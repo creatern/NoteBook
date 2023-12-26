@@ -41,5 +41,3 @@
 | [Cassandra](./Books/Spring/Cassandra.md)             |                            |
 | [MongoDB](./Books/Spring/MongoDB.md)                 |                            |
 | [Spring Data REST](./Books/Spring/SpringDataREST.md) | 基于储存库自动生成REST API |
-
-## [MyBatis](./Books/Spring/MyBatis.md)
