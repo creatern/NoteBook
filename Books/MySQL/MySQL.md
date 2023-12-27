@@ -22,6 +22,8 @@
           <td><code class="literal">/*&gt;</code></td>
           <td>等待下一行，等待以 开头的评论完成<code class="literal">/*</code></td>
 </tr></tbody></table>
+## 连接
+
 
 ```shell
 # 连接MySQL
@@ -68,11 +70,44 @@ quit
 \q
 ```
 
+## 脚本与文件
+
 ```mysql
 -- MySQL执行脚本文件的两种方式
 source 文件
 \. 文件
 ```
+
+```mysql
+select * from mytb
+into outfile '导出到的文件位置';
+```
+
+- `--secure-file-priv`：MySQL的一个安全选项，用于限制数据的导入和导出；该选项被设置后，MySQL只能在指定的目录下进行文件的操作
+
+```mysql
+# 查看变量名包含secure_file_priv的变量
+show variables like 'secure_file_priv'
+```
+
+<table>
+    <tr>
+        <th width="25%"><Code>--secure-file-priv</Code>的值</th>
+        <th width="65%">意义</th>
+    </tr>
+    <tr>
+        <td>null</td>
+        <td>禁止所有文件导入和导出</td>
+    </tr>
+    <tr>
+        <td>具体的目录路径</td>
+        <td>只允许在该目录及其子目录下进行文件操作</td>
+    </tr>
+    <tr>
+        <td>空字符串 <code>''</code></td>
+        <td>不限制文件操作的范围，但某些版本的MySQL可能不允许该选项</td>
+    </tr>
+</table>
 
 # database
 
@@ -373,4 +408,3 @@ from pet;
         <td colspan="2">分窗</td>
     </tr>
 </table>
-
