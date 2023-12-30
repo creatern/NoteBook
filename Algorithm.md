@@ -18,4 +18,6 @@
 
 [概率算法](./Books/Algorithm/概率算法.md)
 
+[Dijkstra 最短路径](./Books/Algorithm/Dijkstra.md)
+
 # 深度学习

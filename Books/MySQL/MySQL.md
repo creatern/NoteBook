@@ -161,11 +161,35 @@ to '被授权者的用户名'@'被授权者的主机地址';
 ## create table
 
 ```mysql
-create table 表名(
-    字段名 数据类型(长度),
-    字段名 数据类型(长度),
+create table [if not exists] 表名(
+    字段名 数据类型(长度) [约束],
+    字段名 数据类型(长度) [约束],
 );
 ```
+
+## alter table
+
+## constraint
+
+<table>
+    <tr>
+        <td rowspan="4" width="10%">primary key</td>
+        <td colspan="3">主键约束</td>
+    </tr>
+    <tr>
+        <td rowspan="2" width="15%">create table</td>
+        <td width="10%">列级</td>
+        <td width="65%"><code></code></td>
+    </tr>
+    <tr>
+        <td>行级</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>alter table</td>
+        <td colspan="2"></td>
+    </tr>
+</table>
 
 # crud
 
