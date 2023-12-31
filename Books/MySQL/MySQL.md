@@ -179,17 +179,18 @@ create table [if not exists] 表名(
     <tr>
         <td rowspan="2" width="15%">create table</td>
         <td width="10%">列级</td>
-        <td width="65%"><code></code></td>
+        <td width="65%"><code>primary key</code></td>
     </tr>
     <tr>
-        <td>行级</td>
-        <td></td>
+        <td>表级</td>
+        <td><code>constraint '约束名' primary key(列名, 列名, ..)</code></td>
     </tr>
     <tr>
         <td>alter table</td>
         <td colspan="2"></td>
     </tr>
 </table>
+
 
 # crud
 
