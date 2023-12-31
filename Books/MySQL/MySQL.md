@@ -173,17 +173,34 @@ create table [if not exists] 表名(
 
 <table>
     <tr>
-        <td rowspan="4" width="10%">primary key</td>
+        <td rowspan="4" width="15%">primary key</td>
         <td colspan="3">主键约束</td>
     </tr>
     <tr>
         <td rowspan="2" width="15%">create table</td>
         <td width="10%">列级</td>
-        <td width="65%"><code>primary key</code></td>
+        <td width="60%"><code>primary key</code></td>
     </tr>
     <tr>
         <td>表级</td>
         <td><code>constraint '约束名' primary key(列名, 列名, ..)</code></td>
+    </tr>
+    <tr>
+        <td>alter table</td>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td rowspan="4" width="15%">foreign key</td>
+        <td colspan="3">外键约束</td>
+    </tr>
+    <tr>
+        <td rowspan="2" width="15%">create table</td>
+        <td width="10%">列级</td>
+        <td width="60%"><code>references 主键表(主键列名)</code></td>
+    </tr>
+    <tr>
+        <td>表级</td>
+        <td><code>constraint '约束名' foreign key(当前表列名, 当前表列名, ..) references 主键表(主键列名, 主键列名)</code></td>
     </tr>
     <tr>
         <td>alter table</td>
