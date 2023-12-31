@@ -4,5 +4,7 @@
 
 [Shell](./Books/Linux/Shell.md)
 
+[Rasberry Pi](./Books/Linux/RasberryPi.md)
+
 [Kernel](./Books/Linux/Kernel.md)
 
