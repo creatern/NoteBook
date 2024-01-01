@@ -120,13 +120,14 @@ public Specification<Appliance> applianceSpecification(
             predicateList.add(cb.equal(root.get("id").as(String.class), id));
         }
         if (category != null && !"".equals(category)) {
-            predicateList.add(cb.like(root.get("category").as(String.class), category));//equal(=)
+            predicateList.add(cb.like(root.get("category").as(String.class), "%" + category + "%"));
+            // like如果不加上"%"之类的通配符，则相当于equal
         }
         if (box != null && !"".equals(box)) {
-            predicateList.add(cb.like(root.get("box").as(String.class), box));
+            predicateList.add(cb.like(root.get("box").as(String.class),"%" + box + "%"));
         }
         if (base != null && !"".equals(base)) {
-            predicateList.add(cb.like(root.get("base").as(String.class), base));
+            predicateList.add(cb.like(root.get("base").as(String.class), "%" + base + "%"));
         }
         if (minRequire != null && !"".equals(minRequire)) {
             predicateList.add(cb.greaterThanOrEqualTo(root.get("require").as(Integer.class), Integer.valueOf(minRequire)));
