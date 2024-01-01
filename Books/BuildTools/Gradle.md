@@ -1,3 +1,5 @@
+# Gradle
+
 ## 安装配置
 
 - 环境变量配置
@@ -13,7 +15,7 @@ export PATH=$PATH:$GRADLE_HOME/bin
 
 3. 输入gradle命令测试。
 
-<img title="" src="../../pictures/Gradle-GradleSystem.drawio.svg" alt="" width="288">
+<img title="" src="../../pictures/Gradle-GradleSystem.drawio.svg" alt="" width="288"> 
 
 ## 项目结构
 
@@ -23,7 +25,7 @@ gradle init
 
 > application：
 >
-> <img src="../../pictures/Gradle-project-model.drawio.svg" width="600"/>
+> <img src="../../pictures/Gradle-project-model.drawio.svg" width="500"/>
 
 ### .gradle
 
@@ -107,6 +109,66 @@ zipStorePath=wrapper/dist
 ```
 
 <img title="" src="../../pictures/Gradle-gradle_wrapper.drawio.svg" alt="" width="717">
+
+# Android Studio
+
+## 基本安装配置
+
+### Http Proxy
+
+- 网络代理：可以选择No，无太大影响。
+
+### 本地Gradle替换
+
+- 替换Android Studio的Gradle，避免长时间的自动下载Gradle
+
+<img src="../../pictures/20240101205659.png" width="600"/> 
+
+### 项目创建选择
+
+<img src="../../pictures/20240101224250.png" width="600"/> 
+
+## Kotlin DSL Gradle
+
+### build.gradle.kts
+
+### gradle.properties
+
+### gradlew
+
+### gradlew.bat
+
+### local.properties
+
+### settings.gradle.kts
+
+```kotlin
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        // 添加国内阿里云仓库
+        maven("https://maven.aliyun.com/repository/google")
+        maven("https://maven.aliyun.com/repository/jcenter")
+        // 或者使用其他国内镜像源
+        // maven("https://mirrors.tencent.com/maven/repository/android/public/")
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // 同样添加国内阿里云仓库或者其他你信任的国内源
+        maven("https://maven.aliyun.com/repository/google")
+        maven("https://maven.aliyun.com/repository/jcenter")
+    }
+}
+
+rootProject.name = "ProphetApp"
+include(":app")
+```
 
 ## Groovy
 
@@ -199,3 +261,4 @@ def run(Closure closure){
     closure(2);
 }
 ```
+

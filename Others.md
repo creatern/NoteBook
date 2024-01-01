@@ -5,5 +5,3 @@
 [运营管理 Operations Management](./Books/Others/OperationsManagement.md)
 
 [公司理财 Corporate Finance](./Books/Others/CorporateFinance.md)
-
-[Android](./Books/Android/Android.md)
