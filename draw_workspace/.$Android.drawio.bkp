@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-09-07T14:16:41.721Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="-M5vNmTXF9RnODsuhl_v" version="21.4.0" type="device" pages="2">
+<mxfile host="Electron" modified="2024-01-04T07:04:00.618Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="nyTiq9CLe-_Vxbs9Wb0d" version="21.4.0" type="device" pages="2">
   <diagram name="Page-1" id="Qk07EQC7B2PtaMgG38TA">
-    <mxGraphModel dx="884" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -8,7 +8,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="fJ6_Dx3_cK6cUc8Ji0aR" name="AndroidProjectStruct">
-    <mxGraphModel dx="884" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -51,7 +51,7 @@
         <mxCell id="OxxsrtmrKmaTpgv6mFME-15" value="res" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="130" y="310" width="120" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="OxxsrtmrKmaTpgv6mFME-16" value="drable" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;strokeColor=none;strokeWidth=1;fillColor=#f5f5f5;fontColor=#333333;" parent="1" vertex="1">
+        <mxCell id="OxxsrtmrKmaTpgv6mFME-16" value="drawable" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;strokeColor=none;strokeWidth=1;fillColor=#f5f5f5;fontColor=#333333;" parent="1" vertex="1">
           <mxGeometry x="190" y="310" width="120" height="30" as="geometry" />
         </mxCell>
         <mxCell id="OxxsrtmrKmaTpgv6mFME-17" value="layout" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;strokeColor=none;strokeWidth=1;fillColor=#f5f5f5;fontColor=#333333;" parent="1" vertex="1">
@@ -77,6 +77,9 @@
         </mxCell>
         <mxCell id="OxxsrtmrKmaTpgv6mFME-24" value="color.xml、string.xml（字符串文件）、themes" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#707070;" parent="1" vertex="1">
           <mxGeometry x="320" y="430" width="350" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="krPYfmGD8ZIZBfEm_oqE-1" value="Activity和layout文件的关联建立" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#707070;" vertex="1" parent="1">
+          <mxGeometry x="210" y="195" width="230" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
