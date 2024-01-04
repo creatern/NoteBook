@@ -139,11 +139,34 @@
                       android:maxLines="1"/>
 ```
 
+```xml
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myKeyword"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:gravity="left"
+    android:singleLine="true"
+    android:textColor="#4CAF50"
+    android:textSize="24sp"
+/>
+```
+
 ```java
-AutoCompleteTextView myAutoCompleteTextView = findViewById(R.id.my_autocomplete);
-myAutoCompleteTextView.setCompoundDrawables(myDrawable, null, null, null); 
-ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.keyword_item, keyWords);
-myAutoCompleteTextView.setAdapter(adapter);
+private Drawable myDrawable;
+private AutoCompleteTextView myAutoCompleteTextView;
+private String[] keyWords = {"ZG", "ZGM", "ZGNP", "ZGJZ", "ZHMZWDFX", "ZHRMGHGJG70ZN"};
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    
+    myAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.my_autocomplete");
+    myDrawable = getResources().getDrawable(R.drawable.search);
+    myDrawable.setBounds(0, 0, myDrawable.getMinimumWidth(), myDrawable.getMinimumHeight());
+    myAutoCompleteTextView.setCompoundDrawables(myDrawable, null, null, null);	//顶行首显示
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.keyword_item, keyWords);
+    myAutoCompleteTextView.setAdapter(adapter);
+}
 ```
 
 ### Button 按钮
@@ -166,6 +189,8 @@ myAutoCompleteTextView.setAdapter(adapter);
 </table>
 
 #### ImageButton 图像按钮
+
+#### ToggleButton
 
 ### 选项/列表
 
@@ -358,7 +383,37 @@ Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
 
 #### DatePicker 日期选择器
 
+<table>
+    <tr>
+        <th width="50%">事件</th>
+        <th width="50%">意义</th>
+    </tr>
+    <tr>
+        <td><code>setOnDateChangedListener</code></td>
+        <td>日期改变</td>
+    </tr>
+</table>
+
+```java
+// 生成弹窗式的日期选择器，可在事件中设置
+DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, DateListener, myYear, myMonth, myDay);                         
+datePickerDialog.show();
+```
+
+
+
 #### TimePicker 时间选择器
+
+<table>
+    <tr>
+        <th width="50%">事件</th>
+        <th width="50%">意义</th>
+    </tr>
+    <tr>
+        <td><code>setOnTimeChangedListener</code></td>
+        <td>时间改变</td>
+    </tr>
+</table>
 
 # Java控件管理
 
