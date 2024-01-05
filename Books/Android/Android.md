@@ -11,6 +11,39 @@
 
 # 界面编程
 
+## AndroidMainifest.xml
+
+- Android界面注册文件
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.dell.mytabhost">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".TabHostActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".FirstPageActivity" />
+        <activity android:name=".SecondPageActivity" />
+        <activity android:name=".ThirdPageActivity" />
+        <activity android:name=".FourPageActivity" />
+        <activity android:name=".FivePageActivity" />
+    </application>
+
+</manifest>
+```
+
 ## 布局容器
 
 ### Constraint Layout 限制布局
@@ -368,7 +401,12 @@ mySpinner.setOnItemSelectedListener(v -> {
         <td><code>afterTextChanged</code></td>
         <td>文本内容改变</td>
     </tr>
+    <tr>
+        <td><code>setOnKeyListener</code></td>
+        <td>键盘按键</td>
+    </tr>
 </table>
+
 
 ### Toast 消息提醒
 
@@ -385,14 +423,31 @@ Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
 
 <table>
     <tr>
-        <th width="50%">事件</th>
-        <th width="50%">意义</th>
+        <th width="30%">事件</th>
+        <th width="70%" colspan="2">意义</th>
     </tr>
     <tr>
-        <td><code>setOnDateChangedListener</code></td>
-        <td>日期改变</td>
+        <td rowspan="45"><code>setOnDateChangedListener</code></td>
+        <td colspan="2">日期选择改变</td>
+    </tr>
+    <tr>
+        <td>DatePicker view</td>
+        <td>该日期选择器控件</td>
+    </tr>
+    <tr>
+        <td>int year</td>
+        <td>日期选择器选择的年</td>
+    </tr>
+    <tr>
+        <td>int month</td>
+        <td>日期选择器选择的月</td>
+    </tr>
+    <tr>
+        <td>int day</td>
+        <td>日期选择器选择的日</td>
     </tr>
 </table>
+
 
 ```java
 // 生成弹窗式的日期选择器，可在事件中设置
@@ -400,18 +455,28 @@ DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, Date
 datePickerDialog.show();
 ```
 
-
-
 #### TimePicker 时间选择器
 
 <table>
     <tr>
-        <th width="50%">事件</th>
-        <th width="50%">意义</th>
+        <th width="30%">事件</th>
+        <th width="70%" colspan="2">意义</th>
     </tr>
     <tr>
-        <td><code>setOnTimeChangedListener</code></td>
-        <td>时间改变</td>
+        <td rowspan="4"><code>setOnTimeChangedListener</code></td>
+        <td colspan="2">时间选择改变</td>
+    </tr>
+    <tr>
+        <td>TimePicker view</td>
+        <td>该时间选择器控件</td>
+    </tr>
+    <tr>
+        <td>int hour</td>
+        <td>时间选择器选择的小时</td>
+    </tr>
+    <tr>
+        <td>int minute</td>
+        <td>时间选择器选择的分钟</td>
     </tr>
 </table>
 
@@ -468,87 +533,50 @@ getResources().getDrawable(R.drawable.yuan_1);
 
 ## Adapter 适配器
 
-### AutoCompleteTextView
-
-```java
-AutoCompleteTextView actv = findViewById(R.id.actv);
-Drawable draw = getResources().getDrawable(R.drawable.testDraw);
-ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.myKeyItem, keyWords);
-actv.setAdapter(adapter);
-actv.setCompoundDrawables(draw, null, null, null);
-```
-
-### Spinner 列表视图
-
-- Spinner需要单独配置一个界面文件来设置选项，而一个主界面中不能存在两个Spinner。
-
-```xml
-<!--主界面-->
-<Spinner
-         android:id="@+id/mySpinner"
-         android:spinnerMode="dialog"
-         />
-```
-
-```xml
-<!--选项界面-->
-<TextView
-          android:id="@+id/degree_name" />
-
-<ImageView
-           android:id="@+id/degree_icon" />
-```
-
-```java
-Spinner mySpinner = findViewById(R.id.mySpinner);
-
-List<Map<String, Object>> degrees = new ArrayList<>(); //选项的内容
-String[] degreeName = {"学士", "硕士", "博士"};
-int[] degreeIcon = {R.drawable.bachelor, R.drawable.master, R.drawable.doctor}; 
-for (int i = 0; i < degreeName.length; i++) {
-    Map<String, Object> item = new HashMap<>();
-    item.put("name", degreeName[i]);
-    item.put("icon", degreeIcon[i]);
-    degrees.add(item);
-}
-
-Adapter adapter = new SimpleAdapter(this, degrees, R.layout.myspinner_item, new String[]{"name", "icon"}, new int[]{R.id.degree_name, R.id.degree_icon});
-adapter.setDropDownViewResource(R.layout.myspinner_item);
-mySpinner.setAdapter(adapter);
-
-mySpinner.setPrompt("选择你的学位："); //选项界面标题
-
-mySpinner.setSelection(1); //设置选中的选项
-```
-
 ## Acitivity 活动类
 
-### 数据传递
+### Intent 数据传递
 
-| Acitivity相关类 | 说明                     |
-| --------------- | ------------------------ |
-| Bundle          | Activity界面之间传递数据 |
-| Intent          | App内部传递数据          |
+<img src="../../pictures/20240105134930.png" width="450"/> 
 
-| Activity                 | 说明                                                         |
-| ------------------------ | ------------------------------------------------------------ |
-| startActivity()          | 启动数据传输，不要求后一个Activity返回值。<br />intent：传递的Intent。 |
-| startActivityForResult() | 启动数据传输，要求后一个Activity返回值。<br />intent：传递的Intent。<br />code：状态码。 |
-| setResult()              | 设置当前Activity返回值<br />code：状态码。<br />intent：传递的Intent。 |
-| getIntent()              | 获取App内的Intent。                                          |
-| finish()                 | 关闭当前的Activity并返回上一个Activity                       |
+<table>
+    <tr>
+        <td rowspan="3" width="10%">Activity</td>
+        <td colspan="2">活动页</td>
+    </tr>
+    <tr>
+        <td><code>new Intent(this, ToActivity.class);</code></td>
+        <td>创建 Intent 并设置目标 Activity</td>
+    </tr>
+    <tr>
+        <td width="30%"><code>getIntent()</code></td>
+        <td width="60%">获取接收到的Intent对象</td>
+    </tr>
+    <tr>
+        <td rowspan="4">Intent</td>
+        <td colspan="2">信使对象</td>
+    </tr>
+    <tr>
+        <td><code>putExtra("key", value)</code></td>
+        <td>将需要传递的数据以 key-value 存入Intent，这些数据会被封装到一个Bundle</td>
+    </tr>
+    <tr>
+        <td><code>putExtra(bundle)</code></td>
+        <td>直接将装好数据的Bundle作为Intent内封装的Bundle</td>
+    </tr>
+    <tr>
+        <td><code>getExtras()</code></td>
+        <td>获取当前Intent对象内封装的Bundle，通过该Bundle来获取<code>putExtra</code>方法存入的数据</td>
+    </tr>
+    <tr>
+        <td>Bundle</td>
+        <td colspan="2">有序的 Key-Value 集合，通常用于存储数据以提供给Intent传递</td>
+    </tr>
+</table>
 
-| Bundle                 | 说明                                         |
-| ---------------------- | -------------------------------------------- |
-| putXxx()<br />getXxx() | 存放Xxx类型的数据。<br />获取Xxx类型的数据。 |
-
-| Intent                       | 说明                                                         |
-| ---------------------------- | ------------------------------------------------------------ |
-| Intent()                     | content：当前的Activity对象（this）。<br />class：目标Activity的class。 |
-| putExtras()<br />getExtras() | bundle：将Bundle存入Intent。<br />获取Intent内部的Bundle。   |
 
 ```java
-private Intent intent = new Intent(this, CountActivity.class);
+private Intent intent = new Intent(this, ToActivity.class);
 private Bundle bundle = new Bundle();
 
 btnSub.setOnClickListener(v -> {
@@ -561,7 +589,7 @@ btnSub.setOnClickListener(v -> {
 ```
 
 ```java
-private Intent intent = new Intent(this, MainActivity.class);
+private Intent intent = new Intent(this, FromActivity.class);
 private Bundle bundle = getIntent().getExtras();
 
 bundle.putString("x", "1");
@@ -571,6 +599,320 @@ intent.putExtras(bundle);
 finish();
 ```
 
+### Activity 页面跳转
+
+<table>
+    <tr>
+        <td width="50%"><code>startActivity(intent)</code></td>
+        <td width="50%">根据Intent内的信息，执行启动新的目标Activity、传递数据等操作</td>
+    </tr>
+    <tr>
+        <td><code>finish()</code></td>
+        <td>关闭自己以返回结果给发起请求的 Activity</td>
+    </tr>
+    <tr>
+        <td><code>startActivityForResult(intent, requestCode)</code></td>
+        <td>启动新的 Activity，并期待结果返回；</td>
+    </tr>
+    <tr>
+        <td><code>setResult(Activity.RESULT_OK, returnIntent);</code></td>
+        <td>设置结果码和结果Intent，此时并没有结束当前页面</td>
+    </tr>
+    <tr>
+        <td rowspan="4"><code>onActivityResult(requestCode, resultCode, data)</code></td>
+        <td>重写该方法，以处理收到的结果码和结果Intent</td>
+    </tr>
+    <tr>
+        <td><code>int requestCode</code> 当前页面发出的请求码</td>
+    </tr>
+    <tr>
+        <td><code>int resultCode</code> 当前页面接收到的结果码</td>
+    </tr>
+    <tr>
+        <td><code>Intent data</code> 当前页面接收到的结果Intent</td>
+    </tr>
+</table>
+
+<img src="../../pictures/Android-Activity交互流程.drawio.svg" width="600"/> 
+
+# 高级控件
+
+## TabHost 标签页
+
+```xml
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/tabbar_height" />
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tabbar_height"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/first_linear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TabLabel"
+                    android:drawableTop="@drawable/first_tab_selector"
+                    android:text="@string/first_tab" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/second_linear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TabLabel"
+                    android:drawableTop="@drawable/second_tab_selector"
+                    android:text="@string/second_tab" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/third__linear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TabLabel"
+                    android:drawableTop="@drawable/third_tab_selector"
+                    android:text="@string/third_tab" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/four_linear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TabLabel"
+                    android:drawableTop="@drawable/four_tab_selector"
+                    android:text="@string/four_tab" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/five_linear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TabLabel"
+                    android:drawableTop="@drawable/five_tab_selector"
+                    android:text="@string/five_tab" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</TabHost>
+```
+
+```java
+package com.example.dell.mytabhost;
+
+import android.app.TabActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+
+public class TabHostActivity extends TabActivity implements OnClickListener {
+	private TabHost myTabHost;
+	private LinearLayout first_linear, second_linear, third_linear, four_linear, five_linear;
+	private String TAG1 = "first";
+	private String TAG2 = "second";
+	private String TAG3 = "third";
+	private String TAG4 = "four";
+	private String TAG5 = "five";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tab_host);
+		first_linear = findViewById(R.id.first_linear);
+		first_linear.setOnClickListener(this);
+		second_linear = findViewById(R.id.second_linear);
+		second_linear.setOnClickListener(this);
+		third_linear = findViewById(R.id.third__linear);
+		third_linear.setOnClickListener(this);
+		four_linear = findViewById(R.id.four_linear);
+		four_linear.setOnClickListener(this);
+		five_linear = findViewById(R.id.five_linear);
+		five_linear.setOnClickListener(this);
+		myTabHost = getTabHost();
+		myTabHost.addTab(myTabHost.newTabSpec(TAG1).setIndicator(getString(R.string.first_tab), getResources().getDrawable(R.drawable.first_tab_selector)).setContent(new Intent(this, FirstPageActivity.class)));
+		myTabHost.addTab(myTabHost.newTabSpec(TAG2).setIndicator(getString(R.string.second_tab), getResources().getDrawable(R.drawable.second_tab_selector)).setContent(new Intent(this, SecondPageActivity.class)));
+		myTabHost.addTab(myTabHost.newTabSpec(TAG3).setIndicator(getString(R.string.third_tab), getResources().getDrawable(R.drawable.third_tab_selector)).setContent(new Intent(this, ThirdPageActivity.class)));
+		myTabHost.addTab(myTabHost.newTabSpec(TAG4).setIndicator(getString(R.string.four_tab), getResources().getDrawable(R.drawable.four_tab_selector)).setContent(new Intent(this, FourPageActivity.class)));
+		myTabHost.addTab(myTabHost.newTabSpec(TAG5).setIndicator(getString(R.string.five_tab), getResources().getDrawable(R.drawable.five_tab_selector)).setContent(new Intent(this, FivePageActivity.class)));
+		setTabView(first_linear);
+	}
+
+	@Override
+	public void onClick(View view) {
+		setTabView(view);
+	}
+
+	private void setTabView(View v) {
+		first_linear.setSelected(false);
+		second_linear.setSelected(false);
+		third_linear.setSelected(false);
+		four_linear.setSelected(false);
+		five_linear.setSelected(false);
+		v.setSelected(true);
+		if (v == first_linear) {
+			myTabHost.setCurrentTabByTag(TAG1);
+		} else if (v == second_linear) {
+			myTabHost.setCurrentTabByTag(TAG2);
+		} else if (v == third_linear) {
+			myTabHost.setCurrentTabByTag(TAG3);
+		} else if (v == four_linear) {
+			myTabHost.setCurrentTabByTag(TAG4);
+		} else if (v == five_linear) {
+			myTabHost.setCurrentTabByTag(TAG5);
+		}
+	}
+}
+```
+
+## GridView 网格视图
+
 # SQLite
 
 - SQLite：嵌入式关系型数据库管理系统，以单个文件形式存储数据，跨平台兼容，并全面支持SQL标准及事务处理等功能；在Android开发中，SQLite用于本地设备上存储结构化数据，实现离线功能并有效管理数据持久化。
+
+<table>
+    <tr>
+        <td width="10%">SQLiteDatabase</td>
+        <td width="90%">Android SDK 中用于操作 SQLite 数据库的核心类，它提供了丰富的接口来执行 SQL 语句、管理数据库版本以及进行数据的增删改查等操作。在 Android 应用开发中，通常通过继承 SQLiteOpenHelper 类并重写其方法来获取 SQLiteDatabase 实例。</td>
+    </tr>
+    <tr>
+        <td>SQLiteOpenHelper</td>
+        <td>Android 系统中用于操作 SQLite 数据库的一个辅助类，封装了数据库的创建、版本管理以及打开关闭等操作。开发者在使用 SQLite 数据库时，通常需要继承 SQLiteOpenHelper 类并重写部分方法来实现对数据库的操作。</td>
+    </tr>
+</table>
+
+
+```java
+public class MySQLiteAdapter {
+    // 声明数据库的基本信息
+    private static final int DB_VERSION = 1; // 数据库版本
+    private static final String SQLITE_NAME = "prophet";// 数据库名称
+
+    // 声明操作Sqlite数据库的实例
+    private SQLiteDatabase sqliteDb;
+    private MyDBOpenHelper sqliteHelper;
+
+    //构造方法
+    public MySQLiteAdapter(Context context) {
+        sqliteHelper = new MyDBOpenHelper(context, SQLITE_NAME, null, DB_VERSION);
+        sqliteDb = sqliteHelper.getWritableDatabase();// 获得可写的数据库，此时有执行OnCreate方法
+    }
+
+    //自定义的帮助类，继承SQLitOpenHelper
+    private static class MyDBOpenHelper extends SQLiteOpenHelper {
+        public MyDBOpenHelper(Context context, String dbname, SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, dbname, factory, version);
+        }
+
+        // 创建数据时执行的操作
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            // 创建数据库时执行的SQL语句
+            db.execSQL("drop table if exists user");
+            db.execSQL("create table user(id varchar(100) primary key, name varchar(255),password varchar(255))");
+            db.execSQL("insert into user values('admin','admin','admin')");
+        }
+
+        // 再次打开数据库时执行的操作
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            // 重新执行onCreate方法内定义的操作
+            onCreate(db);
+        }
+    }
+
+    //获取SQLite数据库实例
+    public SQLiteDatabase getSqliteDb() {
+        return sqliteDb;
+    }
+}
+```
+
+```java
+public class SuperDao {
+    private MySQLiteAdapter mySqLiteAdapter = null;
+    private SQLiteDatabase sqLiteDb = null;
+
+    public Cursor getOne(Context context, String tableName, String[] fields) {
+        mySqLiteAdapter = new MySQLiteAdapter(context);
+        //创建SQLiteAdapter对象，得到SQLite实例
+        sqLiteDb = mySqLiteAdapter.getSqliteDb();
+        // //获取注册的用户数据
+        Cursor cursor = sqLiteDb.query(tableName, fields, null, null, null, null, null);
+        return cursor;
+    }
+}
+```
+
+```java
+public class UserDao extends SuperDao {
+
+    private static final String TABLE_NAME = "user";
+    private static final String[] FIELDS = {"id", "name", "password"};
+
+    public User getUser(Context context) {
+        Cursor cursor = getOne(context, TABLE_NAME, FIELDS);
+        // 默认用户
+        User user = new User("C10001", "Common", "1234");
+        String id;
+        String name;
+        String password;
+        // 获取用户数据
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            id = cursor.getString(0);
+            name = cursor.getString(1);
+            password = cursor.getString(2);
+            user = new User(id, name, password);
+        }
+        return user;
+    }
+
+}
+```
+
