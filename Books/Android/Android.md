@@ -750,6 +750,326 @@ public class TabHostActivity extends TabActivity implements OnClickListener {
 // 标签内容活动页 与一般的Activity一致即可
 ```
 
+## Banner 轮播条
+
+<img src="../../pictures/20240106132316.png" width="300"/> 
+
+```xml
+<!-- 自定义的轮播控件Banner-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" >
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/myViewPager" />
+
+    <RadioGroup
+        android:id="@+id/myRadioGroup"
+        android:paddingBottom="2dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
+```
+
+```xml
+<!--活动页面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <!-- 自定义控件：Banner轮播条-->
+    <com.example.dell.myapplication.Banner
+        android:id="@+id/myBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <!-- 其他控件-->
+    
+</LinearLayout>
+```
+
+```java
+// 自定义Banner控件
+public class Banner extends RelativeLayout implements View.OnClickListener {
+	private Context context;
+	private LayoutInflater inflater;
+	private List<ImageView> imageList = new ArrayList<ImageView>();
+	private ViewPager viewPager;
+	private RadioGroup radioGroup;
+	private int imageCount;
+	private int dp15;
+	private static int interval = 3000;
+
+	public Banner(Context ctx) {
+		this(ctx, null);
+	}
+
+	public Banner(Context ctx, AttributeSet attrs) {
+		super(ctx, attrs);
+		context = ctx;
+		inflater = ((Activity) context).getLayoutInflater();
+		View view = inflater.inflate(R.layout.banner, null);
+		viewPager = view.findViewById(R.id.viewPager);
+		radioGroup = view.findViewById(R.id.radioGroup);
+		addView(view);
+		dp15 = dip2px(context, 15);
+	}
+
+	public void start() {
+		myHandler.postDelayed(scrollRunnable, interval);
+	}
+
+	public void setBannerImage(ArrayList<Integer> imageList) {
+		for (int i = 0; i < imageList.size(); i++) {
+			Integer iId = imageList.get(i).intValue();
+			ImageView iView = new ImageView(context);
+			iView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			iView.setScaleType(ImageView.ScaleType.FIT_XY);
+			iView.setImageResource(iId);
+			iView.setOnClickListener(this);
+			imageList.add(iView);
+		}
+		viewPager.setAdapter(new ImageAdapater());
+		viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int pos) {
+				((RadioButton) radioGroup.getChildAt(pos)).setChecked(true);
+			}
+		});
+
+		imageCount = imageList.size();
+		for (int i = 0; i < imageCount; i++) {
+			RadioButton radioButton = new RadioButton(context);
+			radioButton.setLayoutParams(new RadioGroup.LayoutParams(dp15, dp15));
+			radioButton.setGravity(Gravity.CENTER);
+			radioButton.setButtonDrawable(R.drawable.indicator_selector);
+			radioGroup.addView(radioButton);
+		}
+		viewPager.setCurrentItem(0);
+		((RadioButton) radioGroup.getChildAt(0)).setChecked(true);
+	}
+
+	//根据手机的分辨率从 dp 的单位 转成为 px(像素)
+	public int dip2px(Context ctx, float dpValue) {
+		final float scale = ctx.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
+
+	private Handler myHandler = new Handler();
+	private Runnable scrollRunnable = new Runnable() {
+		@Override
+		public void run() {
+			//滚动到下一幅
+			int index = viewPager.getCurrentItem() + 1;
+			if (imageList.size() <= index) {
+				index = 0;
+			}
+			viewPager.setCurrentItem(index);
+			myHandler.postDelayed(this, interval);
+		}
+	};
+
+	private class ImageAdapater extends PagerAdapter {
+		@Override
+		public int getCount() {
+			return imageList.size();
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView(imageList.get(position));
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			container.addView(imageList.get(position));
+			return imageList.get(position);
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		myBannerListener.onBannerClick(viewPager.getCurrentItem());
+	}
+
+	public void setOnBannerListener(BannerClickListener listener) {
+		myBannerListener = listener;
+	}
+
+	private BannerClickListener myBannerListener;
+
+	public interface BannerClickListener {
+		void onBannerClick(int pos);
+	}
+}
+```
+
+```java
+// 在活动页使用自定义的Banner控件
+public class BannerActivity extends AppCompatActivity {
+	private Banner myBanner;
+	private TextView myTextView;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_banner);
+		myBanner = findViewById(R.id.myBanner);
+		LayoutParams lParams = (LayoutParams) myBanner.getLayoutParams();
+		lParams.height = (int) (getSreenWidth(this) * 250f / 640f);
+		myBanner.setLayoutParams(lParams);
+		ArrayList<Integer> imageList = new ArrayList<Integer>();
+		imageList.add(Integer.valueOf(R.drawable.img1));
+		imageList.add(Integer.valueOf(R.drawable.img2));
+		imageList.add(Integer.valueOf(R.drawable.img3));
+		imageList.add(Integer.valueOf(R.drawable.img4));
+		imageList.add(Integer.valueOf(R.drawable.img5));
+		myBanner.setBannerImage(imageList);
+		myBanner.setOnBannerListener(new Banner.BannerClickListener() {
+			public void onBannerClick(int pos) {
+				myTextView.setText(String.format("第 %d 幅广告", pos + 1));
+			}
+		});
+		myBanner.start();
+		myTextView = findViewById(R.id.myTextView);
+	}
+
+	public int getSreenWidth(Context ctx) {
+		WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics dm = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(dm);
+		return dm.widthPixels;
+	}
+}
+```
+
+## RecyclerView 频道条
+
+<img src="../../pictures/20240106132902.png" width="300"/> 
+
+```xml
+<!-- 频道视图页面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="5dp"
+    android:orientation="vertical" >
+    
+    <!-- 频道视图-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRecyclerGrid"/>
+    
+</LinearLayout>
+```
+
+```xml
+<!-- 频道视图项-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rcgrid_item"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <!-- 每个网格中需要展示的控件模板-->
+    
+</LinearLayout>
+```
+
+```java
+// 频道视图活动页
+RecyclerView myRecyclerGrid = findViewById(R.id.myRecyclerGrid);
+GridLayoutManager manager = new GridLayoutManager(this, 5);
+myRecyclerGrid.setLayoutManager(manager);
+GridAdapter adapter = new GridAdapter(this, Fruit.getDefaultGrid());
+adapter.setOnItemClickListener(adapter);
+myRecyclerGrid.setAdapter(adapter);
+myRecyclerGrid.setItemAnimator(new DefaultItemAnimator());
+```
+
+```java
+// 频道视图适配器
+public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemClickListener {
+	private Context context;
+	private LayoutInflater inflater;
+	private ArrayList<Fruit> fruitsList;
+
+	public GridAdapter(Context ctx, ArrayList<Fruit> lst) {
+		context = ctx;
+		inflater = LayoutInflater.from(ctx);
+		fruitsList = lst;
+	}
+
+	@Override
+	public int getItemCount() {
+		return fruitsList.size();
+	}
+
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
+		View view = inflater.inflate(R.layout.item_regrid, vg, false);
+		RecyclerView.ViewHolder vHolder = new ItemHolder(view);
+		return vHolder;
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder vh, final int pos) {
+		ItemHolder iholder = (ItemHolder) vh;
+		iholder.rcgrid_picture.setImageResource(fruitsList.get(pos).pid);
+		iholder.rcgrid_title.setText(fruitsList.get(pos).title);
+
+		//栏目项的点击事件需要自己实现
+		iholder.rcgrid_item.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (myOnItemClickListener != null) {
+					myOnItemClickListener.onItemClick(null, v, pos, 0);
+				}
+			}
+		});
+	}
+
+	@Override
+	public int getItemViewType(int pos) {
+		return 0;
+	}
+
+	@Override
+	public long getItemId(int pos) {
+		return pos;
+	}
+
+	public class ItemHolder extends RecyclerView.ViewHolder {
+		public LinearLayout rcgrid_item;
+		public ImageView rcgrid_picture;
+		public TextView rcgrid_title;
+
+		public ItemHolder(View view) {
+			super(view);
+			rcgrid_item = view.findViewById(R.id.rcgrid_item);
+			rcgrid_picture = view.findViewById(R.id.rcgrid_picture);
+			rcgrid_title = view.findViewById(R.id.rcgrid_title);
+		}
+	}
+
+	private AdapterView.OnItemClickListener myOnItemClickListener;
+
+	public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+		this.myOnItemClickListener = listener;
+	}
+
+    //频道视图的点击事件
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View view, int pos, long arg3) {
+		String msg = String.format("点击栏目 %s", fruitsList.get(pos).title);
+		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+	}
+}
+```
+
 ## ListView 列表视图
 
 <img src="../../pictures/20240106120906.png" width="300"/> 
@@ -783,7 +1103,7 @@ public class TabHostActivity extends TabActivity implements OnClickListener {
 fruitList = FruitService.getFruitList(); // 获取水果列表
 MyFruitListViewAdapter adapter = new MyFruitListViewAdapter(this, R.layout.item_list, fruitList, Color.WHITE);
 
-myListView = findViewById(R.id.myListView);
+ListView myListView = findViewById(R.id.myListView);
 myListView.setAdapter(adapter);
 myListView.setOnItemClickListener(adapter);
 
@@ -866,6 +1186,353 @@ public class MyFruitListViewAdapter extends BaseAdapter implements OnItemClickLi
 
 ## GridView 网格视图
 
+<img src="../../pictures/20240106132541.png" width="300"/> 
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+    
+    <!-- 网格视图控件-->
+    <GridView
+        android:id="@+id/myGridView"
+        android:background="#ff0000"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth" />
+
+</LinearLayout>
+```
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- 网格视图格内的需要展示的控件-->
+    
+</LinearLayout>
+```
+
+```java
+// 网格视图活动页 Activity
+ArrayList<Fruit> fruitList = Fruit.getDefaultList();
+FruitAdapter adapter = new FruitAdapter(this, R.layout.item_grid, fruitList, Color.WHITE);
+GridView myGridView = findViewById(R.id.myGridView);
+myGridView.setAdapter(adapter);
+myGridView.setOnItemClickListener(adapter);
+
+myGridView.setBackgroundColor(Color.WHITE);
+myGridView.setHorizontalSpacing(0);
+myGridView.setVerticalSpacing(0);
+myGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+myGridView.setColumnWidth(250);
+myGridView.setPadding(0, 0, 0, 0);
+```
+
+```java
+// 网格视图适配器
+public class FruitAdapter extends BaseAdapter implements OnItemClickListener {
+	private Context myContext;
+	private LayoutInflater myInflater;
+	private int myLayoutId;
+	private ArrayList<Fruit_GV> myFruitList;
+	private int myBackground;
+
+	public FruitAdapter_GV(Context ctx, int lid, ArrayList<Fruit_GV> flst, int bg) {
+		myContext = ctx;
+		myInflater = LayoutInflater.from(ctx);
+		myLayoutId = lid;
+		myFruitList = flst;
+		myBackground = bg;
+	}
+
+	@Override
+	public int getCount() {
+		return myFruitList.size();
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		return myFruitList.get(arg0);
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		return arg0;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder vholder = null;
+		if (convertView == null) {
+			vholder = new ViewHolder();
+			convertView = myInflater.inflate(myLayoutId, null);
+			vholder.linear_item = convertView.findViewById(R.id.linear_item);
+			vholder.grid_icon = convertView.findViewById(R.id.grid_icon);
+			vholder.grid_name = convertView.findViewById(R.id.grid_name);
+			vholder.grid_note = convertView.findViewById(R.id.grid_note);
+			vholder.btv_rebate = convertView.findViewById(R.id.btv_rebate);
+			vholder.grid_price = convertView.findViewById(R.id.grid_price);
+			convertView.setTag(vholder);
+		} else {
+			vholder = (ViewHolder) convertView.getTag();
+		}
+		Fruit_GV fruit = myFruitList.get(position);
+		vholder.linear_item.setBackgroundColor(myBackground);
+		vholder.grid_icon.setImageResource(fruit.icon);
+		vholder.grid_name.setText(fruit.name);
+		vholder.grid_note.setText(fruit.note);
+		vholder.btv_rebate.setText("最高¥" + fruit.rebate + "元");
+		vholder.grid_price.setText(fruit.price);
+		return convertView;
+	}
+
+	public final class ViewHolder {
+		private LinearLayout linear_item;
+		public ImageView grid_icon;
+		public TextView grid_name;
+		public TextView grid_note;
+		public BorderTextView btv_rebate;
+		public TextView grid_price;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		String msg = String.format("你选了第 %d 个水果 %s", position + 1, myFruitList.get(position).name);
+		Toast.makeText(myContext, msg, Toast.LENGTH_LONG).show();
+	}
+}
+```
+
+## RecyclerView 标签列表
+
+<img src="../../pictures/20240106132745.png" width="300"/> 
+
+```groovy
+implementation 'androidx.recyclerview:recyclerview:1.1.0'
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TabHost
+        android:id="@+id/myTabHost" >
+
+        <LinearLayout
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"/>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent">
+
+                <FrameLayout
+                    android:id="@+id/frameLayout">
+                </FrameLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+</LinearLayout>
+```
+
+```xml
+<!-- 标签列表视图控件-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <!-- 标签列表控件-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRecyclerList"
+        android:background="#aaaaff" />
+
+</LinearLayout>
+```
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <!-- 标签列表控件的内部列表元素需要展示的控件-->
+</LinearLayout>
+```
+
+```java
+public class RecyclerListActivity extends AppCompatActivity {
+	private TabHost myTabHost;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tabhost_main);
+		myTabHost = findViewById(R.id.myTabHost);
+		myTabHost.setup();
+		myTabHost.addTab(myTabHost.newTabSpec("tab_1").setIndicator("苹果/梨类", getResources().getDrawable(R.drawable.f1)).setContent(R.id.frameLayout));
+		myTabHost.addTab(myTabHost.newTabSpec("tab_2").setIndicator("莓果类", getResources().getDrawable(R.drawable.f2)).setContent(R.id.frameLayout));
+		myTabHost.addTab(myTabHost.newTabSpec("tab_3").setIndicator("柑橘橙柚", getResources().getDrawable(R.drawable.f3)).setContent(R.id.frameLayout));
+		myTabHost.setCurrentTab(1);
+		previewFruit(1);
+		myTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+			@Override
+			public void onTabChanged(String tabId) {
+				switch (myTabHost.getCurrentTabTag()) {
+					case "tab_1":
+						previewFruit(0);
+						break;
+					case "tab_2":
+						previewFruit(1);
+						break;
+					case "tab_3":
+						previewFruit(2);
+						break;
+					default:
+						break;
+				}
+			}
+		});
+	}
+
+	public void previewFruit(int group) {
+		//根据用户点击Tab选择的类别,向“水果版块”传递group参数以显示不同类别水果的预览列表
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		FruitFragment fruitFragment = new FruitFragment();
+		Bundle bundle = new Bundle();
+		bundle.putInt("group", group);
+		fruitFragment.setArguments(bundle);
+		Fragment fragment = manager.findFragmentById(R.id.frameLayout);
+		if (fragment == null) transaction.add(R.id.frameLayout, fruitFragment);
+		else transaction.replace(R.id.frameLayout, fruitFragment);
+		transaction.commit();
+	}
+}
+```
+
+```java
+public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterView.OnItemClickListener {
+	private Context myContext;
+	private LayoutInflater myInflater;
+	private ArrayList<Fruit_RL> myFruitsList;
+
+	public ListAdapter(Context ctx, ArrayList<Fruit_RL> lst) {
+		myContext = ctx;
+		myInflater = LayoutInflater.from(ctx);
+		myFruitsList = lst;
+	}
+
+	@Override
+	public int getItemCount() {
+		return myFruitsList.size();
+	}
+
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
+		View view = myInflater.inflate(R.layout.item_rclist, vg, false);
+		RecyclerView.ViewHolder vholder = new ItemHolder(view);
+		return vholder;
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder vh, final int pos) {
+		ItemHolder iholder = (ItemHolder) vh;
+		iholder.rclist_picture.setImageResource(myFruitsList.get(pos).pid);
+		iholder.rclist_title.setText(myFruitsList.get(pos).title);
+		iholder.rclist_note.setText(myFruitsList.get(pos).note);
+
+		//列表项的点击事件需要自己实现
+		iholder.rclist_item.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (myOnItemClickListener != null) {
+					myOnItemClickListener.onItemClick(null, v, pos, 0);
+				}
+			}
+		});
+	}
+
+	@Override
+	public int getItemViewType(int pos) {
+		return 0;
+	}
+
+	@Override
+	public long getItemId(int pos) {
+		return pos;
+	}
+
+	public class ItemHolder extends RecyclerView.ViewHolder {
+		public LinearLayout rclist_item;
+		public ImageView rclist_picture;
+		public TextView rclist_title;
+		public TextView rclist_note;
+
+		public ItemHolder(View view) {
+			super(view);
+			rclist_item = view.findViewById(R.id.rclist_item);
+			rclist_picture = view.findViewById(R.id.rclist_picture);
+			rclist_title = view.findViewById(R.id.rclist_title);
+			rclist_note = view.findViewById(R.id.rclist_note);
+		}
+	}
+
+	private AdapterView.OnItemClickListener myOnItemClickListener;
+
+	public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+		this.myOnItemClickListener = listener;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View view, int pos, long arg3) {
+		String msg = String.format("%s 加入购物车", myFruitsList.get(pos).title);
+		Toast.makeText(myContext, msg, Toast.LENGTH_SHORT).show();
+	}
+}
+```
+
+```java
+public class FruitFragment extends Fragment {
+    protected View myView;
+    private RecyclerView myRecyclerList;
+    protected Context myContext;
+    private int curgroup;
+    private ListAdapter adapter;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.recycler_list, container, false);
+        myRecyclerList = myView.findViewById(R.id.myRecyclerList);
+
+        myContext = getActivity();
+        LinearLayoutManager manager = new LinearLayoutManager(myContext);
+        manager.setOrientation(RecyclerView.VERTICAL);
+        myRecyclerList.setLayoutManager(manager);
+
+        curgroup = getArguments().getInt("group");//获得水果分类号
+        if (curgroup == 0) adapter = new ListAdapter(myContext, Fruit_RL.getDefaultList1());
+        if (curgroup == 1) adapter = new ListAdapter(myContext, Fruit_RL.getDefaultList2());
+        if (curgroup == 2) adapter = new ListAdapter(myContext, Fruit_RL.getDefaultList3());
+        adapter.setOnItemClickListener(adapter);
+        myRecyclerList.setAdapter(adapter);
+        myRecyclerList.setItemAnimator(new DefaultItemAnimator());
+        return myView;
+    }
+}
+```
+
 # SQLite
 
 - SQLite：嵌入式关系型数据库管理系统，以单个文件形式存储数据，跨平台兼容，并全面支持SQL标准及事务处理等功能；在Android开发中，SQLite用于本地设备上存储结构化数据，实现离线功能并有效管理数据持久化。
@@ -920,7 +1587,7 @@ public class MySQLiteAdapter {
     }
 
     //获取SQLite数据库实例
-    public SQLiteDatabase getSqliteDb() {
+    public SQLiteDatabase getSQLiteDb() {
         return sqliteDb;
     }
 }
@@ -928,16 +1595,34 @@ public class MySQLiteAdapter {
 
 ```java
 public class SuperDao {
-    private MySQLiteAdapter mySqLiteAdapter = null;
-    private SQLiteDatabase sqLiteDb = null;
+    private MySQLiteAdapter mySQLiteAdapter = null;
+    private SQLiteDatabase sqliteDb = null;
 
-    public Cursor getOne(Context context, String tableName, String[] fields) {
-        mySqLiteAdapter = new MySQLiteAdapter(context);
-        //创建SQLiteAdapter对象，得到SQLite实例
-        sqLiteDb = mySqLiteAdapter.getSqliteDb();
-        // //获取注册的用户数据
-        Cursor cursor = sqLiteDb.query(tableName, fields, null, null, null, null, null);
+    public Cursor find(Context context, String tableName, String[] fields, String condition) {
+        mySQLiteAdapter = new MySQLiteAdapter(context);
+        sqliteDb = mySQLiteAdapter.getSQLiteDb();
+        Cursor cursor = sqliteDb.query(tableName, fields, null, null, null, null, null);
         return cursor;
+    }
+    
+    public void save(Context context, String tableName, ContentValues values){
+        mySQLiteAdapter = new MySQLiteAdapter(context);
+        sqliteDb = mySQLiteAdapter.getSQLiteDb();
+        sqliteDb.insert(TABLE_NAME, null, values);
+    }
+    
+    public boolean update(Context context, String tableName, ContentValues values, String condition){
+        mySQLiteAdapter = new MySQLiteAdapter(context);
+        sqliteDb = mySQLiteAdapter.getSQLiteDb();
+        sqliteDb.update(tableName, values, condition, null);
+        return true;
+    }
+    
+    public boolean delete(Context context, String tableName, String condition){
+        mySQLiteAdapter = new MySQLiteAdapter(context);
+        sqliteDb = mySQLiteAdapter.getSqliteDb();
+        sqliteDb.delete(tableName, condition, null);
+        return true;
     }
 }
 ```
@@ -946,12 +1631,12 @@ public class SuperDao {
 public class UserDao extends SuperDao {
 
     private static final String TABLE_NAME = "user";
-    private static final String[] FIELDS = {"id", "name", "password"};
+    private static final String[] FIELDS = {"id", "name", "password", "role"};
 
-    public User getUser(Context context) {
-        Cursor cursor = getOne(context, TABLE_NAME, FIELDS);
+    public User findOne(Context context) {
+        Cursor cursor = super.find(context, TABLE_NAME, FIELDS, null);
         // 默认用户
-        User user = new User("C10001", "Common", "1234");
+        User user = new User("C10001", "Common", "1234", "common");
         String id;
         String name;
         String password;
@@ -961,11 +1646,42 @@ public class UserDao extends SuperDao {
             id = cursor.getString(0);
             name = cursor.getString(1);
             password = cursor.getString(2);
-            user = new User(id, name, password);
+            role = cursor.getString(3);
+            user = new User(id, name, password, role);
         }
         return user;
     }
-
+    
+    public Cursor findAll(Context context){
+        return super.find(context, TABLE_NAME, null, null)
+    }
+    
+    public Cursor findBy(Context context, String condition){
+        return super.find(context, TABLE_NAME, null, condition);
+    }
+    
+    public void save(Context context, User user){
+        ContentValues values = new ContentValues();
+        values.put("id", user.getId());
+        values.put("name", user.getName());
+        values.put("password", user.getPassword());
+        values.put("role", user.getRole());
+        super.save(context, TABLE_NAME, values);
+    }
+    
+    public boolean update(Context context, User user, String condition){
+        // condition举例 "id='C1001'"、"name like '%zjk%'"
+        ContentValues values = new ContentValues();
+        values.put("id",user.getId());
+        values.put("name", user.getName());
+        values.put("password", user.getPassword());
+        values.put("role", user.getRole());
+        return super.update(context, tableName, values, condition);
+    }
+    
+    public boolean delete(String condition){
+        return super.delete(TABLE_NAME, condition);
+    }
 }
 ```
 
