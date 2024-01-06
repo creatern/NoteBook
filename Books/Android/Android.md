@@ -639,28 +639,25 @@ finish();
 
 ## TabHost 标签页
 
+<img src="../../pictures/20240106120801.png" width="300"/> 
+
 ```xml
+<!-- 标签页-->
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/tabhost"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:id="@android:id/tabhost">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
         <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/tabbar_height" />
+            android:id="@android:id/tabcontent"/>
 
         <TabWidget
             android:id="@android:id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
+        <!-- 标签栏-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/tabbar_height"
@@ -668,11 +665,9 @@ finish();
             android:gravity="bottom"
             android:orientation="horizontal" >
 
+            <!-- 标签1-->
             <LinearLayout
                 android:id="@+id/first_linear"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:orientation="vertical" >
 
                 <TextView
@@ -680,12 +675,9 @@ finish();
                     android:drawableTop="@drawable/first_tab_selector"
                     android:text="@string/first_tab" />
             </LinearLayout>
-
+            <!-- 标签2-->
             <LinearLayout
                 android:id="@+id/second_linear"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:orientation="vertical" >
 
                 <TextView
@@ -693,118 +685,181 @@ finish();
                     android:drawableTop="@drawable/second_tab_selector"
                     android:text="@string/second_tab" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/third__linear"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    style="@style/TabLabel"
-                    android:drawableTop="@drawable/third_tab_selector"
-                    android:text="@string/third_tab" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/four_linear"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    style="@style/TabLabel"
-                    android:drawableTop="@drawable/four_tab_selector"
-                    android:text="@string/four_tab" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/five_linear"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    style="@style/TabLabel"
-                    android:drawableTop="@drawable/five_tab_selector"
-                    android:text="@string/five_tab" />
-            </LinearLayout>
+             <!-- 标签n...-->
         </LinearLayout>
-
     </RelativeLayout>
-
 </TabHost>
 ```
 
+```xml
+<!-- first_page.xml等需要展示的标签页面的布局：和平常的一致即可-->
+<!-- 布局、控件-->
+```
+
 ```java
-package com.example.dell.mytabhost;
-
-import android.app.TabActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
-
+// 标签活动页
 public class TabHostActivity extends TabActivity implements OnClickListener {
 	private TabHost myTabHost;
-	private LinearLayout first_linear, second_linear, third_linear, four_linear, five_linear;
-	private String TAG1 = "first";
-	private String TAG2 = "second";
-	private String TAG3 = "third";
-	private String TAG4 = "four";
-	private String TAG5 = "five";
+	private LinearLayout firstLinear, secondLinear;
+	// 标签
+    private String firstTag = "first";
+	private String secondTag = "second";
+   
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_host);
-		first_linear = findViewById(R.id.first_linear);
-		first_linear.setOnClickListener(this);
-		second_linear = findViewById(R.id.second_linear);
-		second_linear.setOnClickListener(this);
-		third_linear = findViewById(R.id.third__linear);
-		third_linear.setOnClickListener(this);
-		four_linear = findViewById(R.id.four_linear);
-		four_linear.setOnClickListener(this);
-		five_linear = findViewById(R.id.five_linear);
-		five_linear.setOnClickListener(this);
-		myTabHost = getTabHost();
-		myTabHost.addTab(myTabHost.newTabSpec(TAG1).setIndicator(getString(R.string.first_tab), getResources().getDrawable(R.drawable.first_tab_selector)).setContent(new Intent(this, FirstPageActivity.class)));
-		myTabHost.addTab(myTabHost.newTabSpec(TAG2).setIndicator(getString(R.string.second_tab), getResources().getDrawable(R.drawable.second_tab_selector)).setContent(new Intent(this, SecondPageActivity.class)));
-		myTabHost.addTab(myTabHost.newTabSpec(TAG3).setIndicator(getString(R.string.third_tab), getResources().getDrawable(R.drawable.third_tab_selector)).setContent(new Intent(this, ThirdPageActivity.class)));
-		myTabHost.addTab(myTabHost.newTabSpec(TAG4).setIndicator(getString(R.string.four_tab), getResources().getDrawable(R.drawable.four_tab_selector)).setContent(new Intent(this, FourPageActivity.class)));
-		myTabHost.addTab(myTabHost.newTabSpec(TAG5).setIndicator(getString(R.string.five_tab), getResources().getDrawable(R.drawable.five_tab_selector)).setContent(new Intent(this, FivePageActivity.class)));
-		setTabView(first_linear);
+        
+		firstLinear = findViewById(R.id.first_linear);
+		firstLinear.setOnClickListener(this);
+		secondLinear = findViewById(R.id.second_linear);
+		secondLinear.setOnClickListener(this);
+		
+        // 初始化：添加标签页
+        myTabHost = getTabHost();
+		myTabHost.addTab(myTabHost.newTabSpec(firstTag).setIndicator(getString(R.string.first_tab), getResources().getDrawable(R.drawable.first_tab_selector)).setContent(new Intent(this, FirstPageActivity.class)));
+		myTabHost.addTab(myTabHost.newTabSpec(secondTag).setIndicator(getString(R.string.second_tab), getResources().getDrawable(R.drawable.second_tab_selector)).setContent(new Intent(this, SecondPageActivity.class)));
+        
+        // 设置页面选中为firstLinear对应的内容页
+		setTabView(firstLinear);
 	}
 
+    // 设置点击标签栏后，视图（内容页）切换
 	@Override
 	public void onClick(View view) {
 		setTabView(view);
 	}
 
-	private void setTabView(View v) {
-		first_linear.setSelected(false);
-		second_linear.setSelected(false);
-		third_linear.setSelected(false);
-		four_linear.setSelected(false);
-		five_linear.setSelected(false);
-		v.setSelected(true);
-		if (v == first_linear) {
-			myTabHost.setCurrentTabByTag(TAG1);
-		} else if (v == second_linear) {
-			myTabHost.setCurrentTabByTag(TAG2);
-		} else if (v == third_linear) {
-			myTabHost.setCurrentTabByTag(TAG3);
-		} else if (v == four_linear) {
-			myTabHost.setCurrentTabByTag(TAG4);
-		} else if (v == five_linear) {
-			myTabHost.setCurrentTabByTag(TAG5);
+	private void setTabView(View view) {
+		firstLinear.setSelected(false);
+		secondLinear.setSelected(false);
+		view.setSelected(true);
+		
+        // 如果选择的视图是指定的标签，则将当前的标签页主内容设为该标签对应的内容页
+        if (view == firstLinear) {
+			myTabHost.setCurrentTabByTag(firstTag);
+		} else if (v == secondLinear) {
+			myTabHost.setCurrentTabByTag(secondTag);
 		}
+	}
+}
+```
+
+```java
+// 标签内容活动页 与一般的Activity一致即可
+```
+
+## ListView 列表视图
+
+<img src="../../pictures/20240106120906.png" width="300"/> 
+
+```xml
+<!-- 列表视图页面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <!-- 列表视图-->
+    <ListView
+        android:id="@+id/myListView"/>
+    
+</LinearLayout>
+```
+
+```xml
+<!-- 列表项-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_item"
+    android:orientation="horizontal" >
+    
+    <!-- 此处定义列表项的控件模板-->
+
+</LinearLayout>
+```
+
+```java
+// 列表视图的Activity
+fruitList = FruitService.getFruitList(); // 获取水果列表
+MyFruitListViewAdapter adapter = new MyFruitListViewAdapter(this, R.layout.item_list, fruitList, Color.WHITE);
+
+myListView = findViewById(R.id.myListView);
+myListView.setAdapter(adapter);
+myListView.setOnItemClickListener(adapter);
+
+myListView.setHeaderDividersEnabled(true);
+myListView.setFooterDividersEnabled(true);
+myListView.setDividerHeight(3);
+myListView.setPadding(25, 10, 25, 0);
+```
+
+```java
+public class MyFruitListViewAdapter extends BaseAdapter implements OnItemClickListener {
+	private Context context;
+	private LayoutInflater inflater;
+	private int layoutId;
+	private ArrayList<Fruit> fruitList;
+	private int background;
+
+	public MyFruitListViewAdapter(Context ctx, int layoutId, ArrayList<Fruit> fruitList, int background) {
+		this.context = context;
+		this.inflater = LayoutInflater.from(context);
+		this.layoutId = layoutId;
+		this.fruitList = fruitList;
+		this.background = background;
+	}
+
+	@Override
+	public int getCount() {
+		return fruitList.size();
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		return fruitList.get(arg0);
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		return arg0;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder viewholder = null;
+		if (convertView == null) {
+			viewholder = new ViewHolder();
+			convertView = myInflater.inflate(myLayoutId, null);
+			viewholder.linear_item = convertView.findViewById(R.id.linear_item);
+			viewholder.list_icon = convertView.findViewById(R.id.list_icon);
+			viewholder.list_name = convertView.findViewById(R.id.list_name);
+			viewholder.list_note = convertView.findViewById(R.id.list_note);
+			viewholder.list_price = convertView.findViewById(R.id.list_price);
+			convertView.setTag(vholder);
+		} else {
+			viewholder = (ViewHolder) convertView.getTag();
+		}
+		Fruit fruit = fruitList.get(position);
+		viewholder.linear_item.setBackgroundColor(background);
+		viewholder.list_icon.setImageResource(fruit.icon);
+		viewholder.list_name.setText(fruit.name);
+		viewholder.list_note.setText(fruit.note);
+		viewholder.list_price.setText(fruit.price);
+		return convertView;
+	}
+
+	public final class ViewHolder {
+		private LinearLayout linear_item;
+		public ImageView list_icon;
+		public TextView list_name;
+		public TextView list_note;
+		public TextView list_price;
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		String msg = String.format("你选了第 %d 个水果 %s", position + 1, fruitList.get(position).name);
+		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	}
 }
 ```
@@ -825,8 +880,6 @@ public class TabHostActivity extends TabActivity implements OnClickListener {
         <td>Android 系统中用于操作 SQLite 数据库的一个辅助类，封装了数据库的创建、版本管理以及打开关闭等操作。开发者在使用 SQLite 数据库时，通常需要继承 SQLiteOpenHelper 类并重写部分方法来实现对数据库的操作。</td>
     </tr>
 </table>
-
-
 ```java
 public class MySQLiteAdapter {
     // 声明数据库的基本信息
