@@ -1,5 +1,100 @@
 # Vue入门
 
+## 项目结构
+
+<table>
+    <tr>
+        <td width="200px">node_modules</td>
+        <td colspan="2">vue项目的依赖库</td>
+    </tr>
+    <tr>
+        <td width="200px">public</td>
+        <td colspan="2">存放favicon.ico（页面图标）、其余不支持js的文件</td>
+    </tr>
+    <tr>
+        <td rowspan="6">src</td>
+        <td>assets</td>
+        <td>资源目录，会被webpack构建</td>
+    </tr>
+    <tr>
+        <td>components</td>
+        <td>Vue组件目录</td>
+    </tr>
+    <tr>
+        <td>route</td>
+        <td>路由配置</td>
+    </tr>
+    <tr>
+        <td>views</td>
+        <td>页面目录</td>
+    </tr>
+    <tr>
+        <td>App.vue</td>
+        <td>根组件，所有页面都是在该组件下进行切换的</td>
+    </tr>
+    <tr>
+        <td>main.js</td>
+        <td>项目的入口文件，初始化Vue实例，并引入所需要的插件</td>
+    </tr>
+    <tr>
+        <td>static</td>
+        <td colspan="2">静态资源，不会被webpack构建，html、css、js、图片等</td>
+    </tr>
+    <tr>
+        <td>build</td>
+        <td colspan="2">构建脚本目录</td>
+    </tr>
+    <tr>
+        <td>jsconfig.json</td>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>package.json</td>
+        <td colspan="2">项目的依赖配置</td>
+    </tr>
+    <tr>
+        <td>package-lock.json</td>
+        <td colspan="2">记录更加详细的依赖库版本和库与库之间的关系</td>
+    </tr>
+    <tr>
+        <td>Vue.config.js</td>
+        <td colspan="2">Vue的配置文件</td>
+    </tr>
+    <tr>
+        <td>babel.config.js</td>
+        <td colspan="2">babel转码器的配置文件</td>
+    </tr>
+</table>
+
+## Vue实例
+
+| 容器与Vue实例的对应关系 | 情况                                                     |
+| ----------------------- | -------------------------------------------------------- |
+| 一个容器对一个Vue实例   | 正常使用，通常配合组件使用                               |
+| 多个容器对一个Vue实例   | 排在前面的容器获得数据（data），而后面的容器不能获得数据 |
+| 一个容器对多个Vue实例   | 不允许，一个容器只能被一个Vue实例接管                    |
+
+```js
+new Vue({
+    el: '#login', 
+    data: { // 1.对象式
+        name: '李四'                  
+    }
+});
+
+const v = new Vue({
+    // el: '#login', 
+    data(){ // 2.函数式，搭配组件时使用
+        return{
+            name:'李四'
+        }
+    }
+});
+
+// el 绑定的另一种方式
+v.$mount('#login');
+```
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -43,45 +138,9 @@
 </html>
 ```
 
-| 容器与Vue实例的对应关系 | 情况                                                     |
-| ----------------------- | -------------------------------------------------------- |
-| 一个容器对一个Vue实例   | 正常使用，通常配合组件使用                               |
-| 多个容器对一个Vue实例   | 排在前面的容器获得数据（data），而后面的容器不能获得数据 |
-| 一个容器对多个Vue实例   | 不允许，一个容器只能被一个Vue实例接管                    |
+## Vue2与Vue3的核心区别
 
-- Vue模板语法：
-
-1. 插值语法 `{{field}}`：标签体；解析标签体内容，field为js表达式，且可以直接读取data内的所有属性
-2. 指令语法 `v-bind:`等：标签属性；解析标签，包括标签属性、标签体内容、绑定事件等，js表达式的使用同插值语法
-
-```js
-new Vue({
-    el: '#login', 
-    data: { // 1.对象式
-        name: '李四'                  
-    }
-});
-
-const v = new Vue({
-    // el: '#login', 
-    data(){ // 2.函数式，搭配组件时使用
-        return{
-            name:'李四'
-        }
-    }
-});
-
-// el 绑定的另一种方式
-v.$mount('#login');
-```
-
-## MVVM 模型 v-model:
-
-<img src="../../pictures/20200204123438.png" width="500"/> 
-
-> Model是位于请求的，对应于数据层（Spring中的Model），Vue和Spring（Servlet）操作的是同一个Model。
-
-## Object.defineProperty()
+### Object.defineProperty()
 
 ```js
 let person = {
@@ -109,6 +168,21 @@ Object.defineProperty(person, 'sex', {
 ```
 
 <img src="../../pictures/20231209131920.png" width="550"/> 
+
+# Vue模板语法
+
+- Vue模板语法：
+
+1. 插值语法 `{{field}}`：标签体；解析标签体内容，field为js表达式，且可以直接读取data内的所有属性
+2. 指令语法 `v-bind:`等：标签属性；解析标签，包括标签属性、标签体内容、绑定事件等，js表达式的使用同插值语法
+
+## 属性绑定
+
+### 单向绑定 v-bind: 
+
+### MVVM模型 v-model:
+
+<img src="../../pictures/20200204123438.png" width="500"/> 
 
 ## 事件处理 v-on: @
 
@@ -152,116 +226,6 @@ Object.defineProperty(person, 'sex', {
 3. 系统修饰符：ctrl、alt、shift、meta。（1）keyup：按下修饰键的同时再按下其他键（keyup.ctrl.y），释放其他键后触发；（2）keydown：正常触发。
 4. 可以通过e.target.value获取对应的e.keyCode（不建议，即将移除）
 5. 定制按键别名：Vue.config.keyCodes.自定义键名 = 键码
-
-## 计算属性 computed
-
-```js
-new Vue({
-    el: '#login',
-    data: {
-        firstName: '张',
-        lastName: '三'
-    },
-    computed: {
-        fullName: {
-            get() { //get()调用时机：（1）初次读取该属性时；（2）所依赖的数据发生变化时
-                return this.firstName + ' ' + this.lastName;
-            },
-            set(newVal) { // 若要修改数据则需要setter，通常不修改计算属性
-                //通过setter改变firstName和lastName，而firstName和lastName改变触发getter
-                let names = newVal.split(' ');
-                if (names.length === 2) {
-                    this.firstName = names[0];
-                    this.lastName = names[1];
-                }
-            }
-        },
-        // 可简写（不需要setter时）
-        //fullName() {
-        //    return this.firstName + ' ' + this.lastName;
-        //}
-    }
-});
-```
-
-## 监视属性（侦听属性） watch
-
-```js
-const vm = new Vue({
-    el: '#login',
-    data: {
-        account: '',
-    },
-    watch: { //监视（普通属性和计算属性）
-        account:{
-            immutable:true, //初始化时调用一次handler
-            // 绑定的属性的值改变时调用handler
-            handler(newVal,oldVal){
-                console.log(oldVal + '被修改为' + newVal);
-            }
-        }
-    }
-    
-    // 简写 1. 
-    // watch: { //监视（普通属性和计算属性）
-    //     account(newVal,oldVal){
-    //         console.log(oldVal + '被修改为' + newVal);
-    //     }
-    // }
-});
-
-// 简写 2.
-vm.$watch('account', {
-    immutable:true,
-    handler(newVal,oldVal){
-        console.log(oldVal + '被修改为' + newVal);
-    },
-})
-
-// 简写 3.
-vm.$watch('account',function(newVal,oldVal){
-    console.log(oldVal + '被修改为' + newVal);
-})
-```
-
-### 深度监视
-
-```js
-const vm = new Vue({
-    el: '#login',
-    data: {
-        numbers: {
-            a: 1,
-            b: 2
-        }
-    },
-    // watch: {
-    //     'numbers.a':{ //监测多级结构中某个具体属性的变化，需要使用正确的写法（字符串）
-    //         immutable:true,
-    //         handler(newVal,oldVal){
-    //             console.log(oldVal + '被修改为' + newVal);
-    //         }
-    //     }
-    // }
-    watch: {
-        numbers: {
-            deep: true, // 开启深度监测，监测多级结构中每个属性的变化，默认false
-            handler(newVal, oldVal) { // 此处的newVal和oldVal都是numbers，而非numbers.a和numbers.b
-                console.log(newVal, oldVal);
-            }
-        }
-    }
-});
-```
-
-### watch与computed
-
-- watch可以完成异步操作，而computed不行。
-
-## 普通函数与箭头函数的采用
-
-1. 所有被Vue管理的函数，应该写成普通函数，此时，this指向Vue的实例。
-2. 所有不被Vue管理的函数（定时器的回调函数等），应该写成箭头函数（即箭头函数的this从外层找），此时，this仍然指向Vue。定时器的回调函数的this原本应该是window，而箭头函数使得其从外层查找this，也就是Vue实例，所以该箭头函数内的this仍然指向Vue。
 
 ## 绑定样式 v-bind:
 
@@ -446,3 +410,114 @@ const vm = new Vue({
 </script>
 ```
 
+# Vue实例属性
+
+## 计算属性 computed
+
+```js
+new Vue({
+    el: '#login',
+    data: {
+        firstName: '张',
+        lastName: '三'
+    },
+    computed: {
+        fullName: {
+            get() { //get()调用时机：（1）初次读取该属性时；（2）所依赖的数据发生变化时
+                return this.firstName + ' ' + this.lastName;
+            },
+            set(newVal) { // 若要修改数据则需要setter，通常不修改计算属性
+                //通过setter改变firstName和lastName，而firstName和lastName改变触发getter
+                let names = newVal.split(' ');
+                if (names.length === 2) {
+                    this.firstName = names[0];
+                    this.lastName = names[1];
+                }
+            }
+        },
+        // 可简写（不需要setter时）
+        //fullName() {
+        //    return this.firstName + ' ' + this.lastName;
+        //}
+    }
+});
+```
+
+## 监视属性（侦听属性） watch
+
+```js
+const vm = new Vue({
+    el: '#login',
+    data: {
+        account: '',
+    },
+    watch: { //监视（普通属性和计算属性）
+        account:{
+            immutable:true, //初始化时调用一次handler
+            // 绑定的属性的值改变时调用handler
+            handler(newVal,oldVal){
+                console.log(oldVal + '被修改为' + newVal);
+            }
+        }
+    }
+    
+    // 简写 1. 
+    // watch: { //监视（普通属性和计算属性）
+    //     account(newVal,oldVal){
+    //         console.log(oldVal + '被修改为' + newVal);
+    //     }
+    // }
+});
+
+// 简写 2.
+vm.$watch('account', {
+    immutable:true,
+    handler(newVal,oldVal){
+        console.log(oldVal + '被修改为' + newVal);
+    },
+})
+
+// 简写 3.
+vm.$watch('account',function(newVal,oldVal){
+    console.log(oldVal + '被修改为' + newVal);
+})
+```
+
+### 深度监视
+
+```js
+const vm = new Vue({
+    el: '#login',
+    data: {
+        numbers: {
+            a: 1,
+            b: 2
+        }
+    },
+    // watch: {
+    //     'numbers.a':{ //监测多级结构中某个具体属性的变化，需要使用正确的写法（字符串）
+    //         immutable:true,
+    //         handler(newVal,oldVal){
+    //             console.log(oldVal + '被修改为' + newVal);
+    //         }
+    //     }
+    // }
+    watch: {
+        numbers: {
+            deep: true, // 开启深度监测，监测多级结构中每个属性的变化，默认false
+            handler(newVal, oldVal) { // 此处的newVal和oldVal都是numbers，而非numbers.a和numbers.b
+                console.log(newVal, oldVal);
+            }
+        }
+    }
+});
+```
+
+### watch与computed
+
+- watch可以完成异步操作，而computed不行。
+
+## 普通函数与箭头函数的采用
+
+1. 所有被Vue管理的函数，应该写成普通函数，此时，this指向Vue的实例。
+2. 所有不被Vue管理的函数（定时器的回调函数等），应该写成箭头函数（即箭头函数的this从外层找），此时，this仍然指向Vue。定时器的回调函数的this原本应该是window，而箭头函数使得其从外层查找this，也就是Vue实例，所以该箭头函数内的this仍然指向Vue。
