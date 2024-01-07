@@ -1578,7 +1578,7 @@ public class MySQLiteAdapter {
             db.execSQL("insert into user values('admin','admin','admin')");
         }
 
-        // 再次打开数据库时执行的操作
+        // 数据库版本更新时执行的操作
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // 重新执行onCreate方法内定义的操作
@@ -1598,10 +1598,11 @@ public class SuperDao {
     private MySQLiteAdapter mySQLiteAdapter = null;
     private SQLiteDatabase sqliteDb = null;
 
-    public Cursor find(Context context, String tableName, String[] fields, String condition) {
+    public Cursor find(Context context, String tableName, String[] fields, String condition, String[] args) {
         mySQLiteAdapter = new MySQLiteAdapter(context);
         sqliteDb = mySQLiteAdapter.getSQLiteDb();
-        Cursor cursor = sqliteDb.query(tableName, fields, null, null, null, null, null);
+        Cursor cursor = sqliteDb.query(tableName, fields, condition, args, null, null, null);
+        // sqLiteDb.query("user",new String[]{"*"},"id= ? and password= ?",new String[]{"admin","admin"},null,null,null);
         return cursor;
     }
     
@@ -1633,19 +1634,20 @@ public class UserDao extends SuperDao {
     private static final String TABLE_NAME = "user";
     private static final String[] FIELDS = {"id", "name", "password", "role"};
 
-    public User findOne(Context context) {
-        Cursor cursor = super.find(context, TABLE_NAME, FIELDS, null);
+    public User getUser(Context context, String id, String password) {
+        // 查询条件
+        String condition = "id= ? and password= ?";
+        String[] args = {id,password};
+        // 执行查询
+        Cursor cursor = getOne(context, TABLE_NAME, FIELDS,condition,args);
         // 默认用户
-        User user = new User("C10001", "Common", "1234", "common");
-        String id;
+        User user = null;
         String name;
-        String password;
+        String role;
         // 获取用户数据
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            id = cursor.getString(0);
             name = cursor.getString(1);
-            password = cursor.getString(2);
             role = cursor.getString(3);
             user = new User(id, name, password, role);
         }
