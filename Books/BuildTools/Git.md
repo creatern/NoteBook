@@ -215,3 +215,25 @@ target
 
 <img src="../../pictures/256234504239826.png" width="700"/> 
 
+# 子模块
+
+```shell
+# 将另一个仓库作为子模块加入到当前仓库
+git submodule add <url> 子模块名
+# url 可以是本地地址，也可以是远程仓库地址
+
+# 查看 Git 子模块的信息
+git submodule status
+
+# 删除子模块，如果存在.gitmodules，则删除对应的条目；之后执行以下命令
+git rm --cached 子模块名
+# 上一条命令仍然没有用，则追加执行这一条
+# rm -rf .git/modules/子模块名
+```
+
+- 当前仓库进行`add commit push`等操作时，如果子模块没有提交，则只会执行到该子模块之前提交过的最新版本，即`modified:   captain-vue (modified content)`
+- 对于嵌套的仓库，有两种处理方法：
+
+1. 作为子模块加入
+2. 移除被嵌套在内的仓库的`.git`，使其不再作为一个仓库，而是普通目录
+
