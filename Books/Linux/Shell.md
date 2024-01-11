@@ -223,6 +223,85 @@ date "+%Y-%m-%d %H:%M:%S"
 # 2023-12-31 10:24:53
 ```
 
+# 文本操作
+
+## echo 格式化输出
+
+```shell
+echo -e "\e[编码1;编码2;编码3m内容"
+# 文字色：
+#颜色码：重置=0，黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，洋红=35，青色=36，白色=37
+echo -e "\e[1;31m内容\e[0m"
+#\e[1;31m 将颜色设置为红色
+#\e[0m 将颜色重新置回
+# 背景色 ：
+#颜色码：重置=0，黑色=40，红色=41，绿色=42，黄色=43，蓝色=44，洋红=45，青色=46，白色=47
+echo -e "\e[1;42m内容\e[0m"
+# 文字闪动：
+
+# 0 关闭所有属性、1 设置高亮度（加粗）、4 下划线、5 闪烁、7 反显、8 消隐
+echo -e "\033[37;31;5mMySQL Server Stop...\033[39;49;0m"
+```
+
+## sed 流编辑器
+
+- sed（stream editor）：批量编辑，执行基本文本输入流（来自管道的文件或输入）上的转换，只对输入进行一次传递。
+- 处理时，把当前处理的行存储在临时缓冲区（模式空间 pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕；接着处理下一行，这样不断重复，直到文件末尾；除非使用重定向存储输出，否则文件内容并不改变。
+
+```shell
+sed [options] 'command' file(s)
+sed [options] -f scriptfile file(s)
+```
+
+<table><tbody><tr><td>-e</td><td>使用指定脚本处理输入的文本文件</td><td rowspan="4">&nbsp;</td><td>-n</td><td>仅显示脚本处理后的结果</td></tr><tr><td>-f</td><td>使用指定脚本文件处理输入的文本文件</td><td>-r</td><td>支持扩展正则表达式</td></tr><tr><td>-h</td><td>显示帮助信息</td><td>-V</td><td>显示版本信息</td></tr><tr><td>-i</td><td>直接修改文件内容，而不输出到终端</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>
+
+## sort 文件数据排序
+
+- sort命令默认会将文本中的数据当成字符来排序按照会话指定的默认语言的升序排序顺序输出，包括数字和时间日期等，而不是按照相应的规则来排序。
+
+| 命令                                       | 说明                                                         |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| sort -n                                    | 将文本识别为数字来排序                                       |
+| sort -M                                    | 将文本识别为Mar形式的月份来排序                              |
+| sort -t '分隔字符' -k 指定排序的字符段位置 | -t对每行的字符段进行分隔，然后-k选择每行分隔的其中一段字符进行排序 |
+| sort -r                                    | 将排序结果降序输出                                           |
+
+```shell
+# sort -t '字符' -k  文件
+# 将/etc/passwd按uid来排序
+[root@bogon ~]# sort -t ':' -k 3  /etc/passwd | head -n 5
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+bin:x:1:1:bin:/bin:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+```
+
+## grep 文本过滤
+
+- grep：默认区分大小写、支持正则。
+- 如果把grep命令当作标准搜索命令，那么egrep则是扩展搜索命令，等价于grep -E命令，支持扩展的正则表达式；而fgrep则是快速搜索命令，等价于grep -F命令，不支持正则表达式，直接按照字符串内容进行匹配。
+
+```shell
+grep [选项] {"查找目标文本" | 查找目标文本} {被过滤文本}
+```
+
+<table><tbody><tr><td>-b</td><td>显示匹配行距文件头部的偏移量</td><td rowspan="6">&nbsp;</td><td>-o</td><td>显示匹配词距文件头部的偏移量</td></tr><tr><td>-c</td><td>只显示匹配的行数</td><td>-q</td><td>静默执行模式</td></tr><tr><td>-E</td><td>支持扩展正则表达式</td><td>-r</td><td>递归搜索模式</td></tr><tr><td>-F</td><td>匹配固定字符串的内容</td><td>-s</td><td>不显示没有匹配文本的错误信息</td></tr><tr><td>-h</td><td>搜索多文件时不显示文件名</td><td>-v</td><td>显示不包含匹配文本的所有行</td></tr><tr><td>-i</td><td>忽略关键词大小写</td><td>-w</td><td>精准匹配整词</td></tr><tr><td>-l</td><td>只显示符合匹配条件的文件名</td><td>&nbsp;</td><td>-x</td><td>精准匹配整行</td></tr><tr><td>-n</td><td>显示所有匹配行及其行号</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>
+
+## awk
+
+```shell
+awk [options] 'script' var=value file(s)
+awk [options] -f scriptfile var=value file(s)
+```
+
+| 选项         | 说明                                                         |
+| :----------- | :----------------------------------------------------------- |
+| -F fs        | fs指定输入分隔符，fs可以是字符串或正则表达式                 |
+| -v var=value | 赋值一个用户定义变量，将外部变量传递给awk                    |
+| -f scripfile | 从脚本文件中读取awk命令                                      |
+| -m[fr] val   | 对val值设置内在限制<br />-mf选项限制分配给val的最大块数目。<br />-mr选项限制记录的最大数目。 |
+
 # shell script语法规范
 
 ## 基础规范

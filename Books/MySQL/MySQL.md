@@ -1,3 +1,31 @@
+# 安装与配置
+
+## Ubuntu20.4
+
+```shell
+sudo apt update
+sudo apt install mysql-server -y
+```
+
+```shell
+# 测试mysql
+sudo systemctl status mysql
+sudo systemctl is-active mysql
+
+# 设置自动启动
+sudo systemctl enable mysql
+```
+
+- 该方式安装的Mysql默认使用无密码登录，可通过以下修改为密码登录
+
+```sql
+alter user 'root'@'localhost' 
+identified with mysql_native_password
+by 'root';
+
+flush privileges;
+```
+
 # MySQL命令行
 
 <table><colgroup><col style="width: 10%"><col style="width: 80%"></colgroup><thead><tr>
