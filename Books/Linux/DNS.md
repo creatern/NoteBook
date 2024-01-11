@@ -1,4 +1,4 @@
-# DNS服务器
+# bind9
 
 - bind9（Berkeley Internet Name Domain，伯克利因特网域名服务器）
 

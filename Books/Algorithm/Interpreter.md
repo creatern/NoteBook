@@ -2,4 +2,4 @@
 
 - 可能会导致类膨胀、采用递归调用。
 
-<img src="../../pictures/设计模式-Interpreter.drawio.svg" width="600"/>
+<img src="../../pictures/设计模式-Interpreter.drawio.svg" width="600"/> 

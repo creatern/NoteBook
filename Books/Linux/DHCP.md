@@ -13,7 +13,7 @@ sudo vim /etc/default/isc-dhcp-server
 sudo vim /etc/dhcp/dhcpd.conf
 
 # 重启DHCP服务
-sudo service isc-dhcp-server restart
+sudo systemctl isc-dhcp-server restart
 
 # 检测DHCP服务是否正常运行 program name列中出现dhcpd服务
 sudo netstat -uap
@@ -74,5 +74,3 @@ subnet 192.168.90.0 netmask 255.255.255.0 {
 
 1. 确保Linux DHCP客户端支持发送主机名`/etc/dhcp/dhclient.conf`中的`send host-name = gethostname();`告诉dhclient程序在DHCP请求中附带主机名
 2. DHCP服务器还需要配置与DNS服务器交互，以便自动注册和更新DNS记录；在DHCP服务器上，需要配置它接收并处理来自客户端的主机名信息
-
-### 

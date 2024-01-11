@@ -21,7 +21,7 @@
         <td>Vue组件目录</td>
     </tr>
     <tr>
-        <td>route</td>
+        <td>router</td>
         <td>路由配置</td>
     </tr>
     <tr>
@@ -65,6 +65,7 @@
         <td colspan="2">babel转码器的配置文件</td>
     </tr>
 </table>
+
 
 ## Vue实例
 
@@ -169,7 +170,7 @@ Object.defineProperty(person, 'sex', {
 
 <img src="../../pictures/20231209131920.png" width="550"/> 
 
-# Vue模板语法
+# 模板语法
 
 - Vue模板语法：
 
@@ -181,6 +182,8 @@ Object.defineProperty(person, 'sex', {
 ### 单向绑定 v-bind: 
 
 ### MVVM模型 v-model:
+
+- 基于MVVM思想，实现数据的双向绑定
 
 <img src="../../pictures/20200204123438.png" width="500"/> 
 
@@ -410,7 +413,7 @@ Object.defineProperty(person, 'sex', {
 </script>
 ```
 
-# Vue实例属性
+# Vue属性
 
 ## 计算属性 computed
 
@@ -521,3 +524,52 @@ const vm = new Vue({
 
 1. 所有被Vue管理的函数，应该写成普通函数，此时，this指向Vue的实例。
 2. 所有不被Vue管理的函数（定时器的回调函数等），应该写成箭头函数（即箭头函数的this从外层找），此时，this仍然指向Vue。定时器的回调函数的this原本应该是window，而箭头函数使得其从外层查找this，也就是Vue实例，所以该箭头函数内的this仍然指向Vue。
+
+# 生命周期
+
+- 生命周期的八个阶段：每触发一个生命周期事件，会自动执行一个生命周期方法
+
+| 状态          | 阶段周期     |
+| ------------- | ------------ |
+| beforeCreate  | 创建前       |
+| created       | 创建后       |
+| beforeMount   | 载入前       |
+| **mounted**   | **挂载完成** |
+| beforeUpdate  | 更新前       |
+| updated       | 更新后       |
+| beforeDestory | 销毁前       |
+| destoryed     | 销毁后       |
+
+<img src="../../pictures/image-20210831160335496.png" width="1200"/>  
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+
+<script src="js/vue.js"></script>
+<script>
+    //1.创建Vue核心对象
+    new Vue({
+        el: "#app", //设置当前vue的作用范围
+        mounted(){
+            alert("加载完成")
+        }
+    })
+
+</script>
+</body>
+</html>
+```
+
+# 组件 components
+
+# 路由 router
