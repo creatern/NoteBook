@@ -96,7 +96,5 @@ try (ServerSocket serverSocket = new ServerSocket(8081)) {
 ```java
 connect.setRequestProperty("Authorization","Basic " + 
                            Base64.getEncoder().encodeToString(
-                               (username + ":" + password).getBytes(StandardCharsets.UTF_8)));
+                               (username + ":" + password).getBytes(StandardCharsets.UTF_8))); 
 ```
-
-# 
