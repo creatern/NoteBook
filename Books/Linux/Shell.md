@@ -302,6 +302,15 @@ awk [options] -f scriptfile var=value file(s)
 | -f scripfile | 从脚本文件中读取awk命令                                      |
 | -m[fr] val   | 对val值设置内在限制<br />-mf选项限制分配给val的最大块数目。<br />-mr选项限制记录的最大数目。 |
 
+## yes
+
+- `yes`：重在输出指定的字符串（默认有换行），直到yes进程被杀死
+
+```shell
+# 创建test.txt文件，并使用yes输出hello来填充，直到文件到达100MB大小
+touch test.txt; yes "hello" | head -c 100MB > test.txt
+```
+
 # shell script语法规范
 
 ## 基础规范
