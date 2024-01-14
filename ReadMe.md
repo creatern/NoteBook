@@ -482,7 +482,7 @@
         <td></td>
     </tr>
     <tr>
-        <td rowspan="24">Linux</td>
+        <td rowspan="25">Linux</td>
         <td><a href="./Books/Linux/Vim.md">Vim</a></td>
         <td></td>
         <td></td>
@@ -556,8 +556,12 @@
         <td></td>
     </tr>
     <tr>
-        <td rowspan="8">服务器</td>
-        <td rowspan="3">文件服务器</td>
+        <td rowspan="9">服务器</td>
+        <td rowspan="4">文件服务器</td>
+        <td><a href="./Books/Linux/rsync.md">rsync</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="./Books/Linux/FTP.md">FTP</a></td>
         <td></td>
     </tr>
@@ -937,4 +941,3 @@
         <td></td>
     </tr>
 </table>
-
