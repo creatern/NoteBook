@@ -86,6 +86,9 @@ sudo vim /etc/rsyncd.conf
 sudo vim /etc/rsyncd.secrets
 sudo chmod 0600 /etc/rsyncd.secrets
 
+# 编写每日消息文件（可选）
+sudo vim /etc/rsyncd.motd
+
 # 创建并设置对应的备份目录
 mkdir /home/zjk/MyDisk/backups
 chmod 0700 /home/zjk/MyDisk/backups
@@ -149,6 +152,10 @@ rsync -av ~/Documents backupman@192.168.31.70::mybackup_01
         <td><code>/var/log/rsyncd.log</code>，指定日志文件的位置</td>
     </tr>
     <tr>
+        <td>motd file</td>
+        <td><code>/etc/rsyncd.motd</code>自定义每日消息文件</td>
+    </tr>
+    <tr>
         <th width="15%">[模块名]</th>
         <th width="85%">意义</th>
     </tr>
@@ -192,11 +199,13 @@ rsync -av ~/Documents backupman@192.168.31.70::mybackup_01
     </tr>
 </table>
 
+
 ```shell
 port = 873
 address = 0.0.0.0
 pid file = /var/run/rsyncd.pid
 log file = /var/log/rsyncd.log
+motd file = /etc/rsyncd.motd
 
 [mybackup_01]
 	path = /home/zjk/MyDisk/backups
@@ -224,9 +233,9 @@ backupman:tiger
 sudo chmod 600 /etc/rsyncd.secrets
 ```
 
-### /etc/rsyncd-motd
+### /etc/rsyncd.motd
 
-- `/etc/rsyncd-motd`：每日消息（Message Of The Day，MOTD），在该文件中编辑消息即可
+- `/etc/rsyncd-motd`：每日消息（Message Of The Day，MOTD），在该自定义文件中编辑消息即可
 
 # 扩展选项
 
@@ -365,8 +374,6 @@ rsync -av --exclude-from='exclude-file.txt' source/ destination
 # 不排除的文件
 + /home
 ```
-
-
 
 ## --link-dest 基准目录
 
