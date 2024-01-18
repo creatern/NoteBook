@@ -69,6 +69,9 @@ rsync -av ~/testDir1 ~/testDir2 /media/test/testDisk
 ```shell
 # 通过ssh，指定将 ~/testDir1 ~/testDir2 传输到目标主机上的/testDisk目录；
 rsync -av ~/testDir1 ~/testDir2 zjk@zjk-pi.local:/testDisk
+
+# 复制到本地
+rsync -av zjk@192.168.1.147:/home/zjk/MyDisk/backups/Adafruit_Python_SSD1306 ~/Documents/
 ```
 
 ## rsync 服务器

@@ -223,6 +223,37 @@ date "+%Y-%m-%d %H:%M:%S"
 # 2023-12-31 10:24:53
 ```
 
+## 开机自启动sh
+
+- 加入到[Systemed](./服务单元控制.md)的服务单元中，作为服务被启动
+
+```shell
+# 创建一个systemd服务单元文件
+sudo vim /etc/systemd/system/oled-stats.service
+
+# systemd识别新的服务
+sudo systemctl daemon-reload
+
+# 加入开机自启动
+sudo systemctl enable oled-stats.service
+```
+
+```shell
+[Unit]
+Description=My OLED stats.py
+After=network.target
+
+[Service]
+ExecStart=/home/zjk/oled-stats.sh
+# simple 隐含了后台运行，无须在脚本加入&等后台运行符
+Type=simple
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
+```
+
 # 文本操作
 
 ## echo 格式化输出

@@ -84,3 +84,11 @@ session setup failed: NT_STATUS_LOGON_FAILURE
 # 错误2：共享目录不存在或用户对该目录无权限
 tree connect failed: NT_STATUS_BAD_NETWORK_NAME
 ```
+
+# smb命令
+
+## mget
+
+```shell
+```
+
