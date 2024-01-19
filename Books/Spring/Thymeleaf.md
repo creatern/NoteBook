@@ -147,6 +147,16 @@
 
 - `th:replace`：替换当前模板的整个元素（包括其自身的标签）而不是仅仅替换元素的内容，即被替换的模板的HTML标签将替换当前模板的相应标签。
 
+## th:class th:classappend 样式选择
+
+```html
+<!-- 替换class-->
+<tbody th:class="${session.user.userType.equals('park')} ? 'park-sidebar-class' : ''"></tbody>
+
+<!-- 追加class-->
+<tbody th:classa="${session.user.userType.equals('park')} ? 'park-sidebar-class' : ''"></tbody>
+```
+
 # ThymeleafResolver
 
 - 引入spring-boot-starter-thymeleaf依赖后，Spring Boot自动配置生成ThymeleafResolver到Spring MVC中，控制器可以引用此视图解析器。
