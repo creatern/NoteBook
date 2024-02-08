@@ -608,59 +608,6 @@
         <td></td>
     </tr>
     <tr>
-        <td rowspan="10">算法</td>
-        <td rowspan="3">数据结构</td>
-        <td><a href="./Books/Algorithm/LinearList.md">线性表</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Tree.md">树</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Graph.md">图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="6">基础篇</td>
-        <td><a href="./Books/Algorithm/算法复杂度.md">算法复杂度</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/排序与查找算法.md">排序与查找</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/贪心算法.md">贪心算法</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/分治策略.md">分治算法</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/概率算法.md">概率算法</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Dijkstra.md">Dijkstra</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>深度学习</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
         <td rowspan="33">软件设计</td>
         <td rowspan="10">UML</td>
         <td><a href="./Books/Algorithm/基本元素.md">基本元素</a></td>
@@ -938,6 +885,64 @@
         <td><a href="./Books/Others/OperationsManagement.md">公司理财</a></td>
         <td></td>
         <td></td>
+        <td></td>
+    </tr>
+</table>
+
+# 算法
+
+<table>
+     <tr>
+        <td rowspan="8" width="10%">数据结构</td>
+        <td rowspan="4" width="15%"><a href="./Books/Algorithm/线性表.md">线性表</a></td>
+        <td><a href="./Books/Algorithm/数组.md">数组</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/链表.md">链表</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/栈.md">栈</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/队列.md">队列</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Tree.md">树</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td rowspan="3">图</td>
+        <td><a href="./Books/Algorithm/图的基本性质.md">图的基本性质</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/图的遍历方式.md">图的遍历方式</a></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/图的查询模式.md">图的查询模式</a></td>
+    </tr>
+    <tr>
+        <td rowspan="6">基础篇</td>
+        <td><a href="./Books/Algorithm/算法分析.md">算法分析</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/排序与查找算法.md">排序与查找</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/贪心算法.md">贪心算法</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/分治策略.md">分治算法</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/概率算法.md">概率算法</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Dijkstra.md">Dijkstra</a></td>
         <td></td>
     </tr>
 </table>
