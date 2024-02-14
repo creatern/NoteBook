@@ -1,40 +1,8 @@
-# 主机名与域名解析
-
-## /etc/hostname
-
-- `/etc/hostname`：本机主机名文件，通过该文件来设置主机名
-
-```shell
-# 查看当前主机名
-hostname
-```
-
-## /etc/hosts
-
-- `/etc/hosts`：主机名查询静态表，定义IP地址和主机名的映射关系。输入域名时，系统会先从hosts文件中寻找对应的IP地址，若没有找到，才将域名发送到DNS服务器进行IP地址解析。
-
-## /etc/systemd/resolved.conf
-
-# 检测DNS
-
-## nslookup
-
-## resolvectl
-
-```shell
-# 查看当前域名解析的信息
-resolvectl status
-```
-
-```shell
-# 修改DNS
-sudo vim /etc/systemd/resolved.conf
-sudo systemctl restart systemd-resolved.service
-```
-
 # mDNS
 
-## Avahi-daemon
+## Avahi
+
+### Avahi-daemon
 
 - Avahi-daemon：开源的mDNS（多播DNS）和DNS-SD（DNS服务发现）实现，提供Zeroconf（即插即用网络）功能。启用Avahi-daemon后，设备会在本地网络中广播其主机名和IP地址信息，同一网络内的其他设备可以通过`.local`域名来访问该设备。
 
@@ -75,5 +43,18 @@ sudo systemctl list-unit-files | grep mdns
 more /var/log/syslog
 ```
 
+# DNS相关文件与命令
 
+## 主机名与域名解析 文件
 
+### [/etc/hostname](./etc_hostname.md)
+
+### [/etc/hosts](./etc_hosts.md)
+
+### [/etc/systemd/resolved.conf](./etc_systemd_resolved_conf.md)
+
+## DNS检测命令
+
+### [nslookup](./nslookup.md)
+
+### [resolvectl](./resolvectl.md)
