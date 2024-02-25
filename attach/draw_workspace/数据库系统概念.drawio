@@ -1,0 +1,46 @@
+<mxfile host="Electron" modified="2024-02-25T08:57:28.065Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="iqv599rlxyzpB73b0X3z" version="21.4.0" type="device">
+  <diagram name="Page-1" id="xT8oFVJp8TGKScVScg1j">
+    <mxGraphModel dx="658" dy="457" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1q0PFT9TLgkvpIosihsk-1" value="" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#FFE6CC;" vertex="1" parent="1">
+          <mxGeometry x="230" y="140" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-2" value="" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#FFCC99;" vertex="1" parent="1">
+          <mxGeometry x="310" y="160" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-3" value="" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#FFB366;" vertex="1" parent="1">
+          <mxGeometry x="420" y="185" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-4" value="&lt;b&gt;超码&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="200" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-5" value="&lt;b&gt;候选码&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="200" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-6" value="&lt;b&gt;主码&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="435" y="200" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-7" value="" style="endArrow=openThin;html=1;rounded=0;endFill=0;dashed=1;strokeWidth=2;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="214.31" as="sourcePoint" />
+            <mxPoint x="340" y="214.31" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-9" value="" style="endArrow=openThin;html=1;rounded=0;endFill=0;dashed=1;strokeWidth=2;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="214.66" as="sourcePoint" />
+            <mxPoint x="440" y="214.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-10" value="设计者选中" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="425" y="215" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1q0PFT9TLgkvpIosihsk-13" value="任意真子集&lt;br&gt;都不是超码" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="330" y="218" width="80" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
