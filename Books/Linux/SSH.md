@@ -71,7 +71,6 @@ ssh usr@ip
     </tr>
 </table>
 
-
 - OpenSSH支持不同类型的身份认证：
 
 <table>
@@ -126,16 +125,12 @@ sudo ssh-keygen -A
 </table>
 ## OpenSSH服务器
 
-### 查看私钥与公钥
-
-```shell
-# 确保私钥归root用户所有，权限为只读；而公钥归root用户所有，权限为读写，其余用户可读。
-ls -l /etc/ssh
-```
-
 ### sshd
 
 ```shell
+# 在sshd运行时执行，可预先检测ssh配置语法是否正确，以便确认是否载入配置
+sudo sshd -t
+
 # 重新加载sshd
 sudo systemctl reload sshd.server
 
@@ -200,5 +195,199 @@ sshd 2022
 sshd 2023
 ```
 
+### 设置密码验证
 
+- 密码认证是最简单的设置远程SSH访问的方法，需要完成下列任务以设置：
+
+1. 安装并正确配置OpenSSH服务器。
+2. 在远程机器上运行SSH守护进程（sshd），并确保任何sshd使用的端口（默认22端口）没有被防火墙拦截。
+3. 在客户端机器上安装SSH客户端。
+4. 登录远程计算机的用户账户。
+5. 服务器上的主机密钥，主机密钥中的公钥必须分发给客户端。最简单的方式是从客户端登录，然后由OpenSSH传输密钥。主机密钥交换只发生一次（第一次登录时），之后除非更换密钥或删除`~/.ssh/kown_hosts`中的密钥，否则ssh不会再询问密钥。
+
+```shell
+# 通过`用户名@主机名或IP地址`的方式来指定登录到SSH服务器的用户
+ssh username@hostname|ipaddress
+
+# 如果SSH客户端的用户名和SSH服务器的用户名相同，则只需要输入主机名或IP地址即可
+ssh hostname|ipaddress
+```
+
+### 获取密钥指纹
+
+```shell
+# 服务器运行，指定主机密钥
+ssh-keygen -lf /etc/ssh/ssh_host_rsa_key
+```
+
+### 使用公钥认证
+
+- Linux用户可以创建任意数量的SSH密钥。可以使用一个密钥来访问多个远程主机，或者为每个远程主机创建一个唯一的密钥。
+
+```shell
+# 创建一对RSA密钥
+# ssh-keygen -C "注释信息" -f 密钥名称 -t rsa -b 4096
+ssh-keygen -C "zjk-pi's rsa key" -f ~/.ssh/pi-key -t rsa -b 4096
+
+# 使用ssh-copy-id 将新密钥复制到远程计算机
+# ssh-copy-id -i 密钥名称 用户名@远程主机
+ssh-copy-id -i ~/.ssh/pi-key zjk@zjk-pi.local
+
+# 使用RAS密钥登录
+# ssh -i 密钥名称 用户名@远程主机
+ssh -i pi-key zjk@zjk-pi.local
+```
+
+#### 查看私钥与公钥
+
+```shell
+# 确保私钥归root用户所有，权限为只读；而公钥归root用户所有，权限为读写，其余用户可读。
+ls -l /etc/ssh
+```
+
+#### ssh-copy-id
+
+- `ssh-copy-id`工具可确保公钥以正确的格式、正确的权限、复制到正确的位置（`~/.ssh/authorized_keys`）。
+
+<table>
+    <tr>
+        <td width="5%">-C</td>
+        <td width="42.5%">向密钥添加注释</td>
+        <td width="5%" rowspan="3"></td>
+        <td width="5%">-f</td>
+        <td width="42.5%">密钥的名称</td>
+    </tr>
+    <tr>
+        <td>-t</td>
+        <td>密钥类型，ras、ecdsa、ed25519</td>
+        <td>-b</td>
+        <td>位强度，只有rsa类型接受该选项，默认为2048，最大为4096。位越多意味着处理所耗费的资源越多</td>
+    </tr>
+    <tr>
+        <td>-i</td>
+        <td>告诉SSH客户端应该使用哪个密钥；当客户端有多个密钥时必须指定该选项</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+#### 管理多个公钥
+
+- `~/.ssh/config`文件可以配置各种远程主机的登录账户，以便管理公钥。按如下格式可配置多个公钥的登录信息：
+
+```
+Host 登录时使用的标签
+  HostName SSH服务器的主机名或IP地址
+  User SSH服务器上的用户名
+    IdentityFile 使用的公钥（~/.ssh/密钥名称）
+    # 仅使用~/.ssh/config中的设置
+    IdentitiesOnly yes
+    Port 服务器SSH使用的端口号
+```
+
+```shell
+Host zjk-pi
+        HostName zjk-pi.local
+        User zjk
+                IdentityFile ~/.ssh/pi-key
+                IdentitiesOnly yes
+```
+
+#### 修改私钥密码
+
+- 私钥的密码是不可恢复的，如果密码丢失，只能重新创建一个私钥并设置密码。
+
+```shell
+# 修改私钥密码
+ssh-keygen -p -f ~/.ssh/私钥名
+```
+
+#### 删除密钥
+
+```shell
+# 删除对应主机（zjk-pi.local）的密钥
+ssh-keygen -R zjk-pi.local
+```
+
+1. 删除本地密钥对
+
+```shell
+# 删除私钥
+rm ~/.ssh/pi-key
+
+# 删除私钥对应的公钥（默认情况下，公钥名为私钥名加上.pub后缀）
+rm ~/.ssh/pi-key.pub
+```
+
+2. 如果已将公钥添加到SSH代理或配置文件中，也需移除：
+
+```shell
+# 如果使用了ssh-agent，可以先清理掉（假设你已经添加到了ssh-agent中）
+ssh-add -d ~/.ssh/pi-key
+
+# 检查并编辑 SSH 配置文件（如需要）
+vi ~/.ssh/config
+# 在配置文件中查找并删除与 zjk_pi_ssh_rsa_key 相关的行
+```
+
+3. 从远程主机 `zjk-pi.local` 上移除公钥： 登录到远程主机，并在远程主机上操作，找到存放`authorized_keys`文件的位置（通常是`~/.ssh/authorized_keys`），然后从该文件中删除对应的公钥。
+
+```shell
+# 登录到远程主机
+ssh zjk@zjk-pi.local
+
+# 切换到.zshrc或.bashrc等合适的shell配置文件，检查是否有关于此密钥的别名或其他引用，如果有则删除
+vi ~/.bashrc # 或者是 ~/.zshrc 等
+
+# 找到 authorized_keys 文件
+cd ~/.ssh
+vi authorized_keys
+
+# 在 authorized_keys 文件中找到并删除对应公钥行
+# 通常这可以通过复制粘贴或手动比对公钥内容来完成
+
+# 保存并退出编辑器
+:wq
+
+# 可选地，重新加载 shell 配置以确保更改生效
+source ~/.bashrc
+```
+
+## Keychain 自动管理密码
+
+- Keychain是ssh-agent和gpg-agent的管理器，只要计算机处于开机状态，就可以缓存SSH和GPG的密码，只有重启后才需要重新输入密码。
+
+- Keychain可以一直保持私钥有效直到计算机关闭，因此每次启动计算机都需要输入私钥密码。对于图形化界面，可能需要打开终端再输入私钥密码。
+
+```shell
+# 添加配置到.bashrc文件，如下配置：
+keychain ~/.ssh/密钥1名称 ~/.ssh/密钥2名称 . ~/.keychain/$HOSTNAME-sh
+```
+
+### 为Cron提供私钥密码
+
+# X会话隧道
+
+# sshfs
+
+- sshfs ：挂载整个远程文件系统，以像本地文件系统一样使用。
+
+```shell
+# 安装sshfs的同时会安装 FUSE（Filesystem in Userspace，用户空间中的文件系统）
+sudo apt install sshfs
+
+# 创建本地挂载点
+mkdir mysshfs
+
+# 将远程目录挂载到本地sshfs目录中，之后可像本地文件系统一样使用
+# sshfs 用户名@主机:/目录 本地挂载点/
+sshffs zjk@zjk-pi:/home/zjk/ mysshfs/
+
+# 卸载远程文件系统
+fusermount -u mysshfs/
+
+# 若网络连接不稳定，可以告诉sshfs在中断后自动重新连接
+# sshfs 用户名@主机:/目录 本地挂载点/ -o reconnect
+sshfs zjk@zjk-pi:/home/zjk/ mysshfs/ -o reconnect
+```
 
