@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-02-27T04:37:18.240Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="s9qe_zlgevVlF_aqY1n1" version="21.4.0" type="device" pages="40">
+<mxfile host="Electron" modified="2024-02-27T08:31:54.752Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="7FRM-oDCZoCnRi9IywWH" version="21.4.0" type="device" pages="41">
   <diagram name="核心部分和边缘部分" id="5RJuf0KVygsoXLDJJIir">
     <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -7687,12 +7687,20 @@
           <mxGeometry x="-40" y="140" width="830" height="80" as="geometry" />
         </mxCell>
         <mxCell id="6CLsrYrai5r5XwhW-l8c-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;OSI参考模型&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-40" y="430" width="90" height="30" as="geometry" />
+          <mxGeometry x="-40" y="420" width="90" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="RDICqPR5pr0Z-N_q-VGY" name="Page-40">
+  <diagram id="RDICqPR5pr0Z-N_q-VGY" name="路由表和转发表">
+    <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="nAhn0LSY9ZPEjIg-XAeE" name="Page-41">
     <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
