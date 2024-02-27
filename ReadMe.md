@@ -241,9 +241,8 @@
 
 <table>
     <tr>
-        <td rowspan="22" width="15%">Oracle</td>
         <td rowspan="11" width="20%">基础篇</td>
-        <td width="65%"><a href="./Books/SQL/SQL概念与事务.md">概述与事务</a></td>
+        <td width="80%"><a href="./Books/SQL/SQL概念与事务.md">概述与事务</a></td>
     </tr>
     <tr>
         <td><a href="./Books/Oracle/权限管理.md">权限管理</a></td>
@@ -309,27 +308,21 @@
     <tr>
         <td><a href="./Books/Oracle/源码导出与加密.md">源码导出与加密</a></td>
     </tr>
-    <tr>
-        <td>MySQL</td>
-        <td><a href="./Books/MySQL/基础篇.md">基础篇</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>MongoDB</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Cassandra</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Redis</td>
-        <td><a href="./Books/NoSQL/Redis/数据结构与编码.md">数据结构与编码</a></td>
-        <td></td>
-    </tr>
 </table>
+
+## MySQL
+
+### [基础篇](./Books/MySQL/基础篇.md)
+
+## MongoDB
+
+## Cassandra
+
+## Redis
+
+### [数据结构与编码](./Books/NoSQL/Redis/数据结构与编码.md)
+
+## [数据挖掘导论 Data Mining](./Books/数据库理论/数据挖掘导论.md)
 
 # Java
 
@@ -480,64 +473,76 @@
         <td></td>
     </tr>
 </table>
-
 # JavaWeb
 
-<table>
-    <tr>
-        <td rowspan="3" width="10%">工具篇</td>
-        <td width="20%"><a href="./Books/BuildTools/Git.md">Git 版本控制</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/BuildTools/Maven.md">Maven 依赖管理</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/BuildTools/Node.md">Node.js JS环境</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="3">后端篇</td>
-        <td><a href="./Books/Java/Servlet.md">Servlet</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Spring.md">Spring</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Spring/MyBatis.md">MyBatis</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="4">前端篇</td>
-        <td><a href="./Books/前端/HTML.md">HTML</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/前端/CSS.md">CSS</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/前端/JavaScript.md">JavaScript</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/前端/Vue.md">Vue</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+## 工具篇
+
+### [Git 版本控制](./Books/BuildTools/Git.md)
+
+### [Maven 依赖管理](./Books/BuildTools/Maven.md)
+
+### [Node.js JS环境](./Books/BuildTools/Node.md)
+
+## 后端篇
+
+### [Servlet API](./Books/Java/Servlet.md)
+
+### Spring
+
+#### Spring 基本
+
+| 基本思想                              | 说明                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                           |
+| [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
+| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
+
+[MVC框架](./Books/Spring/MVC.md)
+
+#### Spring Boot
+
+| Initializr结构                                               | 说明             |
+| ------------------------------------------------------------ | ---------------- |
+| [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类 |
+| /static                                                      | 静态资源         |
+| /templates                                                   | 模板文件         |
+| application.properties<br />application.yml                  | 配置文件         |
+
+- Starter依赖管理（spring\-boot\-starter）：Spring对依赖包的集中描述，本身不包含库代码，而是传递性地拉取其他库。
+- [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
+- [配置属性](./Books/Spring/properties.md)：Spring从各个属性源获取数据并注入到各个Bean。
+
+| 依赖库                                     | 功能                                                         |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| [Lombok](./Books/Spring/Lombok.md)         | 编译期自动生成类的方法（@Data），生成jar、war时自动剔除Lombok |
+| [视图模板库](./Books/Spring/View.md)       | [Thymeleaf](./Books/Spring/Thymeleaf.md)                     |
+| [validation](./Books/Spring/validation.md) | 校验（JSR-303）                                              |
+
+> 模板缓存：模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）：spring.thymeleaf.cache。
+>
+
+#### Spring Data
+
+| 依赖库                                               | 说明                       |
+| ---------------------------------------------------- | -------------------------- |
+| [JDBC](./Books/Spring/JDBC.md)                       |                            |
+| [JPA](./Books/Spring/JPA.md)                         | 适用于SQL和NoSQL           |
+| [Cassandra](./Books/Spring/Cassandra.md)             |                            |
+| [MongoDB](./Books/Spring/MongoDB.md)                 |                            |
+| [Spring Data REST](./Books/Spring/SpringDataREST.md) | 基于储存库自动生成REST API |
+
+### [MyBatis](./Books/Spring/MyBatis.md)
+
+## 前端篇
+
+### [HTML]((./Books/前端/HTML.md))
+
+### [CSS](./Books/前端/CSS.md)
+
+### [JavaScript](./Books/前端/JavaScript.md)
+
+### [Vue](./Books/前端/Vue.md)
+
 
 # [JVM](./Books/JVM/JVM概述.md)
 
@@ -806,32 +811,14 @@
 
 ### [计算机系统概述](./Books/Computer/计算机系统概述.md)
 
-
 # 管理
 
-<table>
-        <tr>
-        <td><a href="./Books/MIS/MIS.md">信息管理系统 MIS</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Others/Logistics.md">物流基础 Logistics</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Others/OperationsManagement.md">运营管理</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Others/OperationsManagement.md">公司理财</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+## [信息管理系统 MIS](./Books/MIS/MIS.md)
+
+## [物流基础 Logistics](./Books/Others/Logistics.md)
+
+## [运营管理 Operations Management](./Books/Others/OperationsManagement.md)
+
+## [公司理财 Corporate Finance](./Books/Others/CorporateFinance.md)
+
+## [IT项目管理](./Books/MIS/IT项目管理.md)
