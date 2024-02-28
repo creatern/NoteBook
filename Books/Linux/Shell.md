@@ -1,17 +1,34 @@
 # shell概述
 
-## bash
+- GNU/Linux shell是一种特殊的交互式工具，为用户提供了启动程序、管理文件系统中的文件以及在Linux系统中的进程的途径。Linux启动时，最先进入内存的是内核，并常驻内存。然后进行系统引导，引导过程中启动所有进程的父进程在后台运行，直到相关的系统资源初始化完毕后，等待用户登录。用户登录时，通过登录进程验证用户的合法性。用户验证通过后根据用户的设置启动相关的shell，以便接收用户输入的命令并返回执行结果。
+- shell的核心是命令行提示符，负责shell的交互部分，运行用户输入文本命令，然后解释命令并在内核中执行。shell包含一组内部命令，可用于完成复制文件、移动文件、重命名文件、显示和终止系统中正在运行的程序这类操作；此外，shell还允许在命令行提示符中输入程序的名称，并由其将程序名称传递给内核以启动程序。也可以将多个shell命令放入文件（shell 脚本）中作为程序执行。
 
-- bash（Bourne Again Shell，/bin/bash）：Linux中的默认shell，提供用户与操作系统进行交互操作的接口，提供脚本语言编程环境。
+<img src="../../pictures/Linux-user-shell-sys.drawio.svg" width="408"/> 
 
-| shell     | 说明                                                         |
-| --------- | ------------------------------------------------------------ |
-| /bin/bash | 用户默认shell，用户登录某个虚拟控制台终端或在GUI中运行终端仿真器时启动 |
-| /bin/sh   | 系统默认shell，启动时需要使用的系统shell脚本                 |
+- bash（Bourne Again Shell，/bin/bash）是所有Linux发行版的默认shell，提供用户与操作系统进行交互操作的接口，提供脚本语言编程环境。
 
-- Linux启动时，最先进入内存的是内核，并常驻内存。然后进行系统引导，引导过程中启动所有进程的父进程在后台运行，直到相关的系统资源初始化完毕后，等待用户登录。用户登录时，通过登录进程验证用户的合法性。用户验证通过后根据用户的设置启动相关的Shell，以便接收用户输入的命令并返回执行结果。
-
-<img src="../../pictures/Linux-user-shell-sys.drawio.svg" width="508"/> 
+<table>
+    <tr>
+        <th width="10%">shell</th>
+        <th width="90%">描述</th>
+    </tr>
+    <tr>
+        <td>ash</td>
+        <td>一种简单的轻量级shell，运行在内存受限环境中，与bash shell完全兼容</td>
+    </tr>
+    <tr>
+        <td>korn</td>
+        <td>一种与Bourne shell兼容的编程shell，支持如关联数组和浮点算术等高级编程特性</td>
+    </tr>
+    <tr>
+        <td>tcsh</td>
+        <td>一种将C语言中的一些元素引入shell脚本的shell</td>
+    </tr>
+    <tr>
+        <td>zsh</td>
+        <td>一种结合了bash、tcsh和korn的特性，同时提供高级编程特性、共享历史文件和主题化提示符的高级shell</td>
+    </tr>
+</table>
 
 ## shell的父子关系
 

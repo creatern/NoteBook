@@ -377,17 +377,17 @@ keychain ~/.ssh/密钥1名称 ~/.ssh/密钥2名称 . ~/.keychain/$HOSTNAME-sh
 sudo apt install sshfs
 
 # 创建本地挂载点
-mkdir mysshfs
+mkdir ~/MyDisk/mysshfs
 
 # 将远程目录挂载到本地sshfs目录中，之后可像本地文件系统一样使用
 # sshfs 用户名@主机:/目录 本地挂载点/
-sshffs zjk@zjk-pi:/home/zjk/ mysshfs/
+sshfs zjk@zjk-pi:/home/zjk/Docs ~/MyDisk/mysshfs
 
 # 卸载远程文件系统
-fusermount -u mysshfs/
+fusermount -u ~/MyDisk/mysshfs/
 
 # 若网络连接不稳定，可以告诉sshfs在中断后自动重新连接
 # sshfs 用户名@主机:/目录 本地挂载点/ -o reconnect
-sshfs zjk@zjk-pi:/home/zjk/ mysshfs/ -o reconnect
+sshfs zjk@zjk-pi:/home/zjk/Docs ~/MyDisk/mysshfs/ -o reconnect
 ```
 

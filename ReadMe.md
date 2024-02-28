@@ -241,8 +241,8 @@
 
 <table>
     <tr>
-        <td rowspan="11" width="20%">基础篇</td>
-        <td width="80%"><a href="./Books/SQL/SQL概念与事务.md">概述与事务</a></td>
+        <td rowspan="11" width="10%">基础篇</td>
+        <td width="90%"><a href="./Books/SQL/SQL概念与事务.md">概述与事务</a></td>
     </tr>
     <tr>
         <td><a href="./Books/Oracle/权限管理.md">权限管理</a></td>
@@ -309,6 +309,7 @@
         <td><a href="./Books/Oracle/源码导出与加密.md">源码导出与加密</a></td>
     </tr>
 </table>
+
 
 ## MySQL
 
@@ -697,7 +698,7 @@
 
 ### [用户管理](./Books/Linux/用户管理.md)
 
-### [界面与连接](./Books/Linux/界面与连接.md)
+### [界面与CLI](./Books/Linux/界面与连接.md)
 
 ## 系统篇
 
@@ -708,8 +709,6 @@
 ### [网络管理](./Books/Linux/网络管理.md)
 
 ### [磁盘管理](./Books/Linux/磁盘管理.md)
-
-### [电源管理](./Books/Linux/电源管理.md)
 
 ### [硬件信息](./Books/Linux/硬件信息.md)
 
@@ -735,6 +734,8 @@
 
 #### [NAT](./Books/Linux/NAT.md)
 
+#### [OpenVPN](./Books/Linux/OpenVPN.md)
+
 ### 服务部署
 
 #### [SSH](./Books/Linux/SSH.md)
@@ -743,7 +744,7 @@
 
 #### [Nginx](./Books/Linux/Nginx.md)
 
-## Shell篇
+## [Shell篇](./Books/Linux/Shell.md)
 
 ## Kernel篇
 
