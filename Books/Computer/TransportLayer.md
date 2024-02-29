@@ -319,7 +319,7 @@ Socket = (IP地址: 端口号)
 
 ### 三次握手 TCP连接的建立
 
-<img src="../../pictures/计算机网络-TCP三次握手.drawio.svg" width="480"/> 
+<img src="../../pictures/计算机网络-TCP三次握手.drawio.svg" width="580"/> 
 
 0. 建立连接之前，服务器进程处于<b>LISTEN</b>（收听）状态，等待客户的连接请求。
 1. <b>第一次握手</b>，客户机的TCP首先向服务器的TCP发送<b>连接请求报文段（SYN=1, seq=x）</b>。TCP规定SYN报文段不能携带数据，且要消耗一个序号。此时，TCP客户进程进入<b>SYN-SENT</b>（同步已发送）状态。
@@ -329,7 +329,7 @@ Socket = (IP地址: 端口号)
 
 ### 四次挥手 TCP连接的释放
 
-<img src="../../pictures/计算机网络-TCP四次挥手.drawio.svg" width="580"/> 
+<img src="../../pictures/计算机网络-TCP四次挥手.drawio.svg" width="650"/> 
 
 - 参与TCP连接的两个进程中的任何一个都能终止该连接。
 
