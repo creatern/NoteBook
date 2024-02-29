@@ -1,228 +1,3 @@
-<table>
-    <tr>
-        <td width="100px">C/C++</td>
-        <td width="150px"></td>
-        <td width="200px"></td>
-        <td width="200px"></td>
-        <td width="200px"></td>
-    </tr>
-    <tr>
-        <td>Kotlin</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="2">Android</td>
-        <td><a href="./Books/BuildTools/Gradle.md">Gradle 依赖配置</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Android/Android.md">基础篇</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="33">软件设计</td>
-        <td rowspan="10">UML</td>
-        <td><a href="./Books/Algorithm/基本元素.md">基本元素</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/关系元素.md">关系元素</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/视图和图.md">视图和图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/静态视图.md">静态视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/用例视图.md">用例视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/状态机视图.md">状态机视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/活动视图.md">活动视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/物理视图.md">物理视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/模型管理视图.md">模型管理视图</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Rational_Rose.md">Rational Rose</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="22">GOF</td>
-        <td><a href="./Books/Algorithm/设计原则.md">设计原则</a></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="3">创建型</td>
-        <td><a href="./Books/Algorithm/Factory.md">工厂模式 Factory</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/SingleTon.md">单例模式 SingleTon</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Builder.md">建造者模式 Builder</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="7">结构型</td>
-        <td><a href="./Books/Algorithm/Adapter.md">适配器模式 Adapter</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Bridge.md">桥接模式</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Decorator.md">装饰者模式 Decorator</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Composite.md">组合模式 Composite</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Facade.md">外观模式 Facade</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Flyweight.md">享元模式 Flyweight</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Proxy.md">代理模式 Proxy</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="11">行为型</td>
-        <td><a href="./Books/Algorithm/Template.md">模板方法模式 Template</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Command.md">命令模式 Command</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Visitor.md">访问者模式 Visitor</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Iterator.md">迭代器模式 Iterator</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Observer.md">观察者模式 Observer</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Mediator.md">中介者模式 Mediator</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Memento.md">备忘录模式 Memento</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Interpreter.md">解释器模式 Interpreter</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/State.md">状态模式 State</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/Strategy.md">策略模式 Strategy</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/ChainOfResponsibility.md">职责链模式 Chain of Responsibility</a></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Algorithm/多线程设计模式.md">多线程设计模式</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td rowspan="7">数学</td>
-        <td>高等数学</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>线性代数</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Mathematics/Operations.md">运筹学</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>概率论与数理统计</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="./Books/Mathematics/Statistics.md">统计学 Statistics</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>离散数学</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>图论</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
-
-
 # 数据库
 
 ## 数据库系统概念
@@ -810,6 +585,179 @@
 
 ### [计算机系统概述](./Books/Computer/计算机系统概述.md)
 
+# 软件设计
+
+<table>
+   <tr>
+        <td rowspan="33">软件设计</td>
+        <td rowspan="10">UML</td>
+        <td><a href="./Books/Algorithm/基本元素.md">基本元素</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/关系元素.md">关系元素</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/视图和图.md">视图和图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/静态视图.md">静态视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/用例视图.md">用例视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/状态机视图.md">状态机视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/活动视图.md">活动视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/物理视图.md">物理视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/模型管理视图.md">模型管理视图</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Rational_Rose.md">Rational Rose</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td rowspan="22">GOF</td>
+        <td><a href="./Books/Algorithm/设计原则.md">设计原则</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td rowspan="3">创建型</td>
+        <td><a href="./Books/Algorithm/Factory.md">工厂模式 Factory</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/SingleTon.md">单例模式 SingleTon</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Builder.md">建造者模式 Builder</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td rowspan="7">结构型</td>
+        <td><a href="./Books/Algorithm/Adapter.md">适配器模式 Adapter</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Bridge.md">桥接模式</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Decorator.md">装饰者模式 Decorator</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Composite.md">组合模式 Composite</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Facade.md">外观模式 Facade</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Flyweight.md">享元模式 Flyweight</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Proxy.md">代理模式 Proxy</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td rowspan="11">行为型</td>
+        <td><a href="./Books/Algorithm/Template.md">模板方法模式 Template</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Command.md">命令模式 Command</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Visitor.md">访问者模式 Visitor</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Iterator.md">迭代器模式 Iterator</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Observer.md">观察者模式 Observer</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Mediator.md">中介者模式 Mediator</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Memento.md">备忘录模式 Memento</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Interpreter.md">解释器模式 Interpreter</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/State.md">状态模式 State</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/Strategy.md">策略模式 Strategy</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/ChainOfResponsibility.md">职责链模式 Chain of Responsibility</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="./Books/Algorithm/多线程设计模式.md">多线程设计模式</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+
+# 数学
+
+## 高等数学
+
+## 线性代数
+
+## [运筹学](./Books/Mathematics/Operations.md)
+
+## 概率论与数理统计
+
+## [统计学 Statistics](./Books/Mathematics/Statistics.md)
+
+## 离散数学
+
+## 图论
+
 # 管理
 
 ## [信息管理系统 MIS](./Books/MIS/MIS.md)
@@ -821,3 +769,13 @@
 ## [公司理财 Corporate Finance](./Books/Others/CorporateFinance.md)
 
 ## [IT项目管理](./Books/MIS/IT项目管理.md)
+
+# Android
+
+## [Gradle 依赖配置](./Books/BuildTools/Gradle.md)
+
+## [基础篇](./Books/Android/Android.md)
+
+## Kotlin
+
+# C/C++
