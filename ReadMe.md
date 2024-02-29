@@ -178,13 +178,6 @@
         <td></td>
     </tr>
     <tr>
-        <td>极客</td>
-        <td><a href="./Books/Linux/RasberryPi.md">Rasberry Pi</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
         <td rowspan="7">数学</td>
         <td>高等数学</td>
         <td></td>
@@ -228,6 +221,7 @@
         <td></td>
     </tr>
 </table>
+
 
 # 数据库
 
@@ -747,6 +741,8 @@
 ## [Shell篇](./Books/Linux/Shell.md)
 
 ## Kernel篇
+
+## [Rasberry Pi](./Books/Linux/RasberryPi.md)
 
 # 算法
 
