@@ -1,11 +1,24 @@
 # shell概述
 
 - GNU/Linux shell是一种特殊的交互式工具，为用户提供了启动程序、管理文件系统中的文件以及在Linux系统中的进程的途径。Linux启动时，最先进入内存的是内核，并常驻内存。然后进行系统引导，引导过程中启动所有进程的父进程在后台运行，直到相关的系统资源初始化完毕后，等待用户登录。用户登录时，通过登录进程验证用户的合法性。用户验证通过后根据用户的设置启动相关的shell，以便接收用户输入的命令并返回执行结果。
-- shell的核心是命令行提示符，负责shell的交互部分，运行用户输入文本命令，然后解释命令并在内核中执行。shell包含一组内部命令，可用于完成复制文件、移动文件、重命名文件、显示和终止系统中正在运行的程序这类操作；此外，shell还允许在命令行提示符中输入程序的名称，并由其将程序名称传递给内核以启动程序。也可以将多个shell命令放入文件（shell 脚本）中作为程序执行。
+- shell的核心是命令行提示符（CLI），负责shell的交互部分，运行用户输入文本命令，然后解释命令并在内核中执行。shell包含一组内部命令，可用于完成复制文件、移动文件、重命名文件、显示和终止系统中正在运行的程序这类操作；此外，shell还允许在命令行提示符中输入程序的名称，并由其将程序名称传递给内核以启动程序。也可以将多个shell命令放入文件（shell 脚本）中作为程序执行。
 
 <img src="../../pictures/Linux-user-shell-sys.drawio.svg" width="408"/> 
 
-- bash（Bourne Again Shell，/bin/bash）是所有Linux发行版的默认shell，提供用户与操作系统进行交互操作的接口，提供脚本语言编程环境。
+## shell的类型
+
+<table>
+    <tr>
+        <td width="15%">默认shell</td>
+        <td width="85%">用户登录虚拟控制台终端时默认启动的shell</td>
+    </tr>
+    <tr>
+        <td>默认的系统shell</td>
+        <td>用于需要在启动时使用的系统shell脚本</td>
+    </tr>
+</table>
+
+- bash（Bourne Again Shell，/bin/bash）是所有Linux发行版的默认shell，提供用户与操作系统进行交互操作的接口，提供脚本语言编程环境。即，bash通常作为默认的交互式shell（default interactive shell）也就是登录shell（login shell），只要某个用户登录虚拟控制台终端或在GNU中启动终端仿真器就会启动该shell。
 
 <table>
     <tr>
@@ -28,24 +41,151 @@
         <td>zsh</td>
         <td>一种结合了bash、tcsh和korn的特性，同时提供高级编程特性、共享历史文件和主题化提示符的高级shell</td>
     </tr>
+    <tr>
+        <td>dash</td>
+        <td>Debian Almquist Shell，dash比bash小的多，是由bash移植到Debian系列</td>
+    </tr>
 </table>
+
+- sh是默认的系统shell（default systen shell），用于那些需要在启动时使用的系统shell脚本。
+
+```shell
+# sh 通常位于/usr/bin/sh
+which sh
+
+# 不同的发行版，sh指向的shell不同。Redhat系使用bash，而Debian系使用dash 
+ll /usr/bin/sh
+# /usr/bin/sh -> dash*
+```
+
+```shell
+# 在当前shell进程中查看shell名称的方式
+echo $0
+```
 
 ## shell的父子关系
 
-- 用户在默认shell中输入/bin/bash或其他的bash命令时，会创建一个新的子shell，此时该shell就是这个子shell的父进程；创建子shell的代价较高，需要为该子shell创建新的环境。
+- 用户登录虚拟控制台终端（Terminal等）时，自动使用并进入默认shell（通常是bash）。此时，输入启动其他shell的命令时（bash、dash等），会启用（进入）指定的shell。此时，默认shell就是这个子shell的父进程（父shell）。
+- 创建子shell的代价较高，需要为该子shell创建新的环境。子shell同样具有CLI提示符并会等待命令输入。
+
+```
+zjk@zjk-laptop:~$ dash
+$ bash 
+zjk@zjk-laptop:~$ ps -f
+UID          PID    PPID  C STIME TTY          TIME CMD
+zjk        18945   18919  0 19:37 pts/0    00:00:00 bash
+zjk        18951   18945  0 19:37 pts/0    00:00:00 dash
+zjk        18952   18951  0 19:37 pts/0    00:00:00 bash
+zjk        18958   18952  0 19:37 pts/0    00:00:00 ps -f
+zjk@zjk-laptop:~$ exit
+exit
+$ ps -f
+UID          PID    PPID  C STIME TTY          TIME CMD
+zjk        18945   18919  0 19:37 pts/0    00:00:00 bash
+zjk        18951   18945  0 19:37 pts/0    00:00:00 dash
+zjk        18959   18951  0 19:37 pts/0    00:00:00 ps -f
+$ exit 
+zjk@zjk-laptop:~$ ps -f
+UID          PID    PPID  C STIME TTY          TIME CMD
+zjk        18945   18919  0 19:37 pts/0    00:00:00 bash
+zjk        18960   18945  0 19:37 pts/0    00:00:00 ps -f
+```
+
+<img src="../../pictures/Linux-shell的父子关系.drawio.svg" width="870"/> 
 
 ```shell
 # 查看当前shell的子shell数量
 echo $BASH_SUBSHELL
 ```
 
-| 操作符                | 说明                                                         |
-| --------------------- | ------------------------------------------------------------ |
-| `(命令; 命令; 命令) ` | 生成一个子shell，并由其按括号内的命令依次执行，执行完成之后，该子shell自动被杀死 |
-| `命令; 命令`          | 命令列表                                                     |
-| `{命令; 命令}`        | coproc协程                                                   |
+### 命令列表与进程列表
 
-## bashrc
+<table>
+    <tr>
+        <td width="12%">进程列表</td>
+        <td width="20%">(命令; 命令; 命令)</td>
+        <td width="68%">生成一个子shell，并由其按括号内的命令依次执行，执行完成之后，该子shell自动被杀死</td>
+    </tr>
+    <tr>
+        <td>命令列表</td>
+        <td>命令; 命令</td>
+        <td>依次执行命令</td>
+    </tr>
+    <tr>
+        <td>coproc协程</td>
+        <td>{命令; 命令}</td>
+        <td>同时处理两件事情，后台生成一个子shell并在该子shell中执行命令</td>
+    </tr>
+</table>
+
+### 子shell与后台模式
+
+- 将子shell搭配[后台模式](./进程管理.md#后台模式)（`&`或`bg`）或协程（[coproc](./进程管理.md#coproc)）可以发挥出类似多线程的效果。
+
+### 外部命令与内建命令
+
+<table>
+    <tr>
+        <td width="10%" rowspan="3">外部命令</td>
+        <td width="90%">文件系统命令，是存在于bash shell之外的程序，并不属于shell程序的一部分</td>
+    </tr>
+    <tr>
+        <td>外部命令执行时会产生一个子shell（衍生，forking），因此外部命令系统开销较大</td>
+    </tr>
+    <tr>
+        <td>外部命令通常位于/bin、/usr/bin、/usr/sbin</td>
+    </tr>
+    <tr>
+        <td>内建命令</td>
+        <td>不需要子进程执行，已和shell编译成一体，不需要借助外部程序文件来执行</td>
+    </tr>
+</table>
+
+- 对于具有多种实现的命令，如果想使用其外部命令实现，则直接指明对应的文件即可。
+
+#### type 查看命令类型
+
+```shell
+# type -a 显示每个命令的两种实现
+type -a pwd
+#pwd is a shell builtin
+#pwd is /usr/bin/pwd
+#pwd is /bin/pwd
+```
+
+<table><tbody><tr><th>常用类型</th><th>信息说明</th></tr><tr><td>builtin</td><td>内部指令</td></tr><tr><td>file</td><td>文件</td></tr><tr><td>function</td><td>函数</td></tr><tr><td>keyword</td><td>关键字</td></tr><tr><td>alias</td><td>别名</td></tr><tr><td>unfound</td><td>没有找到</td></tr></tbody></table>
+
+```shell
+type ls
+# ls is aliased to `ls --color=auto'
+
+type mv
+# mv is /usr/bin/mv
+
+type source
+# source is a shell builtin
+```
+
+#### which 查找命令文件
+
+- which：查找命令文件，能够快速搜索二进制程序所对应的位置。
+
+- which只显示文件命令文件。对于有多种方式实现的命令，如果需要指定为外部命令的方式实现，可以通过which找到相应的文件，直接执行该文件即可。
+
+>如果我们既不关心同名文件（find与locate），也不关心命令所对应的源代码和帮助文件（whereis），仅仅是想找到命令本身所在的路径，那么这个which命令就太合适了。
+
+<table><tbody><tr><td>-a</td><td>显示PATH变量中所有匹配的可执行文件</td></tr><tr><td>-n</td><td>设置文件名长度（不含路径）</td></tr><tr><td>-p</td><td>设置文件名长度（含路径）</td></tr><tr><td>-V</td><td>显示版本信息</td></tr><tr><td>-w&nbsp;</td><td>设置输出时栏位的宽度</td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--read-functions</td><td>从标准输入中读取Shell函数定义</td></tr><tr><td>--show-tilde</td><td>使用波浪线代替路径中的家目录</td></tr><tr><td>--skip-dot</td><td>跳过PATH变量中以点号开头的目录</td></tr></tbody></table>
+
+```shell
+# 查找多个指定命令文件的位置
+which ls who
+#/usr/bin/ls
+#/usr/bin/who  
+```
+
+## .bashrc
+
+- `.bashrc`：存储用户的个性化 Bash shell 设置，这些设置将在每次用户打开一个新的交互式 Shell 时自动加载执行。在该文件中，用户可以定义各种配置选项。每当用户登录到系统并在终端中打开一个新的 Bash shell 时，Bash 会读取并执行 `.bashrc` 文件中的命令。
 
 ### /etc/bashrc 
 
@@ -57,9 +197,7 @@ echo $BASH_SUBSHELL
 
 # shell相关命令
 
-##  命令别名
-
-### alias 别名
+## alias 命令别名
 
 - alias：设置指令的别名，只在当前shell起作用，未更改[/etc/bashrc](#bashrc)；对于个人专用的命令别名，应该在[\~/.bashrc](#bashrc)设置。
 
@@ -78,48 +216,11 @@ alias 别名='命令1;命令2'
 unalias 别名
 ```
 
-## 内建命令、外部命令
-
-| 命令形式 | 说明                                                         |
-| -------- | ------------------------------------------------------------ |
-| 内建命令 | 不需要子进程执行，已和shell编译成一体；不需要借助外部程序文件来执行 |
-| 外部命令 | 存在于bash shell之外的程序，并不是shell程序的一部分；执行时会创建一个子shell（衍生）<br />外部命令通常位于/bin、/usr/bin、/usr/sbin |
-
-### type 查看命令类型
-
-<table><tbody><tr><th>常用类型</th><th>信息说明</th></tr><tr><td>builtin</td><td>内部指令</td></tr><tr><td>file</td><td>文件</td></tr><tr><td>function</td><td>函数</td></tr><tr><td>keyword</td><td>关键字</td></tr><tr><td>alias</td><td>别名</td></tr><tr><td>unfound</td><td>没有找到</td></tr></tbody></table>
-
-```shell
-type ls
-# ls is aliased to `ls --color=auto'
-
-type mv
-# mv is /usr/bin/mv
-
-type source
-# source is a shell builtin
-```
-
-### which 查找命令文件
-
-- which：查找命令文件，能够快速搜索二进制程序所对应的位置。
-- 如果我们既不关心同名文件（find与locate），也不关心命令所对应的源代码和帮助文件（whereis），仅仅是想找到命令本身所在的路径，那么这个which命令就太合适了。
-- 对于有多种方式实现的命令，如果需要指定为外部命令的方式实现，可以通过which找到相应的文件，直接执行该文件即可。
-
-<table><tbody><tr><td>-a</td><td>显示PATH变量中所有匹配的可执行文件</td></tr><tr><td>-n</td><td>设置文件名长度（不含路径）</td></tr><tr><td>-p</td><td>设置文件名长度（含路径）</td></tr><tr><td>-V</td><td>显示版本信息</td></tr><tr><td>-w&nbsp;</td><td>设置输出时栏位的宽度</td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--read-functions</td><td>从标准输入中读取Shell函数定义</td></tr><tr><td>--show-tilde</td><td>使用波浪线代替路径中的家目录</td></tr><tr><td>--skip-dot</td><td>跳过PATH变量中以点号开头的目录</td></tr></tbody></table>
-
-```shell
-# 查找多个指定命令文件的位置
-which ls who
-#/usr/bin/ls
-#/usr/bin/who  
-```
-
 ## history 历史命令
 
-- history：查看历史命令记录
-- `$HISTSIZE`：最大保存的历史命令条数（默认1000条）
-- \~/\.bash\_history：历史命令文件；bash命令的历史记录先放在内存中，bash退出时才被写入到历史文件
+- `history`：查看历史命令记录。bash shell会跟踪最近使用过的命令。
+- `$HISTSIZE`：最大保存的历史命令条数（默认1000条）。
+- `~/.bash_history`：历史命令文件；在CLI会话期间，bash命令的历史记录会先放在内存中，等到shell退出时才被写入到历史文件。
 
 <table><tbody><tr><td>-a</td><td>保存命令记录</td></tr><tr><td>-c</td><td>清空命令记录</td></tr><tr><td>-d</td><td>删除指定序号的命令记录</td></tr><tr><td>-n</td><td>读取命令记录</td></tr><tr><td>-r</td><td>读取命令记录到缓冲区</td></tr><tr><td>-s</td><td>添加命令记录到缓冲区</td></tr><tr><td>-w</td><td>将缓冲区信息写入到历史文件</td></tr></tbody></table>
 
@@ -154,7 +255,7 @@ history -w
 !{prex}
 ```
 
-## 限时任务 timeout
+## timeout 限时任务
 
 - timeout：运行指定命令，若在指定时间后，该命令仍然在运行，则结束该命令的执行，并返回退出状态码`124`（\$? 获取）（未超时则正常返回）；以执行下一条命令（如果存在）。
 
