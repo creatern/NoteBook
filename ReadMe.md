@@ -511,7 +511,7 @@
 
 ## 线性代数
 
-## [运筹学](./Books/Mathematics/Operations.md)
+## [运筹学 Operations](./Books/Mathematics/Operations.md)
 
 ## 概率论与数理统计
 
