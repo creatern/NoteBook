@@ -317,6 +317,8 @@
 
 ### [日志与计划任务](./Books/Linux/日志与计划任务.md)
 
+### [systemctl 服务单元控制](./Books/Linux/服务单元控制.md)
+
 ### [防火墙](./Books/Linux/防火墙.md)
 
 ### [网络管理](./Books/Linux/网络管理.md)

@@ -183,17 +183,292 @@ which ls who
 #/usr/bin/who  
 ```
 
-## .bashrc
+## 启动文件
+
+- 启动文件（环境文件）：用户登录Linux系统启动bash shell，默认情况下bash会在几个文件（启动文件）中查找命令。
+- bash进程的启动文件取决于用户启动bash的方式：
+
+1. 登录时作为默认登录shell。
+2. 作为交互式shell，通过生成子shell启动。
+3. 作为运行脚本的非交互式shell。
+
+### 登录shell
+
+- bash通常作为登录shell启动，登录shell会从5个不同的启动文件中读取命令：
+
+<table>
+    <tr>
+        <td width="15%">/etc/profile</td>
+        <td width="85%">系统默认的bash shell主启动文件</td>
+    </tr>
+    <tr>
+        <td>$HOME/.bash_profile</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>$HOME/.bashrc</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>$HOME/.bash_login</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>$HOME/.profile</td>
+        <td></td>
+    </tr>
+</table>
+
+#### /etc/profile
+
+- <code><span name="/etc/profile">/etc/profile</span></code>：bash shell默认的主启动文件，只要登录Linux系统，bash就会执行`/etc/profile`文件中的命令。 不同的发行版对该文件的设置也不同。
+
+##### /etc/profile.d
+
+- `/etc/profile.d`：大多数的Linux发行版的/etc/profile文件都使用for语句来迭代/etc/profile.d目录下的所有文件。/etc/profile.d目录为Linux系统提供了一个放置特定应用程序启动文件和管理员自定义启动文件的地方，shell会在用户登录时执行这些文件。
+
+```shell
+# /etc/profile文件内的部分for语句
+if [ -d /etc/profile.d ]; then
+  for i in /etc/profile.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  unset i
+fi
+```
+
+- 大部分的应用程序会在/etc/profile.d目录中创建两个启动文件：一个供bash shell使用（.sh），一个供C shell使用（.csh）。
+
+```shell
+zjk@zjk-laptop:~$ ls /etc/profile.d
+01-locale-fix.sh       debuginfod.csh            vte-2.91.sh
+apps-bin-path.sh       debuginfod.sh             vte.csh
+bash_completion.sh     gnome-session_gnomerc.sh  xdg_dirs_desktop_session.sh
+cedilla-portuguese.sh  im-config_wayland.sh
+```
+
+##### /etc/bash.bashrc
+
+- <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。在Ubuntu发行版的/etc/profile文件中涉及到/etc/bash.bashrc文件。
+
+#### $HOME目录下的启动文件
+
+- `$HOME`目录下的启动文件都用于提供用户专属的启动文件来定义该用户所用到的环境变量，每个用户都可以对其编辑并添加自己的环境变量，其中的环境变量会在每次启动bash shell会话时生效。大部分的Linux发行版只使用以下四种启动文件的其中一种：
+
+<table>
+    <tr>
+        <td width="15%">$HOME/.bash_profile</td>
+        <td width="85%"></td>
+    </tr>
+    <tr>
+        <td>$HOME/.bashrc</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>$HOME/.bash_login</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>$HOME/.profile</td>
+        <td></td>
+    </tr>
+</table>
+
+- shell会按照如下顺序执行第一个被找到的文件，余下的则被忽略：`$HOME/.bash_profile`、`$HOME/.bash_login`、`$HOME/.profile`。而`$HOME/.bashrc`通常通过其他文件运行。
+
+##### $HOME/.bashrc 个性化bash
 
 - `.bashrc`：存储用户的个性化 Bash shell 设置，这些设置将在每次用户打开一个新的交互式 Shell 时自动加载执行。在该文件中，用户可以定义各种配置选项。每当用户登录到系统并在终端中打开一个新的 Bash shell 时，Bash 会读取并执行 `.bashrc` 文件中的命令。
 
-### /etc/bashrc 
+###### /etc/bashrc 
 
 - <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。
 
-### \~/.bashrc 
+###### \$HOME/.bashrc 
 
 - \~/.bashrc：专属于个人bash shell的信息；用户登录以及每次打开一个新的shell时，执行这个文件；在这个文件里可以自定义用户专属的个人信息。
+
+# Linux环境变量
+
+- bash shell使用环境变量来存储shell会话和工作环境的相关信息。环境变量允许在内存中存储数据，以便shell中运行的程序或脚本能够轻松访问到这些数据。
+
+<table>
+    <tr>
+        <th width="15%">变量类型</th>
+        <th width="10%">命名规范</th>
+        <th width="50%">可见性</th>
+        <th width="25%">声明与定义</th>
+    </tr>
+    <tr>
+        <td>全局环境变量</td>
+        <td>大写</td>
+        <td>对于shell会话和其所有生成的子shell都是可见的</td>
+        <td>export</td>
+    </tr>
+    <tr>
+        <td>局部环境变量</td>
+        <td>小写</td>
+        <td>仅创建该局部变量的当前shell可见</td>
+        <td>大部分方式</td>
+    </tr>
+</table>
+
+- 局部变量仅在创建其的shell进程中可见。如果进入到其子shell或父shell，则该局部变量不可见；但如果回到创建其的shell中，则可见。
+
+```shell
+zjk@zjk-laptop:~$ ihello="hello linux"
+zjk@zjk-laptop:~$ echo $ihello
+hello linux
+zjk@zjk-laptop:~$ bash
+zjk@zjk-laptop:~$ echo $ihello
+
+zjk@zjk-laptop:~$ exit
+exit
+zjk@zjk-laptop:~$ echo $ihello
+hello linux
+```
+
+## 查看环境变量
+
+### env
+
+- env：显示系统中已存在的环境变量；如果使用env命令在新环境中执行指令时，会因为没有定义环境变量“PATH”（/etc/profile）而提示错误信息，此时，用户可以重新定义一个新的“PATH”或者使用绝对路径。
+- env不对输出结果排序，不输出局部变量和用户定义变量；查看全局变量时，使用env、printenv。
+
+### printenv
+
+- printenv：不对输出结果排序，不输出局部变量和用户定义变量；查看个别环境变量时，使用printenv而不是env。
+
+### [set](#set)
+
+- set：显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量、用户定义变量；对输出的结果按照字母顺序来排序。
+
+## \$ 变量符
+
+- `$`表示对指定变量的引用。
+
+<table>
+    <tr>
+        <th width="10%">特殊变量</th>
+        <th width="90%">说明</th>
+    </tr>
+    <tr>
+        <td>$n</td>
+        <td>$0代表该脚本文件名；$1~$9代表该命令输入的第1~9个参数<br/>序号为10以上的参数用大括号包含，如${10}</td>
+    </tr>
+    <tr>
+        <td>$#</td>
+        <td>获取所有输入参数个数（常用于循环），判断参数的个数是否正确以及加强脚本的健壮性</td>
+    </tr>
+    <tr>
+        <td>$*</td>
+        <td>命令行中所有的参数，把所有的参数看成一个整体；被双引号“”包含时，$*以“$1 $2 …$n”的形式输出所有参数</td>
+    </tr>
+    <tr>
+        <td>$@</td>
+        <td>命令行中所有的参数，把每个参数区分对待；被双引号“”包含时，$@以“$1” “$2”...“$n”的形式输出所有参数</td>
+    </tr>
+    <tr>
+        <td>$?</td>
+        <td>最后一次执行的命令的返回状态<br />若该变量的值为0，则上一个命令执行正确；若该变量的值非0，则上一个命令执行错误</td>
+    </tr>
+</table>
+
+<img src="../../pictures/20231219083240.png" width="800"/> 
+
+## 变量定义与赋值
+
+- 用户自定义变量：变量名区分大小写，bash shell惯例所有的环境变量均使用大写字母，而用户自定义变量或局部变量则使用小写字母命名。
+
+1. 变量名称可以由字母、数字和下划线组成；但是不能以数字开头，环境变量名建议大写
+2. 变量定义和赋值时，等号两侧不能有空格
+3. 在 bash 中，变量默认类型都是字符串类型，无法直接进行数值运算
+4. 变量的值如果有空格，需要使用双引号或单引号括起来
+
+### declare 声明与显示
+
+- declare：声明和显示已存在的shell变量
+
+```shell
+变量名 = 变量值
+
+declare 变量名 = 变量值
+```
+
+### set 赋值与显示
+
+- <span name="set">set</span>：显示系统中已经存在的shell变量、设置shell变量的新变量值；不能定义新的shell变量。
+
+### readonly 只读变量
+
+- readonly：定义只读shell变量和shell函数。
+
+### export 全局环境变量
+
+- export：将shell变量、函数输出为全局环境变量。
+
+1. 在子shell中修改（或删除）全局变量，不会影响到父shell中该全局变量的值，只会影响该子shell以及其创建的子shell的全局变量的值。
+2. 一个变量创建时，它不会自动地为在它之后创建的shell进程所知；而export命令可以向后面的shell传递变量的值。即一个shell脚本被调用并执行时，它不会自动得到原为脚本（调用者）定义的变量的访问权，除非这些变量已经被显式地设置为可用。
+
+## unset 删除环境变量
+
+- unset：删除已定义的shell变量（包括环境变量）、shell函数；不能删除具有只读属性的shell变量和环境变量。
+
+##  系统环境变量
+
+- 在默认情况下，bash shell会用一些特定的环境变量（已经设置好的）来定义系统环境。
+
+| 系统变量 | 说明                                                         |
+| :------- | :----------------------------------------------------------- |
+| PATH     | 执行文件查找的路径（/etc/profile 路径文件）；文件查找的顺序与PATH的变量的顺序有关<br />目录与目录中间以:冒号隔开 |
+| HOME     | 当前用户主目录                                               |
+| USER     | 当前用户                                                     |
+| HISTSIZE | 代表可以容纳多少条历史命令                                   |
+| LOGNAME  | 当前用户的登录名                                             |
+| HOSTNAME | 指主机的名称                                                 |
+| SHELL    | 当前用户Shell类型                                            |
+| LANG     | 当前的语系类型                                               |
+| MAIL     | 当前用户的邮件存放目录                                       |
+| PS1      | 基本提示符                                                   |
+| RANDOM   | 随机数的变量                                                 |
+
+### PATH环境变量
+
+- PATH环境变量定义了查找命令和程序的目录。当用户在shell CLI中输入一个外部命令时，shell必须搜索系统，从中找到对应的程序。如果命令或程序所在的位置没有包括在PATH变量中，那么在不使用绝对路径的情况小，shell是无法找到的“command not found”。
+- PATH环境变量内的目录以冒号（`:`）分隔，shell会在其中查找命令和程序。PATH环境变量无须从头定义，而是在之后追加`:`和需要加入的目录即可。
+
+```shell
+# 查看PATH环境变量
+zjk@zjk-laptop:~$ echo $PATH
+/home/zjk/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/software/idea/bin:/usr/lib/jvm/jdk-17.0.9/bin:/opt/apache-maven-3.9.3/bin:/opt/gradle-8.2.1/bin:/opt/groovy-4.0.13/bin:/opt/node20.10.0/bin
+
+# 临时定义PATH
+PATH=$PATH:/opt/mysoft/bin
+
+# 在/etc/profile中永久定义PATH
+vim /etc/profile
+```
+
+## 语系变量 locale、localectl
+
+| 命令      | 说明                           |
+| --------- | ------------------------------ |
+| locale    | 当前软件的语系，不修改配置文件 |
+| localectl | 当前系统的语系，修改配置文件   |
+
+```shell
+# 设置当前系统语系 同时修改配置文件
+localectl set-locale LANG=en_US.UTF-8 
+```
+
+- `LANG`与`LC_ALL`：设置语系变量时，一般建议更改这两个变量，其他语系变量都会替换成`LANG`与`LC_ALL`这两个变量的值。`LANG`直接用=号赋值即可；而`LC_ALL`需要使用export设置。
+
+```shell
+LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+```
 
 # shell相关命令
 
@@ -302,6 +577,26 @@ ll /etc | grep "*.config"
 ls >myOutAndErr.txt 2>&
 ```
 
+## date 日期时间
+
+```shell
+date "+%Y-%m-%d %H:%M:%S"
+# 2023-12-31 10:24:53
+```
+
+## read 读取变量值
+
+- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
+
+```shell
+#!/bin/bash
+
+read -t 10 -p "请在10秒内输入: " x
+echo "输出：$x"
+```
+
+# shell脚本
+
 ## 脚本执行
 
 ### 直接执行
@@ -334,14 +629,7 @@ sh test.sh
 source test.sh
 ```
 
-## date 日期时间
-
-```shell
-date "+%Y-%m-%d %H:%M:%S"
-# 2023-12-31 10:24:53
-```
-
-## 开机自启动sh
+## 开机自启动的shell脚本
 
 - 加入到[Systemed](./服务单元控制.md)的服务单元中，作为服务被启动
 
@@ -372,7 +660,7 @@ RestartSec=10s
 WantedBy=default.target
 ```
 
-# 文本操作
+# 文本处理
 
 ## echo 格式化输出
 
@@ -494,160 +782,6 @@ echo "current position is `pwd`"
 echo 'current position is `pwd`'
 # current position is `pwd`
 ```
-
-## 变量
-
-### 全局变量与局部变量
-
-<table>
-    <tr>
-        <td>变量类型</td>
-        <td>命名规范</td>
-        <td>可见性</td>
-        <td>声明与定义</td>
-    </tr>
-    <tr>
-        <td>全局变量</td>
-        <td>大写</td>
-        <td>创建该全部变量shell，及其子shell</td>
-        <td>export</td>
-    </tr>
-    <tr>
-        <td>局部变量</td>
-        <td>小写</td>
-        <td>仅创建该局部变量的shell</td>
-        <td>大部分方式</td>
-    </tr>
-</table>
-
-### \$ 变量符
-
-<table>
-    <tr>
-        <th>特殊变量</th>
-        <th>说明</th>
-    </tr>
-    <tr>
-        <td>$n</td>
-        <td>$0代表该脚本文件名；$1~$9代表该命令输入的第1~9个参数<br/>序号为10以上的参数用大括号包含，如${10}</td>
-    </tr>
-    <tr>
-        <td>$#</td>
-        <td>获取所有输入参数个数（常用于循环），判断参数的个数是否正确以及加强脚本的健壮性</td>
-    </tr>
-    <tr>
-        <td>$*</td>
-        <td>命令行中所有的参数，把所有的参数看成一个整体；被双引号“”包含时，$*以“$1 $2 …$n”的形式输出所有参数</td>
-    </tr>
-    <tr>
-        <td>$@</td>
-        <td>命令行中所有的参数，把每个参数区分对待；被双引号“”包含时，$@以“$1” “$2”...“$n”的形式输出所有参数</td>
-    </tr>
-    <tr>
-        <td>$?</td>
-        <td>最后一次执行的命令的返回状态<br />若该变量的值为0，则上一个命令执行正确；若该变量的值非0，则上一个命令执行错误</td>
-    </tr>
-</table>
-<img src="../../pictures/20231219083240.png" width="1000"/>
-
-### 查看与读取变量
-
-#### read 读取变量值
-
-- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
-
-```shell
-#!/bin/bash
-
-read -t 10 -p "请在10秒内输入: " x
-echo "输出：$x"
-```
-
-### set
-
-- set：显示为某个特定进程设置的所有环境变量，包括局部变量、全局变量、用户定义变量；对输出的结果按照字母顺序来排序。
-
-#### env 系统中已存在的环境变量
-
-- env：显示系统中已存在的环境变量；如果使用env命令在新环境中执行指令时，会因为没有定义环境变量“PATH”（/etc/profile）而提示错误信息，此时，用户可以重新定义一个新的“PATH”或者使用绝对路径。
-- env不对输出结果排序，不输出局部变量和用户定义变量；查看全局变量时，使用env、printenv。
-
-#### printenv
-
-- printenv：不对输出结果排序，不输出局部变量和用户定义变量；查看个别环境变量时，使用printenv而不是env。
-
-### 变量定义与赋值
-
-1. 变量名称可以由字母、数字和下划线组成；但是不能以数字开头，环境变量名建议大写
-2. 变量定义和赋值时，等号两侧不能有空格
-3. 在 bash 中，变量默认类型都是字符串类型，无法直接进行数值运算
-4. 变量的值如果有空格，需要使用双引号或单引号括起来
-
-#### declare 声明与显示
-
-- declare：声明和显示已存在的shell变量
-
-```shell
-变量名 = 变量值
-
-declare 变量名 = 变量值
-```
-
-#### set 赋值与显示
-
-- set：显示系统中已经存在的shell变量、设置shell变量的新变量值；不能定义新的shell变量。
-
-#### unset 删除
-
-- unset：删除已定义的shell变量（包括环境变量）、shell函数；不能删除具有只读属性的shell变量和环境变量
-
-#### readonly 只读变量
-
-- readonly：定义只读shell变量和shell函数
-
-#### export 全局变量
-
-- export：将shell变量、函数输出为环境变量
-
-1. 修改子shell中全局变量的值，不会影响到父shell中该全局变量的值，只会影响该子shell创建的子shell的全局变量的值
-2. 一个变量创建时，它不会自动地为在它之后创建的shell进程所知；而export命令可以向后面的shell传递变量的值。即一个shell脚本被调用并执行时，它不会自动得到原为脚本（调用者）定义的变量的访问权，除非这些变量已经被显式地设置为可用
-
-### 语系变量 locale/localectl
-
-| 命令      | 说明                           |
-| --------- | ------------------------------ |
-| locale    | 当前软件的语系，不修改配置文件 |
-| localectl | 当前系统的语系，修改配置文件   |
-
-```shell
-# 设置当前系统语系 同时修改配置文件
-localectl set-locale LANG=en_US.UTF-8 
-```
-
-- `LANG`与`LC_ALL`：设置语系变量时，一般建议更改这两个变量，其他语系变量都会替换成`LANG`与`LC_ALL`这两个变量的值。`LANG`直接用=号赋值即可；而`LC_ALL`需要使用export设置。
-
-```shell
-LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-```
-
-###  系统环境变量
-
-- 环境变量：存储有关shell会话和工作环境的信息，允许用户在内存中存储数据
-
-| 系统变量   | 说明                                                         |
-| :--------- | :----------------------------------------------------------- |
-| \$PATH     | 执行文件查找的路径（/etc/profile 路径文件）；文件查找的顺序与PATH的变量的顺序有关<br />目录与目录中间以:冒号隔开 |
-| \$HOME     | 当前用户主目录                                               |
-| $USER      | 当前用户                                                     |
-| \$HISTSIZE | 代表可以容纳多少条历史命令                                   |
-| \$LOGNAME  | 当前用户的登录名                                             |
-| \$HOSTNAME | 指主机的名称                                                 |
-| \$SHELL    | 当前用户Shell类型                                            |
-| \$LANG     | 当前的语系类型                                               |
-| \$MAIL     | 当前用户的邮件存放目录                                       |
-| \$PS1      | 基本提示符                                                   |
-| \$RANDOM   | 随机数的变量                                                 |
 
 ## 运算符
 
