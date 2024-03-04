@@ -1,147 +1,8 @@
-# 安装与配置
-
-## Ubuntu20.4
-
-```shell
-sudo apt update
-sudo apt install mysql-server -y
-```
-
-```shell
-# 测试mysql
-sudo systemctl status mysql
-sudo systemctl is-active mysql
-
-# 设置自动启动
-sudo systemctl enable mysql
-```
-
-- 该方式安装的Mysql默认使用无密码登录，可通过以下修改为密码登录
-
-```sql
-alter user 'root'@'localhost' 
-identified with mysql_native_password
-by 'root';
-
-flush privileges;
-```
-
-# MySQL命令行
-
-<table><colgroup><col style="width: 10%"><col style="width: 80%"></colgroup><thead><tr>
-          <th>提示符</th>
-          <th>意义</th>
-        </tr></thead><tbody><tr>
-          <td><code class="literal">mysql&gt;</code></td>
-          <td>准备好接受新查询</td>
-        </tr><tr>
-          <td><code class="literal">-&gt;</code></td>
-          <td>等待下一行多行查询</td>
-        </tr><tr>
-          <td><code class="literal">'&gt;</code></td>
-          <td>等待下一行，等待以单引号 ( <code class="literal">'</code>)开头的字符串的完成；可以通过<code class="literal">'\c</code>来断开</td>
-        </tr><tr>
-          <td><code class="literal">"&gt;</code></td>
-          <td>等待下一行，等待以双引号 ( <code class="literal">"</code>)开头的字符串的完成</td>
-        </tr><tr>
-          <td><code class="literal">`&gt;</code></td>
-          <td>等待下一行，等待以反引号 ( <code class="literal">`</code>)开头的标识符的完成</td>
-        </tr><tr>
-          <td><code class="literal">/*&gt;</code></td>
-          <td>等待下一行，等待以 开头的评论完成<code class="literal">/*</code></td>
-</tr></tbody></table>
-## 连接MySQL
-
-
-```shell
-# 连接MySQL
-mysql [-h 主机地址] [-u 用户 -p] [数据库名] [< 文件 | 文件 | 文件] [> 文件]
-```
-
-<table>
-    <tr>
-        <th width="20%">连接选项</th>
-        <th width="80%">意义</th>
-    </tr>
-    <tr>
-        <td>-h 主机地址</td>
-        <td>指定连接的服务器主机地址；若忽略，则使用本地地址</td>
-    </tr>
-    <tr>
-        <td>-u 用户 -p</td>
-        <td>指定通过用户密码方式登录；若忽略，则尝试匿名登录</td>
-    </tr>
-    <tr>
-        <td><span name="连接时指定数据库">数据库名</span></td>
-        <td>选择待会使用的数据库；若忽略，则需要通过<code>use database</code>选择使用的数据库</td>
-    </tr>
-    <tr>
-        <td rowspan="3">&lt; 文件 | 文件 | 文件</td> 
-        <td>批处理模式，MySQL从该文件中读取要执行的命令</td>
-    </tr>
-    <tr>
-        <td><code>mysql -t</code>：以批处理模式获取交互式输出格式</td>
-    </tr>
-    <tr>
-        <td><code>mysql -v</code>将执行的语句回显到输出中</td>
-    </tr>
-    <tr>
-        <td>&gt; 文件</td>
-        <td>捕获输出到指定文件</td>
-    </tr>
-</table>
-
-```mysql
--- 断开连接的3种方式
-exit
-quit
-\q
-```
-
-## 脚本与文件
-
-```mysql
--- MySQL执行脚本文件的两种方式
-source 文件
-\. 文件
-```
-
-```mysql
-select * from mytb
-into outfile '导出到的文件位置';
-```
-
-- `--secure-file-priv`：MySQL的一个安全选项，用于限制数据的导入和导出；该选项被设置后，MySQL只能在指定的目录下进行文件的操作
-
-```mysql
-# 查看变量名包含secure_file_priv的变量
-show variables like 'secure_file_priv'
-```
-
-<table>
-    <tr>
-        <th width="25%"><Code>--secure-file-priv</Code>的值</th>
-        <th width="65%">意义</th>
-    </tr>
-    <tr>
-        <td>null</td>
-        <td>禁止所有文件导入和导出</td>
-    </tr>
-    <tr>
-        <td>具体的目录路径</td>
-        <td>只允许在该目录及其子目录下进行文件操作</td>
-    </tr>
-    <tr>
-        <td>空字符串 <code>''</code></td>
-        <td>不限制文件操作的范围，但某些版本的MySQL可能不允许该选项</td>
-    </tr>
-</table>
-
 # database
 
 ## show databases
 
-- `show databases`：只显示当前用户具有权限的数据库；需要注意该命令是databases，而不是database
+- `show databases`：只显示当前用户具有权限的数据库；需要注意该命令是databases，而不是database。
 
 ### database()
 
@@ -294,6 +155,7 @@ create table [if not exists] 表名(
     </tr>
 </table>
 
+
 ### `auto_increment`
 
 - `auto_increment`：自增列（自增约束，严格上来说这并不是约束）；一个表只能存在一个该属性，且该属性所在列必须存在unique约束，故通常用于主键
@@ -315,10 +177,6 @@ create table tb_demo (
 -- 重设auto_increment的初值；因为auto_increment属性在一张表是唯一的，故不需要指明字段
 alter table tb_demo auto_increment = 100;
 ```
-
-## 数据类型
-
-### 字符串
 
 # crud
 
@@ -356,6 +214,7 @@ values
         <td>数字类型的数据可以直接插入（<code>123</code>）</td>
     </tr>
 </table>
+
 
 ### load
 
@@ -408,6 +267,7 @@ select 字段
     </tr>
 </table>
 
+
 ### null
 
 - `null`：缺失的未知值
@@ -440,6 +300,7 @@ select 字段
     </tr>
 </table>
 
+
 ### like
 
 - `like`：模式匹配
@@ -463,6 +324,7 @@ select 字段
         <td>rlike</td>
     </tr>
 </table>
+
 
 ```mysql
 select name from sys_menu where regexp_like(name, '^..管理');
@@ -498,67 +360,3 @@ where 谓词
 
 ## delete
 
-# 常用函数
-
-## 日期时间函数
-
-<table>
-    <tr>
-        <th width="320px">函数</th>
-        <th width="140px">返回值类型</th>
-        <th colspan="2">意义与参数</th>
-    </tr>
-    <tr>
-        <td>curdate()</td>
-        <td>date</td>
-        <td colspan="2">当前的日期</td>
-    </tr>
-    <tr>
-        <td>curtime()</td>
-        <td>time</td>
-        <td colspan="2">当前的时间</td>
-    </tr>
-    <tr>
-        <td rowspan="4">timestampdiff(时间格式, 时间1, 时间2)</td>
-        <td rowspan="4">时间格式决定</td>
-        <td colspan="2">以指定的时间格式，计算两个时间之间的时间段</td>
-    </tr>
-    <tr>        
-        <td width="160px">时间格式</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>时间1/2的类型</td>
-        <td></td>
-    </tr>
-</table>
-
-```mysql
-select name, timestampdiff(year, birth_day, curdate()) as age
-from pet;
-```
-
-## 窗口函数
-
-<table>
-    <tr>
-        <th width="35%">函数</th>
-        <th width="65%" colspan="2">意义</th>
-    </tr>
-    <tr>
-        <td rowspan="3" width="35%"><code>partion by 列 order by 列 asc|desc</code></td>
-        <td colspan="2" width="65%">提供分窗函数需要的参数</td>
-    </tr>
-    <tr>        
-        <td width="25%"><code>partion by</code></td>
-        <td wdith="40%">分窗的标准</td>
-    </tr>
-    <tr>
-        <td>order by</td>
-        <td>每个窗口内部的排序规则</td>
-    </tr>
-    <tr>
-        <td><code>rank over(参数)</code></td>
-        <td colspan="2">分窗</td>
-    </tr>
-</table>

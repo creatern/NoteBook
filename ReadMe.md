@@ -60,7 +60,19 @@
 
 ## MySQL
 
-### [基础篇](./Books/MySQL/基础篇.md)
+### 基础篇
+
+#### [安装与配置（单实例）](./Books/MySQL/安装与配置.md)
+
+#### [MySQL Shell](./Books/MySQL/Shell.md)
+
+#### [CRUD](./Books/MySQL/CRUD.md)
+
+#### [字符集](./Books/MySQL/character.md)
+
+#### [数据类型](./Books/MySQL/DataType.md)
+
+#### [函数和运算符](./Books/MySQL/函数和运算符.md)
 
 ## MongoDB
 
