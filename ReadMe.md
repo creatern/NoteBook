@@ -323,6 +323,8 @@
 
 ### [用户管理](./Books/Linux/用户管理.md)
 
+### [文件管理](./Books/Linux/文件管理.md)
+
 ### [界面与CLI](./Books/Linux/界面与连接.md)
 
 ## 系统篇

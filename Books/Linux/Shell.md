@@ -66,7 +66,7 @@ echo $0
 ## shell的父子关系
 
 - 用户登录虚拟控制台终端（Terminal等）时，自动使用并进入默认shell（通常是bash）。此时，输入启动其他shell的命令时（bash、dash等），会启用（进入）指定的shell。此时，默认shell就是这个子shell的父进程（父shell）。
-- 创建子shell的代价较高，需要为该子shell创建新的环境。子shell同样具有CLI提示符并会等待命令输入。
+- 创建子shell的代价较高，需要为该子shell创建新的环境。子shell同样可以具有CLI提示符并会等待命令输入。
 
 ```
 zjk@zjk-laptop:~$ dash
@@ -249,9 +249,11 @@ bash_completion.sh     gnome-session_gnomerc.sh  xdg_dirs_desktop_session.sh
 cedilla-portuguese.sh  im-config_wayland.sh
 ```
 
+- 对于环境变量的持久化等设置，可以在`/etc/profile.d`目录下创建一个`.sh`文件，把所有新的或修改过的全局环境变量的设置都放在该文件中，而保留个人用户永久性bash shell变量的最佳位置是<code><a href="#bashrc">$HOME/.bashrc</a></code>文件。
+
 ##### /etc/bash.bashrc
 
-- <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。在Ubuntu发行版的/etc/profile文件中涉及到/etc/bash.bashrc文件。
+- <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。在Ubuntu发行版的`/etc/profile`文件中涉及到`/etc/bash.bashrc`文件。
 
 #### $HOME目录下的启动文件
 
@@ -282,13 +284,26 @@ cedilla-portuguese.sh  im-config_wayland.sh
 
 - `.bashrc`：存储用户的个性化 Bash shell 设置，这些设置将在每次用户打开一个新的交互式 Shell 时自动加载执行。在该文件中，用户可以定义各种配置选项。每当用户登录到系统并在终端中打开一个新的 Bash shell 时，Bash 会读取并执行 `.bashrc` 文件中的命令。
 
-###### /etc/bashrc 
-
-- <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。
-
 ###### \$HOME/.bashrc 
 
 - \~/.bashrc：专属于个人bash shell的信息；用户登录以及每次打开一个新的shell时，执行这个文件；在这个文件里可以自定义用户专属的个人信息。
+
+### 交互式shell
+
+- 作为交换式shell启动的bash并不处理/etc/profile文件，而是只检查`$HOME/.bashrc`文件。此时，`$HOME/.bashrc`文件会做两件事：（1）检查/etc目录下的通用bashrc文件；（2）为用户提供一个定制自己的命令别名和脚本函数。
+
+### 非交互式shell
+
+- 系统执行shell脚本时使用的shell，没有CLI。
+
+- `BASH_ENV`环境变量：bash shell设置了该环境变量，当shell启动一个非交换式shell进程时，会检查这个`BASH_ENV`环境变量以查看要执行的启动文件名。如果该环境变量有指定的文件，则shell会执行该文件里的命令，通常包括shell脚本变量设置。
+
+```shell
+# 查看BASH_ENV变量设置的启动文件，没有则空
+echo $BASH_ENV
+```
+
+- 子shell会继承父shell的导出变量（不包括局部变量等），如果父shell是登录shell，在`/etc/profile`、`/etc/profile.d/*`、`$HOME/.bashrc`文件中设置并导出了变量，那么执行脚本的子shell就能继承这些变量。
 
 # Linux环境变量
 
@@ -451,7 +466,7 @@ PATH=$PATH:/opt/mysoft/bin
 vim /etc/profile
 ```
 
-## 语系变量 locale、localectl
+### 语系变量 locale、localectl
 
 | 命令      | 说明                           |
 | --------- | ------------------------------ |
@@ -468,6 +483,27 @@ localectl set-locale LANG=en_US.UTF-8
 ```shell
 LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+```
+
+## 数组变量
+
+- 环境变量可以作为数组来使用，要为某个环境变量设置多个值，可以把值放在圆括号中，值与值之间以空格分隔。
+- Linux数组变量的下标从0开始。
+
+```shell
+# 声明数组变量
+myarr=(Tom Jack Mac)
+
+# 显示数组的第一个值
+echo $myarr
+echo ${myarr[0]}
+
+# 通配符显示整个数组变量
+echo ${myarr[*]}
+
+# 修改或赋值给数组
+myarr[1]=Tim
+myarr[11]=Li
 ```
 
 # shell相关命令
