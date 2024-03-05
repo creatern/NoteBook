@@ -66,13 +66,21 @@
 
 #### [MySQL Shell](./Books/MySQL/Shell.md)
 
-#### [CRUD](./Books/MySQL/CRUD.md)
+#### [CRUD 增删改查](./Books/MySQL/CRUD.md)
+
+#### [Table](./Books/MySQL/table.md)
+
+#### [函数和运算符](./Books/MySQL/函数和运算符.md)
+
+### 进阶篇
+
+#### [Database 数据库](./Books/MySQL/database.md)
+
+#### [User 权限](./Books/MySQL/user.md)
 
 #### [字符集](./Books/MySQL/character.md)
 
 #### [数据类型](./Books/MySQL/DataType.md)
-
-#### [函数和运算符](./Books/MySQL/函数和运算符.md)
 
 ## MongoDB
 

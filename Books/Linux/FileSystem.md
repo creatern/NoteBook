@@ -108,6 +108,23 @@
 5. 支持TRIM/Discard命令：F2FS支持TRIM命令，可以通知底层存储设备哪些数据块不再使用，从而允许存储设备进行内部优化，提高性能和寿命。
 6. 检查点（Checkpoint）机制：F2FS利用检查点机制来减少文件系统一致性检查（fsck）的时间，通过记录文件系统的状态来快速恢复文件系统。
 
+## [Lustre](https://www.lustre.org/)
+
+- Lustre是一种高性能的分布式文件系统，广泛用于大规模并行计算环境。Lustre设计用来处理大量的数据，并支持数以万计的客户端同时访问存储系统，存储容量可以达到数PB（Petabyte）甚至更高。
+- Lustre文件系统的关键组件包括Metadata Server（MDS，元数据服务器）、Object Storage Server（OSS，对象存储服务器）、Lustre clients（Lustre 客户端）。The Metadata Servers (MDS) provide metadata services for a file system and manages a Metadata Target (MDT) that stores the file metadata. The Object Storage Servers (OSS) manage the Object Storage Targets (OST) that store the file data objects.
+
+<img src="../../pictures/20240305184511.png" width="600"/> 
+
+1. 高度可扩展性：Lustre可以轻松扩展至数千个节点，支持PB级数据存储，非常适合需要处理大量数据的环境。
+2. 高性能：通过有效的数据分布和并行访问，Lustre提供了出色的I/O吞吐量和低延迟，特别适合高性能计算（HPC）应用。
+3. 数据和元数据分离：Lustre将数据和元数据分开存储，这意味着文件的元数据（如文件名、权限等）可以独立于文件内容被快速访问和更新，从而提高了文件系统的性能和灵活性。
+4. 容错和恢复：Lustre支持多种容错机制，包括数据副本和RAID，以及快速恢复功能，确保数据的持久性和可靠性。
+5. POSIX兼容：Lustre在内核空间运行，大部分功能已经以内核模块的形式实现，提供了与POSIX标准相兼容的接口，这意味着许多现有的应用程序可以在不需要修改的情况下直接在Lustre上运行。
+
+## BeeGFS
+
+- BeeGFS（之前称为FhGFS）是一个开源的并行文件系统，专为性能、可扩展性和简易性而设计。
+
 # /proc/filesystems
 
 - nodev：虚拟文件系统，只存在于内存，由Systemd管理
