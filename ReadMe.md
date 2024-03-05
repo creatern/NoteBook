@@ -339,6 +339,8 @@
 
 ### [网络管理](./Books/Linux/网络管理.md)
 
+### [文件系统](./Books/Linux/FileSystem.md)
+
 ### [磁盘管理](./Books/Linux/磁盘管理.md)
 
 ### [硬件信息](./Books/Linux/硬件信息.md)
@@ -375,7 +377,15 @@
 
 #### [Nginx](./Books/Linux/Nginx.md)
 
-## [Shell篇](./Books/Linux/Shell.md)
+## Shell篇
+
+### [Shell概述](./Books/Linux/Shell.md)
+
+### [环境变量](./Books/Linux/环境变量.md)
+
+### [文本处理](./Books/Linux/文本处理.md)
+
+### [Shell脚本](./Books/Linux/Shell脚本.md)
 
 ## Kernel篇
 
