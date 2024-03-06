@@ -240,7 +240,7 @@
 5. 支持TRIM/Discard命令：F2FS支持TRIM命令，可以通知底层存储设备哪些数据块不再使用，从而允许存储设备进行内部优化，提高性能和寿命。
 6. 检查点（Checkpoint）机制：F2FS利用检查点机制来减少文件系统一致性检查（fsck）的时间，通过记录文件系统的状态来快速恢复文件系统。
 
-# /proc/filesystems
+## /proc/filesystems
 
 - nodev：虚拟文件系统，只存在于内存，由Systemd管理
 
@@ -249,7 +249,307 @@
 cat /proc/filesystems
 ```
 
-# 挂载/卸载文件系统
+# 分区
+
+## Linux分区
+
+- Linux的所有文件和目录都存在于根分区/中，Linux系统中的每一个硬件设备都映射到系统的一个文件；且Linux上的磁盘总是以`/dev`（device）为根目录
+- 硬盘分区类型主要有：主分区、扩展分区、逻辑分区。每一个硬盘设备最多只能由4个主分区构成，任何一个扩展分区都要占用一个主分区号码（主分区和扩展分区数量最多为4），占用分区号1~4。当分区数量大于4时，要用到扩展分区和逻辑分区。先划分扩展分区，再在扩展分区的基础上建立逻辑分区。在进行系统分区时，主分区一般设置为激活状态，用于在系统启动时引导系统。分区时，每个分区的大小可以由用户指定。
+- 每个分区可以有不同的文件系统
+
+### [分区方案](./文件管理.md)
+
+<table>
+    <tr>
+        <th width="20%">目录</th>
+        <th width="80%">建立单独分区的优势</th>
+    </tr>
+    <tr>
+        <td>/boot</td>
+        <td>更轻松的管理多重启动系统；引导文件不依赖于安装或删除的操作系统</td>
+    </tr>
+    <tr>
+        <td>/home</td>
+        <td>与根文件系统隔离，重装时可不影响/home，甚至可以在单独的驱动器</td>
+    </tr>
+    <tr>
+        <td>/var、/tmp</td>
+        <td>防止进程失控时占用大量空间而影响到其他文件系统</td>
+    </tr>
+    <tr>
+        <td>swap</td>
+        <td>可启用挂起到磁盘的功能</td>
+    </tr>
+</table>
+
+### 分区表
+
+#### MSDOS
+
+- MSDOS
+
+#### GPT
+
+- GPT（Globally Unique Identifier Partition Table，GUID分区表）：UEFI（Unified Extensible Firmware Interface，统一可扩展固件接口）规范的一部分，UEFI替代老旧的BIOS（Basic Input Output System）
+
+1. 分区最多可达128个，编号为`1~128`，不需要区分主分区和扩展分区
+2. 容错性，多个位置都保存了分区表的副本
+3. 磁盘和分区拥有唯一的ID
+4. 支持传统的BIOS/MBR引导模式
+5. 可验证自身的完整性和分区表
+6. 支持安全引导
+
+## 分区工具
+
+### fdisk
+
+- `fdisk`：固定磁盘（fixed disk）或格式化磁盘（format disk），可以在任何存储设备上创建和管理分区，`fdisk`只能处理最大2TB的硬盘。
+
+<table><tbody><tr><td>-b</td><td>设置每个分区的大小</td><td rowspan="5">&nbsp;</td><td>-l</td><td>显示指定的外围设备分区表状态</td></tr><tr><td>-c</td><td>关闭DOS兼容模式</td><td>-s</td><td>显示指定的分区大小</td></tr><tr><td>-C</td><td>设置硬盘的柱面数量</td><td>-S</td><td>设置每个磁道的扇区数</td></tr><tr><td>-h</td><td>显示帮助信息</td><td>-u</td><td>以分区数目代替柱面数目</td></tr><tr><td>-H</td><td>设置硬盘的磁头数</td><td>-v</td><td>显示版本信息</td></tr></tbody></table>
+
+```shell
+# fdisk进入指定的磁盘分区，以进行交互式操作
+sudo fdisk /dev/nvme0n1p10
+```
+
+- `fdisk`是一个交互式程序，其使用自己的命令行，允许用户输入命令来逐步完成硬盘分区操作。
+- `fdisk`不允许调整现有分区的大小，只能通过删除再重新创建来调整现有分区大小。
+
+####   DOS (MBR)
+
+<table>
+        <tr>
+            <td width="5%">a</td>
+            <td width="47.5%">toggle a bootable flag</td>
+            <td width="47.5%">设置活动分区标志</td>
+        </tr>
+        <tr>
+            <td>b</td>
+            <td>edit nested BSD disklabel</td>
+            <td>编辑BSD Unix系统使用的标签</td>
+        </tr>
+        <tr>
+            <td>c</td>
+            <td>toggle the dos compatibility flag</td>
+            <td>设置DOS兼容标志</td>
+        </tr>
+</table>
+
+####   Generic
+
+<table>
+    <tr>
+        <td width="5%">d</td>
+        <td width="47.5%">delete a partition</td>
+        <td width="47.5%">删除分区</td>
+    </tr>
+    <tr>
+        <td>F</td>
+        <td>list free unpartitioned space</td>
+        <td>列出未分配空间</td>
+    </tr>
+    <tr>
+        <td>l</td>
+        <td>list known partition types</td>
+        <td>列出已知分区类型</td>
+    </tr>
+    <tr>
+        <td>n</td>
+        <td>add a new partition</td>
+        <td>添加新分区</td>
+    </tr>
+    <tr>
+        <td>p</td>
+        <td>print the partition table</td>
+        <td>打印分区表</td>
+    </tr>
+    <tr>
+        <td>t</td>
+        <td>change a partition type</td>
+        <td>更改分区类型</td>
+    </tr>
+    <tr>
+        <td>v</td>
+        <td>verify the partition table</td>
+        <td>验证分区表</td>
+    </tr>
+    <tr>
+        <td>i</td>
+        <td>print information about a partition</td>
+        <td>打印分区信息</td>
+    </tr>
+</table>
+
+####   Misc
+
+<table>
+    <tr>
+        <td width="5%">m</td>
+        <td width="47.5%">print this menu</td>
+        <td width="47.5%">打印当前菜单</td>
+    </tr>
+    <tr>
+        <td>u</td>
+        <td>change display/entry units</td>
+        <td>更改显示/输入单位</td>
+    </tr>
+    <tr>
+        <td>x</td>
+        <td>extra functionality (experts only)</td>
+        <td>额外功能（仅限专家使用）</td>
+    </tr>
+</table>
+
+####   Script
+
+<table>
+    <tr>
+        <td width="5%">I</td>
+        <td width="47.5%">load disk layout from sfdisk script file</td>
+        <td width="47.5%">从sfdisk脚本文件加载磁盘布局</td>
+    </tr>
+    <tr>
+        <td>O</td>
+        <td>dump disk layout to sfdisk script file</td>
+        <td>将磁盘布局导出至sfdisk脚本文件</td>
+    </tr>
+</table>
+
+####   Save &amp; Exit
+
+<table>
+    <tr>
+        <td width="5%">w</td>
+        <td width="47.5%">write table to disk and exit</td>
+        <td width="47.5%">将分区表写入磁盘并退出</td>
+    </tr>
+    <tr>
+        <td>q</td>
+        <td>quit without saving changes</td>
+        <td>不保存更改直接退出</td>
+    </tr>
+</table>
+
+####   Create a new label
+
+<table>
+    <tr>
+        <td width="5%">g</td>
+        <td width="47.5%">create a new empty GPT partition table</td>
+        <td width="47.5%">创建一个新的空GPT分区表</td>
+    </tr>
+    <tr>
+        <td>G</td>
+        <td>create a new empty SGI (IRIX) partition table</td>
+        <td>创建一个新的空SGI (IRIX) 分区表</td>
+    </tr>
+    <tr>
+        <td>o</td>
+        <td>create a new empty DOS partition table</td>
+        <td>创建一个新的空DOS分区表</td>
+    </tr>
+    <tr>
+        <td>s</td>
+        <td>create a new empty Sun partition table</td>
+        <td>创建一个新的空Sun分区表</td>
+    </tr>
+</table>
+
+### gdisk
+
+### parted
+
+- <code>parted</code>：管理分区，会立即应用更改
+
+```shell
+# 进入交互模式
+parted
+
+# 对指定的磁盘设备/dev/sda操作
+parted /dev/sda
+
+# 执行命令而不是进入交互
+parted parted命令
+```
+
+#### parted交互模式
+
+##### print
+
+- `print`：打印磁盘设备的信息
+
+```shell
+# 查看所有磁盘设备的所有信息
+print all
+
+# 查看空闲空间
+print free
+```
+
+```shell
+GNU Parted 3.3
+Using /dev/mmcblk0
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) print all                                                        
+Model: SD SD32G (sd/mmc) # 设备制造商的名称
+Disk /dev/mmcblk0: 30.9GB # 设备名称和大小
+Sector size (logical/physical): 512B/512B # 逻辑块和物理块大小
+Partition Table: msdos # 分区类型 msdos/gpt
+Disk Flags:  # 标志
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  269MB   268MB   primary  fat32        boot, lba
+ 2      269MB   30.9GB  30.7GB  primary  ext4
+```
+
+##### mkpart
+
+- `mkpart`：创建分区
+
+1. 创建新分区的起点不能从0开始，因为前33个扇区是为EFI标签保留的
+2. 两个分区的起点和终点不应该离太近
+3. 新分区必须在建立文件系统后使用
+
+```shell
+# 卸载设备
+sudo unmount /dev/sdc
+
+# 新建分区表 gpt/msdos，同时会擦除磁盘上的所有数据
+sudo parted /dev/sdc
+mklabel gpt
+
+# 创建分区 mkpart name fs-type start end ；该步骤并没有创建文件系统，其中的fs-type只是标记
+mkpart "images" ext4 1MB 2004MB
+mkpart "audio files" xfs 2005MB 100%
+```
+
+##### rm
+
+- `rm`：删除分区以及文件系统，删除分区时，如果分区内的文件正在使用，且无视警告继续删除，则这些文件会被保存在内存
+
+```shell
+# 序号删除（number）
+rm 2
+```
+
+##### rescue
+
+- `rescue`：恢复分区，指定分区近似的起点和终点位置来恢复
+
+```shell
+rescue 1MB 2004MB
+```
+
+##### resizepart
+
+- `resizepart`：调整分区大小
+
+```shell
+# 按序号调整至指定终点，并没有同步扩展文件系统
+resizepart 2 4010MB
+```
+
+# 挂载文件系统
 
 - 文件系统必须先挂载到正在运行的文件系统，然后才能访问，且需要一个挂载点
 - <span name="挂载点">挂载点</span>：
