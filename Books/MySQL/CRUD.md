@@ -416,6 +416,15 @@ limit 20 offset 0;
 
 - 如果查询语句中出现了在多个关系中同名的属性，则必须通过`关系.属性名`指明属性所在的关系。
 
+- MySQL支持SQL99 `join .. on`；但不支持SQL92 连接符`(+)`。
+
+```mysql
+# 左外连接，使用空值来额外返回department表中不满足连接条件的行，以满足employee表中存在的行
+select employee_id, department_name
+from employees e
+	left join departments d on e.department_id = d.department_id;
+```
+
 ### 笛卡尔积 cross join
 
 - 笛卡尔积（cross join，交叉连接）：将任意几个关系的所有元组进行相互拼接。
@@ -439,10 +448,18 @@ select e.name, d.department_id
 from employee e, department d
 where e.department_id = d.department_id;
 
+select e.name, d.department_id
+from employee e 
+	join department d on e.department_id = d.department_id;
+
 # 非等值连接
 select e.name, e.salary
 from employee e, job_grades j
 where e.salary between j.least_sal and j.greatest_sal;
+
+select e.name, e.salary
+from employee e 
+	join job_grades j on e.salary between j.least_sal and j.greatest_sal;
 ```
 
 ### 自连接、非自连接
@@ -454,21 +471,83 @@ where e.salary between j.least_sal and j.greatest_sal;
 select emp.employee_id, emp.name, mgr.employee_id, mgr.name
 from employee emp, employee mgr
 where emp.manager_id = mgr.employee_id;
+
+select emp.employee_id, emp.name, mgr.employee_id, mgr.name
+from employee emp
+	join employee mgr on emp.manager_id = mgr.employee_id;
 ```
 
 ### 内连接、外连接
 
 <table>
     <tr>
-        <td width="10%">内连接</td>
-        <td width="90%">合并具有同一字段的多个表的行，结果集中不包含一个表与另一个表不匹配的行（没有特殊指定外连接的）</td>
+        <td width="10%" rowspan="2">内连接</td>
+        <td width="90%">合并具有同一字段的多个表的行，结果集中不包含一个表与另一个表不匹配的行（没有特殊指定外连接的基本都是内连接）</td>
     </tr>
     <tr>
-        <td>外连接</td>
-        <td>合并具有同一字段的多个表的行，结果集中除了包含一个表与另一个表匹配的行之外，还包含不匹配的行（左外连接、右外连接、全外连接）</td>
+        <td><code>[inner] join</code></td>
+    </tr>
+    <tr>
+        <td rowspan="2">外连接</td>
+        <td>合并具有同一字段的多个表的行，结果集中除了包含一个表与另一个表匹配的行之外，还包含不匹配的行（左外连接、右外连接、满外连接）</td>
+    </tr>
+    <tr>
+        <td><code>left|right [outer] join</code>。MySQL不支持满外连接（全连接）</td>
     </tr>
 </table>
 
+<table>
+    <tr>
+        <td width="10%" rowspan="2">左外连接</td>
+        <td width="90%">两个表在连接过程中除了返回满足连接条件的行以外还返回左表中不满足连接条件的行</td>
+    </tr>
+    <tr>
+        <td>左外连接，使用空值null来额外返回右表中不满足连接条件的行，以满足左表中存在的行，使得左表中的所有行都能够被显示</td>
+    </tr>
+    <tr>
+        <td rowspan="2">右外连接</td>
+        <td>两个表在连接过程中除了返回满足连接条件的行以外还返回右表中不满足连接条件的行</td>
+    </tr>
+    <tr>
+        <td>右外连接，使用空值null来额外返回左表中不满足连接条件的行，以满足右表中存在的行，使得右表中的所有行都能够被显示</td>
+    </tr>
+    <tr>
+        <td>满外连接</td>
+        <td>MySQL不支持满外连接（全连接），两个表在连接过程中除了返回满足连接条件的行以外还返回两表中不满足连接条件的行</td>
+    </tr>
+</table>
+<img src="../../pictures/20240306223409.png" width="600"/> 
+
+```mysql
+# 左外连接
+select employee_id, department_name 
+from employees e 
+	left join departments d on e.department_id = d.department_id;
++-------------+-----------------+
+| employee_id | department_name |
++-------------+-----------------+
+|         178 | NULL            |
+|         200 | Adm             |
+|         201 | Mar             |
+|         205 | Acc             |
+|         206 | Acc             |
++-------------+-----------------+
+
+# 右外连接
+select employee_id, department_name 
+from employees e 
+	right join departments d on e.department_id = d.department_id;
+	
++-------------+-----------------+
+| employee_id | department_name |
++-------------+-----------------+
+|         200 | Adm             |
+|         201 | Mar             |
+|        NULL | Ret             |
+|        NULL | Rec             |
+|        NULL | Pay             |
++-------------+-----------------+
+```
 
 
 ## 组（聚合）函数

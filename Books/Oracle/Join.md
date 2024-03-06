@@ -147,7 +147,7 @@ from table1 t1
  full outer join table2 on t1.no1 = t2.no1;
 ```
 
-## (+) 外连接运算符
+## SQL92 外连接符 (+)
 
 - 在连接条件中无匹配行的表的列后面加(+)，没有匹配的行时，结果表中相对应的列为空。
 
@@ -163,4 +163,11 @@ where t1.no1 = t2.no1(+);
 select t1.no1,no2,no4
 from table1 t1,table2 t2
 where t1.no1(+) = t2.no1;
+```
+
+```sql
+# 左外连接，额外返回department表中不满足连接条件的行
+select employee_id, department_name
+from employee e, department d
+where e.department_id = d.department_id(+);
 ```
