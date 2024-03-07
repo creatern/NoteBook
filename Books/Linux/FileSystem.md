@@ -707,9 +707,16 @@ sda            8:0    0 465.8G  0 disk
 ├─sda6         8:6    0   139G  0 part /media/zjk/文档
 └─sda7         8:7    0 137.8G  0 part /media/zjk/娱乐
 
-# 2. fdisk进行格式化
-sudo fdisk /dev/sda
+# 2. 卸载对应的文件系统
+sudo umount /dev/sda*
 
+# 3. fdisk进行格式化
+sudo fdisk /dev/sda
+d # 删除之前的文件分区
+w # 保存修改后退出
+
+# 4. 创建文件系统
+sudo mkfs.ext4 /dev/sda
 ```
 
 # 挂载和卸载文件系统
@@ -817,7 +824,6 @@ sudo mount -a
     <tr><td colspan="2">推荐设置：根文件系统 1，任何其他Linux文件系统 2，非Linux文件系统 0</td></tr>
 </table>
 
-
 # 调整文件系统大小
 
 - 扩展文件系统：
@@ -854,6 +860,13 @@ sudo fatresize -i /dev/sdc
 > 尽管日志文件系统的用户确实也要使用fsck命令，但使用COW的文件系统是否真的需要该命令，还存在争议。
 
 - `fsck`命令会使用[/etc/fstab](#/etc/fstab)文件自动决定系统中已挂载的存储设备的文件系统。如果存在设备尚未挂载，则需要使用`-t`命令行选项来指定文件系统类型。
+
+```shell
+# 使用fsck的自动修复和检查
+sudo fsck -p /dev/sda
+#fsck from util-linux 2.34
+#/dev/sda: clean, 11/30531584 files, 2197341/122096646 blocks
+```
 
 # 逻辑卷管理 LVM
 
