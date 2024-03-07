@@ -454,12 +454,101 @@ sudo fdisk /dev/nvme0n1p10
         <td>创建一个新的空Sun分区表</td>
     </tr>
 </table>
-
 ### gdisk
+
+- `gdisk`：当存储设备要采用GUID分区表（GUID partition table，GPT）时，使用`gdisk`命令。
+- `gdisk`会识别存储设备所采用的分区类型。如果当前未使用GPT方法，则`gdisk`会提供相应的选项，将其转换为GPT。在转换存储设备分区类型时，所选择的类型必须与系统固件（BIOS或UEFI）兼容，否则 ，将无法发引导设备。
+- `gdisk`提供了命令行提示符，允许输入命令来进行分区操作。
+
+<table>
+    <tr>
+        <td width="5%">b</td>
+        <td width="47.5%">back up GPT data to a file</td>
+        <td width="47.5%">将GPT数据备份到文件</td>
+    </tr>
+    <tr>
+        <td>c</td>
+        <td>change a partition's name</td>
+        <td>更改分区名称</td>
+    </tr>
+    <tr>
+        <td>d</td>
+        <td>delete a partition</td>
+        <td>删除分区</td>
+    </tr>
+    <tr>
+        <td>i</td>
+        <td>show detailed information on a partition</td>
+        <td>显示分区详细信息</td>
+    </tr>
+    <tr>
+        <td>l</td>
+        <td>list known partition types</td>
+        <td>列出已知分区类型</td>
+    </tr>
+    <tr>
+        <td>n</td>
+        <td>add a new partition</td>
+        <td>添加新分区</td>
+    </tr>
+    <tr>
+        <td>o</td>
+        <td>create a new empty GUID partition table (GPT)</td>
+        <td>创建一个新的空白GUID分区表(GPT)</td>
+    </tr>
+    <tr>
+        <td>p</td>
+        <td>print the partition table</td>
+        <td>打印分区表</td>
+    </tr>
+    <tr>
+        <td>q</td>
+        <td>quit without saving changes</td>
+        <td>退出而不保存更改</td>
+    </tr>
+    <tr>
+        <td>r</td>
+        <td>recovery and transformation options (experts only)</td>
+        <td>恢复与转换选项（仅限专家）</td>
+    </tr>
+    <tr>
+        <td>s</td>
+        <td>sort partitions</td>
+        <td>排序分区</td>
+    </tr>
+    <tr>
+        <td>t</td>
+        <td>change a partition's type code</td>
+        <td>更改分区类型代码</td>
+    </tr>
+    <tr>
+        <td>v</td>
+        <td>verify disk</td>
+        <td>验证磁盘</td>
+    </tr>
+    <tr>
+        <td>w</td>
+        <td>write table to disk and exit</td>
+        <td>将分区表写入磁盘并退出</td>
+    </tr>
+    <tr>
+        <td>x</td>
+        <td>extra functionality (experts only)</td>
+        <td>额外功能（仅限专家）</td>
+    </tr>
+    <tr>
+        <td>?</td>
+        <td>print this menu</td>
+        <td>打印此菜单</td>
+    </tr>
+</table>
 
 ### parted
 
-- <code>parted</code>：管理分区，会立即应用更改
+- <code>parted</code>：GNU `parted`提供了另一种命令来处理分区。
+
+1. `parted`的命令管理分区，会立即应用更改。
+2. `pared`允许调整现有的分区大小。
 
 ```shell
 # 进入交互模式
@@ -472,9 +561,7 @@ parted /dev/sda
 parted parted命令
 ```
 
-#### parted交互模式
-
-##### print
+#### print
 
 - `print`：打印磁盘设备的信息
 
@@ -502,7 +589,7 @@ Number  Start   End     Size    Type     File system  Flags
  2      269MB   30.9GB  30.7GB  primary  ext4
 ```
 
-##### mkpart
+#### mkpart
 
 - `mkpart`：创建分区
 
@@ -523,7 +610,7 @@ mkpart "images" ext4 1MB 2004MB
 mkpart "audio files" xfs 2005MB 100%
 ```
 
-##### rm
+#### rm
 
 - `rm`：删除分区以及文件系统，删除分区时，如果分区内的文件正在使用，且无视警告继续删除，则这些文件会被保存在内存
 
@@ -532,7 +619,7 @@ mkpart "audio files" xfs 2005MB 100%
 rm 2
 ```
 
-##### rescue
+#### rescue
 
 - `rescue`：恢复分区，指定分区近似的起点和终点位置来恢复
 
@@ -540,16 +627,92 @@ rm 2
 rescue 1MB 2004MB
 ```
 
-##### resizepart
+#### resizepart
 
-- `resizepart`：调整分区大小
+- `resizepart`：调整分区大小，允许调整现有的分区大小。
 
 ```shell
 # 按序号调整至指定终点，并没有同步扩展文件系统
 resizepart 2 4010MB
 ```
 
-# 挂载文件系统
+# 创建文件系统
+
+- 将数据存储到分区之前，必须使用某种文件系统对其进行格式化，以便Linux能够使用分区。每种文件系统都有自己专门的格式化工具。Linux可能没有安装所有的文件系统工具。
+
+<table>
+    <tr>
+        <td width="15%">mkefs</td>
+        <td width="85%">创建ext文件系统</td>
+    </tr>
+    <tr>
+        <td>mke2fs</td>
+        <td>创建ext2文件系统</td>
+    </tr>
+    <tr>
+        <td>mkfs.ext3</td>
+        <td>创建ext3文件系统</td>
+    </tr>
+    <tr>
+        <td>mkfs.ext4</td>
+        <td>创建ext4文件系统</td>
+    </tr>
+    <tr>
+        <td>mkreiserfs</td>
+        <td>创建ReiserFS文件系统</td>
+    </tr>
+    <tr>
+        <td>jfs_mkfs</td>
+        <td>创建JFS文件系统</td>
+    </tr>
+    <tr>
+        <td>mkfs.xfs</td>
+        <td>创建XFS文件系统</td>
+    </tr>
+    <tr>
+        <td>mkfs.zfs</td>
+        <td>创建ZFS文件系统</td>
+    </tr>
+    <tr>
+        <td>mkfs.btrfs</td>
+        <td>创建Btrfs文件系统</td>
+    </tr>
+</table>
+
+- 所有文件系统命令都允许通过不带选项的简单形式来创建默认的文件系统，需要超级用户权限。为分区创建文件系统后，下一步就是将其挂载到虚拟目录中的某个挂载点。
+
+## mkfs
+
+- mkfs（make file system）：对设备进行格式化文件系统操作
+
+<table><tbody><tr><td>-c</td><td>检查指定设备是否损坏</td></tr><tr><td>-t</td><td>设置档案系统的模式</td></tr><tr><td>-V </td><td>显示执行过程详细信息</td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--version</td><td>显示版本信息</td></tr></tbody></table>
+
+```shell
+# 查看当前系统中支持mkfs的文件系统格式
+ls -l /usr/sbin/mkfs.*
+
+# 对指定的硬盘进行格式化文件系统操作，并输出详细过程信息
+sudo mkfs -V -t xfs /dev/sdb
+```
+
+- 将磁盘格式化为ext4文件系统：
+
+```shell
+# 1. 查看需要被格式化的磁盘
+lsblk
+sda            8:0    0 465.8G  0 disk 
+├─sda1         8:1    0    50G  0 part /media/zjk/1A34C40E34C3EB39
+├─sda2         8:2    0     1K  0 part 
+├─sda5         8:5    0   139G  0 part /media/zjk/软件
+├─sda6         8:6    0   139G  0 part /media/zjk/文档
+└─sda7         8:7    0 137.8G  0 part /media/zjk/娱乐
+
+# 2. fdisk进行格式化
+sudo fdisk /dev/sda
+
+```
+
+# 挂载和卸载文件系统
 
 - 文件系统必须先挂载到正在运行的文件系统，然后才能访问，且需要一个挂载点
 - <span name="挂载点">挂载点</span>：
@@ -572,6 +735,7 @@ mount <operation> <mountpoint> [<target>]
 ## umount
 
 - <code>umount</code>（unmount）：与mount挂载命令需要同时提供设备名与挂载目录不同，umount卸载命令只需要提供设备名或挂载目录之一即可完成卸载。
+- 根文件系统含有Linux所有的核心命令和日志文件，所以无法在处于运行状态的系统中卸载它。但可以借助Linux Live CD、DVD、USB等工具来通过媒介启动系统，然后对根文件系统使用`fsck`命令。
 
 ```
 umount [参数] 设备或目录名
@@ -594,7 +758,7 @@ mountpoint /
 
 ## <span name="/etc/fstab">/etc/fstab</span>
 
-- `/etc/fstab`：自动挂载文件，在该文件内设置的挂载点和设备会在系统启动时自动挂载 
+- <code><span name="/etc/fstab">/etc/fstab</span></code>：自动挂载文件，在该文件内设置的挂载点和设备会在系统启动时自动挂载 
 
 ```shell
 # 测试/etc/fstab配置
@@ -681,22 +845,22 @@ sudo fatresize -i /dev/sdc
 2. 必须确保文件系统已使用的空间小于收缩后的大小；为保存元数据、浪费的块空间以及以防万一，需要留出大约40%的空间，即 `已使用空间 * 1.4`
 3. 若分区位于外部设备，则先卸载；若分区属于正在运行的系统，则必须从可引导的救援磁盘上运行`parted`，或通过另一个启动的Linux来执行
 
+# fsck 检查和修复文件系统
+
+- 每种文件系统各自都有相应的恢复命令，而通用的前端程序可以判断存储设备使用的文件系统并根据要恢复的文件系统调用适合的恢复命令。
+
+- `fsck`命令可以检查和修复大部分的文件系统。文件系统可以通过多种方法指定（如设备名、设备在虚拟目录中的挂载点等），但在对其使用`fdisk`命令前，必须先卸载设备。
+
+> 尽管日志文件系统的用户确实也要使用fsck命令，但使用COW的文件系统是否真的需要该命令，还存在争议。
+
+- `fsck`命令会使用[/etc/fstab](#/etc/fstab)文件自动决定系统中已挂载的存储设备的文件系统。如果存在设备尚未挂载，则需要使用`-t`命令行选项来指定文件系统类型。
+
+# 逻辑卷管理 LVM
+
+- 逻辑卷管理（logical volume manager，LVM）允许用户在无须重建文件系统的情况下，管理磁盘空间。
+
 # tune2fs
 
 - `tune2fs`：调整/查看磁盘的文件系统参数
-
-# mkfs
-
-- mkfs（make file system）：对设备进行格式化文件系统操作
-
-<table><tbody><tr><td>-c</td><td>检查指定设备是否损坏</td></tr><tr><td>-t</td><td>设置档案系统的模式</td></tr><tr><td>-V </td><td>显示执行过程详细信息</td></tr><tr><td>--help</td><td>显示帮助信息</td></tr><tr><td>--version</td><td>显示版本信息</td></tr></tbody></table>
-
-```shell
-# 查看当前系统中支持mkfs的文件系统格式
-ls -l /usr/sbin/mkfs.*
-
-# 对指定的硬盘进行格式化文件系统操作，并输出详细过程信息
-sudo mkfs -V -t xfs /dev/sdb
-```
 
 # e2label ntfs格式、ext2/3/4格式
