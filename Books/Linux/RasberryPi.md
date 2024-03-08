@@ -147,7 +147,7 @@ SPI_DEVICE = 0
 # SPI_DEVICE = 0
 
 # 128x32 display with hardware I2C:
-# disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST)
+#disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST)
 
 # 128x64 display with hardware I2C:
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
@@ -211,6 +211,8 @@ while True:
     draw.rectangle((0,0,width,height), outline=0, fill=0)
 
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
+    cmd = "iwconfig wlan0 | grep ESSID | awk '{print $4}'"
+    SSID = subprocess.check_output(cmd, shell = True )
     cmd = "hostname -I | cut -d\' \' -f1"
     IP = subprocess.check_output(cmd, shell = True )
     cmd = "top -bn1 | grep load | awk '{printf \"CPU Load: %.2f\", $(NF-2)}'"
@@ -219,18 +221,52 @@ while True:
     MemUsage = subprocess.check_output(cmd, shell = True )
     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
     Disk = subprocess.check_output(cmd, shell = True )
+    cmd = "sensors cpu_thermal-virtual-0 | grep temp1 | awk '{print $2}'"
+    Temperature = subprocess.check_output(cmd, shell = True )
 
     # Write two lines of text.
-
-    draw.text((x, top),       "IP: " + str(IP),  font=font, fill=255)
-    draw.text((x, top+8),     str(CPU), font=font, fill=255)
-    draw.text((x, top+16),    str(MemUsage),  font=font, fill=255)
-    draw.text((x, top+25),    str(Disk),  font=font, fill=255)
+    draw.text((x, top),       str(SSID), font=font, fill=255)
+    draw.text((x, top+9),       "IP: " + str(IP),  font=font, fill=255)
+    draw.text((x, top+20),     str(CPU), font=font, fill=255)
+    draw.text((x, top+30),    str(MemUsage),  font=font, fill=255)
+    draw.text((x, top+40),    str(Disk),  font=font, fill=255)
+    draw.text((x, top+50),    str(Temperature),  font=font, fill=255)
 
     # Display image.
     disp.image(image)
     disp.display()
     time.sleep(.1)
+```
+
+#### 设置为服务
+
+- 加入到[Systemed](./服务单元控制.md)的服务单元中，作为服务被启动
+
+```shell
+# 创建一个systemd服务单元文件
+sudo vim /etc/systemd/system/oled-stats.service
+
+# systemd识别新的服务
+sudo systemctl daemon-reload
+
+# 加入开机自启动
+sudo systemctl enable oled-stats.service
+```
+
+```shell
+[Unit]
+Description=My OLED stats.py
+After=network.target
+
+[Service]
+ExecStart=/home/zjk/oled-stats.sh
+# simple 隐含了后台运行，无须在脚本加入&等后台运行符
+Type=simple
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
 ```
 
 # 软路由

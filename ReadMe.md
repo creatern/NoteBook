@@ -349,8 +349,6 @@
 
 ### [文件系统](./Books/Linux/FileSystem.md)
 
-### [磁盘管理](./Books/Linux/磁盘管理.md)
-
 ### [硬件信息](./Books/Linux/硬件信息.md)
 
 ### [CPU](./Books/Linux/CPU.md)

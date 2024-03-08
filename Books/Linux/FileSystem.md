@@ -249,6 +249,34 @@
 cat /proc/filesystems
 ```
 
+# 文件系统的信息查看
+
+## du
+
+- `du`：显示某个指定目录下的磁盘使用情况
+
+## df
+
+- df（report file system disk space usage）：显示的磁盘使用量情况含可用、已用及使用率等信息，默认单位为KB。
+
+<table><tbody><tr><td>-a<strong></strong></td><td>显示所有文件系统</td><td rowspan="5"><strong>&nbsp;</strong></td><td>-l<strong></strong></td><td>只显示本地文件系统 </td></tr><tr><td>-h<strong></strong></td><td>以更易读的方式显示<strong></strong></td><td>-t</td><td>只显示指定类型文件系统 <strong></strong></td></tr><tr><td>-H<strong></strong></td><td>以1KB=1000B为换算单位</td><td>-T<strong></strong></td><td>显示文件系统的类型<strong></strong></td></tr><tr><td>-i</td><td>显示索引字节信息<strong></strong></td><td>--sync <strong></strong></td><td>在获取磁盘使用信息前先执行sync同步命令</td></tr><tr><td>-k<strong></strong></td><td>设置显示时的块大小<strong></strong></td><td>&nbsp;</td><td><strong>&nbsp;</strong></td></tr></tbody></table>
+
+```shell
+# 显示系统全部磁盘的使用量情况（带容量单位）
+df -h
+```
+
+## lsblk
+
+- `lsblk`（list block devices）：查看系统的磁盘使用情况
+
+<table><tbody><tr><td width="5%">-a</td><td width="42.5%">显示所有设备信息</td><td rowspan="7" width="5%">&nbsp;</td><td width="5%">-m</td><td width="42.5%">显示权限信息</td></tr><tr><td>-b</td><td>显示以字节为单位的设备大小</td><td>-n</td><td>不显示标题</td></tr><tr><td>-e</td><td>排除指定设备</td><td>-o</td><td>输出列信息</td></tr><tr><td>-f</td><td>显示文件系统信息</td><td>-P</td><td>使用key=value格式显示信息</td></tr><tr><td>-h</td><td>显示帮助信息</td><td>-r</td><td>使用原始格式显示信息</td></tr><tr><td>-i</td><td>仅使用字符</td><td>-t</td><td>显示拓扑结构信息</td></tr><tr><td>-l</td><td>使用列表格式显示</td><td>-V</td><td>显示版本信息</td></tr></tbody></table>
+
+```shell
+# 仅查看设备名和文件系统类型
+lsblk -o NAME,FSTYPE
+```
+
 # 分区
 
 ## Linux分区
@@ -871,6 +899,43 @@ sudo fsck -p /dev/sda
 # 逻辑卷管理 LVM
 
 - 逻辑卷管理（logical volume manager，LVM）允许用户在无须重建文件系统的情况下，管理磁盘空间。
+
+## LVM布局
+
+- LVM允许将多个分区组合在一起，作为单个分区（逻辑卷）进行格式化、在Linux虚拟目录结构上挂载、存储数据等。还可以继续向逻辑卷中添加分区。
+- LVM由三个主要部分组成：物理卷、卷组、逻辑卷。
+
+<table>
+    <tr>
+        <td width="25%">物理卷<br />（phsical volume，PV）</td>
+        <td width="10%"><Code>pvcreate</Code></td>
+        <td width="65%">物理卷通过LVM的<code>pvcreate</code>命令创建。该命令指定了一个未使用的磁盘分区（或整个驱动器）由LVM使用。在这个过程中，LVM结构、卷标和元数据都会被添加到该分区。</td>
+    </tr>
+    <tr>
+        <td rowspan="3">卷组<br />（volume group，VG）</td>
+        <td rowspan="3"><code>vgcreate</code></td>
+        <td>卷组通过LVM的<code>vgcreate</code>命令创建。该命令会将PV加入存储池，存储池随后用于构建各种逻辑卷。多个PV集中在一起回形成VG，由此形成了一个存储池，从中为LV分配存储空间</td>
+    </tr>
+    <tr>
+        <td>可以存在多个卷组。当用户使用<code>vgcreate</code>将一个或多个PV加入VG时，也会同时添加卷组的元数据</td>
+    </tr>
+    <tr>
+        <td>被指定为PV的分区只能属于单个VG。但是，被指定为PV的其他分区可以属于其他VG</td>
+    </tr>
+    <tr>
+        <td rowspan="2">逻辑卷<br />（logical volume，LV）</td>
+        <td rowspan="2"><code>lvcreate</code></td>
+        <td>逻辑卷通过LVM的<code>lvcreate</code>命令创建。这是逻辑卷创建过程的最终产物。LV由VG的存储空间块（PE）组成。可以使用文件系统格式化LV，然后将其挂载</td>
+    </tr>
+    <tr>
+        <td>尽管可以有多个VG，但LV只能从一个指定的VG中创建，而多个LV可以共享单个VG。可以使用相应的LVM命令调整（增加或减少）LV的容量</td>
+    </tr>
+</table>
+
+## lvm Linux的LVM
+
+- <code>lvm</code>是用于创建和管理LV的交互式实用工具。如果尚未安装，可以使用lvm2软件包安装。各种LVM工具直接在CLI中就可以使用，无须进入<code>lvm</code>。
+- 首次设置逻辑卷的步骤：创建物理卷&rarr;创建卷组&rarr;创建逻辑卷&rarr;格式化逻辑卷&rarr;挂载逻辑卷。也就是：`pgcreate`&rarr;`vgcreate`&rarr;`lvcreate`&rarr;`mkfs`&rarr;`mount`。
 
 # tune2fs
 
