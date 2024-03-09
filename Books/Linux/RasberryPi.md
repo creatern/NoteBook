@@ -269,4 +269,8 @@ RestartSec=10s
 WantedBy=default.target
 ```
 
+### ILI9374 TFT
+
+https://blog.csdn.net/chenqide163/article/details/107873190
+
 # 软路由
