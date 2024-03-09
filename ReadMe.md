@@ -12,11 +12,13 @@
 
 ### 基础篇
 
-#### [概述与事务](./Books/SQL/SQL概念与事务.md)
+#### [安装与配置](./Books/Oracle/安装与配置.md)
+
+#### [概述与事务](./Books/Oracle/SQL概念与事务.md)
 
 #### [权限管理](./Books/Oracle/权限管理.md)
 
-#### [数据类型](./Books/Oracle/SQL数据类型.md)
+#### [数据类型](./Books/Oracle/数据类型.md)
 
 #### [CRUD](./Books/Oracle/CRUD.md)
 

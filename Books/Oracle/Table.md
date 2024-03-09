@@ -125,6 +125,8 @@ rename to employees;
 
 # constraint 约束
 
+## constraint 指定约束
+
 - constraint（约束）定义规则，确保完整性。
 
 1. 若不指定约束名，ORACLE自动按sys_cn格式指定约束名。

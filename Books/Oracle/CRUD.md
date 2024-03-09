@@ -161,7 +161,9 @@ where department_id = 20
 order by 1 DESC;
 ```
 
-# insert 添加数据
+# insert
+
+## insert 插入数据
 
 - insert一次只能向表中插入一条数据。
 
@@ -211,56 +213,7 @@ from employees
 where department_id = 90;
 ```
 
-# update 更新数据 
-
-```sql
-update 表
-set 列=新的列
-where -- 没有where ，则全部更新
-```
-
-```sql
--- 更新114号员工的工作和工资使其和205号员工相同
-update employees
-set job_id = (
-             select job_id
-             from employees
-             where employee_id = 205
-             )
-   ,salary = (
-              select salary
-              from employees
-              where employee_id = 205
-              )
-where employee_id = 114;
-```
-
-
-# delete 删除数据 
-
-```sql
-delete from table_name
-where  -- 若无where子句，则全部删除
-```
-
-```sql
--- 删除emp表中id为1的员工
-delete from emp
-where id = 1;
-```
-
-## truncate 清空数据
-
-| 操作     | 对比     |
-| -------- | -------- |
-| delete   | 可以回滚 |
-| truncate | 不可回滚 |
-
-```sql
-truncate table 表;
-```
-
-# merge 合并数据
+## merge 合并数据
 
 - 数据转储操作：从表中选择数据行以修改或插入到另一个表。
 - merge基于on子句中的条件来决定对目标表执行的是修改还是插入操作，必须在目标表上有insert和update系统权限，源表上具有select系统权限。
@@ -342,4 +295,54 @@ name                      MonEY
 a                            30
 c                            20
 d                           100
+```
+
+# update 更新数据 
+
+```sql
+update 表
+set 列=新的列
+where -- 没有where ，则全部更新
+```
+
+```sql
+-- 更新114号员工的工作和工资使其和205号员工相同
+update employees
+set job_id = (
+             select job_id
+             from employees
+             where employee_id = 205
+             )
+   ,salary = (
+              select salary
+              from employees
+              where employee_id = 205
+              )
+where employee_id = 114;
+```
+
+# delete
+
+## delete 删除数据 
+
+```sql
+delete from table_name
+where  -- 若无where子句，则全部删除
+```
+
+```sql
+-- 删除emp表中id为1的员工
+delete from emp
+where id = 1;
+```
+
+## truncate 清空数据
+
+| 操作     | 对比     |
+| -------- | -------- |
+| delete   | 可以回滚 |
+| truncate | 不可回滚 |
+
+```sql
+truncate table 表;
 ```
