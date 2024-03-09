@@ -290,7 +290,7 @@ Host zjk-pi
         HostName zjk-pi.local
         User zjk
                 IdentityFile ~/.ssh/pi-key
-                IdentitiesOnly yes
+                IdentitiesOnly no
 ```
 
 #### 修改私钥密码
