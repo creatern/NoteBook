@@ -280,7 +280,6 @@ where e.name = 'Tom';
     </tr>
 </table>
 
-
 ##### like 模式匹配
 
 - `like`：模式匹配
@@ -308,6 +307,111 @@ where e.name = 'Tom';
 ```mysql
 select name from sys_menu where regexp_like(name, '^..管理');
 ```
+
+#### 类型转换
+
+- 类型转换（type conversion）：当运算符与不同类型的操作数一起使用时，会发生类型转换以使操作数兼容，有些转换是隐式发生的。
+
+##### 不同类型之间的比较
+
+<table>
+    <tr>
+        <th width="30%">参数情况</th>
+        <th width="70%">是否转换</th>
+    </tr>
+    <tr>
+        <td>一个或两个参数是null</td>
+        <td>除了&lt;=&gt;运算符外，所有的比较结果都是null</td>
+    </tr>
+    <tr>
+        <td>两个参数都是字符串</td>
+        <td>作为字符串进行比较</td>
+    </tr>
+    <tr>
+        <td>两个参数都是整数</td>
+        <td>作为整数进行比较</td>
+    </tr>
+    <tr>
+        <td>十六进制值如果不与数字比较</td>
+        <td>Hexadecimal values are treated as binary strings if not compared to a number.<br/>十六进制值被视为二进制字符串来进行比较</td>
+    </tr>
+    <tr>
+        <td rowspan="2">一个参数是<code>TIMESTAMP</code>或<code>DATETIME</code>类型，而另一个参数是常量</td>
+        <td>在执行比较之前，该常量将转换为时间戳</td>
+    </tr>
+    <tr>
+        <td>This is not done for the arguments to IN().<br/>如果是<code>IN()</code>相关的参数，则不会进行转换</td>
+    </tr>
+    <tr>
+        <td>一个参数是十进制值</td>
+        <td>比较取决于另一个参数。如果另一个参数是十进制值或整数值，则将参数作为十进制值进行比较；如果另一个参数是浮点值，则将参数作为浮点值进行比较</td>
+    </tr>
+    <tr>
+        <td>所有其他情况下</td>
+        <td>参数作为浮点（双精度）数字进行比较。例如，字符串和数字操作数的比较是浮点数的比较</td>
+    </tr>
+</table>
+
+###### 浮点数的精确度问题
+
+- 当从字符串到浮点以及从整数到浮点的转换发生时，它们不一定以相同的方式发生。整数可以由CPU转换为浮点数，而字符串在涉及浮点乘法的操作中逐位转换。此外，结果可能会受到计算机体系结构或编译器版本或优化级别等因素的影响。
+- 由于浮点数和`INTEGER`类型的大值之间的比较是近似值，因此出现如下两个查询的结果都是1（正确）的情况：
+
+```mysql
+SELECT '9223372036854775807' = 9223372036854775807;
+        -> 1
+SELECT '9223372036854775807' = 9223372036854775806;
+        -> 1
+```
+
+```mysql
+-- 避免字符串隐式转换为浮点数，而是指定转换为无符号数
+SELECT CAST('9223372036854775807' AS UNSIGNED) = 9223372036854775806;
+        -> 0
+```
+
+###### dtoa库提供的转换
+
+- `dtoa` 库提供具有以下属性的转换。 `D` 表示具有 `DECIMAL` or 字符串表示形式的值，并以 `F` 本机二进制 （IEEE） 格式表示浮点数。
+
+<table>
+    <tr>
+        <td width="10%">F&rarr;D</td>
+        <td width="90%">conversion is done with the best possible precision, returning D as the shortest string that yields F when read back in and rounded to the nearest value in native binary format as specified by IEEE.<br/>转换以尽可能高的精度完成，当读入并四舍五入到IEEE指定的本机二进制格式中最接近的值时，返回D作为返回F的最短字符串</td>
+    </tr>
+    <tr>
+        <td>F&rarr;D</td>
+        <td>conversion is done such that F is the nearest native binary number to the input decimal string D.<br/>使F是最接近输入十进制字符串D的本机二进制数</td>
+    </tr>
+</table>
+
+1. F&rarr;D&rarr;F是无损的，除非F是带有符号的（`-inf` 、 `+inf`）或者是无效值（NaN）。
+2. D&rarr;F&rarr;D，无损的充分条件是 `D` 使用 15 位或更少的精度，不是正态值、 `-inf` 、 `+inf` 或 `NaN` 。尽管在某些情况下，即使 `D` 精度超过 15 位，转换也是无损的，但情况并非总是如此。
+
+- 将数值或时态值隐式转换为字符串会生成一个值，该值具有由 `character_set_connection` 和 `collation_connection` 系统变量确定的字符集和排序规则。这意味着，这样的转换将产生字符（非二进制）字符串（CHAR、VARCHAR或LONGTEXT值），除非连接字符集被设置为二进制。在这种情况下（二进制），转换结果是一个二进制字符串（binary、VARBINARY或LONGBLOB值）。
+
+- 对于整数表达式，其生成的值的类型（INT、BIGINT）取决于表达式（值）的长度。如果长度没有超过INT的范围，则类型为INT；如果长度超过INT的范围，则类型为BIGINT。
+
+```mysql
+-- 如下生成的类型是BIGINT
+CREATE TABLE t SELECT 000000000000000000000;
+
+mysql> desc t;
++-----------------------+--------+------+-----+---------+-------+
+| Field                 | Type   | Null | Key | Default | Extra |
++-----------------------+--------+------+-----+---------+-------+
+| 000000000000000000000 | bigint | NO   |     | 0       |       |
++-----------------------+--------+------+-----+---------+-------+
+```
+
+##### 时态类型之间的转换
+
+##### JSON值的比较
+
+- JSON值的比较在两个级别进行：第一级比较基于比较值的JSON类型。如果类型不同，则比较结果仅由哪种类型具有更高的优先级来确定。如果这两个值具有相同的 JSON 类型，则使用特定于类型的规则进行第二级比较。
+- 比较JSON值和非 JSON值，会将非JSON值转换为JSON，并将值作为JSON值进行比较。
+
+> Comparison of JSON values takes place at two levels. The first level of comparison is based on the JSON types of the compared values. If the types differ, the comparison result is determined solely by which type has higher precedence. If the two values have the same JSON type, a second level of comparison occurs using type-specific rules. For comparison of JSON and non-JSON values, the non-JSON value is converted to JSON and the values compared as JSON values. For details, see [Comparison and Ordering of JSON Values](https://dev.mysql.com/doc/refman/8.0/en/json.html#json-comparison).
 
 
 ### 逻辑运算符
@@ -370,7 +474,6 @@ select name from sys_menu where regexp_like(name, '^..管理');
         <td>左移</td>
     </tr>
 </table>
-
 ## 排序与筛选
 
 ### order by 排序
@@ -411,6 +514,23 @@ select *
 from employees
 limit 20 offset 0;
 ```
+
+## 关系结果集处理
+
+- 在对多个表的结果集进行处理时，这些表对应的列数和数据类型必须相同，并且相互对应；各个select语句之间通过相应的运算符/关键字分隔。
+
+<table>
+    <tr>
+        <td width="20%">union</td>
+        <td width="80%">返回两个查询的结果集的并集，同时去除重复记录</td>
+    </tr>
+    <tr>
+        <td>union all</td>
+        <td>返回两个查询的结果集的并集，不进行去重操作，因此效率高于union</td>
+    </tr>
+</table>
+
+
 
 ## join 连接
 
@@ -534,7 +654,7 @@ from employees e
 +-------------+-----------------+
 
 # 右外连接
-select employee_id, department_name 
+select employee_id, department_name
 from employees e 
 	right join departments d on e.department_id = d.department_id;
 	
@@ -549,8 +669,40 @@ from employees e
 +-------------+-----------------+
 ```
 
+### 自然连接 natural join
 
-## 组（聚合）函数
+- `natural join`（自然连接）是SQL99提供的语法标准，会自动通过两个连接表中的<b>所有相同字段</b>来进行等值连接。
+
+<img src="../../pictures/20240309154947.png" width="500"/> 
+
+```mysql
+# 通过自然连接来查询employee和department
+select employee_id, department_name
+from employees 
+	natural join departments;
+
+# 结果集相当于如下查询：
+select employee_id, department_name
+from employees e
+	join departments d on e.department_id = d.department_id
+		and e.manager_id = d.manager_id;
+```
+
+### using join 同名连接
+
+- `using join`（同名连接）是SQL99提供的语法标准，必须搭配`join`使用，通过使用`using`来指定数据表里的<b>同名字段</b>（可以指定多个）进行等值连接。
+
+```mysql
+select employee_id, department_name
+from employees 
+	join departments using (department_id);
+	
+select employee_id, department_name
+from employees 
+	join departments using (department_id, manager_id);
+```
+
+## [内置函数](./内置函数.md)
 
 <table>
     <tr>
@@ -564,7 +716,7 @@ from employees e
     <tr></tr>
 </table>
 
-### group by
+## group by
 
 # update
 

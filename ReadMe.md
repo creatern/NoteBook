@@ -70,7 +70,7 @@
 
 #### [Table](./Books/MySQL/table.md)
 
-#### [函数和运算符](./Books/MySQL/函数和运算符.md)
+#### [内置函数 Function](./Books/MySQL/内置函数.md)
 
 ### 进阶篇
 
