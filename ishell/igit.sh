@@ -3,7 +3,7 @@
 key=$1
 msg=$2
 if [ -z "$msg" ]; then
-	$msg="none"
+	msg="none"
 fi
 
 stat="success"
@@ -13,14 +13,14 @@ BOOK_HOME=/home/zjk/note-book
 cd $BOOK_HOME
 
 git add --all
-git commit -m $msg --all
+git commit -m "$msg" --all
 
 if [ $(timeout -k 5s 30s git push gitee) ]; then
-	$stat="$stat---->gitee push failed"
+	stat="$stat---->gitee push failed"
 fi
 
 if [ $(timeout -k 5s 30s git push github) ]; then
-	$stat="$stat---->github push failed"
+	stat="$stat---->github push failed"
 fi
 
 # ok-0 lock-2 end-3
