@@ -28,6 +28,7 @@ if [ 0 -eq $key ]; then
 	for ((i=5;i>0;i--))
 	do
 		echo "$i秒之后退出"
+		sleep 1s
 	done
 	exit
 fi
@@ -36,6 +37,7 @@ if [ 1 -eq $key ]; then
 	for ((i=5;i>0;i--))
 	do
 		echo "$i秒之后锁屏"
+		sleep 1s
 	done
 	systemctl suspend
 	exit
@@ -45,6 +47,7 @@ if [ 3 -eq $key ]; then
 	for ((i=5;i>0;i--))
 	do
 		echo "$i秒之后制定1分钟的关机计划"
+		sleep 1s
 	done
 	systemctl shutdown
 fi

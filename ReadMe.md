@@ -122,15 +122,11 @@
 
 ### [Comparator 比较器](./Books/Java/Comparator.md)
 
-
 ### [Pattern 正则](./Books/Java/Pattern.md)
-
 
 ### [时间日期API](./Books/Java/Date.md)
 
-
 ### [格式化/国际化](./Books/Java/format.md)
-
 
 ## 进阶卷
 
@@ -142,12 +138,9 @@
 
 ### [IO](./Books/Java/IO.md)
 
-
 ### [JDBC](./Books/Java/JDBC.md)
 
-
 ### [网络](./Books/Java/Socket.md)
-
 
 ## [FP 函数式编程](./Books/Java/FP.md)
 
@@ -160,7 +153,6 @@
 ## JUC 并发编程
 
 ### [Thread](./Books/Java/Thread.md)
-
 
 ### [Unsafe](./Books/Java/Unsafe.md)
 
@@ -188,44 +180,43 @@
 
 #### Spring 基本
 
-| 基本思想                              | 说明                                                         |
-| ------------------------------------- | ------------------------------------------------------------ |
-| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                           |
+| 基本思想                              | 说明                                                                                      |
+| --------------------------------- | --------------------------------------------------------------------------------------- |
+| [IoC 控制反转](./Books/Spring/IOC.md) | 将创造Bean的权利交给Spring进行管理                                                                  |
 | [DI 依赖注入](./Books/Spring/DI.md)   | 某个Bean的完整创建依赖于其他Bean（或普通参数）的注入<br />注入顺序（后面的覆盖前面的）：字面量/声明 \<\-\- 属性标注 \<\-\- setXxx()标注 |
-| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面       |
+| [AOP 面向切面](./Books/Spring/AOP.md) | 横向抽取方法（属性、对象等）思想，组装成一个功能性切面                                                             |
 
 [MVC框架](./Books/Spring/MVC.md)
 
 #### Spring Boot
 
-| Initializr结构                                               | 说明             |
-| ------------------------------------------------------------ | ---------------- |
+| Initializr结构                                                      | 说明            |
+| ----------------------------------------------------------------- | ------------- |
 | [@SpringBootApplication](./Books/Spring/SpringBootApplication.md) | SpringBoot启动类 |
-| /static                                                      | 静态资源         |
-| /templates                                                   | 模板文件         |
-| application.properties<br />application.yml                  | 配置文件         |
+| /static                                                           | 静态资源          |
+| /templates                                                        | 模板文件          |
+| application.properties<br />application.yml                       | 配置文件          |
 
 - Starter依赖管理（spring\-boot\-starter）：Spring对依赖包的集中描述，本身不包含库代码，而是传递性地拉取其他库。
 - [Spring DevTools](./Books/Spring/DevTools.md)：Spring开发环境工具，应用部署后DevTools禁用自身。
 - [配置属性](./Books/Spring/properties.md)：Spring从各个属性源获取数据并注入到各个Bean。
 
-| 依赖库                                     | 功能                                                         |
-| ------------------------------------------ | ------------------------------------------------------------ |
-| [Lombok](./Books/Spring/Lombok.md)         | 编译期自动生成类的方法（@Data），生成jar、war时自动剔除Lombok |
-| [视图模板库](./Books/Spring/View.md)       | [Thymeleaf](./Books/Spring/Thymeleaf.md)                     |
-| [validation](./Books/Spring/validation.md) | 校验（JSR-303）                                              |
+| 依赖库                                        | 功能                                       |
+| ------------------------------------------ | ---------------------------------------- |
+| [Lombok](./Books/Spring/Lombok.md)         | 编译期自动生成类的方法（@Data），生成jar、war时自动剔除Lombok  |
+| [视图模板库](./Books/Spring/View.md)            | [Thymeleaf](./Books/Spring/Thymeleaf.md) |
+| [validation](./Books/Spring/validation.md) | 校验（JSR-303）                              |
 
 > 模板缓存：模板默认只有第一次使用时解析，防止每次请求时多余的模板解析（对生产友好、不利于开发）。Spring Boot Devtools默认禁用模板缓存（应用部署后DevTools禁用自身）：spring.thymeleaf.cache。
->
 
 #### Spring Data
 
-| 依赖库                                               | 说明                       |
-| ---------------------------------------------------- | -------------------------- |
-| [JDBC](./Books/Spring/JDBC.md)                       |                            |
-| [JPA](./Books/Spring/JPA.md)                         | 适用于SQL和NoSQL           |
-| [Cassandra](./Books/Spring/Cassandra.md)             |                            |
-| [MongoDB](./Books/Spring/MongoDB.md)                 |                            |
+| 依赖库                                                  | 说明                |
+| ---------------------------------------------------- | ----------------- |
+| [JDBC](./Books/Spring/JDBC.md)                       |                   |
+| [JPA](./Books/Spring/JPA.md)                         | 适用于SQL和NoSQL      |
+| [Cassandra](./Books/Spring/Cassandra.md)             |                   |
+| [MongoDB](./Books/Spring/MongoDB.md)                 |                   |
 | [Spring Data REST](./Books/Spring/SpringDataREST.md) | 基于储存库自动生成REST API |
 
 ### [MyBatis](./Books/Spring/MyBatis.md)
@@ -255,7 +246,6 @@
 ### [执行引擎](./Books/JVM/ExecutionEngine.md)
 
 ### [字符串常量池](./Books/JVM/StringTable.md)
-
 
 ## GC
 
@@ -499,51 +489,51 @@
 
 ### 创建型
 
-####  [工厂模式 Factory](./Books/Algorithm/Factory.md)
+#### [工厂模式 Factory](./Books/Algorithm/Factory.md)
 
-####  [单例模式 SingleTon](./Books/Algorithm/SingleTon.md)
+#### [单例模式 SingleTon](./Books/Algorithm/SingleTon.md)
 
-####  [建造者模式 Builder](./Books/Algorithm/Builder.md)
+#### [建造者模式 Builder](./Books/Algorithm/Builder.md)
 
 ### 结构型
 
-####  [适配器模式 Adapter](./Books/Algorithm/Adapter.md)
+#### [适配器模式 Adapter](./Books/Algorithm/Adapter.md)
 
-####  [桥接模式](./Books/Algorithm/Bridge.md)
+#### [桥接模式](./Books/Algorithm/Bridge.md)
 
-####  [装饰者模式 Decorator](./Books/Algorithm/Decorator.md)
+#### [装饰者模式 Decorator](./Books/Algorithm/Decorator.md)
 
-####  [组合模式 Composite](./Books/Algorithm/Composite.md)
+#### [组合模式 Composite](./Books/Algorithm/Composite.md)
 
-####  [外观模式 Facade](./Books/Algorithm/Facade.md)
+#### [外观模式 Facade](./Books/Algorithm/Facade.md)
 
-####  [享元模式 Flyweight](./Books/Algorithm/Flyweight.md)
+#### [享元模式 Flyweight](./Books/Algorithm/Flyweight.md)
 
-####  [代理模式 Proxy](./Books/Algorithm/Proxy.md)
+#### [代理模式 Proxy](./Books/Algorithm/Proxy.md)
 
 ### 行为型
 
-####  [模板方法模式 Template](./Books/Algorithm/Template.md)
+#### [模板方法模式 Template](./Books/Algorithm/Template.md)
 
-####  [命令模式 Command](./Books/Algorithm/Command.md)
+#### [命令模式 Command](./Books/Algorithm/Command.md)
 
-####  [访问者模式 Visitor](./Books/Algorithm/Visitor.md)
+#### [访问者模式 Visitor](./Books/Algorithm/Visitor.md)
 
-####  [迭代器模式 Iterator](./Books/Algorithm/Iterator.md)
+#### [迭代器模式 Iterator](./Books/Algorithm/Iterator.md)
 
-####  [观察者模式 Observer](./Books/Algorithm/Observer.md)
+#### [观察者模式 Observer](./Books/Algorithm/Observer.md)
 
-####  [中介者模式 Mediator](./Books/Algorithm/Mediator.md)
+#### [中介者模式 Mediator](./Books/Algorithm/Mediator.md)
 
-####  [备忘录模式 Memento](./Books/Algorithm/Memento.md)
+#### [备忘录模式 Memento](./Books/Algorithm/Memento.md)
 
-####  [解释器模式 Interpreter](./Books/Algorithm/Interpreter.md)
+#### [解释器模式 Interpreter](./Books/Algorithm/Interpreter.md)
 
-####  [状态模式 State](./Books/Algorithm/State.md)
+#### [状态模式 State](./Books/Algorithm/State.md)
 
-####  [策略模式 Strategy](./Books/Algorithm/Strategy.md)
+#### [策略模式 Strategy](./Books/Algorithm/Strategy.md)
 
-####  [职责链模式 Chain of Responsibility](./Books/Algorithm/ChainOfResponsibility.md)
+#### [职责链模式 Chain of Responsibility](./Books/Algorithm/ChainOfResponsibility.md)
 
 # 数学
 
