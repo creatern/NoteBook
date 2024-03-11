@@ -1,3 +1,50 @@
+# Docker安装
+
+## Fedora
+
+### 卸载旧版本
+
+```shell
+sudo dnf remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine
+```
+
+### dnf 安装
+
+```shell
+# 安装依赖
+sudo dnf -y install dnf-plugins-core
+```
+
+```shell
+# 换Docker的安装源
+sudo dnf config-manager \
+    --add-repo \
+    https://mirrors.aliyun.com/docker-ce/linux/fedora/docker-ce.repo
+
+sudo sed -i 's/download.docker.com/mirrors.aliyun.com\/docker-ce/g' /etc/yum.repos.d/docker-ce.repo
+
+# 官方源
+# $ sudo dnf config-manager \
+#    --add-repo \
+#    https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+```shell
+# 更新dnf源
+sudo dnf update
+# 安装
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
 # Docker概述
 
 - 容器技术只隔离应用程序的运行时环境但容器之间可以共享同一个操作系统（程序的运行只和容器有关，即屏蔽环境差异）。
@@ -6,13 +53,13 @@
 
 <img src="../../pictures/image-20200325194141346.png" width="700"/> 
 
-| 概念       | 说明                        |
-| ---------- | --------------------------- |
+| 概念         | 说明                 |
+| ---------- | ------------------ |
 | Dockerfile | 自动化脚本（创建Image）     |
 | Image      | 镜像（创建Container的模板） |
-| Container  | 容器                        |
-| **其他**   | **说明**                    |
-| Repository | 仓库（存放镜像）            |
+| Container  | 容器                 |
+| **其他**     | **说明**             |
+| Repository | 仓库（存放镜像）           |
 
 ## [Docker命令](https://docs.docker.com/reference/)
 
@@ -33,10 +80,10 @@ docker run -it --name mysql5.7 \
 
 > UnionFS（联合文件系统）：分层、轻量级、高性能的文件系统，是Docker镜像的基础（所有镜像都基于其基础镜像）。
 
-| 层次   | 说明                                               |
-| ------ | -------------------------------------------------- |
+| 层次     | 说明                                      |
+| ------ | --------------------------------------- |
 | bootfs | Docker最底层，包含bootloader、kernel。<br />公用。 |
-| rootfs | 底层直接使用Host的kernel，只需要基本的指令集。     |
+| rootfs | 底层直接使用Host的kernel，只需要基本的指令集。            |
 
 - Docker镜像是只读的。当容器启动时，新的可写层（容器）被加载到镜像层顶部，用户的操作都基于容器层。
 
@@ -77,20 +124,20 @@ docker build [-f {dockerFile}] -t {imageName[:tag]} .
 > docker history {imageID}
 > ```
 
-| 执行时机 | DockerFile命令 | 说明                                               |
-| -------- | -------------- | -------------------------------------------------- |
-| 镜像构建 | FROM           | 基础镜像                                           |
-|          | MAINTAINER     | `姓名<邮箱>`                                       |
-|          | ENV            | 环境变量                                           |
-|          | WORKDIR        | 工作目录                                           |
-|          | RUN            | 运行命令                                           |
-|          | ADD            | 复制到镜像（自动解压）                             |
-|          | COPY           | 复制到镜像                                         |
-|          | VOLUME         | 数据卷                                             |
-|          | EXPOSE         | 暴露端口                                           |
-|          | ONBUILD        |                                                    |
-| 容器启动 | CMD            | 运行命令，只有最后一个CMD会执行（替换之前的CMD）。 |
-|          | ENTRYPOINT     | 运行命令，在之前ENTRYPOINT基础上追加命令。         |
+| 执行时机 | DockerFile命令 | 说明                           |
+| ---- | ------------ | ---------------------------- |
+| 镜像构建 | FROM         | 基础镜像                         |
+|      | MAINTAINER   | `姓名<邮箱>`                     |
+|      | ENV          | 环境变量                         |
+|      | WORKDIR      | 工作目录                         |
+|      | RUN          | 运行命令                         |
+|      | ADD          | 复制到镜像（自动解压）                  |
+|      | COPY         | 复制到镜像                        |
+|      | VOLUME       | 数据卷                          |
+|      | EXPOSE       | 暴露端口                         |
+|      | ONBUILD      |                              |
+| 容器启动 | CMD          | 运行命令，只有最后一个CMD会执行（替换之前的CMD）。 |
+|      | ENTRYPOINT   | 运行命令，在之前ENTRYPOINT基础上追加命令。   |
 
 ```dockerfile
 FROM ubuntu
@@ -127,15 +174,14 @@ CMD echo "---Tomcat OK---" && pwd
 
 Docker0
 
-| 网络模式  | 说明             |
-| --------- | ---------------- |
-| bridge    | 默认，桥接       |
-| none      | 不配置网络       |
+| 网络模式      | 说明       |
+| --------- | -------- |
+| bridge    | 默认，桥接    |
+| none      | 不配置网络    |
 | host      | 和宿主机共享网络 |
-| container | 容器网络连通     |
+| container | 容器网络连通   |
 
 ```shell
 # docker run 默认--net bridge
 --net {bridge | networkName}
 ```
-
