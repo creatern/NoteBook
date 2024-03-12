@@ -273,6 +273,47 @@ WantedBy=default.target
 
 https://blog.csdn.net/chenqide163/article/details/107873190
 
+```
+RPi Pin    RPi Label     CAN Module
+01---------3.3V------------VCC
+06---------GND-----------GND
+19---------GPIO10--------MOSI (SI)
+21---------GPIO9---------MISO (SO)
+23---------GPIO11--------SCK
+24---------GPIO8---------CS
+16---------GPIO23--------RESET
+18---------GPIO24--------DC/RS
+12---------GPIO18--------LED
+```
+
+<img src="../../pictures/ab0fc189513bd2cf689725f8360d960c.png" width="400"/> 
+
+<img src="../../pictures/2024-03-12_22-51.png" width="400"/> 
+
+```shell
+# 安装树莓派的工具
+sudo apt upgrade
+sudo apt install raspi-config
+# 开启SPI接口 3 Interface Options    Configure connections to peripherals  
+sudo apt install raspi-config enable SPI interface
+
+# 安装必要工具，此步骤可忽略
+sudo apt install raspberrypi-bootloader
+sudo apt install rpi-update
+# 更新时间
+sudo timedatectl set-ntp true
+# 更新树莓派固件设置
+sudo rpi-update
+
+# 重启
+sudo reboot
+
+# fbtft
+# /lib/modules/5.4.0-1104-raspi/kernel/drivers/staging/fbtft/
+ls /lib/modules/5.4.0-1104-raspi/kernel/drivers/staging/fbtft/
+# fb_ili9341.ko
+```
+
 
 
 # 软路由
