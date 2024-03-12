@@ -10,9 +10,19 @@
 
 ## Oracle
 
-### 基础篇
+### 配置篇
 
 #### [安装与配置](./Books/Oracle/安装与配置.md)
+
+#### [数据库启动与关闭](./Books/Oracle/数据库启动与关闭.md)
+
+#### [内存结构](./Books/Oracle/内存结构.md)
+
+#### [逻辑结构](./Books/Oracle/逻辑结构.md)
+
+#### [物理结构](./Books/Oracle/物理结构.md)
+
+### 基础篇
 
 #### [概述与事务](./Books/Oracle/SQL概念与事务.md)
 
