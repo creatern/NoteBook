@@ -81,6 +81,7 @@ rsync -av zjk@192.168.1.147:/home/zjk/MyDisk/backups/Adafruit_Python_SSD1306 ~/D
 ```shell
 # 安装rsync服务器
 sudo apt install rsync
+# sudo dnf install rsync
 
 # 创建/编写rsync配置文件
 sudo vim /etc/rsyncd.conf
@@ -93,18 +94,21 @@ sudo chmod 0600 /etc/rsyncd.secrets
 sudo vim /etc/rsyncd.motd
 
 # 创建并设置对应的备份目录
-mkdir /home/zjk/MyDisk/backups
-chmod 0700 /home/zjk/MyDisk/backups
+mkdir /home/zjk/backups
+chmod 0700 /home/zjk/backups
 
 # 启动rsyncd进程 rsyc --daemon
 sudo systemctl start rsync
 sudo systemctl enable rsync
+# /usr/bin/rsync --daemon --config=/etc/rsyncd.conf
 
 # 防火墙允许
 sudo ufw allow rsync
+# sudo firewall-cmd --add-port=873/tcp --permanent
+# sudo firewall-cmd --reload
 
 # 测试rsyncd进程是否正在监听
-rsync 192.168.31.70::
+rsync 192.168.186.71::
 
 # 进行传输
 rsync -av ~/test.txt 192.168.31.70::mybackup_01
@@ -202,7 +206,6 @@ rsync -av ~/Documents backupman@192.168.31.70::mybackup_01
     </tr>
 </table>
 
-
 ```shell
 port = 873
 address = 0.0.0.0
@@ -211,7 +214,7 @@ log file = /var/log/rsyncd.log
 motd file = /etc/rsyncd.motd
 
 [mybackup_01]
-	path = /home/zjk/MyDisk/backups
+	path = /home/zjk/backups
 	comment = "server public archive"
 	list = yes
 	read only = no

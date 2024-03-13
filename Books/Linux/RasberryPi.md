@@ -45,6 +45,23 @@ Rasberry Pi 4B的配置：
 
 ### OLED （I2C）
 
+<table>
+    <tr>
+        <th width="30%">Python库</th>
+        <th width="70%">支持的驱动</th>
+    </tr>
+    <tr>
+        <td>Adafruit_Python_SSD1306库</td>
+        <td>只支持SSD1306</td>
+    </tr>
+    <tr>
+        <td>Luma.oled库</td>
+        <td>支持SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / WS0010驱动芯片</td>
+    </tr>
+</table>
+
+#### I2C接口基本准备
+
 1. 使用杜邦线连接引脚
 
 GND --- GND
@@ -52,7 +69,7 @@ VCC --- 接树莓派 5V
 SDA --- I2C 数据
 SCL --- I2C 时钟
 
-<img src="../../pictures/20240118220411.png" width="300"/> 
+<img src="../../pictures/20240118220411.png" width="500"/> 
 
 2. 下载安装i2c工具，并打开I2C接口
 
@@ -62,6 +79,7 @@ sudo apt install -y python3-smbus
 sudo apt install -y i2c-tools
 
 # 树莓派打开I2C接口的方式 sudo raspi-config
+sudo raspi-config
 
 # 检测i2c数量
 i2cdetect -l
@@ -79,7 +97,9 @@ i2cdetect -r -y 1
 # 70: -- -- -- -- -- -- -- --  
 ```
 
-3. 下载Adafruit的Python库，这个库支持所有的 SSD1306 相关的显示屏，包括 128×32 和 128×64 屏幕
+#### <code>Adafruit_Python_SSD1306</code>
+
+- 下载Adafruit的Python库，这个库支持所有的 SSD1306 相关的显示屏，包括 128×32 和 128×64 屏幕
 
 ```shell
 # 克隆需要的Adafruit的Python 库
@@ -88,14 +108,17 @@ git clone https://github.com/adafruit/Adafruit_Python_SSD1306.git
 # 进行安装
 cd Adafruit_Python_SSD1306
 sudo python3 setup.py install
+# 如果出错
+#python3 -m venv my_virtual_env
+#source my_virtual_env/bin/activate  # 激活虚拟环境
+#pip install --upgrade pip setuptools  # 在虚拟环境中升级 pip 和 setuptools
 
 sudo apt install python3-pil
 # python运行屏幕显示脚本
-cd examples
-python3 shapes.py
+python3 examples/shapes.py
 ```
 
-#### 屏幕显示脚本
+##### 屏幕显示脚本
 
 - 参考`Adafruit_Python_SSD1306/examples`目录下的文件，尤其是`Adafruit_Python_SSD1306/examples/stats.py`
 - 可以在UbuntuServer等的[开机启动脚本](./Shell.md)中设置自动启动`python3 /home/zjk/Documents/Adafruit_Python_SSD1306/examples/stats.py`命令（开机自启动sh）
@@ -236,6 +259,35 @@ while True:
     disp.image(image)
     disp.display()
     time.sleep(.1)
+```
+
+#### luma.oled
+
+https://github.com/rm-hull/luma.examples
+
+https://luma-oled.readthedocs.io/en/latest/intro.html
+
+[luma例库](https://github.com/rm-hull/luma.examples)
+
+```shell
+sudo usermod -a -G i2c,spi,gpio pi
+sudo apt install python3-dev python3-pip python3-numpy libfreetype6-dev libjpeg-dev build-essential
+sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev
+
+# 拉取github的luma库
+git clone https://github.com/rm-hull/luma.examples.git
+cd luma.examples
+
+# 下载luma库
+sudo -H pip install -e .
+
+# 参考示例
+cd examples
+python3 3d_box.py
+# python3 terminal.py
+# python3 sys_histogram.py
+# python3 sys_info.py
+# python3 sys_info_extended.py
 ```
 
 #### 设置为服务
