@@ -335,6 +335,8 @@
 
 ### [文件管理](./Books/Linux/文件管理.md)
 
+### [文本处理](./Books/Linux/文本处理.md)
+
 ### [界面与CLI](./Books/Linux/界面与连接.md)
 
 ## 系统篇
@@ -390,8 +392,6 @@
 ### [Shell概述](./Books/Linux/Shell.md)
 
 ### [环境变量](./Books/Linux/环境变量.md)
-
-### [文本处理](./Books/Linux/文本处理.md)
 
 ### [Shell脚本](./Books/Linux/Shell脚本.md)
 
