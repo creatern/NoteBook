@@ -24,9 +24,7 @@
 
 ### 基础篇
 
-#### [概述与事务](./Books/Oracle/SQL概念与事务.md)
-
-#### [权限管理](./Books/Oracle/权限管理.md)
+#### [事务与权限](./Books/Oracle/事务与权限.md)
 
 #### [数据类型](./Books/Oracle/数据类型.md)
 
