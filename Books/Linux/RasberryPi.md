@@ -270,7 +270,7 @@ https://luma-oled.readthedocs.io/en/latest/intro.html
 [luma例库](https://github.com/rm-hull/luma.examples)
 
 ```shell
-sudo usermod -a -G i2c,spi,gpio pi
+sudo usermod -a -G i2c,spi,gpio zjk
 sudo apt install python3-dev python3-pip python3-numpy libfreetype6-dev libjpeg-dev build-essential
 sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev
 
@@ -342,28 +342,67 @@ RPi Pin    RPi Label     CAN Module
 
 <img src="../../pictures/2024-03-12_22-51.png" width="400"/> 
 
+#### Adafruit_Python_ILI9341
+
 ```shell
-# 安装树莓派的工具
-sudo apt upgrade
-sudo apt install raspi-config
-# 开启SPI接口 3 Interface Options    Configure connections to peripherals  
-sudo apt install raspi-config enable SPI interface
+sudo apt install python3-full
+sudo -H pip install RPi.GPIO
 
-# 安装必要工具，此步骤可忽略
-sudo apt install raspberrypi-bootloader
-sudo apt install rpi-update
-# 更新时间
-sudo timedatectl set-ntp true
-# 更新树莓派固件设置
-sudo rpi-update
+# 安装Adafruit_Python_ILI9341库
+cd ~
+git clone https://github.com/adafruit/Adafruit_Python_ILI9341.git
+cd Adafruit_Python_ILI9341
+sudo python3 setup.py install
 
-# 重启
-sudo reboot
+# 运行案例
+cd examples
+sudo python image.py
+```
 
-# fbtft
-# /lib/modules/5.4.0-1104-raspi/kernel/drivers/staging/fbtft/
-ls /lib/modules/5.4.0-1104-raspi/kernel/drivers/staging/fbtft/
-# fb_ili9341.ko
+#### Adafruit_CircuitPython_RGB_Display
+
+https://github.com/adafruit/Adafruit_CircuitPython_RGB_Display
+
+```shell
+# 安装adafruit-circuitpython-rgb-display库
+sudo -H pip3 install adafruit-circuitpython-rgb-display
+```
+
+- 示例脚本
+
+```shell
+import time
+import busio
+import digitalio
+from board import SCK, MOSI, MISO, D2, D3
+
+from adafruit_rgb_display import color565
+import adafruit_rgb_display.ili9341 as ili9341
+
+
+# Configuration for CS and DC pins:
+CS_PIN = D2
+DC_PIN = D3
+
+# Setup SPI bus using hardware SPI:
+spi = busio.SPI(clock=SCK, MOSI=MOSI, MISO=MISO)
+
+# Create the ILI9341 display:
+display = ili9341.ILI9341(spi, cs=digitalio.DigitalInOut(CS_PIN),
+                          dc=digitalio.DigitalInOut(DC_PIN))
+
+# Main loop:
+while True:
+    # Clear the display
+    display.fill(0)
+    # Draw a red pixel in the center.
+    display.pixel(120, 160, color565(255, 0, 0))
+    # Pause 2 seconds.
+    time.sleep(2)
+    # Clear the screen blue.
+    display.fill(color565(0, 0, 255))
+    # Pause 2 seconds.
+    time.sleep(2)
 ```
 
 
