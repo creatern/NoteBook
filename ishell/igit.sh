@@ -24,7 +24,7 @@ if [ $(timeout -k 5s 30s git push github) ]; then
 fi
 
 # log
-echo "`whoami`, `date`, $stat" >> $BOOK_HOME/ilog/igit_log.csv
+echo "'`whoami`', '`date`', '$msg' , '$stat'" >> $BOOK_HOME/ilog/igit_log.csv
 
 # ok-0 lock-2 end-3
 if [ 0 -eq $key ]; then
