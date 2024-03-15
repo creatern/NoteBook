@@ -10,63 +10,9 @@
 
 ## Oracle
 
-### 配置篇
+### 单实例篇
 
-#### [安装与配置](./Books/Oracle/安装与配置.md)
-
-#### [数据库启动与关闭](./Books/Oracle/数据库启动与关闭.md)
-
-#### [内存结构](./Books/Oracle/内存结构.md)
-
-#### [逻辑结构](./Books/Oracle/逻辑结构.md)
-
-#### [物理结构](./Books/Oracle/物理结构.md)
-
-### 基础篇
-
-#### [事务与权限](./Books/Oracle/事务与权限.md)
-
-#### [CRUD](./Books/Oracle/CRUD.md)
-
-#### [数据类型](./Books/Oracle/数据类型.md)
-
-#### [Table](./Books/Oracle/Table.md)
-
-#### [View](./Books/Oracle/View.md)
-
-#### [子查询](./Books/Oracle/子查询.md)
-
-#### [join 连接](./Books/Oracle/Join.md)
-
-#### [组函数](./Books/Oracle/Group.md)
-
-#### [Sequence 序列](./Books/Oracle/Sequence.md)
-
-#### [index 索引](./Books/Oracle/Index.md)
-
-### PL/SQL
-
-#### [synonym 同义词](./Books/Oracle/Synonym.md)
-
-#### [cursor 游标](./Books/Oracle/Cursor.md)
-
-#### [procedure、function 子程序](./Books/Oracle/ProcedureAndFunction.md)
-
-#### [trigger 触发器](./Books/Oracle/Trigger.md)
-
-#### [Exception 异常处理](./Books/Oracle/Exception.md)
-
-#### [批量绑定](./Books/Oracle/bulk.md)
-
-#### [PL/SQL软件包](./Books/Oracle/package.md)
-
-#### [程序使用权限](./Books/Oracle/程序使用权限.md)
-
-#### [自治事务](./Books/Oracle/自治事务.md)
-
-#### [外部语言例程](./Books/Oracle/外部语言例程.md)
-
-#### [源码导出与加密](./Books/Oracle/源码导出与加密.md)
+#### [Oracle数据库简介](./Books/Oracle/Oracle数据库简介.md)
 
 ## MySQL
 
@@ -138,6 +84,8 @@
 
 ## 进阶卷
 
+### [java.script 脚本](./Books/Java/script.md)
+
 ### [泛型](./Books/Java/泛型.md)
 
 ### [反射](./Books/Java/reflect.md)
@@ -152,7 +100,7 @@
 
 ## [FP 函数式编程](./Books/Java/FP.md)
 
-### [Lamdba 对象表达式](./Books/Java/Lambda.md)
+### [Lambda 对象表达式](./Books/Java/Lambda.md)
 
 ### [Stream](./Books/Java/Stream.md)
 

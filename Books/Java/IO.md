@@ -1,4 +1,4 @@
-# IO 输入/输出
+# java.io概述
 
 - java.io：流式IO是一种顺序存取方式，流中的字节依据先进先出的规则。
 
@@ -70,8 +70,8 @@ try (FileReader fileReader = new FileReader(readFile);
 
 - 管道流：实现线程间数据的直接传输，一个管道由管道输出端（管道输出流）与管道输入端（管道输入流）连接而成。线程A可以通过它的输出管道发送数据，线程B把它的输人管道接到A的输出管道上即可接收A发送的数据。
 
-> 管道的连接实际上是使管道的输入流指向管道的输出流，或管道的输出流也指向管道输入流，这样从管道的输入流可以读取写入管道输出流的数据。
-> 管道流有时会使依赖于管道通信的程序造成**死锁** ： Java使用管道进行线程连接时不用考虑线程的同步问题。
+1. 管道的连接实际上是使管道的输入流指向管道的输出流，或管道的输出流也指向管道输入流，这样从管道的输入流可以读取写入管道输出流的数据。
+2. 管道流有时会使依赖于管道通信的程序造成**死锁** ： Java使用管道进行线程连接时不用考虑线程的同步问题。
 
 | 管道         | 类                                 |
 | ------------ | ---------------------------------- |
@@ -145,7 +145,7 @@ try (PrintWriter pw = new PrintWriter(System.out,true)) {
 | 方法     | readInt()<br />readShort()<br />readLong()<br />readFloat()<br />readDouble()<br />readChar()<br />readBoolean()<br />readUTF() | writeChars()<br />writeByte()<br />writeInt()<br />writeShort()<br />writeLong()<br />writeFloat()<br />writeDouble()<br />writeChar()<br />writeBoolean()<br />writeUTF() |
 | 说明     | 以固定的字节读取                                             | 以固定的字节写出                                             |
 
-- 读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同：否则可能报错、数据顺序出错。
+- 读取不同类型数据的顺序需要与保存不同类型的数据的顺序相同，否则可能报错、数据顺序出错。
 
 ```java
 File file = new File(System.getProperty("user.dir") + "/test.txt");
