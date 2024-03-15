@@ -82,7 +82,7 @@ from employees
 where salary between 1000 and 7000;
 ```
 
-## order 排序
+## order by 排序
 
 - order by子句只能在语句最后出现，可以使用第一个查询中的列名、别名、相对位置。
 

@@ -78,6 +78,8 @@
 
 #### [CRUD 增删改查](./Books/MySQL/CRUD.md)
 
+#### [数据类型](./Books/MySQL/DataType.md)
+
 #### [Table](./Books/MySQL/table.md)
 
 #### [内置函数 Function](./Books/MySQL/内置函数.md)
@@ -89,8 +91,6 @@
 #### [User 权限](./Books/MySQL/user.md)
 
 #### [字符集](./Books/MySQL/character.md)
-
-#### [数据类型](./Books/MySQL/DataType.md)
 
 ## MongoDB
 
