@@ -325,7 +325,7 @@
 
 ## 基础篇
 
-### [Vim](./Books/Linux/Vim.md)
+### [文本编辑器](./Books/Linux/文本编辑器.md)
 
 ### [应用安装](./Books/Linux/应用安装.md)
 
@@ -335,7 +335,7 @@
 
 ### [文本处理](./Books/Linux/文本处理.md)
 
-### [界面与CLI](./Books/Linux/界面与连接.md)
+### [界面与CLI](./Books/Linux/界面与CLI.md)
 
 ## 系统篇
 
