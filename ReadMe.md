@@ -26,9 +26,9 @@
 
 #### [事务与权限](./Books/Oracle/事务与权限.md)
 
-#### [数据类型](./Books/Oracle/数据类型.md)
-
 #### [CRUD](./Books/Oracle/CRUD.md)
+
+#### [数据类型](./Books/Oracle/数据类型.md)
 
 #### [Table](./Books/Oracle/Table.md)
 
@@ -90,7 +90,7 @@
 
 #### [User 权限](./Books/MySQL/user.md)
 
-#### [字符集](./Books/MySQL/character.md)
+#### [Character 字符集](./Books/MySQL/character.md)
 
 ## MongoDB
 

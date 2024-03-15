@@ -109,6 +109,13 @@ export PATH=$PATH:$MAVEN_HOME\bin
         <url>https://maven.aliyun.com/repository/public</url>
     </mirror>
 </mirrors>
+
+    <mirror>
+        <id>aliyunmaven</id>
+        <mirrorOf>central</mirrorOf>
+        <name>aliyunmaven</name>
+        <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
 ```
 
 > 阿里云等镜像仓库的url可能会更新，需要去阿里云maven官网查看id和url并及时更改。
