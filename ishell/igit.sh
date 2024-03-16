@@ -23,6 +23,12 @@ if [ $(timeout -k 5s 30s git push github) ]; then
 	stat="$stat---->github push failed"
 fi
 
+# check the log file
+while [ $(wc < $BOOK_HOME/ilog/igit_log.csv) -ge 100 ]
+do
+	sed '2d' /home/zjk/note-book/ilog/igit_log.csv
+done
+
 # log
 echo "'`whoami`', '`date`', '$msg' , '$stat'" >> $BOOK_HOME/ilog/igit_log.csv
 
