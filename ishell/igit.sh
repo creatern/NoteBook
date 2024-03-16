@@ -31,6 +31,10 @@ done
 
 # log
 echo "'`whoami`', '`date`', '$msg' , '$stat'" >> $BOOK_HOME/ilog/igit_log.csv
+echo "================================================"
+head -n 1 ~/note-book/ilog/igit_log.csv
+tail -n 5 ~/note-book/ilog/igit_log.csv
+echo "================================================"
 
 # ok-0 lock-2 end-3
 if [ 0 -eq $key ]; then
