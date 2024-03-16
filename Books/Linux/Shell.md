@@ -5,7 +5,7 @@
 
 <img src="../../pictures/Linux-user-shell-sys.drawio.svg" width="408"/> 
 
-## shell的类型
+# shell的类型
 
 <table>
     <tr>
@@ -63,7 +63,7 @@ ll /usr/bin/sh
 echo $0
 ```
 
-## shell的父子关系
+# shell的父子关系
 
 - 用户登录虚拟控制台终端（Terminal等）时，自动使用并进入默认shell（通常是bash）。此时，输入启动其他shell的命令时（bash、dash等），会启用（进入）指定的shell。此时，默认shell就是这个子shell的父进程（父shell）。
 - 创建子shell的代价较高，需要为该子shell创建新的环境。子shell同样可以具有CLI提示符并会等待命令输入。
@@ -98,7 +98,7 @@ zjk        18960   18945  0 19:37 pts/0    00:00:00 ps -f
 echo $BASH_SUBSHELL
 ```
 
-### 命令列表与进程列表
+## 命令列表与进程列表
 
 <table>
     <tr>
@@ -118,11 +118,11 @@ echo $BASH_SUBSHELL
     </tr>
 </table>
 
-### 子shell与后台模式
+## 子shell与后台模式
 
 - 将子shell搭配[后台模式](./进程管理.md#后台模式)（`&`或`bg`）或协程（[coproc](./进程管理.md#coproc)）可以发挥出类似多线程的效果。
 
-### 外部命令与内建命令
+## 外部命令与内建命令
 
 <table>
     <tr>
@@ -143,7 +143,7 @@ echo $BASH_SUBSHELL
 
 - 对于具有多种实现的命令，如果想使用其外部命令实现，则直接指明对应的文件即可。
 
-#### type 查看命令类型
+### type 查看命令类型
 
 ```shell
 # type -a 显示每个命令的两种实现
@@ -166,7 +166,7 @@ type source
 # source is a shell builtin
 ```
 
-#### which 查找命令文件
+### which 查找命令文件
 
 - which：查找命令文件，能够快速搜索二进制程序所对应的位置。
 
@@ -183,7 +183,7 @@ which ls who
 #/usr/bin/who  
 ```
 
-## 启动文件
+# 启动文件
 
 - 启动文件（环境文件）：用户登录Linux系统启动bash shell，默认情况下bash会在几个文件（启动文件）中查找命令。
 - bash进程的启动文件取决于用户启动bash的方式：
@@ -192,7 +192,7 @@ which ls who
 2. 作为交互式shell，通过生成子shell启动。
 3. 作为运行脚本的非交互式shell。
 
-### 登录shell
+## 登录shell
 
 - bash通常作为登录shell启动，登录shell会从5个不同的启动文件中读取命令：
 
@@ -219,11 +219,11 @@ which ls who
     </tr>
 </table>
 
-#### /etc/profile
+### /etc/profile
 
 - <code><span name="/etc/profile">/etc/profile</span></code>：bash shell默认的主启动文件，只要登录Linux系统，bash就会执行`/etc/profile`文件中的命令。 不同的发行版对该文件的设置也不同。
 
-##### /etc/profile.d
+#### /etc/profile.d
 
 - `/etc/profile.d`：大多数的Linux发行版的/etc/profile文件都使用for语句来迭代/etc/profile.d目录下的所有文件。/etc/profile.d目录为Linux系统提供了一个放置特定应用程序启动文件和管理员自定义启动文件的地方，shell会在用户登录时执行这些文件。
 
@@ -251,11 +251,11 @@ cedilla-portuguese.sh  im-config_wayland.sh
 
 - 对于环境变量的持久化等设置，可以在`/etc/profile.d`目录下创建一个`.sh`文件，把所有新的或修改过的全局环境变量的设置都放在该文件中，而保留个人用户永久性bash shell变量的最佳位置是<code><a href="#bashrc">$HOME/.bashrc</a></code>文件。
 
-##### /etc/bash.bashrc
+#### /etc/bash.bashrc
 
 - <span name="bashrc">/etc/bashrc</span>（Ubuntu：/etc/bash.bashrc）：为每一个运行bash shell的用户执行此文件；bash shell被打开时，该文件被读取。在Ubuntu发行版的`/etc/profile`文件中涉及到`/etc/bash.bashrc`文件。
 
-#### $HOME目录下的启动文件
+### $HOME目录下的启动文件
 
 - `$HOME`目录下的启动文件都用于提供用户专属的启动文件来定义该用户所用到的环境变量，每个用户都可以对其编辑并添加自己的环境变量，其中的环境变量会在每次启动bash shell会话时生效。大部分的Linux发行版只使用以下四种启动文件的其中一种：
 
@@ -280,19 +280,19 @@ cedilla-portuguese.sh  im-config_wayland.sh
 
 - shell会按照如下顺序执行第一个被找到的文件，余下的则被忽略：`$HOME/.bash_profile`、`$HOME/.bash_login`、`$HOME/.profile`。而`$HOME/.bashrc`通常通过其他文件运行。
 
-##### $HOME/.bashrc 个性化bash
+#### $HOME/.bashrc 个性化bash
 
 - `.bashrc`：存储用户的个性化 Bash shell 设置，这些设置将在每次用户打开一个新的交互式 Shell 时自动加载执行。在该文件中，用户可以定义各种配置选项。每当用户登录到系统并在终端中打开一个新的 Bash shell 时，Bash 会读取并执行 `.bashrc` 文件中的命令。
 
-###### \$HOME/.bashrc 
+##### \$HOME/.bashrc 
 
 - \~/.bashrc：专属于个人bash shell的信息；用户登录以及每次打开一个新的shell时，执行这个文件；在这个文件里可以自定义用户专属的个人信息。
 
-### 交互式shell
+## 交互式shell
 
 - 作为交换式shell启动的bash并不处理/etc/profile文件，而是只检查`$HOME/.bashrc`文件。此时，`$HOME/.bashrc`文件会做两件事：（1）检查/etc目录下的通用bashrc文件；（2）为用户提供一个定制自己的命令别名和脚本函数。
 
-### 非交互式shell
+## 非交互式shell
 
 - 系统执行shell脚本时使用的shell，没有CLI。
 
@@ -304,95 +304,3 @@ echo $BASH_ENV
 ```
 
 - 子shell会继承父shell的导出变量（不包括局部变量等），如果父shell是登录shell，在`/etc/profile`、`/etc/profile.d/*`、`$HOME/.bashrc`文件中设置并导出了变量，那么执行脚本的子shell就能继承这些变量。
-
-# shell相关命令
-
-## alias 命令别名
-
-- alias：设置指令的别名，只在当前shell起作用，未更改[/etc/bashrc](#bashrc)；对于个人专用的命令别名，应该在[\~/.bashrc](#bashrc)设置。
-
-```shell
-# 查看已经设置的别名
-alias
-alias -p
-
-# 检查别名是否已被使用
-type 别名
-
-# 设置/更改别名，多条命令之间使用分号分隔
-alias 别名='命令1;命令2'
-
-# 撤销别名，只在当前shell起作用，未更改/etc/bashrc
-unalias 别名
-```
-
-## history 历史命令
-
-- `history`：查看历史命令记录。bash shell会跟踪最近使用过的命令。
-- `$HISTSIZE`：最大保存的历史命令条数（默认1000条）。
-- `~/.bash_history`：历史命令文件；在CLI会话期间，bash命令的历史记录会先放在内存中，等到shell退出时才被写入到历史文件。
-
-<table><tbody><tr><td>-a</td><td>保存命令记录</td></tr><tr><td>-c</td><td>清空命令记录</td></tr><tr><td>-d</td><td>删除指定序号的命令记录</td></tr><tr><td>-n</td><td>读取命令记录</td></tr><tr><td>-r</td><td>读取命令记录到缓冲区</td></tr><tr><td>-s</td><td>添加命令记录到缓冲区</td></tr><tr><td>-w</td><td>将缓冲区信息写入到历史文件</td></tr></tbody></table>
-
-```shell
-# 查看指定的历史命令记录
-history [n]
-上下光标
-
-# 清空当前缓冲区中的历史命令（并未对历史命令文件修改）
-history -c
-
-# 将历史命令文件中的命令读入当前历史命令缓冲区，否则只有在第一个终端被打开时才会读取历史命令文件
-history -r
-
-# 将历史命令缓冲区中的命令写入历史命令文件，同时打开多个终端时，其他终端的历史记录不会自动更新
-history -a
-
-# 将当前历史命令缓冲区中的命令写入历史命令文件，同时打开多个终端时，其他终端的历史记录也会自动更新
-history -w
-```
-
-### \!\! 执行上次命令
-
-```shell
-# 执行上次命令
-!!
-
-# 执行指定序号的历史命令
-!{n}
-
-# 执行以指定字符开头的历史命令
-!{prex}
-```
-
-## timeout 限时任务
-
-- timeout：运行指定命令，若在指定时间后，该命令仍然在运行，则结束该命令的执行，并返回退出状态码`124`（\$? 获取）（未超时则正常返回）；以执行下一条命令（如果存在）。
-
-<table><tbody><tr><td>-s&lt;信号&gt;</td><td>指定在超时时发送的信号，信号可以是类似“HUP”的信号名或是信号数</td></tr><tr><td>-k&lt;时间&gt;</td><td>达到给定的时间限制后会强制结束</td></tr><tr><td>-- -foreground</td><td>在前台运行</td></tr></tbody></table>
-
-```shell
-# 5秒钟后发送SIGKILL信号给ping命令以终止该命令
-timeout -s SIGKILL 5s top
-
-# 运行命令一分钟，如果命令没有结束，将在10秒后终止该命令
-timeout -k 10s 1m top
-```
-
-## date 日期时间
-
-```shell
-date "+%Y-%m-%d %H:%M:%S"
-# 2023-12-31 10:24:53
-```
-
-## read 读取变量值
-
-- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
-
-```shell
-#!/bin/bash
-
-read -t 10 -p "请在10秒内输入: " x
-echo "输出：$x"
-```
