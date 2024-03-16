@@ -29,7 +29,7 @@ echo "Hello World"
 
 <table>
     <tr>
-        <td width="15%">单引号 '</td>
+        <td width="15%"><span name="单引号">单引号 '</span></td>
         <td width="85%">将字符串的特殊符号变成普通符号</td>
     </tr>
     <tr>
@@ -52,7 +52,28 @@ echo 'current position is `pwd`'
 
 ## 脚本执行
 
-### 直接执行
+<table>
+    <tr>
+        <th width="25%">脚本执行方式</th>
+        <th width="25%">路径执行</th>
+        <th width="25%">shell解释器</th>
+        <th width="25%">source或 .</th>
+    </tr>
+    <tr>
+        <th>是否需要可执行权限（x）</th>
+        <td>是</td>
+        <td>否</td>
+        <td>否</td>
+    </tr>
+    <tr>
+        <th>是否创建子shell来执行</th>
+        <td>是</td>
+        <td>是</td>
+        <td>否，直接在当前shell执行</td>
+    </tr>
+</table>
+
+### 直接执行（路径执行）
 
 - 直接执行shell脚本文件需要可执行权限（`chmod +x`），该方式会在当前shell内开启一个子shell以执行脚本，脚本结束时关闭子shell并回到当前shell（父shell）。
 
@@ -113,11 +134,252 @@ RestartSec=10s
 WantedBy=default.target
 ```
 
-## 命令替换
+# [用户自定义变量](./环境变量.md#用户自定义变量)
 
-# 运算符
+# Shell命令补充
 
-### 算术运算式
+## <span name="命令替换">命令替换</span>
+
+<table>
+    <tr>
+        <th>命令替换符</th>
+        <th>意义</th>
+    </tr>
+    <tr>
+        <td width="15%">反引号 <code>``</code></td>
+        <td rowspan="2" width="85%">shell会执行命令替换符内的命令，从而允许将shell命令的输出赋给变量</td>
+    </tr>
+    <tr>
+        <td><code>$()</code></td>
+    </tr>
+</table>
+
+- 命令替换<b>会创建出子shell</b>（由脚本shell所生成的一个独立的shell）来运行指定命令，在该子shell中运行的命令无法使用脚本中的变量。
+- <a href="#单引号">单引号</a>内的所有特殊符号都会被无效化，因此，命令替换符在单引号字符串内部也失效。
+
+
+```shell
+echo "My name is `whoami`"
+echo "My name is $(whoami)"
+# My name is zjk
+
+echo 'My name is $(whoami)'
+# My name is $(whoami)
+```
+
+## 重定向
+
+### 标准输入/输出/错误输出
+
+- 执行一个Shell命令通常会自动打开3个标准文件：标准输入文件stdin、标准输出文件stout、标准错误输出文件stderr。进程从标准输入文件得到输入数据，将正常输出数据输出到标准输出文件，而错误信息则打印到标准错误文件。
+
+<img src="../../pictures/153845716239573.png" width="369"/> 
+
+1. 如果给定的文件不止一个，则在显示的每个文件前面加一个文件名标题。
+2. 若不指定任何文件名称/给予的文件名为"\-"，则命令从标准输入设备读取数据。
+
+### 重定向操作符
+
+- 重定向操作符：把命令/可执行程序的标准输入/输出重定向到指定的文件或命令的参数输入。
+
+<table>
+	<thead>
+		<tr>
+			<th width="10%">操作符</th>
+			<th width="20%">意义</th>
+            <th width="70%">描述</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>&lt;</td>
+            <td>输入重定向</td>
+            <td></td>
+		</tr>
+		<tr>
+			<td>&lt;&lt;</td>
+			<td>文档的重定向<br/>内联输入重定向</td>
+            <td>内联输入重定向无需使用文件来进行重定向，只需要在命令行中指定用于输入重定向的数据即可（需要<b>文本标记</b>来划分起始）</td>
+		</tr>
+		<tr>
+			<td>&gt;</td>
+			<td>输出重定向</td>
+            <td>若&gt;后面的文件不存在，则创建该文件；若存在，则将内容覆盖到该文件</td>
+		</tr>
+		<tr>
+			<td>&gt;&gt;</td>
+			<td>追加输出重定向</td>
+            <td>若&gt;&gt;后面的文件不存在，则创建该文件；若存在，则将内容追加到该文件</td>
+		</tr>
+		<tr>
+			<td rowspan="2">2&gt;</td>
+			<td rowspan="2">错误输出重定向</td>
+            <td>若<code>2&gt;</code>后面的文件不存在，则创建该文件；若存在，则将内容覆盖到该文件</td>
+		</tr>
+        <tr>
+            <td>如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件；即使没有错误信息也会创建/覆盖</td>
+        </tr>
+		<tr>
+			<td rowspan="2">2&gt;&gt;</td>
+			<td rowspan="2">追加错误输出重定向</td>
+            <td>若<code>2&gt;&gt;</code>后面的文件不存在，则创建该文件；若存在，则将内容追加到该文件</td>
+		</tr>
+        <tr>
+            <td>如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件中；即使没有错误信息也会创建/追加</td>
+        </tr>
+	</tbody>
+</table>
+
+- `&`用于表示该行命令中上一个重定向操作符重定向到的命令或文件。
+
+
+```shell
+# 重定向操作符可以混合使用，如将标准输出和标准错误输出重定向到同一个文件
+ls >myOutAndErr.txt 2>&
+
+# 通过输入重定向搭配wc统计文本
+wc < mylog.txt
+```
+
+#### &gt;&gt; 内联输入重定向 与 文本标记符
+
+- 内联输入重定向（<code>&gt;&gt;</code>）需要搭配文本标记符号使用，文本标记符可以是任意字符或字符串，用于标记多行文本的开头和结束。
+
+```shell
+# 内联输入重定向
+$ wc << EOF
+> this is title
+> this is context
+> this is end
+> EOF
+      3       9      42
+```
+
+### \| 管道符
+
+- \|（管道符）：连接两个命令（管道连接，piping），将一个程序/命令的输出作为另一个程序/命令的参数输入。一般为输入和输出的结合，一个进程向管道的一端发送数据，而另一个进程从该管道的另一端读取数据。
+- 由管道符连接的两个命令并不是依次执行，而是由Linux系统同时运行这两个命令，在系统内部将二者连接起来（实时化）。当第一个命令产生输出时，它会被立即传给第二个命令。此处的数据传输不会用到任何文件或缓冲区。
+- 管道符可以串联的命令数量没有限制，可以持续地将命令输出通过管道传给其他命令来细化操作。
+
+```shell
+# 列出/etc下匹配模式"*.config"的文件
+ll /etc | grep "*.config"
+
+# 分页查看排序后的已安装的软件包列表
+rpm -qa | sort | more
+```
+
+## 数学运算
+
+### expr 表达式计算工具
+
+- expr命令能够识别少量算术运算符和字符串运算符，极其不推荐使用。部分expr的表达式可能会和shell本身的符号定义冲突，有的需要进行转义。
+- 为了兼容Bourne shell，bash shell保留了expr命令。
+
+```shell
+# Shell将*误解为通配符
+expr 5 * 2
+# expr: syntax error: unexpected argument ‘test01.sh’
+
+# 防止Shell将*误解为通配符
+expr 5 \* 2
+# 10
+```
+
+<table>
+    <thead>
+        <tr>
+            <th width="30%">Expression</th>
+            <th width="70%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>ARG1 | ARG2</td>
+            <td>Returns ARG1 if it is neither null nor 0, otherwise returns ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 &amp; ARG2</td>
+            <td>Returns ARG1 if neither argument is null or 0, otherwise returns 0.</td>
+        </tr>
+        <tr>
+            <td>ARG1 &gt; ARG2</td>
+            <td>Tests if ARG1 is less than ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 &gt;= ARG2</td>
+            <td>Tests if ARG1 is less than or equal to ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 = ARG2</td>
+            <td>Tests if ARG1 is equal to ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 != ARG2</td>
+            <td>Tests if ARG1 is unequal to ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 &lt;= ARG2</td>
+            <td>Tests if ARG1 is greater than or equal to ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 &lt; ARG2</td>
+            <td>Tests if ARG1 is greater than ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 + ARG2</td>
+            <td>Returns the arithmetic sum of ARG1 and ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 - ARG2</td>
+            <td>Returns the arithmetic difference of ARG1 and ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 * ARG2</td>
+            <td>Returns the arithmetic product of ARG1 and ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 / ARG2</td>
+            <td>Returns the arithmetic quotient of ARG1 divided by ARG2.</td>
+        </tr>
+        <tr>
+            <td>ARG1 % ARG2</td>
+            <td>Returns the arithmetic remainder of ARG1 divided by ARG2.</td>
+        </tr>
+        <tr>
+            <td>STRING : REGEXP</td>
+            <td>Performs an anchored pattern match of REGEXP in STRING.</td>
+        </tr>
+        <tr>
+            <td>match STRING REGEXP</td>
+            <td>Same as STRING : REGEXP.</td>
+        </tr>
+        <tr>
+            <td>substr STRING POS LENGTH</td>
+            <td>Returns a substring of STRING, where POS starts from 1.</td>
+        </tr>
+        <tr>
+            <td>index STRING CHARS</td>
+            <td>Returns the index in STRING where any character from CHARS is found, or 0 if not found.</td>
+        </tr>
+        <tr>
+            <td>length STRING</td>
+            <td>Returns the length of STRING.</td>
+        </tr>
+        <tr>
+            <td>+ TOKEN</td>
+            <td>Interprets TOKEN as a string, even if it's a keyword like 'match' or an operator like '/'. This is often used in situations where such keywords need to be treated as literals.</td>
+        </tr>
+        <tr>
+            <td>( EXPRESSION )</td>
+            <td>Returns the value of the enclosed EXPRESSION.</td>
+        </tr>
+    </tbody>
+</table>
+
+### $[运算式] 或 $((运算式)) 算术运算式
+
+- Bash Shell提供了<code>$[运算式]</code> 或 <code>$((运算式))</code>用于执行数学运算（只支持整数运算），并可以将数学运算结果赋给变量。表达式和`$[]`或`$(())`之间不能有空格，否则`syntax error: invalid arithmetic operator`。
 
 ```shell
 $((运算式)) 
@@ -129,23 +391,62 @@ $[运算式]
 s=(1+2)     # 1+2
 s1=$((1+2)) # 3
 s2=$[1+2]   # 3
-```
 
-#### bc 任意精度运算
-
-- bash内置对整数四则运算的支持，但并不支持浮点运算，需要借助bc命令。
-
-```shell
 echo $[ 9.9 * 9 ]
 #-bash: 9.9 * 9 : syntax error: invalid arithmetic operator (error token is ".9 * 9 ")
+```
 
+### bc Bash计算器
+
+- <code>bc</code>命令用于访问Bash计算器。Bash计算器实际上是一种编程语言语言，允许在命令行输入浮点数表达式，然后解释并计算该表达式，最后返回结果。
+
+```shell
 # 算术操作高级运算bc命令它可以执行浮点运算和一些高级函数：
 echo "1.212*3" | bc 
 3.636
-# 设定小数精度（数值范围）
+
+$ bc << EOF
+> 5*2
+> EOF
+10
+```
+
+- Bash计算器能够识别以下内容：数字（整数和浮点数）、变量（简单变量和数组）、注释（<code>#</code>或C语言的<code>/**/</code>）、表达式、编程语句（如 if-then等语句）、函数。
+- Bash计算器的浮点数运算的位数是由内建变量`scale`控制的，`scale`控制浮点数运算结果的小数位位数，默认值为0，也就是默认不包含小数位（截断）。
+
+```shell
+# scale 设定小数精度（数值范围）
 echo "scale=2;3/8" | bc # 参数scale=2是将bc输出结果的小数位设置为2位。
 0.37
 
+$ bc -q
+3.44 / 5
+0
+scale=4
+3.44 / 5
+.6880
+```
+
+- Bash计算器支持变量的使用，变量值一旦被定义就可以在整个Bash计算器中使用，可以通过Bash计算器中的`print var`命令打印变量。
+
+```shell
+# bc 支持变量
+echo "a=1;b=2;a+b;print a" | bc
+# 3
+# 1
+
+$ bc -q
+a=1
+b=2
+a*b
+2
+a+b
+3
+a+1
+2
+```
+
+```shell
 # 进制转换
 abc=192
 echo "obase=2;$abc" | bc
@@ -158,6 +459,28 @@ echo "obase=10;ibase=2;$abc" | bc
 echo "10^10" | bc
 echo "sqrt(100)" | bc
 ```
+
+## 退出脚本
+
+### <code><a href="./环境变量.md#退出状态码"><span name="退出状态码1">$?</span></a></code> 退出状态码
+
+- Linux提供了专门的变量`$?`来保存最后一个已执行命令的退出状态码。Linux的退出状态码没有标准，但有一些可用的指南：
+
+<table><thead><tr><th width="10%">状态码</th><th width="90%">意义</th></tr></thead><tbody><tr><td>0</td><td>命令成功结束</td></tr><tr><td>1</td><td>一般性未知错误</td></tr><tr><td>2</td><td>不适合的shell命令</td></tr><tr><td>126</td><td>命令不可执行</td></tr><tr><td>127</td><td>没有找到命令</td></tr><tr><td>128</td><td>无效的退出参数</td></tr><tr><td>128+x</td><td>与Linux信号x相关的严重错误</td></tr><tr><td>130</td><td>通过<code>Ctrl + C</code>终止的命令</td></tr><tr><td>255</td><td>正常范围之外的退出状态码。对于超过正常范围（0~255）的退出状态码，shell会自动对其进行模运算（%256）并将结果作为退出状态码</td></tr></tbody></table>
+
+### exit
+
+- 在默认情况下，shell脚本会以脚本中最后一个命令的退出状态码退出。可以通过<code>exit</code>命令在结束shell脚本时指定一个退出状态码。
+
+```shell
+exit 0
+
+# 对于超过正常范围（0~255）的退出状态码，会自动对其进行模运算（%256）
+(exit 300);echo $?
+# 44
+```
+
+# 运算符
 
 ### 条件判断
 
