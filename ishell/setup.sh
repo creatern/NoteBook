@@ -31,8 +31,17 @@ else
 		exit 127
 	fi
 fi
-git config --global user.name $CURR_USER
-git config --global user.email $CURR_USER@null.com
+
+# git init
+read -p "Do you need init git ? (n/default y)" GIT_INIT_KEY
+
+if [ "n" -eq $GIT_INIT_KEY ]
+then
+	echo "=====cancel mask git init"
+else
+	git config --global user.name $CURR_USER
+	git config --global user.email $CURR_USER@null.com
+fi
 
 echo "=====git ok"
 
