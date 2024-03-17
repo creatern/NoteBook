@@ -572,42 +572,36 @@ read -t 10 -p "请在10秒内输入: " x
 echo "输出：$x"
 ```
 
-# 运算符
+# 结构化命令
 
-### 条件判断
+- 结构化命令（structured command）允许脚本根据条件跳过部分命令，改变执行流程。
 
-#### <code>[ 条件表达式 ]</code>
+## 条件测试
+
+### test 条件测试
+
+- test：检查条件是否成立，能够对数值、字符和文件进行条件测试。如果test命令中列出的条件成立，则之后会退出test命令并返回退出状态码0；如果条件不成立，则之后会退出test命令并返回退出状态码非0。
 
 ```shell
-test 条件表达式
-
-[条件表达式]
-# [非空] true
-# [] false
+test condition
 ```
 
-| 整数比较 | 说明 | 整数比较 | 说明     |
-| -------- | ---- | -------- | -------- |
-| -eq      | 等于 | -ne      | 不等于   |
-| -lt      | 小于 | -le      | 小于等于 |
-| -gt      | 大于 | -ge      | 大于等于 |
+### <code>[ 测试表达式 ]</code>
 
-| 文件权限 | 说明           | 文件类型 | 说明                 |
-| -------- | -------------- | -------- | -------------------- |
-| -r       | 可读           | -e       | 文件存在             |
-| -w       | 可写           | -f       | 文件存在且是常规文件 |
-| -x       | 可执行         | -d       | 文件存在且是目录     |
-| 以上     | 也判断文件存在 | -s       | 文件存在且非空       |
+- <code>[ 测试表达式 ]</code>是一种对<code>test</code>命令的等效替代。<code>[]</code> 与测试表达式之间必须存在一个空格。
 
-| 逻辑 | 说明 |
-| ---- | ---- |
-| !    | 取反 |
-| -a   | \&\& |
-| -o   | \|\| |
+```shell
+test 测试表达式
 
-- -z 、-n 判断字符串是否为空：最好使用"$变量"的方式判断（空格也被看作不为空）；也可以通过`[ ! $1 ]`的方式判断空，若空则true
+[ 测试表达式 ]
+```
 
-#### \[\[\]\]
+```shell
+[ 1  -eq 1 ] && echo "1"
+# 1
+```
+
+### \[\[\]\]
 
 | 判断符         | \[\[\]\]                               | \[\]               |
 | -------------- | -------------------------------------- | ------------------ |
@@ -617,36 +611,214 @@ test 条件表达式
 | 运算           | 允许使用\(\)                           | 仅支持部分         |
 | \<<br />\>     | 排序操作<br />（本地的locale语言顺序） |                    |
 
-#### test
+### 测试表达式
 
-- test：检查条件是否成立，能够对数值、字符和文件进行条件测试
+#### 数值比较
 
-# 流程控制
+<table>
+    <caption>数值比较（Bash Shell支持比较整数）</caption>
+    <tbody>
+        <tr>
+            <td width="15%">-eq</td>
+            <td width="33.75%">等于</td>
+            <td width="2.5%" rowspan="3"></td>
+            <td width="15%">-ne</td>
+            <td width="33.75%">不等于</td>
+        </tr>
+        <tr>
+            <td>-lt</td>
+            <td>小于</td>
+            <td>-le</td>
+            <td>小于等于</td>
+        </tr>
+        <tr>
+            <td>-gt</td>
+            <td>大于</td>
+            <td>-ge</td>
+            <td>大于等于</td>
+        </tr>
+    </tbody>
+</table>
 
-### 判断
+#### 字符串比较
 
-#### if
+<table>
+    <caption>字符串比较</caption>
+    <tr>
+        <td width="15%">str1 = str2</td>
+        <td width="33.75%">相同</td>
+        <td width="2.5%" rowspan="3"></td>
+        <td width="15%">str1 != str2</td>
+        <td width="33.75%">不同</td>
+    </tr>
+    <tr>
+        <td>str1 &lt; str2</td>
+        <td>小于</td>
+        <td>str1 &gt; str2</td>
+        <td>大于</td>
+    </tr>
+    <tr>
+        <td>-n str1</td>
+        <td>长度不为0</td>
+        <td>-z str1</td>
+        <td>长度为0</td>
+    </tr>
+</table>
+
+
+- 字符串进行比较时的情况：
+
+1. 字符串相等性：只是比较字符串的值是否相同，例如字符、大小写、标点等。
+2. 字符串顺序（不等性）：先比较字符串的长度大小；若长度相等，则再依次比较字符串中的字符的大小顺序。
+   1. 比较符<code>&lt;</code>以及<code>&gt;</code>必须进行转义，否则会被认为是重定向。如果误认为是重定向，则会导致尽管字符串的大小判断错误，但返回的退出状态码仍然是0（因为重定向未被认为出错）。
+   2. 大于和小于顺序与`sort`命令不同。在比较时使用的是每个字符的Unicode编码值的大小，而不是自然语言顺序（系统的语言环境设置中定义的排序顺序 ）。
+3. 在比较字符串长度时，字符串内的空格（<code>" "</code>）也算作一个长度。
 
 ```shell
-if [ 条件判断式 ]; then
-	程序
+# 字符串相等性
+$(test "zjk" = "$(whoami)") && echo "1"
+# 1
+
+# 错误地使用了重定向
+test "abcd" > "edf" && echo "1"
+# 1 导致在当前目录下创建了一个内容为abcd且文件名为edf的文件
+
+test "abcd" \> "edf" || echo "1"
+# 1
+
+# 比较字符串的顺序
+test "zcd" \> "zdf" || echo "1"
+# 1
+
+test "zcd" \> "zDf" && echo "1"
+# 1 因为大写字母的Unicode编码是0044，而小写字母c的Unicode编码是0063
+
+# 纯空格的字符串也计算有长度
+test -n " " && echo "1"
+# 1
+```
+
+#### 文件比较
+
+<table>
+    <caption>文件信息比较</caption>
+	<tbody>
+        <tr>
+            <td>-e file</td>
+			<td>file是否存在</td>
+            <td width="2.5%" rowspan="4"></td>
+			<td width="15%">-r file</td>
+			<td width="33.75%">file是否存在且可读</td>
+        </tr>
+		<tr>
+			<td width="15%">-f file</td>
+			<td width="33.75%">file是否存在且是文件</td>
+			<td>-w file</td>
+			<td>file是否存在且可写</td>
+		</tr>
+		<tr>
+			<td>-d file</td>
+			<td>file是否存在且是目录</td>
+			<td>-x</td>
+			<td>file是否存在且可执行</td>
+		</tr>
+		<tr>
+			<td>-s file</td>
+			<td>file是否存在且非空</td>
+            <td></td>
+            <td></td>
+		</tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td>-O file</td>
+            <td>file是否存在且属当前用户所有</td>
+            <td rowspan="2"></td>
+            <td>file 1 -nt file2</td>
+            <td>file1是否比file2新</td>
+        </tr>
+        <tr>
+            <td>-G file</td>
+            <td>file是否存在且默认组与当前用户组相同</td>
+            <td>file1 -ot file2</td>
+            <td>file1是否比file2旧</td>
+        </tr>
+	</tbody>
+</table>
+
+- <code>-G</code>可以检查文件的属组，如果与用户的默认组匹配，则测试成功。但是，<code>-G</code>只会检查默认组而非用户所属的所有组。
+- <code>-nt</code>和<code>-ot</code>都不会检查文件是否存在。只要有不存在的文件参与比较<code>-nt</code>和<code>-ot</code>，则返回的退出状态码就一定是非0的
+
+```shell
+# -G 只比较文件的属组是否和用户的默认组匹配
+ls -g it.sh
+# -rw-r--r--. 1 zjk 0 Mar 17 10:24 it.sh
+groups
+# zjk wheel docker
+test -G it.sh && echo "file's defult group matches" || echo "file's defult group does not match"
+# file's defult group matches
+
+chgrp wheel it.sh
+ls -g it.sh
+# -rw-r--r--. 1 wheel 0 Mar 17 10:24 it.sh
+groups
+# zjk wheel docker
+test -G it.sh && echo "file's defult group matches" || echo "file's defult group does not match"
+# file's defult group does not match
+```
+
+```shell
+# 对于不存在的文件进行比较-nt和-ot，返回的退出状态码一定都是非0的
+# it.sh是存在的，而qq.sh qaf.txt是不存在的
+test it.sh -nt qq.sh && echo "it.sh is new then qq.sh" || echo "it.sh is old then qq.sh"
+# it.sh is old then qq.sh
+
+test qq.sh -nt it.sh && echo "it.sh is new then qq.sh" || echo "it.sh is old then qq.sh"
+# it.sh is old then qq.sh
+
+test qaf.txt -nt qq.sh && echo "qaf.txt is new then qq.sh" || echo "qaf.txt is old then qq.sh"
+# it.sh is old then qq.sh
+```
+
+#### 布尔逻辑（复合条件测试）
+
+
+| 逻辑 | 说明 |
+| ---- | ---- |
+| !    | 取反 |
+| -a   | \&\& |
+| -o   | \|\| |
+
+- -z 、-n 判断字符串是否为空：最好使用"$变量"的方式判断（空格也被看作不为空）；也可以通过`[ ! $1 ]`的方式判断空，若空则true
+
+## if-then、if-then-else
+
+1. bash shell的if语句会运行if之后的命令（并不一定要是条件判断），如果该命令的退出状态码为0，那么位于then部分的命令（或代码块）就会被执行；非0则跳过then部分。
+
+2. 如果之前所有语句的then部分都没有被执行（退出状态码非0），且存在elif语句且elif之后的命令（并不一定要是条件判断）的退出状态码是0，则bash shell会执行elif对应的then语句部分的命令（或代码块）。但是，<b>只有第一个返回退出状态码0的语句中的then部分会被执行</b>。
+3. 如果以上部分都没有返回退出状态码0，且存在else语句，则执行else语句部分的命令（或代码块）。
+
+<img src="../../pictures/Linux-if-then-else.drawio.svg" width="600"/> 
+
+```shell
+if command
+then
+	commands
 fi
 
-if [ 条件判断式 ] # if的条件判断式与[]之间必须留有空格
-then
-	程序
+if command; then
+	commands
 fi
 ```
 
 ```shell
-if [ 条件判断式 ]
-then
-	程序
-elif [ 条件判断式 ]
-then
-	程序
+if command; then
+	commands
+elif command; then
+	commands
 else
-	程序
+	commands
 fi
 ```
 
@@ -664,7 +836,7 @@ else
 fi
 ```
 
-#### case
+## case
 
 ```shell
 case $变量名 in
@@ -758,6 +930,10 @@ do
     程序段落
 done
 ```
+
+
+
+# 流程控制
 
 # 函数
 
