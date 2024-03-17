@@ -1,5 +1,18 @@
 #!/bin/bash"
 
+# init script
+read -p "please input which user you want to setup: (default zjk)" CURR_USER
+
+if [ -z $CURR_USER ]
+then
+	CURR_USER=zjk
+fi
+
+CURR_USER_HOME=/home/$CURR_USER
+BOOK_HOME=$CURR_USER_HOME/note-book
+ISHELL_POSITION=$BOOK_HOME/ishell
+I_PROJECTS=$BOOK_HOME/Projects
+
 if git --version
 then
 	echo "git ok"
@@ -21,49 +34,39 @@ fi
 
 echo "=====git ok"
 
-if (cd ~/note-book)
+if [ -e $CURR_USER_HOME/note-book ]
 then
 	echo "=====git clone ok"
 else
-	cd ~
+	cd $CURR_USER_HOME
 	git clone https://gitee.com/zjk1054860443/note-book.git
 fi
 
-# init script
-cd ~/note-book/ishell
-ISHELL_POSITION=$(pwd)
-cd $ISHELL_POSITION;
-cd ..;
-BOOK_HOME=$(pwd)
-cd $BOOK_HOME/Projects
-I_PROJECTS=$(pwd)
-CURR_USER_HOME=~
-
 # set env
-echo "export BOOK_HOME=$BOOK_HOME" >> ~/.bashrc
-echo 'export I_PROJECTS=$BOOK_HOME/Projects' >> ~/.bashrc
-echo 'alias ok="$BOOK_HOME/ishell/igit.sh 0"' >> ~/.bashrc
-echo 'alias lock="$BOOK_HOME/ishell/igit.sh 1"' >> ~/.bashrc
-echo 'alias end="$BOOK_HOME/ishell/igit.sh 2"' >> ~/.bashrc
+echo "export BOOK_HOME=$BOOK_HOME" >> $CURR_USER_HOME/.bashrc
+echo 'export I_PROJECTS=$BOOK_HOME/Projects' >> $CURR_USER_HOME/.bashrc
+echo 'alias ok="$BOOK_HOME/ishell/igit.sh 0"' >> $CURR_USER_HOME/.bashrc
+echo 'alias lock="$BOOK_HOME/ishell/igit.sh 1"' >> $CURR_USER_HOME/.bashrc
+echo 'alias end="$BOOK_HOME/ishell/igit.sh 2"' >> $CURR_USER_HOME/.bashrc
 
 echo "=====env ok"
 
 # set git
 cd $BOOK_HOME
-
 git remote add gitee git@gitee.com:zjk1054860443/note-book.git
-git remote add github github git@github.com:creatern/NoteBook.git
+git remote add github git@github.com:creatern/NoteBook.git
 git remote remove origin
+chown -R $CURR_USER $BOOK_HOME
 
 echo "=====git remote ok"
 
 # set backups
 # 1. mkdir
-cd ~;
+cd $CURR_USER_HOME;
 mkdir backups
-chown `whoami` $CURR_USER_HOME/backups 
+chown -R $CURR_USER $CURR_USER_HOME/backups 
 chmod 0700 $CURR_USER_HOME/backups
-echo "export I_BACKUPS=$CURR_USER_HOME/backups" >> ~/.bashrc
+echo "export I_BACKUPS=$CURR_USER_HOME/backups" >> $CURR_USER_HOME/.bashrc
 # 2. rsync
 if rsync --version
 then
@@ -144,17 +147,17 @@ else
 fi
 
 # set ssh: rsa.pub
-cd ~;
+cd $CURR_USER_HOME;
 
-if [ -e ~/.ssh/id_rsa.pub ]
+if [ -e $CURR_USER_HOME/.ssh/id_rsa.pub ]
 then
 	echo "=====id.rsa.pub already created"
 else
-	ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
+	ssh-keygen -t rsa -b 4096 -N '' -f $CURR_USER_HOME/.ssh/id_rsa
 fi
 
 echo "=============== rsa.pub ==============="
-cat ~/.ssh/.rsa.pub
+cat $CURR_USER_HOME/.ssh/.rsa.pub
 echo "======================================="
 echo "save this ssh-key to your gitee and your github"
 echo "then you should try to use 'git push' by yourself at the first time"
