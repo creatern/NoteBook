@@ -6,13 +6,13 @@ then
 else
 	if dnf --version
 	then
-        	dnf install git
+        	dnf install git -y
 	elif yum --version
 	then
-        	yum install git
+        	yum install git -y
 	elif apt --version
 	then
-        	apt install git
+        	apt install git -y
 	else
 		echo "no suitable installer=====git install failed"
 		exit 127
@@ -71,13 +71,13 @@ then
 else
 	if dnf --version
 	then
-		dnf install rsync
+		dnf install rsync -y
 	elif yum --version
 	then
-		yum install rsync
+		yum install rsync -y
 	elif apt --version
 	then
-		apt install rsync
+		apt install rsync -y
 	else
 		echo "no suitable installer=====rsync install failed"
 	fi
@@ -121,6 +121,27 @@ fi
 echo "=================rsync user================"
 echo "backupman:tiger"
 echo "==========================================="
+
+# set Avahi
+if avahi-daemon --version
+then
+	echo "avahi-daemon already setup"
+else
+	if apt --version
+	then 
+		apt install avahi-daemon -y
+		systemctl start avahi-daemon
+		systemctl enable avahi-daemon
+	elif dnf --version
+	then
+		dnf install avahi-daemon -y
+		systemctl start avahi-daemon
+		systemctl enable avahi-daemon
+	else
+		echo "no suitable installer======avahi-daemon install failed"
+		exit 127
+	fi
+fi
 
 # set ssh: rsa.pub
 cd ~;
