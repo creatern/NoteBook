@@ -1,4 +1,4 @@
-#!/bin/bash"
+#!/bin/bash
 
 # init script
 read -p "please input which user you want to setup: (default zjk)" CURR_USER
@@ -31,6 +31,8 @@ else
 		exit 127
 	fi
 fi
+git config --global user.name $CURR_USER
+git config --global user.email $CURR_USER@null.com
 
 echo "=====git ok"
 
@@ -157,7 +159,7 @@ else
 fi
 
 echo "=============== rsa.pub ==============="
-cat $CURR_USER_HOME/.ssh/.rsa.pub
+cat $CURR_USER_HOME/.ssh/id_rsa.pub
 echo "======================================="
 echo "save this ssh-key to your gitee and your github"
 echo "then you should try to use 'git push' by yourself at the first time"
