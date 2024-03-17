@@ -11,7 +11,16 @@ back_point=`pwd`
 
 cd $BOOK_HOME
 
+
+# check the log file
+while [ $(wc -l < $BOOK_HOME/ilog/igit_log.csv) -ge 100 ]
+do
+	sed -i '2d' /home/zjk/note-book/ilog/igit_log.csv
+done
+#log
 echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg'" >> $BOOK_HOME/ilog/igit_log.csv
+
+# git
 git add --all
 git commit -m "$msg" --all
 
@@ -23,18 +32,18 @@ if [ $(timeout -k 5s 30s git push github) ]; then
 	stat="$stat---->github push failed"
 fi
 
-# check the log file
-while [ $(wc -l < $BOOK_HOME/ilog/igit_log.csv) -ge 100 ]
-do
-	sed -i '2d' /home/zjk/note-book/ilog/igit_log.csv
-done
-
 # backups
 rsync -av $BOOK_HOME $I_BACKUPS
 echo "================================================"
 echo "successfully backup to $I_BACKUPS"
 ls $I_BACKUPS
 echo "================================================"
+
+# check the log file
+while [ $(wc -l < $BOOK_HOME/ilog/igit_log_local.csv) -ge 100 ]
+do
+	sed -i '2d' /home/zjk/note-book/ilog/igit_log_local.csv
+done
 
 # log
 echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$stat'" >> $BOOK_HOME/ilog/igit_log_local.csv
