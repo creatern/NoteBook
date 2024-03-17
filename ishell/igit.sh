@@ -11,7 +11,7 @@ back_point=`pwd`
 
 cd $BOOK_HOME
 
-echo "'`whoami`', '`date`', '$msg'" >> $BOOK_HOME/ilog/igit_log.csv
+echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg'" >> $BOOK_HOME/ilog/igit_log.csv
 git add --all
 git commit -m "$msg" --all
 
@@ -37,10 +37,10 @@ ls $I_BACKUPS
 echo "================================================"
 
 # log
-echo "'`whoami`', '`date`', '$msg' , '$stat'" >> $BOOK_HOME/ilog/igit_log_local.csv
+echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$stat'" >> $BOOK_HOME/ilog/igit_log_local.csv
 echo "================================================"
-head -n 1 ~/note-book/ilog/igit_log.csv
-tail -n 5 ~/note-book/ilog/igit_log.csv
+head -n 1 ~/note-book/ilog/igit_log_local.csv
+tail -n 5 ~/note-book/ilog/igit_log_local.csv
 echo "================================================"
 
 # ok-0 lock-2 end-3
