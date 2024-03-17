@@ -580,15 +580,41 @@ echo "输出：$x"
 
 ### 条件测试命令
 
-#### test 条件测试
+<table>
+    <tr>
+        <td width="20%"><code>test</code></td>
+        <td width="80%">提供最基本的比较</td>
+    </tr>
+    <tr>
+        <td><code>[ condition ]</code></td>
+        <td><code>[ condition ]</code>在一定程度上等价于<code>test</code>命令</td>
+    </tr>
+    <tr>
+        <th colspan="2">bash shell提供的高级特性：</th>
+    </tr>
+    <tr>
+        <td><code>(command)</code></td>
+        <td>在子shell中执行命令</td>
+    </tr>
+    <tr>
+        <td><code>(( expression ))</code></td>
+        <td>用于数学表达式</td>
+    </tr>
+    <tr>
+        <td><code>[[ expression ]]</code></td>
+        <td>高级字符串处理功能</td>
+    </tr>
+</table>
+
+- 注意是否需要空格。
+
+#### test 条件测试 与 <code>[ 测试表达式 ]</code>
 
 - test：检查条件是否成立，能够对数值、字符和文件进行条件测试。如果test命令中列出的条件成立，则之后会退出test命令并返回退出状态码0；如果条件不成立，则之后会退出test命令并返回退出状态码非0。
 
 ```shell
 test condition
 ```
-
-#### <code>[ 测试表达式 ]</code>
 
 - <code>[ 测试表达式 ]</code>是一种对<code>test</code>命令的等效替代。<code>[]</code> 与测试表达式之间必须存在一个空格。
 
@@ -603,15 +629,113 @@ test 测试表达式
 # 1
 ```
 
-#### \[\[\]\]
+#### <code>(command)</code> 子shell
 
-| 判断符         | \[\[\]\]                               | \[\]               |
-| -------------- | -------------------------------------- | ------------------ |
-| \&\&<br />\|\| | 支持                                   | 不支持             |
-| ==             | 模式匹配<br />通配符`*、?、[..]`       | 匹配字符串是否相同 |
-| 正则           | 支持=\~                                | 不支持             |
-| 运算           | 允许使用\(\)                           | 仅支持部分         |
-| \<<br />\>     | 排序操作<br />（本地的locale语言顺序） |                    |
+- <code>(command)</code>允许在if语句中使用子shell。通过该方式，在bash shell执行command之前，会先创建一个子shell，然后在其中执行命令。 如果命令成功结束，则返回退出状态码0。
+- 当在if test语句中使用进程列表时，可能会导致意外的结果。哪怕进程列表中除了最后一个命令之外的其他命令全部失败，只要最后一个命令成功了，子shell就仍然会将退出状态码设为0。同理，如果最后一个命令失败，那么子shell就不会将退出状态码设为0。
+
+```shell
+# 子shell使用进程列表，且只有最后一个命令成功时：
+if (cat /etc/no-file; echo "Hello")
+then
+        echo "1"
+fi
+# cat: /etc/no-file: No such file or directory
+# Hello
+# 1
+
+# 子shell使用进程列表，且最后一个命令失败时：
+if ( echo "Hello"; cat /ect/no-file)
+then
+        echo "T"
+else
+        echo "F"
+fi
+# Hello
+# cat: /ect/no-file: No such file or directory
+# F
+```
+
+#### <code>(( expression ))</code> 高级数学表达式
+
+- 双括号命令（<code>(( expression ))</code>）允许在比较过程中使用高级数学表达式（可以是任意的数学赋值或比较表达式），而test命令在比较时只能使用简单的算术操作。
+- 除了<code>test</code>命令支持的标准数学运算符外，双括号命令还支持以下运算符：
+
+<table>
+    <caption>双括号命令支持的运算符</caption>
+    <tr>
+        <td width="15%">val++</td>
+        <td width="33.75%">后增</td>
+        <td width="2.5%" rowspan="7"></td>
+        <td width="15%">val--</td>
+        <td width="33.75%">后减</td>
+    </tr>
+    <tr>
+        <td>++val</td>
+        <td>先增</td>
+        <td>--val</td>
+        <td>先减</td>
+    </tr>
+    <tr>
+        <td>!</td>
+        <td>逻辑求反</td>
+        <td>~</td>
+        <td>位求反</td>
+    </tr>
+    <tr>
+        <td>**</td>
+        <td>幂运算</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>&lt;&lt;</td>
+        <td>左位移</td>
+        <td>&gt;&gt;</td>
+        <td>右位移</td>
+    </tr>
+    <tr>
+        <td>&amp;</td>
+        <td>位布尔AND</td>
+        <td>|</td>
+        <td>位布尔OR</td>
+    </tr>
+    <tr>
+        <td>&amp;&amp;</td>
+        <td>逻辑AND</td>
+        <td>||</td>
+        <td>逻辑OR</td>
+    </tr>
+</table>
+
+1. 双括号命令既可以在if语句中使用，也用在脚本的普通命令来进行赋值。
+2. 双括号命令内的特殊符号（如 &lt;、\*等）无需担心转义问题，不会被误解。
+
+```shell
+(( a = 10 ** 2 )); echo $a
+# 100
+```
+
+#### <code>[[ expression ]]</code> 高级字符串比较
+
+- 双方括号命令（<code>[[ expression ]]</code> ）提供了针对字符串比较的高级特性，不仅可以使用<code>test</code>命令中的标准字符串来比较，还提供了模式匹配，可以通过定义通配符或正则表达式来匹配字符串。
+
+<table>
+    <tr>
+        <td width="10%">&lt;</td>
+        <td width="90%" rowspan="2">根据系统设置的语言变量（locale）来对字符串进行排序</td>
+    </tr>
+    <tr>
+        <td>&gt;</td>
+    </tr>
+    <tr>
+        <td>==</td>
+        <td rowspan="2">正则，支持模式匹配</td>
+    </tr>
+    <tr>
+    <td>=~</td>
+    </tr>
+</table>
 
 ### 测试表达式
 
@@ -784,6 +908,8 @@ test qaf.txt -nt qq.sh && echo "qaf.txt is new then qq.sh" || echo "qaf.txt is o
 
 #### 布尔逻辑（复合条件测试）
 
+- 布尔逻辑是一种将可能的返回值简化（reduce）为真（TRUE）或假（FALSE）的方法。
+
 <table>
     <tr>
         <td rowspan="2" width="30%">[ condition1 ] &amp;&amp; [ condition2 ]</td>
@@ -801,13 +927,6 @@ test qaf.txt -nt qq.sh && echo "qaf.txt is new then qq.sh" || echo "qaf.txt is o
     </tr>
 </table>
 <img src="../../pictures/Linux-短路与和短路或.drawio.svg" width="550"/> 
-
-
-| 逻辑 | 说明 |
-| ---- | ---- |
-| !    | 取反 |
-| -a   | \&\& |
-| -o   | \|\| |
 
 ## if-then、if-then-else
 
@@ -855,7 +974,15 @@ fi
 
 ## case
 
+- <code>case</code>命令采用列表格式来检查变量的多个值。<code>case</code>命令会将指定变量与不同的模式进行比较，如果变量和模式匹配，则shell就会执行该模式指定的命令。可以通过竖线运算符（<code>|</code>）在一行中分隔出多个模式（只要有一个匹配即可）；星号（<code>*</code>）会捕获所有与已知模式不匹配的值。
+
 ```shell
+case variable in
+pattern1 | pattern2) commands1;;
+pattern3) commands2;;
+*) default commands;;
+esac
+
 case $变量名 in
 "值1") # 相当于case
 	若变量的值等于值1，则执行该程序
@@ -871,18 +998,13 @@ esac
 ```
 
 ```shell
-#!/bin/bash
-
-case $1 in
-"1")
-    echo "选项1"
-;;
-"2")
-    echo "选项2"
-;;
-*)
-    echo "其他选项"
-;;
+case $1 in 
+"1") 
+	echo "选项1";;
+"2" | hello | 3)
+	echo "选项2";;
+*) echo
+	"其他选项";;
 esac
 ```
 
@@ -945,10 +1067,6 @@ do
     程序段落
 done
 ```
-
-
-
-# 流程控制
 
 # 函数
 
