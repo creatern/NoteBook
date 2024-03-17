@@ -32,3 +32,5 @@ user, date, msg, status
 'zjk', 'Sun Mar 17 02:53:38 PM CST 2024', 'my-setup.sh' , 'success'
 'zjk', 'Sun Mar 17 03:00:46 PM CST 2024', 'set-up' , 'success'
 'zjk', 'Sun Mar 17 03:03:48 PM CST 2024', 'setup-v1' , 'success'
+'zjk', 'Sun Mar 17 03:54:03 PM CST 2024', 'set-up' , 'success'
+'zjk', 'Sun Mar 17 04:04:00 PM CST 2024', 'log'
