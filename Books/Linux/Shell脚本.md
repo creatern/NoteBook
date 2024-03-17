@@ -578,7 +578,9 @@ echo "输出：$x"
 
 ## 条件测试
 
-### test 条件测试
+### 条件测试命令
+
+#### test 条件测试
 
 - test：检查条件是否成立，能够对数值、字符和文件进行条件测试。如果test命令中列出的条件成立，则之后会退出test命令并返回退出状态码0；如果条件不成立，则之后会退出test命令并返回退出状态码非0。
 
@@ -586,7 +588,7 @@ echo "输出：$x"
 test condition
 ```
 
-### <code>[ 测试表达式 ]</code>
+#### <code>[ 测试表达式 ]</code>
 
 - <code>[ 测试表达式 ]</code>是一种对<code>test</code>命令的等效替代。<code>[]</code> 与测试表达式之间必须存在一个空格。
 
@@ -601,7 +603,7 @@ test 测试表达式
 # 1
 ```
 
-### \[\[\]\]
+#### \[\[\]\]
 
 | 判断符         | \[\[\]\]                               | \[\]               |
 | -------------- | -------------------------------------- | ------------------ |
@@ -664,7 +666,6 @@ test 测试表达式
         <td>长度为0</td>
     </tr>
 </table>
-
 
 - 字符串进行比较时的情况：
 
@@ -783,14 +784,30 @@ test qaf.txt -nt qq.sh && echo "qaf.txt is new then qq.sh" || echo "qaf.txt is o
 
 #### 布尔逻辑（复合条件测试）
 
+<table>
+    <tr>
+        <td rowspan="2" width="30%">[ condition1 ] &amp;&amp; [ condition2 ]</td>
+        <td width="70%">使用<b>AND</b>来组合两个条件，必须两个条件都为真才返回退出状态码0</td>
+    </tr>
+    <tr>
+        <td>短路与：在使用<code>&amp;&amp;</code>时，如果condition1为真，那么就执行condition2；否则，不执行condition2。只有最后一个condition为真时，才会返回退出状态码0</td>
+    </tr>
+    <tr>
+        <td rowspan="2" >[ condition1 ] || [ condition2 ]</td>
+        <td>使用<b>OR</b>来组合两个条件，只要有一个条件为真就返回退出状态码0</td>
+    </tr>
+    <tr>
+        <td> 短路或：在使用<code>||</code>时，如果condition1为真，那么就不执行condition2，直接返回退出状态码0；否则，继续执行condition2</td>
+    </tr>
+</table>
+<img src="../../pictures/Linux-短路与和短路或.drawio.svg" width="550"/> 
+
 
 | 逻辑 | 说明 |
 | ---- | ---- |
 | !    | 取反 |
 | -a   | \&\& |
 | -o   | \|\| |
-
-- -z 、-n 判断字符串是否为空：最好使用"$变量"的方式判断（空格也被看作不为空）；也可以通过`[ ! $1 ]`的方式判断空，若空则true
 
 ## if-then、if-then-else
 
@@ -869,9 +886,7 @@ case $1 in
 esac
 ```
 
-### 循环
-
-#### for
+## for
 
 ```shell
 for (( 初始值; 循环控制条件; 变量变化 ))
@@ -901,7 +916,7 @@ do
 done 
 ```
 
-#### while
+## while
 
 ```shell
 while [ 条件判断式 ]
@@ -922,7 +937,7 @@ do
 done
 ```
 
-#### until
+## until
 
 ```shell
 until [ condition ]
