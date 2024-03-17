@@ -8,7 +8,6 @@ fi
 
 stat="success"
 back_point=`pwd`
-BOOK_HOME=/home/zjk/note-book
 
 cd $BOOK_HOME
 
@@ -34,6 +33,13 @@ echo "'`whoami`', '`date`', '$msg' , '$stat'" >> $BOOK_HOME/ilog/igit_log.csv
 echo "================================================"
 head -n 1 ~/note-book/ilog/igit_log.csv
 tail -n 5 ~/note-book/ilog/igit_log.csv
+echo "================================================"
+
+# backups
+rsync -av $BOOK_HOME $I_BACKUPS
+echo "================================================"
+echo "successfully backup to $I_BACKUPS"
+ls $I_BACKUPS
 echo "================================================"
 
 # ok-0 lock-2 end-3
