@@ -107,6 +107,9 @@ sudo rm /etc/ssh/ssh_host*
 
 # 生成所有密钥，包括RSA DSA ECDSA ED25519
 sudo ssh-keygen -A
+
+# 生成无密码的rsa密钥，且位于~/.ssh/id_rsa
+ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
 ```
 
 <table>

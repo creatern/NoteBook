@@ -227,8 +227,14 @@ echo 'My name is $(whoami)'
         <tr>
             <td>如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件中；即使没有错误信息也会创建/追加</td>
         </tr>
+        <tr>
+            <td>&amp;&gt;</td>
+            <td></td>
+            <td></td>
+        </tr>
 	</tbody>
 </table>
+
 
 - `&`用于表示该行命令中上一个重定向操作符重定向到的命令或文件。
 
@@ -253,6 +259,17 @@ $ wc << EOF
 > this is end
 > EOF
       3       9      42
+```
+
+#### <code>/dev/null</code> 黑洞 &#x1F573;
+
+- 所有送往黑洞（<code>/dev/null</code>）的文件都是有去无回的&#9924;。
+
+```shell
+echo "I'm here" no-back
+sudo mv no-back /dev/null
+cat /dev/null
+# 是空的，而不是 I'm here
 ```
 
 ### \| 管道符
@@ -587,7 +604,7 @@ echo "输出：$x"
     </tr>
     <tr>
         <td><code>[ condition ]</code></td>
-        <td><code>[ condition ]</code>在一定程度上等价于<code>test</code>命令</td>
+        <td><code>[ condition ]</code>等价于（同义词）<code>test</code>命令</td>
     </tr>
     <tr>
         <th colspan="2">bash shell提供的高级特性：</th>
@@ -606,7 +623,14 @@ echo "输出：$x"
     </tr>
 </table>
 
-- 注意是否需要空格。
+1. 注意是否需要空格。
+2. 重定向符并不会影响命令返回的退出状态码，只是因为重定向的存在可能会导致命令以另一种（意料之外）的方式执行。
+
+```shell
+# 错误地使用了重定向，这样，在shell看来，是在测试"abcd"（test "abcd"）（当然是正确的），只不过是额外增加了重定向到edf的操作
+test "abcd" > "edf" && echo "1"
+# 1 导致在当前目录下创建了一个内容为abcd且文件名为edf的文件
+```
 
 #### test 条件测试 与 <code>[ 测试表达式 ]</code>
 
@@ -616,7 +640,7 @@ echo "输出：$x"
 test condition
 ```
 
-- <code>[ 测试表达式 ]</code>是一种对<code>test</code>命令的等效替代。<code>[]</code> 与测试表达式之间必须存在一个空格。
+- <code>[ 测试表达式 ]</code>是一种对<code>test</code>命令的等效替代（同义词）。<code>[]</code> 与测试表达式之间必须存在一个空格。
 
 ```shell
 test 测试表达式
@@ -645,7 +669,7 @@ fi
 # 1
 
 # 子shell使用进程列表，且最后一个命令失败时：
-if ( echo "Hello"; cat /ect/no-file)
+if (echo "Hello"; cat /ect/no-file)
 then
         echo "T"
 else
@@ -804,7 +828,7 @@ fi
 $(test "zjk" = "$(whoami)") && echo "1"
 # 1
 
-# 错误地使用了重定向
+# 错误地使用了重定向，这样，在shell看来，是在测试"abcd"（test "abcd"）（当然是正确的），只不过是额外增加了重定向到edf的操作
 test "abcd" > "edf" && echo "1"
 # 1 导致在当前目录下创建了一个内容为abcd且文件名为edf的文件
 
