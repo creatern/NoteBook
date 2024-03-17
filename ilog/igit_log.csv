@@ -1,2 +1,2 @@
-user,date,msg,pre_log
-'zjk','2024-03-17 16:24:08','log-v2','3ea1863e63c13f9b89e3a2bf2f243bd28f816e8b log'
+hostname,user,date,msg,pre_log
+'zjk-laptop','zjk','2024-03-17 16:26:09','log-v3','8f30f1f5cc930e6780e1bcfcd9a10cab562dfa35 log-v2'

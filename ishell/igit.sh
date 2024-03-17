@@ -19,7 +19,7 @@ do
 done
 #log
 cd $BOOK_HOME
-echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log.csv
+echo "'`hostname`','`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log.csv
 
 # git
 git add --all
@@ -48,7 +48,7 @@ done
 
 # log
 cd $BOOK_HOME
-echo "'`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$stat','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log_local.csv
+echo "'`hostname`','`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$stat','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log_local.csv
 echo "================================================"
 head -n 1 ~/note-book/ilog/igit_log_local.csv
 tail -n 5 ~/note-book/ilog/igit_log_local.csv
