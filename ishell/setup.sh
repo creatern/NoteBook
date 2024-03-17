@@ -56,7 +56,14 @@ echo "=====git remote ok"
 
 # set ssh: rsa.pub
 cd ~;
-ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
+
+if [ -e ~/.ssh/id_rsa.pub ]
+then
+	echo "=====id.rsa.pub already created"
+else
+	ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
+fi
+
 echo "=============== rsa.pub ==============="
 cat ~/.ssh/.rsa.pub
 echo "======================================="
