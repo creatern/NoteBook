@@ -67,21 +67,24 @@ sudo systemctl status libvirtd
 
 - virbr0（虚拟网桥）：安装KVM时，会自动创建一个名为<b>virbr0</b>的虚拟网桥，用于提供 NAT（网络地址转换）服务。因此，如果虚拟机的网卡被绑定到虚拟网桥virbr0上，虚拟机就可以通过DHCP获取IP，从而可以连接到外部（Internet）。但默认情况下，该虚拟机不能从外部访问。
 - 可以通过<code>nmcli</code>命令创建网桥，使得虚拟机能够被外部访问：
-- 如果过程中：`cant add wlan0 to bridge br0: Operation not supported`，别挣扎了，这是硬性规定的。
+- 如果过程中：`cant add wlan0 to bridge br0: Operation not supported`，别挣扎了，这是协议中硬性规定不允许的。
 
 ```shell
 nmcli connection show
+# 配置与创建网桥br0
 sudo nmcli connection add type bridge autoconnect yes con-name br0 ifname br0
 sudo nmcli connection modify br0 ipv4.addresses 192.168.1.189/24 gw4 192.168.1.1 ipv4.method manual
 sudo nmcli connection modify br0 ipv4.dns 192.168.1.1
+# 删除一些其余的网络连接配置
 sudo nmcli connection del wlp1s0
+# 将wlp1s0加入到br0网桥
 sudo nmcli connection add type bridge-slave autoconnect yes con-name wlp1s0 ifname wlp1s0 master br0
 sudo nmcli connection up br0
 # sudo ifconfig wlp1s0 up
 # sudo brctl addif br0 wlp1s0
 # sudo ifconfig br0 up
 
-# 验证连接和桥接
+# 验证连接和桥接 如果成功wlp1s0应该作为br0的接口（Interface）
 nmcli connection show br0
 ip add show br0
 brctl show
