@@ -13,3 +13,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-18 13:54:10','kvm','success','52fba02fa62ff5d3aa7bcab8bd328a4084d883f1 kvm'
 'zjk-laptop','zjk','2024-03-18 17:23:42','none','success','7ddeab8efbd87e33b55b404ca174a5e37baec989 none'
 'zjk-laptop','zjk','2024-03-18 19:46:15','kvm-arch','success','e6955d78a5794746d868ad87e760f23e72c9c615 kvm-arch'
+'zjk-laptop','zjk','2024-03-19 00:09:23','mountpoint','success','6c94bd55954c529030d9979c889087743323d0fb mountpoint'
