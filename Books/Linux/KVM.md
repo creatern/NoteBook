@@ -65,7 +65,7 @@ sudo systemctl status libvirtd
 
 ### virbr0 网桥 failed
 
-- virbr0（虚拟网桥）：安装KVM时，会自动创建一个名为<b>virbr0</b>的虚拟网桥，用于提供 NAT（网络地址转换）服务。因此，如果虚拟机的网卡被绑定到虚拟网桥virbr0上，虚拟机就可以通过DHCP获取IP，从而可以连接到外部（Internet）。但默认情况下，该虚拟机不能从外部访问。
+- virbr0（虚拟网桥）：安装KVM时，会自动创建一个名为<b>virbr0</b>的虚拟网桥，用于提供 NAT（网络地址转换）服务。因此，如果虚拟机的网卡被绑定到虚拟网桥virbr0上，虚拟机就可以通过DHCP获取IP，从而可以连接到外部（Internet）。<del>但默认情况下，该虚拟机不能从外部访问</del>（其实不配置，使用默认的NAT模式也行ssh）。
 - 可以通过<code>nmcli</code>命令创建网桥，使得虚拟机能够被外部访问：
 - 如果过程中：`cant add wlan0 to bridge br0: Operation not supported`，别挣扎了，这是协议中硬性规定不允许的。
 

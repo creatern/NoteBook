@@ -1,4 +1,3 @@
-ssh zjk@192.168.186.71
-ssh zjk@zjk-pi.local
-ssh u01@192.168.124.80
-ssh u01@zjk-virtual-ubuntu01
+zjk@192.168.186.71
+zjk@zjk-pi.local
+u01@192.168.124.80
