@@ -15,3 +15,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-03-18 19:46:07','kvm-arch','7ddeab8efbd87e33b55b404ca174a5e37baec989 none'
 'zjk-laptop','zjk','2024-03-19 00:09:23','mountpoint','e6955d78a5794746d868ad87e760f23e72c9c615 kvm-arch'
 'zjk-laptop','zjk','2024-03-19 00:16:52','re','7e11c8d72a9fe04c6291fe21216c8106b39c3b72 test'
+'zjk-laptop','zjk','2024-03-19 00:23:26','re-mountpoint','2939269e0321f85853fb0f99588ffc40561bdfee re'
