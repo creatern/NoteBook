@@ -90,8 +90,76 @@ ip add show br0
 brctl show
 ```
 
-### 创建虚拟机
+## 创建虚拟机
 
 - 在KVM上创建虚拟机有两种方法，可以在命令行上使用<code>virt-install</code>命令行工具或使用virt-manager GUI 实用程序完成此操作。
 - 选择Brige方式，以及之前创建的br0（Driver name）。
 
+### Arch Linux的安装
+
+```shell
+# 进入BIOS启动界面 root@archiso
+
+# 通过fdisk创建分区如下
+Device     Boot    Start      End  Sectors Size Id Type
+/dev/vda1           2048  8390655  8388608   4G 83 Linux
+/dev/vda2        8390656 10487807  2097152   1G 83 Linux
+/dev/vda3       10487808 52428799 41940992  20G 83 Linux
+
+# 格式化文件系统
+mkswap /dev/vda1
+mkfs.ext4 /dev/vda2
+mkfs.ext4 /dev/vda3
+
+# 挂载文件系统
+mount /dev/vda2 /mnt/boot
+mount /dev/vda3 /mnt     
+swapon /dev/vda1
+
+# 安装必要的软件包、内核等
+pacstrap /mnt base linux linux-firmware vim sudo
+
+# 生成新的自动挂载文件，并写入到新安装的系统
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# 进入新安装的系统
+arch-chroot /mnt
+
+# 设置root密码
+passwd root
+
+# 基础服务配置
+pacman -Sy dhcpcd networkmanager openssh net-tools
+systemctl enable dhcpcd
+systemctl start dhcpcd
+systemctl enable NetworkManager
+systemctl start NetworkManager
+systemctl enable sshd
+systemctl start sshd
+
+# 时区配置
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+# 配置本地字符编码 使用 en_US.UTF-8 UTF-8
+vim /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+# 编辑/etc/sudoers允许sudo用户（wheel用户组成员）  %wheel ALL=(ALL) ALL
+visudo
+
+# 新建一个用户（可选，因为root不能ssh连接）
+useradd d01 -G wheel
+passwd d01
+
+# 安装GRUB启动器
+pacman -Sy grub
+grub-install --recheck /dev/vda
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# 以上就安装成功了，下面是收尾工作
+exit
+umount -R /mnt
+```
+
+## qcow2

@@ -747,6 +747,10 @@ w # 保存修改后退出
 sudo mkfs.ext4 /dev/sda
 ```
 
+## mkswap
+
+- <code>mkswap</code>：将指定分区格式化为SWAP分区形式。
+
 # 挂载和卸载文件系统
 
 - 文件系统必须先挂载到正在运行的文件系统，然后才能访问，且需要一个挂载点
@@ -851,6 +855,13 @@ sudo mount -a
     <tr><td colspan="2"><code>0</code>：不运行检查；<code>1</code>：每次都运行检查；<code>2</code>：仅在非正常关机、达到最大加载次数、一定天数后运行检查</td></tr>
     <tr><td colspan="2">推荐设置：根文件系统 1，任何其他Linux文件系统 2，非Linux文件系统 0</td></tr>
 </table>
+## swapon
+
+- <code>swapon</code>：挂载SWAP分区到指定设备。
+
+```shell
+swapon /dev/vda1
+```
 
 # 调整文件系统大小
 
@@ -942,3 +953,4 @@ sudo fsck -p /dev/sda
 - `tune2fs`：调整/查看磁盘的文件系统参数
 
 # e2label ntfs格式、ext2/3/4格式
+

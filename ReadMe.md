@@ -14,6 +14,8 @@
 
 #### [Oracle数据库简介](./Books/Oracle/Oracle数据库简介.md)
 
+#### [单实例安装]
+
 ## MySQL
 
 ### 基础篇
