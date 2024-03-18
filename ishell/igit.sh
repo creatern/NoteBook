@@ -1,22 +1,30 @@
 #!/bin/bash
 
+# ok-0 lock-1 end-2
 key=$1
+
+# message for git to commit
 msg=$2
 if [ -z "$msg" ]; then
 	msg="none"
 fi
 
+# the result of "git push"
 stat="success"
-back_point=`pwd`
+
+# These variable already set in envirenment
+# BOOK_HOME
+# I_BACKUPS
+# I_MOUNTPOINT
 
 cd $BOOK_HOME
-
 
 # check the log file
 while [ $(wc -l < $BOOK_HOME/ilog/igit_log.csv) -ge 100 ]
 do
-	sed -i '2d' /home/zjk/note-book/ilog/igit_log.csv
+	sed -i '2d' $BOOK_HOME/ilog/igit_log.csv
 done
+
 #log
 cd $BOOK_HOME
 echo "'`hostname`','`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log.csv
@@ -35,6 +43,16 @@ fi
 
 # backups
 rsync -av $BOOK_HOME $I_BACKUPS
+
+# disk backups
+if mountpoint $I_MOUNTPOINT
+then
+	rsync -av $BOOK_HOME $I_MOUNTPOINT
+	echo "========================================="
+	echo "find a disk which mount at this  mountpoint ($I_MOUNTPOINT), succefully backup on it"
+	echo "========================================="
+fi
+
 echo "================================================"
 echo "successfully backup to $I_BACKUPS"
 ls $I_BACKUPS
@@ -43,15 +61,15 @@ echo "================================================"
 # check the log file
 while [ $(wc -l < $BOOK_HOME/ilog/igit_log_local.csv) -ge 100 ]
 do
-	sed -i '2d' /home/zjk/note-book/ilog/igit_log_local.csv
+	sed -i '2d' $BOOK_HOME/ilog/igit_log_local.csv
 done
 
 # log
 cd $BOOK_HOME
 echo "'`hostname`','`whoami`','$(date "+%Y-%m-%d %H:%M:%S")','$msg','$stat','$(git log --pretty=oneline -n 1)'" >> $BOOK_HOME/ilog/igit_log_local.csv
 echo "================================================"
-head -n 1 ~/note-book/ilog/igit_log_local.csv
-tail -n 5 ~/note-book/ilog/igit_log_local.csv
+head -n 1 $BOOK_HOME/ilog/igit_log_local.csv
+tail -n 5 $BOOK_HOME/ilog/igit_log_local.csv
 echo "================================================"
 
 # ok-0 lock-2 end-3

@@ -53,9 +53,14 @@ else
 	git clone https://gitee.com/zjk1054860443/note-book.git
 fi
 
+# prepare for I_MOUNTPOINT
+mkdir $CURR_USER_HOME/MyDisk
+chown -R $CURR_USER $CURR_USER_HOME/MyDisk
+
 # set env
 echo "export BOOK_HOME=$BOOK_HOME" >> $CURR_USER_HOME/.bashrc
 echo 'export I_PROJECTS=$BOOK_HOME/Projects' >> $CURR_USER_HOME/.bashrc
+echo "export I_MOUNTPOINT=$CURR_USER_HOME/MyDisk" >> $CURR_USER_HOME/.bashrc
 echo 'alias ok="$BOOK_HOME/ishell/igit.sh 0"' >> $CURR_USER_HOME/.bashrc
 echo 'alias lock="$BOOK_HOME/ishell/igit.sh 1"' >> $CURR_USER_HOME/.bashrc
 echo 'alias end="$BOOK_HOME/ishell/igit.sh 2"' >> $CURR_USER_HOME/.bashrc

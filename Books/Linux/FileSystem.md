@@ -789,7 +789,7 @@ umount -v /dev/sdb
 
 ## mountpoint
 
-- <span name="mountpoint"><code>mountpoint</code></span>：查看指定目录是否为挂载点
+- <span name="mountpoint"><code>mountpoint</code></span>：查看指定目录是否为挂载点（mountpoint）。如果是挂载点，则输出信息“xxx is a mountpoint”，并返回退出状态码0；如果不是，则输出信息“xxx is not a mountpoint”，并返回退出状态码32。
 
 ```shell
 mountpoint /

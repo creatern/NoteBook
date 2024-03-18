@@ -12,3 +12,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-18 13:05:37','none','success','b8f17956c9f9a29e723978b549eafdd76fa82b31 none'
 'zjk-laptop','zjk','2024-03-18 13:54:10','kvm','success','52fba02fa62ff5d3aa7bcab8bd328a4084d883f1 kvm'
 'zjk-laptop','zjk','2024-03-18 17:23:42','none','success','7ddeab8efbd87e33b55b404ca174a5e37baec989 none'
+'zjk-laptop','zjk','2024-03-18 19:46:15','kvm-arch','success','e6955d78a5794746d868ad87e760f23e72c9c615 kvm-arch'
