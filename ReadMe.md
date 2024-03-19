@@ -379,9 +379,9 @@
 
 ### [排序与查找](./Books/Algorithm/排序与查找.md)
 
-### [贪心算法](./Books/Algorithm/贪心算法.md)
+### [贪心策略](./Books/Algorithm/贪心策略.md)
 
-### [分治算法](./Books/Algorithm/分治算法.md)
+### [分治策略](./Books/Algorithm/分治策略.md)
 
 ### [概率算法](./Books/Algorithm/概率算法.md)
 

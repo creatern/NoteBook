@@ -16,3 +16,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-19 00:09:23','mountpoint','success','6c94bd55954c529030d9979c889087743323d0fb mountpoint'
 'zjk-laptop','zjk','2024-03-19 00:17:01','re','success','2939269e0321f85853fb0f99588ffc40561bdfee re'
 'zjk-laptop','zjk','2024-03-19 00:23:36','re-mountpoint','success','723cfc34ef241abf17cb84720d69bee03bb7e7b3 re-mountpoint'
+'zjk-laptop','zjk','2024-03-19 00:25:27','none','success','6b67345eae2e5916fc3ba47db4b909c3edc2d36a none'
