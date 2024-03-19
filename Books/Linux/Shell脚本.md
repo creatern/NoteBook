@@ -1034,15 +1034,84 @@ esac
 
 ## for
 
+### 标准的for命令
+
 ```shell
-for (( 初始值; 循环控制条件; 变量变化 ))
+# $var包含着对应于此次迭代的列表list的当前值
+for var in list
 do
-	程序
+	commands
+done
+
+for var in list; do
+	commands
 done
 ```
 
 ```shell
-for 变量 in 值1 值2 值3...
+#!/bin/bash
+
+for i in 第一名 第二名 第三名
+do 
+   echo $i 
+done 
+```
+
+#### IFS环境变量 内部字段分隔符
+
+- for循环中的值列表list，可以是一系列的值，也可以是命令的输出。
+
+1. 当使用一系列的值时，for循环假定各个值之间是以空格（内部字段分隔符）分隔的，如果某个值含有空格（多单词值，multiword value），则需使用单引号或双引号来区分（这些引号不会被当成值的一部分）。
+2. 当使用命令替换时，只要输出中的数据中含有空格，即使使用了单引号或双引号来区分，for循环也仍然会用空格来分隔值，也就是将引号视为普通字符处理。
+
+- IFS（internal field separator，内部字段分隔符）环境变量定义了bash shell中用于字段分隔符的一些列字符。默认情况下bash shell会将如下字符视为字段分隔符：空格、制表符<code>\t</code>、换行符（<code>\n</code>）。内部字段分隔符是不会被当作值而显示的。
+- 可以在当前shell环境中临时更改IFS的值，以此指定特定的字段分隔符，而之前的默认字段分隔符不再使用。
+
+```shell
+# 指定使用换行作为字段分隔符
+IFS=$'\n'
+
+# 如果要指定多个字段分隔符，只需要将这些字符写在一起并赋值即可
+# 如下会将 换行\n、冒号:、分号;、双引号" 作为内部字段分隔符
+IFS=$'\n:;"'
+```
+
+#### for命令-通配符读取目录
+
+- 文件名通配符匹配（file globbing）：for命令也可以用于自动遍历目录中的文件，而为此必须在文件名或路径名中使用通配符，这会强制shell使用文件名通配符匹配。文件名通配符匹配是生成与指定通配符匹配的文件名或路径名的过程。
+- 可以在值列表中放入任何东西，即使文件或目录不存在，for语句也会尝试将列表处理完。并不会提示任何错误信息。
+
+```shell
+#!/bin/bash
+
+for file in /home/zjk/Documents/*
+do
+        # 加入""来包含$file是为了防止文件名中存在空格的情况
+        if [ -d "$file" ]
+        then
+                echo "$file is a directory"
+        elif [ -f "$file" ]
+        then
+                echo "$file is a common file"
+        fi
+done
+```
+
+### C语言风格的for命令
+
+- 在满足给定条件（condition）的情况下，仿C语言的for循环通过定义好的变量（variable assignment）来迭代执行命令。在每次迭代中，该变量都包含for循环中赋予的值。在每次迭代后，循环的迭代过程（iteration process）会作用于变量。
+- C语言风格的for命令与标准的bash shell的for命令不一致，在C语言风格下：
+
+1. 变量赋值可以有空格
+2. 迭代过程中的变量不以美元符号`$`开头（但在程序中使用的话还是要`$`来引用）
+3. 迭代过程的算式不使用`expr`命令格式
+
+- C语言风格的for命令允许为迭代使用多个变量（之间通过`,`分隔），循环会单独处理每个变量，可以为每个变量定义不同的迭代过程（ iteration process）（之间通过`,`分隔）。但在for循环中只能定义一种迭代条件（condition）。
+
+```shell
+for (( variable assignment ; condition ; iteration process ))
+
+for (( 初始值; 循环控制条件; 变量变化 ))
 do
 	程序
 done
@@ -1051,15 +1120,16 @@ done
 ```shell
 #!/bin/bash
 
-for ((i=0;i<10;i++))
+for (( i=0; i < 10; i++ ))
 do
     echo $i
 done
 
-for i in 第一名 第二名 第三名
-do 
-   echo $i 
-done 
+# C语言风格的for命令允许为迭代使用多个变量
+for (( a=0, b=10; a<=10; a++,b-- ))
+do
+	echo $a | $b"
+done
 ```
 
 ## while
@@ -1136,3 +1206,4 @@ sum $num1 $num2;
 avg $num1 $num2;
 minus $num1 $num2;
 ```
+

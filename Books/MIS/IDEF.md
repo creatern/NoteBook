@@ -47,7 +47,6 @@
     </tr>
 </table>
 
-
 # IDEF0模型 功能建模方法
 
 <table>
