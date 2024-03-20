@@ -86,8 +86,71 @@
 
 ### Tables 表
 
-- You define a table with a table name, such as employees, and set of columns. In general, you give each column a name, a data type, and a width when you create the table.
+- You define a table with a table name and set of columns. In general, you give each column a name, a data type, and a width when you create the table.
 - A table is a set of rows. A column identifies an attribute of the entity described by the table, whereas a row identifies an instance of the entity. 
-- You can optionally specify a rule, called an integrity constraint, for a column. 
+- You can optionally specify a rule, called an <b>integrity constraint（完整性约束）</b>, for a column. 
 
-#### Indexes 索引
+### Indexes 索引
+
+- An <b>index</b> is an optional data structure that you can create on one or more columns of a table. Indexes can increase the performance of data retrieval.
+
+1. When processing a request, the database can use available indexes to locate the requested rows efficiently. Indexes are useful when applications often query a specific row or range of rows.
+2. Indexes are logically and physically independent of the data. 
+
+# Data Access 数据访问
+
+## Structured Query Language (SQL)
+
+- Structured Query Language （SQL，结构化查询语言）is a set-based declarative language that provides an interface to an RDBMS such as Oracle Database. 
+
+1. SQL is nonprocedural and describes *what* should be done.
+2. SQL is the <b>ANSI</b> standard language for relational databases. All operations on the data in an Oracle database are performed using SQL statements. 
+3. SQL statements enable you to perform the following tasks:
+   1. Query data
+   2. Insert, update, and delete rows in a table
+   3. Create, replace, alter, and drop objects
+   4. Control access to the database and its objects
+   5. Guarantee database consistency and integrity
+
+## PL/SQL and Java
+
+- <b>PL/SQL</b> is a procedural extension to Oracle SQL and integrated with Oracle Database.
+- A primary benefit of PL/SQL is the ability to <b>store application logic in the database itself</b>. A PL/SQL procedure or function is a schema object that consists of a set of SQL statements and other PL/SQL constructs, grouped together, stored in the database, and run as a unit to solve a specific problem or to perform a set of related tasks. The principal benefit of <b>server-side programming</b> is that built-in functionality can be deployed anywhere.
+-  <b>Oracle Database can alsostore program units written in Java</b>. A Java stored procedure is a Java method published to SQL and stored in the database for general use. You can call existing PL/SQL programs from Java and Java programs from PL/SQL.
+
+# Transaction Management 事务管理
+
+- Oracle Database is designed as a <b>multiuser database</b>. The database must ensure that multiple users can work concurrently without corrupting one another's data.
+
+## Transactions 事务
+
+- A <b>transaction（事务）</b> is <b>a logical, atomic unit of work（逻辑上的一个原子性的作业单元）</b> that contains one or more <b>SQL statements（SQL语句）</b>.
+- An RDBMS must be able to group SQL statements so that they are either all <b>committed</b>, which means they are applied to the database, or all <b>rolled back</b>, which means they are undone.
+
+> Transactions are one feature that set Oracle Database apart from a file system. If you perform an atomic operation that updates several files, and if the system fails halfway through, then the files will not be consistent. In contrast, a transaction moves an Oracle database from one consistent state to another. The basic principle of a transaction is "all or nothing": an atomic operation succeeds or fails as a whole.
+
+## Data Concurrency 数据并发
+
+- A requirement of a multiuser RDBMS is the control of data concurrency, which is <b>the simultaneous access of the same data by multiple users</b>.Without concurrency controls, users could change data improperly.
+- If multiple users access the same data, then one way of managing concurrency is to make users wait. However, the goal of a DBMS is to reduce wait time so it is either nonexistent or negligible. All SQL statements that modify data must proceed with as little interference as possible. <u>Destructive interactions, which are interactions that incorrectly update data or alter underlying data structures, must be avoided.</u>
+- Oracle Database uses locks to control concurrent access to data. A <b>lock（事务锁）</b> is a mechanism that prevents destructive interaction between transactions accessing a shared resource. Locks help ensure data integrity while allowing maximum concurrent access to data.
+
+## Data Consistency 数据一致性
+
+- In Oracle Database, each user must see <b>a consistent view of the data</b>, including visible changes made by a user's own transactions and committed transactions of other users.
+
+> For example, the database must prevent <b>the dirty read problem（脏读）</b>, which occurs when one transaction sees uncommitted changes made by another concurrent transaction.
+
+- Oracle Database always enforces <b>statement-level read consistency（语句级读一致性）</b>, which guarantees that the data that a single query returns is committed and consistent for a single point in time. Depending on the transaction isolation level, this point is the time at which the statement was opened or the time the transaction began. The Oracle Flashback Query feature enables you to specify this point in time explicitly.
+- The database can also provide read consistency to all queries in a transaction, known as <b>transaction-level read consistency（事务级读一致性）</b>. In this case, each statement in a transaction sees data from the same point in time, which is the time at which the transaction began.
+
+# Oracle Database Architecture Oracle 数据库架构
+
+- A <b>database server（数据库服务器）</b> is the key to information management.
+
+1.  In general, a server reliably manages a large amount of data in a <b>multiuser</b> environment so that users can concurrently access the same data. 
+2. A database server also <b>prevents unauthorized access</b> and provides efficient solutions for <b>failure recovery（故障恢复）</b>.
+
+## Database and Instance 数据库和实例
+
+- An Oracle database server consists of a database and at least one <b>database instance（数据库实例 [实例]）</b>, commonly referred to as simply an instance.
