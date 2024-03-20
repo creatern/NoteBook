@@ -154,3 +154,23 @@
 ## Database and Instance 数据库和实例
 
 - An Oracle database server consists of a database and at least one <b>database instance（数据库实例 [实例]）</b>, commonly referred to as simply an instance.
+
+<table>
+    <tr>
+        <td width="20%">Database</td>
+        <td width="80%">A database is a set of <b>files</b>, located on disk, that store data. These files can exist independently of a database instance.</td>
+    </tr>
+    <tr>
+        <td>Database Instance</td>
+        <td>An instance is a set of <b>memory structures</b> that manage database files. The instance consists of a shared memory area, called <b><u>the system global area (SGA)</u></b>, and a set of <u>background processes</u>. An instance can exist independently of database files.</td>
+    </tr>
+</table>
+
+- For each user connection to the instance, a client process runs the application. Each client process is associated with its own server process. The server process has its own private session memory, known as <b><u>the program global area (PGA)</u></b>.
+
+<img src="../../pictures/20240320170811.gif" width="650"/> 
+
+- Within the SGA are the Database Buffer Cache, Redo Log Buffer, Shared Pool, Large Pool, Fixed SGA, Java Pool, and Streams Pool. To the right of the SGA are the background processes PMON, SMON, RECO, MMON, MMNL, and Others. Below the SGA are DBWn, CKPT, LGWR, ARCn, and RVWR. Below the SGA are the PGA and Server Process. The Server Process is connected to a Client Process. To the right of the Client Process are Database Files (Data Files, Control Files, Online Redo Log), Archived Redo Log, and Flashback Log.
+- Although in the strict sense an Oracle database is a set of physical structures (files and memory structures), applications can interact with multiple logical databases inside a single physical database, or a single logical database distributed across multiple physical databases.
+
+### Multitenant Architecture
