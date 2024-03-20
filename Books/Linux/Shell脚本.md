@@ -396,7 +396,7 @@ expr 5 \* 2
 
 ### $[运算式] 或 $((运算式)) 算术运算式
 
-- Bash Shell提供了<code>$[运算式]</code> 或 <code>$((运算式))</code>用于执行数学运算（只支持整数运算），并可以将数学运算结果赋给变量。表达式和`$[]`或`$(())`之间不能有空格，否则`syntax error: invalid arithmetic operator`。
+- Bash Shell提供了<code>$[运算式]</code> 或 <code>$((运算式))</code>用于执行数学运算（只支持整数运算），并可以将数学运算结果赋给变量。表达式和`$[]`或`$(())`之间不能有空格（表达式内部也不能有空格），否则`syntax error: invalid arithmetic operator`。
 
 ```shell
 $((运算式)) 
@@ -593,7 +593,7 @@ echo "输出：$x"
 
 - 结构化命令（structured command）允许脚本根据条件跳过部分命令，改变执行流程。
 
-## 条件测试
+## 条件测试（测试命令）
 
 ### 条件测试命令
 
@@ -953,7 +953,9 @@ test qaf.txt -nt qq.sh && echo "qaf.txt is new then qq.sh" || echo "qaf.txt is o
 </table>
 <img src="../../pictures/Linux-短路与和短路或.drawio.svg" width="550"/> 
 
-## if-then、if-then-else
+## 条件判断
+
+### if-then、if-then-else
 
 1. bash shell的if语句会运行if之后的命令（并不一定要是条件判断），如果该命令的退出状态码为0，那么位于then部分的命令（或代码块）就会被执行；非0则跳过then部分。
 
@@ -997,7 +999,7 @@ else
 fi
 ```
 
-## case
+### case
 
 - <code>case</code>命令采用列表格式来检查变量的多个值。<code>case</code>命令会将指定变量与不同的模式进行比较，如果变量和模式匹配，则shell就会执行该模式指定的命令。可以通过竖线运算符（<code>|</code>）在一行中分隔出多个模式（只要有一个匹配即可）；星号（<code>*</code>）会捕获所有与已知模式不匹配的值。
 
@@ -1033,9 +1035,11 @@ case $1 in
 esac
 ```
 
-## for
+## 循环
 
-### 标准的for命令
+### for
+
+#### 标准的for命令
 
 ```shell
 # $var包含着对应于此次迭代的列表list的当前值
@@ -1058,26 +1062,7 @@ do
 done 
 ```
 
-#### IFS环境变量 内部字段分隔符
-
-- for循环中的值列表list，可以是一系列的值，也可以是命令的输出。
-
-1. 当使用一系列的值时，for循环假定各个值之间是以空格（内部字段分隔符）分隔的，如果某个值含有空格（多单词值，multiword value），则需使用单引号或双引号来区分（这些引号不会被当成值的一部分）。
-2. 当使用命令替换时，只要输出中的数据中含有空格，即使使用了单引号或双引号来区分，for循环也仍然会用空格来分隔值，也就是将引号视为普通字符处理。
-
-- IFS（internal field separator，内部字段分隔符）环境变量定义了bash shell中用于字段分隔符的一些列字符。默认情况下bash shell会将如下字符视为字段分隔符：空格、制表符<code>\t</code>、换行符（<code>\n</code>）。内部字段分隔符是不会被当作值而显示的。
-- 可以在当前shell环境中临时更改IFS的值，以此指定特定的字段分隔符，而之前的默认字段分隔符不再使用。
-
-```shell
-# 指定使用换行作为字段分隔符
-IFS=$'\n'
-
-# 如果要指定多个字段分隔符，只需要将这些字符写在一起并赋值即可
-# 如下会将 换行\n、冒号:、分号;、双引号" 作为内部字段分隔符
-IFS=$'\n:;"'
-```
-
-#### for命令-通配符读取目录
+##### for命令-通配符读取目录
 
 - 文件名通配符匹配（file globbing）：for命令也可以用于自动遍历目录中的文件，而为此必须在文件名或路径名中使用通配符，这会强制shell使用文件名通配符匹配。文件名通配符匹配是生成与指定通配符匹配的文件名或路径名的过程。
 - 可以在值列表中放入任何东西，即使文件或目录不存在，for语句也会尝试将列表处理完。并不会提示任何错误信息。
@@ -1098,7 +1083,7 @@ do
 done
 ```
 
-### C语言风格的for命令
+#### C语言风格的for命令
 
 - 在满足给定条件（condition）的情况下，仿C语言的for循环通过定义好的变量（variable assignment）来迭代执行命令。在每次迭代中，该变量都包含for循环中赋予的值。在每次迭代后，循环的迭代过程（iteration process）会作用于变量。
 - C语言风格的for命令与标准的bash shell的for命令不一致，在C语言风格下：
@@ -1133,20 +1118,19 @@ do
 done
 ```
 
-## while
+### while
+
+- <code>while</code>命令允许定义一个用于测试的命令（test command），只要该命返回的退出状态码是0，就会循环执行一组命令。会在每次迭代开始前执行测试命令，如果测试命令返回非0的退出状态码，while命令就会停止执行循环（停止这一次和之后的循环）。
 
 ```shell
-while [ 条件判断式 ]
+while test commands
 do
-	程序
+	other commands
 done
 ```
 
 ```shell
-#!/bin/bash
-
 i=0
-
 while [ $i -lt 3 ]
 do
     i=$[ $i+1 ]
@@ -1154,13 +1138,98 @@ do
 done
 ```
 
-## until
+- while命令允许在while语句行定义多个测试命令，但只有最后一个测试命令的退出状态码会被用于决定是否结束循环。
 
 ```shell
-until [ condition ]
+i=10
+while echo "outside $i"
+        i=$[$i+1]
+        [ $i -ge 0 ]
 do
-    程序段落
+        echo "inside $i"
+        i=$[$i-2]
 done
+```
+
+### until
+
+- <code>until</code>命令和<code>while</code>命令测试方式相反，<code>until</code>命令要求指定返回一个非0退出状态码的测试命令，只要测试命令的退出状态码不为0，bash shell就会执行循环中的一组命令；反之则退出循环。
+- <code>untile</code>命令和<code>while</code>命令一样支持多个测试命令，但也是只有最后一个测试命令的退出状态码会被用于决定是否结束循环。
+
+```shell
+until test commands
+do
+	other commands
+done
+```
+
+## 循环的控制
+
+### 循环控制
+
+#### break
+
+- <code>break</code>命令可以退出任意类型的循环：
+
+1. 跳出单个循环：shell在执行break命令时会尝试跳出当前正在执行的循环。
+2. 跳出内层循环：在处理多个循环时，break命令会自动结束其所在的那一层循环，而其外层的循环仍然会继续执行。
+3. 跳出外层循环：break命令接受单个命令行参数n，该参数指定了要跳出的循环层级。默认情况下，n为1，表明跳出的是当前循环。如果将n设为2，那么就会跳出下一级的循环（也就是结束相对于break命令所在循环的外面一层循环），以此类推。
+
+#### continue
+
+- <code>continue</code>命令可以提前中止某次循环（跳过该循环剩余的命令并进入下一个循环），但不会结束整个循环。
+- <code>continue</code>命令也接受单个命令行参数n，该参数指定了要提前中止的循环层级。默认情况下，n为1，表明提前中止的是当前循环。如果将n设为2，那么就会提前中止下一级的循环（也就是结束相对于<code>continue</code>命令所在循环的外面一层循环），以此类推。
+
+### IFS环境变量 内部字段分隔符
+
+- for循环中的值列表list，可以是一系列的值，也可以是命令的输出。
+
+1. 当使用一系列的值时，for循环假定各个值之间是以空格（内部字段分隔符）分隔的，如果某个值含有空格（多单词值，multiword value），则需使用单引号或双引号来区分（这些引号不会被当成值的一部分）。
+2. 当使用命令替换时，只要输出中的数据中含有空格，即使使用了单引号或双引号来区分，for循环也仍然会用空格来分隔值，也就是将引号视为普通字符处理。
+
+- IFS（internal field separator，内部字段分隔符）环境变量定义了bash shell中用于字段分隔符的一些列字符。默认情况下bash shell会将如下字符视为字段分隔符：空格、制表符<code>\t</code>、换行符（<code>\n</code>）。内部字段分隔符是不会被当作值而显示的。
+- 可以在当前shell环境中临时更改IFS的值，以此指定特定的字段分隔符，而之前的默认字段分隔符不再使用。
+
+```shell
+# 指定使用换行作为字段分隔符
+IFS=$'\n'
+
+# 如果要指定多个字段分隔符，只需要将这些字符写在一起并赋值即可
+# 如下会将 换行\n、冒号:、分号;、双引号" 作为内部字段分隔符
+IFS=$'\n:;"'
+```
+
+### 循环输出的重定向
+
+- 循环的输出可以通过重定向符或管道符来进行重定向。对于每一层循环的输出，会在该层所有的循环都执行完毕后，将整个循环一起输出，而不是每循环一次就输出一次。
+
+```shell
+i=10
+while [ $i -ge 0 ]
+do
+        echo "inside $i"
+        i=$[$i-2]
+done > tmp.data
+
+cat tmp.data
+inside 10
+inside 8
+inside 6
+inside 4
+inside 2
+inside 0
+```
+
+### 循环的数据源
+
+```shell
+# 将input的值作为while循环的数据源
+input="users.csv"
+while IFS=',' read -r loginname name
+do
+	echo "adding $logingname"
+	useradd -C "$name" -m "$loginame"
+done < "$input"
 ```
 
 # 函数

@@ -27,3 +27,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-20 16:46:55','oracle','success','bb7680b02f887b0d37699cd395bbad33183ce349 oracle'
 'zjk-laptop','zjk','2024-03-20 17:11:43','oracle','success','9048e2d4450580f247f37f1dcf90e8e1e066b0fa oracle'
 'zjk-laptop','zjk','2024-03-20 21:50:55','dbas','success','8dc9a4df73204b9ca192a11f43825b2842ad682d dbas'
+'zjk-laptop','zjk','2024-03-20 22:28:32','dbas','success','d116aef7275ed93168e0f9ff6354dae3abd46bce dbas'
