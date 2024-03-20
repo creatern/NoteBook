@@ -173,4 +173,42 @@
 - Within the SGA are the Database Buffer Cache, Redo Log Buffer, Shared Pool, Large Pool, Fixed SGA, Java Pool, and Streams Pool. To the right of the SGA are the background processes PMON, SMON, RECO, MMON, MMNL, and Others. Below the SGA are DBWn, CKPT, LGWR, ARCn, and RVWR. Below the SGA are the PGA and Server Process. The Server Process is connected to a Client Process. To the right of the Client Process are Database Files (Data Files, Control Files, Online Redo Log), Archived Redo Log, and Flashback Log.
 - Although in the strict sense an Oracle database is a set of physical structures (files and memory structures), applications can interact with multiple logical databases inside a single physical database, or a single logical database distributed across multiple physical databases.
 
-### Multitenant Architecture
+### Multitenant Architecture 多租户架构（多重服务架构）
+
+- The <b>multitenant architecture（多租户架构、多重服务架构）</b> enables an Oracle database to be a multitenant <b>container database (CDB，容器数据库)</b>.
+- A <b>non-CDB</b> is a traditional Oracle database that cannot contain PDBs. <u>A CDB is a single physical database that contains zero, one, or many user-created pluggable databases.</u> A <b>pluggable database (PDB，可插式数据库)</b>  is a portable collection of schemas, schema objects, and nonschema objects that appears to an <b>Oracle Net</b> client as a non-CDB.
+- By consolidating multiple physical databases on separate computers into a single database on a single computer, the multitenant architecture provides the following benefits:
+
+1. Cost reduction for hardware
+2. Easier and more rapid movement of data and code
+3. Easier management and monitoring of the physical database
+4. Separation of data and code
+5. Separation of duties between a <u>PDB administrator</u>, who manages only the PDBs to which she or he is granted privileges, and the <u>CDB administrator</u>, who manages the entire CDB
+
+- Benefits for manageability include:
+
+1. Easier upgrade of data and code by unplugging and plugging in PDBs
+2. Easier testing by using PDBs for development before plugging them in to the production CDB
+3. Ability to flash back an individual PDB to a previous SCN
+4. Ability to set performance limits for memory and I/O at the PDB level
+5. Ability to install, upgrade, and manage a master application definition within an <b>application container</b>, which is a set of PDBs plugged in to a common <b>application root</b>
+
+### Database Consolidation 数据库合并
+
+- <b>Database consolidation（数据库合并）</b> is the general process of moving data from one or more non-CDBs into a CDB.
+
+> Starting in <b>Oracle Database 12c</b>, you must create a database as either a CDB or non-CDB. You can plug a traditional non-CDB into a CDB as a PDB. The PDB/non-CDB compatibility guarantee means that a PDB behaves the same as a non-CDB as seen from a client connecting with Oracle Net.
+
+<img src="../../pictures/2024-03-20_18-55.png" width="700"/> 
+
+- To administer the CDB itself or any PDB within it, a CDB administrator can connect to the <b>CDB root</b>, which is a collection of schemas, schema objects, and nonschema objects to which all PDBs belong.
+
+### Application Containers 应用程序容器
+
+- Starting in Oracle Database 12c Release 2 (12.2), an <b>application container（应用程序容器）</b> is an optional, user-created container that stores data and metadata for one or more application models.
+- An<b> application</b> (also called an application model) is a named, versioned set of common data and metadata stored in the <b>application root</b>. For example, the application model might include definitions of tables, views, user accounts, and PL/SQL packages that are common to a set of PDBs.
+- In some ways, an application container functions as an application-specific CDB within a CDB. An application container, like the CDB itself, can include multiple application PDBs, and enables these PDBs to share metadata and data. Plugging, unplugging, cloning, and other PDB-level operations are available for individual customer PDBs.
+
+<img src="../../pictures/20240320190522.png" width="450"/> 
+
+## Sharding Architecture 分片架构
