@@ -303,7 +303,7 @@
 
 ### [硬件信息](./Books/Linux/硬件信息.md)
 
-### [CPU](./Books/Linux/CPU.md)
+### [负载监测](./Books/Linux/负载监测.md)
 
 ## 服务器篇
 

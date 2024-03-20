@@ -868,7 +868,7 @@ test -n " " && echo "1"
 		<tr>
 			<td>-d file</td>
 			<td>file是否存在且是目录</td>
-			<td>-x</td>
+			<td>-x file</td>
 			<td>file是否存在且可执行</td>
 		</tr>
 		<tr>
@@ -895,6 +895,7 @@ test -n " " && echo "1"
         </tr>
 	</tbody>
 </table>
+
 
 - <code>-G</code>可以检查文件的属组，如果与用户的默认组匹配，则测试成功。但是，<code>-G</code>只会检查默认组而非用户所属的所有组。
 - <code>-nt</code>和<code>-ot</code>都不会检查文件是否存在。只要有不存在的文件参与比较<code>-nt</code>和<code>-ot</code>，则返回的退出状态码就一定是非0的

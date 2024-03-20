@@ -37,7 +37,7 @@ sudo dnf install -y libvirt-devel virt-top libguestfs-tools guestfs-tools
   </tr>
   <tr>
     <td>libvirt</td>
-    <td>一个软件包，它包含了管理和控制虚拟化环境所需的库以及libvirtd守护进程所需的配置文件。Libvirt为多种虚拟化技术（包括但不限于KVM、QEMU等）提供了统一的管理接口。</td>
+    <td>一个软件包，它包含了管理和控制虚拟化环境所需的库以及libvirtd守护进程所需的配置文件。libvirt为多种虚拟化技术（包括但不限于KVM、QEMU等）提供了统一的管理接口。</td>
   </tr>
   <tr>
     <td>virtinst</td>
@@ -52,6 +52,7 @@ sudo dnf install -y libvirt-devel virt-top libguestfs-tools guestfs-tools
     <td>包含了一系列用于创建、配置和管理网络桥接设备的实用程序，在虚拟化环境中，常用于建立虚拟机与宿主机或外部网络之间的网络连接，实现网络桥接模式下的通信。</td>
   </tr>
 </table>
+
 ### libvirtd 虚拟化守护进程
 
 
