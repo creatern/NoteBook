@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-21T10:38:21.108Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="l7IwlLCzzLYsknvVfxmN" version="24.0.4" type="device" pages="32">
+<mxfile host="Electron" modified="2024-03-21T12:28:47.052Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="qeN-Tm_rxba-PANvJtJx" version="24.0.4" type="device" pages="34">
   <diagram name="码key" id="xT8oFVJp8TGKScVScg1j">
     <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -3145,6 +3145,131 @@
         </mxCell>
         <mxCell id="veDGdUhgRYmmq2utZbSz-22" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#d79b00;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#ffe6cc;" vertex="1" parent="1">
           <mxGeometry x="340" y="380" width="220" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="WkdYXCK83xZbMyEhLGRm" name="RAID磁盘子系统">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lWTsDQnInXrYRbev0RPH-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="lWTsDQnInXrYRbev0RPH-1" target="lWTsDQnInXrYRbev0RPH-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-1" value="主机系统" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="365" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-2" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#666666;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=#333333;fontStyle=1;labelBackgroundColor=none;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="140" y="270" width="570" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="lWTsDQnInXrYRbev0RPH-4" target="lWTsDQnInXrYRbev0RPH-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-4" value="&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;子系统RAID控制器&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#b85450;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="340" y="270" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-5" value="磁盘" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=1;strokeColor=#d79b00;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="155" y="350" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-6" value="磁盘" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=1;strokeColor=#d79b00;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="360" y="350" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-7" value="磁盘" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;rounded=1;strokeColor=#d79b00;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontStyle=1;labelBackgroundColor=none;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="565" y="350" width="130" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="lWTsDQnInXrYRbev0RPH-4" target="lWTsDQnInXrYRbev0RPH-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lWTsDQnInXrYRbev0RPH-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="lWTsDQnInXrYRbev0RPH-4" target="lWTsDQnInXrYRbev0RPH-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="CwBUpCJdvKxOvB8WVr3V" name="Active-Standby模式架构">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jS108vde0UztZtsvzQ5i-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.543;exitY=0.991;exitDx=0;exitDy=0;strokeColor=#0066CC;strokeWidth=6;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="576.2925999999999" y="504.99859999999995" as="sourcePoint" />
+            <mxPoint x="438.4" y="588.43" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="576.4" y="591.43" />
+              <mxPoint x="438.4" y="591.43" />
+              <mxPoint x="438.4" y="588.43" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-1" value="" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.thin_client;rounded=1;strokeWidth=2;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="210" y="160" width="71" height="71" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-2" value="客户端" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="211" y="231" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="jS108vde0UztZtsvzQ5i-3" target="jS108vde0UztZtsvzQ5i-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="400" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-3" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;fillColor=#009900;" vertex="1" parent="1">
+          <mxGeometry x="80" y="290" width="640" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-4" value="公有网络" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="490" y="250" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-6" value="" style="image;points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;image=img/lib/allied_telesis/storage/Datacenter_Server_Half_Rack_ToR.svg;rounded=1;strokeColor=default;strokeWidth=2;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="530" y="400" width="88.2" height="114.6" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-7" value="" style="image;points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;image=img/lib/allied_telesis/storage/Datacenter_Server_Half_Rack_ToR.svg;rounded=1;strokeColor=default;strokeWidth=2;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="201.89999999999998" y="400" width="88.2" height="114.6" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-8" value="运行服务器" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="101.9" y="442.3" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-9" value="备用服务器" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="618.2" y="442.3" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;strokeColor=default;strokeWidth=5;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1" source="jS108vde0UztZtsvzQ5i-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.976;exitY=0.524;exitDx=0;exitDy=0;strokeColor=#0066CC;strokeWidth=6;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;exitPerimeter=0;entryX=-0.051;entryY=0.524;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="291.9832000000001" y="460.0504000000001" as="sourcePoint" />
+            <mxPoint x="529.5018" y="460.0504000000001" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-13" value="私有网络" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="355" y="430" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-14" value="" style="image;points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;image=img/lib/allied_telesis/storage/Datacenter_Server_Storage_Unit_Large.svg;rounded=1;strokeColor=default;strokeWidth=2;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="361.6" y="550" width="76.8" height="79.2" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-15" value="共享存储" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="355" y="629.2" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;strokeColor=default;strokeWidth=5;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="300" as="sourcePoint" />
+            <mxPoint x="240" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jS108vde0UztZtsvzQ5i-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.46;exitY=0.982;exitDx=0;exitDy=0;strokeColor=#0066CC;strokeWidth=6;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=16;fontColor=default;fontStyle=1;labelBackgroundColor=none;startSize=6;endArrow=none;endFill=0;endSize=6;exitPerimeter=0;entryX=-0.001;entryY=0.467;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="jS108vde0UztZtsvzQ5i-7" target="jS108vde0UztZtsvzQ5i-14">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="301.9832000000001" y="470.0504000000001" as="sourcePoint" />
+            <mxPoint x="539.5018" y="470.0504000000001" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="243" y="590" />
+              <mxPoint x="361" y="590" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
