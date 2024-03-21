@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-19T13:12:06.540Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="-PalNg_8S-MXbWjXXO3n" version="24.0.4" type="device" pages="26">
+<mxfile host="Electron" modified="2024-03-21T01:32:42.381Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="0w8N-qA0I0x9t2ifCBXD" version="24.0.4" type="device" pages="27">
   <diagram name="码key" id="xT8oFVJp8TGKScVScg1j">
     <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -2748,6 +2748,35 @@
         </mxCell>
         <mxCell id="n627r1UpGqHeqcm52xD7-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.203;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;startArrow=blockThin;startFill=1;" edge="1" parent="1" source="n627r1UpGqHeqcm52xD7-6" target="n627r1UpGqHeqcm52xD7-1">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="k6Pv2mMAlLYi3PWrpsy0" name="DBAS软件4层架构">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;shape=flexArrow;startArrow=block;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" edge="1" parent="1" source="FmKUywRz8eDM-jS0pWMZ-1" target="FmKUywRz8eDM-jS0pWMZ-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-1" value="表示层" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;fontSize=17;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;shape=flexArrow;startArrow=block;fillColor=#f5f5f5;strokeColor=#666666;" edge="1" parent="1" source="FmKUywRz8eDM-jS0pWMZ-3" target="FmKUywRz8eDM-jS0pWMZ-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-3" value="业务逻辑层" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;fontSize=17;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="120" y="180" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#666666;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=block;endArrow=classic;shape=flexArrow;fillColor=#f5f5f5;" edge="1" parent="1" source="FmKUywRz8eDM-jS0pWMZ-4" target="FmKUywRz8eDM-jS0pWMZ-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-4" value="数据访问层" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;fontSize=17;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="280" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FmKUywRz8eDM-jS0pWMZ-5" value="数据持久层" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;strokeWidth=2;fontSize=17;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="120" y="380" width="400" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
