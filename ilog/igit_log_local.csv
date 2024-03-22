@@ -41,3 +41,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-22 00:32:39','position-parameter','success','1ca873dd77303c3bfea1b18313c0941db899eca2 position-parameter'
 'zjk-laptop','zjk','2024-03-22 09:29:34','getopt','success','605fb7a7e4c214f6dd0bc46b1c028cadc2dcd935 getopt'
 'zjk-laptop','zjk','2024-03-22 12:17:35','delta','success','7f2b1e968999d66700a62d789168414120698841 delta'
+'zjk-laptop','zjk','2024-03-22 16:11:24','dbas','success','fd8940346f010ec2b7e2bfb82853a48b8959c8a9 dbas'
