@@ -12,6 +12,8 @@
 
 ## Oracle
 
+[Oracle参考文档阅读](https://docs.oracle.com/en/database/oracle/oracle-database/19/cncpt/introduction-to-oracle-database.html#GUID-C756D70F-75D4-4234-BEB5-CB05A4742128)
+
 ### 单实例篇
 
 #### [Oracle数据库简介](./Books/Oracle/Oracle数据库简介.md)

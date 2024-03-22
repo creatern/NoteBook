@@ -1205,13 +1205,11 @@
 
 ## 云计算数据库架构
 
-### 云计算
-
-- 云计算（Cloud Computing）
+### [云计算](../Computer/操作系统概述.md#云计算)
 
 ### 云数据库体系结构
 
-
+<img src="../../pictures/数据库系统概念-Google云计算体系结构.drawio.svg" width="600"/> 
 
 ## XML数据库
 

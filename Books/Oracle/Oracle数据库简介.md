@@ -193,7 +193,7 @@
 4. Ability to set performance limits for memory and I/O at the PDB level
 5. Ability to install, upgrade, and manage a master application definition within an <b>application container</b>, which is a set of PDBs plugged in to a common <b>application root</b>
 
-### Database Consolidation 数据库合并
+#### Database Consolidation 数据库合并
 
 - <b>Database consolidation（数据库合并）</b> is the general process of moving data from one or more non-CDBs into a CDB.
 
@@ -203,7 +203,7 @@
 
 - To administer the CDB itself or any PDB within it, a CDB administrator can connect to the <b>CDB root</b>, which is a collection of schemas, schema objects, and nonschema objects to which all PDBs belong.
 
-### Application Containers 应用程序容器
+#### Application Containers 应用程序容器
 
 - Starting in Oracle Database 12c Release 2 (12.2), an <b>application container（应用程序容器）</b> is an optional, user-created container that stores data and metadata for one or more application models.
 - An<b> application</b> (also called an application model) is a named, versioned set of common data and metadata stored in the <b>application root</b>. For example, the application model might include definitions of tables, views, user accounts, and PL/SQL packages that are common to a set of PDBs.
@@ -211,4 +211,154 @@
 
 <img src="../../pictures/20240320190522.png" width="450"/> 
 
-## Sharding Architecture 分片架构
+### Sharding Architecture 分片架构
+
+- <b>Oracle Sharding（Oracle分片）</b> is a database scaling technique based on horizontal partitioning of data across multiple Oracle databases. <u>Applications perceive the pool of databases as a single logical database.</u>
+- In a sharding architecture, each database is hosted on a dedicated server with its own local resources - CPU, memory, flash, or disk. Each database in such configuration is called a <b>shard（分片）</b>. All of the shards together make up a single logical database, which is referred to as a <b>sharded database（分片数据库）</b>.
+- <b>Horizontal partitioning（水平分区）</b> involves splitting a database table across shards so that each shard contains the table with the same columns but a different subset of rows. A table split up in this manner is also known as a <b>sharded table（分区表）</b>.
+
+<img src="../../pictures/20243022200322.png" width="500"/> 
+
+<img src="../../pictures/2024_03_22_20_10_11.png" width="500"/>  
+
+## Database Storage Structures 数据库存储结构
+
+- A database can be considered from both a physical and logical perspective. Physical data is data viewable at the operating system level. Logical data such as a table is meaningful only for the database. 
+- The database has <b>physical structures</b> and <b>logical structures</b>. Because the physical and logical structures are separate, you <u>can manage the  physical storage of data without affecting access to logical storage  structures</u>. （物理结构和逻辑结构的分离）
+
+### Physical Storage Structures 物理存储结构
+
+- The physical database structures are the files that store the data.
+- When you execute a `CREATE DATABASE` statement, the following files are created:
+
+<table>
+    <tr>
+        <td width="20%">Data files 数据文件</td>
+        <td with="80%">Every Oracle database has one or more physical data files, which <u>contain all the database data</u>. The data of logical database structures, such as tables and indexes, is physically stored in the data files.
+</td>
+    </tr>
+    <tr>
+        <td>Control files 控制文件</td>
+        <td>Every Oracle database has a control file. A control file <u>contains metadata specifying the physical structure of the database</u> , including the database name and the names and locations of the database files.
+</td>
+    </tr>
+    <tr>
+        <td>Online redo log files 在线重做日志文件</td>
+        <td>Every Oracle Database has an online redo log, which is a set of two or more online redo log files. An online redo log is <u>made up of redo entries</u> (also called redo log records), which record all changes made to data. </td>
+    </tr>
+    <tr>
+        <td colspan="2">Many other files are important for the functioning of an Oracle database server. These include <u>parameter files and networking files</u>. <u>Backup files and archived redo log files</u> are offline files important for backup and recovery.
+</td>
+    </tr>
+</table>
+
+### Logical Storage Structures 逻辑存储结构
+
+- Logical storage structures enable Oracle Database to have fine-grained control of disk space use.
+
+<table>
+    <tr>
+        <td>Data blocks 数据块</td>
+        <td><u>At the finest level of granularity</u>, Oracle Database data is stored in data blocks. One data block corresponds to a specific number of bytes on disk. </td>
+    </tr>
+    <tr>
+        <td>Extents 区</td>
+        <td>An extent is a specific number of <u>logically contiguous data blocks</u>, obtained in a single allocation, used to store a specific type of information. </td>
+    </tr>
+    <tr>
+        <td>Segments 段</td>
+        <td>A segment is a set of extents allocated for a <u>user object</u> (for example, a table or index), undo data, or temporary data. </td>
+    </tr>
+    <tr>
+        <td>Tablespaces 表空间</td>
+        <td>A database is divided into logical storage units called tablespaces. A tablespace is the logical container for segments. <u>Each tablespace consists of at least one data file.</u> </td>
+    </tr>
+</table>
+
+## Database Instance Structures 数据库实例结构
+
+- An Oracle database uses memory structures and processes to manage and  access the database. All memory structures exist in the main memory of  the computers that constitute the RDBMS.
+- When applications connect to an Oracle database, they connect to a <b>database instance（数据库实例）</b>. The instance services applications by allocating other memory areas in addition to the SGA, and starting other processes in addition to background processes.
+
+### Oracle Database Processes Oracle数据库进程
+
+- An Oracle database instance has the following types of processes:
+
+<table>
+    <tr>
+        <td width="20%">Client processes 客户端进程</td>
+        <td width="80%">These processes are created and maintained to run the software code of an application program or an Oracle tool. Most environments have separate computers for client processes.
+</td>
+    </tr>
+    <tr>
+        <td>Background processes 后台进程</td>
+        <td>These processes consolidate functions that would otherwise be handled by multiple Oracle Database programs running for each client process. Background processes asynchronously perform I/O and monitor other Oracle Database processes to provide increased parallelism for better performance and reliability.
+</td>
+    </tr>
+    <tr>
+        <td>Server processes 服务器进程</td>
+        <td>These processes communicate with client processes and interact with Oracle Database to fulfill requests.
+</td>
+    </tr>
+</table>
+
+- Oracle processes include server processes and background processes. In  most environments, Oracle processes and client processes run on separate computers.
+
+### Instance Memory Structures 
+
+- Oracle Database creates and uses memory structures for program code,  data shared among users, and private data areas for each connected user.
+- The following memory structures are associated with a database instance:
+
+<table>
+    <tr>
+        <td width="20%" rowspan="2">System Global Area (SGA)<br/>系统全局区域</td>
+        <td width="80%">The SGA is a group of shared memory structures that contain data and control information <u>for one database instance</u>. Examples of SGA components include the database buffer cache and shared SQL areas. </td>
+    </tr>
+    <tr>
+        <td>Starting in Oracle Database 12c Release 1 (12.1.0.2), the SGA can contain an optional In-Memory Column Store (IM column store), which enables data to be populated in memory in a columnar format.</td>
+    </tr>
+    <tr>
+        <td>Program Global Areas (PGA)<br/>程序全局区域</td>
+        <td>A PGA is a memory region that contains data and control information <u>for a server or background process. Access to the PGA is exclusive to the process. Each server process and background process has its own PGA.</u>
+</td>
+    </tr>
+</table>
+
+## Application and Networking Architecture 应用与网络架构
+
+- Oracle Database enables processing to be split between the database  server and the client programs. The computer running the RDBMS handles  the database server responsibilities while the computers running the  applications handle the interpretation and display of data.
+
+### Application Architecture 应用架构
+
+- The <b>application architecture</b> is the computing environment in which a  database application connects to an Oracle database. The two most common database architectures are <b>client/server</b> and<b> multitier</b>.
+
+#### Client-Server Architecture 客户端-服务器体系结构
+
+- In a <b>client/server architecture</b>, the client application initiates a request for an operation to be performed on the database server. The server runs Oracle Database software and handles the functions required for concurrent, shared data access. The server receives and processes requests that originate from clients.
+
+#### Multitier Architecture 多层架构
+
+- In a multitier architecture, one or more application servers perform parts of the operation. An application server contains a large part of the application logic, provides access to the data for the client, and performs some query processing. In this way, the load on the database decreases. The application server can serve as an interface between clients and multiple databases and provide an additional level of security.
+- A <b>service-oriented architecture (SOA，面向服务的架构)</b> is a multitier architecture in which application functionality is encapsulated in services. SOA services are usually implemented as Web services. Web services are accessible through HTTP and are based on XML-based standards such as Web Services Description Language (WSDL) and SOAP.<u> Oracle Database can act as a Web service provider in a traditional multitier or SOA environment.</u>
+- <b>Simple Oracle Document Access (SODA，Oracle简单文档处理)</b> is an adaption of SOA that enables you to access to data stored in the database. SODA is designed for schemaless application development without knowledge of relational database features or languages such as SQL and PL/SQL. You can create and store collections of documents in Oracle Database, retrieve them, and query them, without needing to know how the documents are stored. SODA for REST uses the representational state transfer (REST) architectural style to implement SODA.
+
+### Oracle Net Services Architecture Oracle网络服务架构
+
+- <b>Oracle Net Services</b> is the interface between the database and the network communication protocols that facilitate distributed processing and distributed databases.
+- Communication protocols define the way that data is transmitted and  received on a network. Oracle Net Services supports communications on  all major network protocols, including TCP/IP, HTTP, FTP, and WebDAV.
+- <b>Oracle Net</b>, a component of Oracle Net Services, establishes and maintains a network session from a client application to a database server. After a network session is established, Oracle Net acts as the data courier for both the client application and the database server, exchanging messages between them. Oracle Net can perform these jobs because it is <u>located on each computer in the network</u>.
+- The most common ways to configure an Oracle database to service client requests are:
+
+<table>
+    <tr>
+        <td width="20%">Dedicated server architecture<br/>专用服务器架构</td>
+        <td width="80%">Each client process connects to a <b>dedicated server</b> process. The server process is not shared by any other client for the duration of the client's session. Each new session is assigned a dedicated server process.
+</td>
+    </tr>
+    <tr>
+        <td>Shared server architecture<br/>共享服务器架构</td>
+        <td>The database uses a pool of <b>shared server</b> processes for multiple sessions. A client process communicates with a <b>dispatcher</b>, which is a process that enables many clients to connect to the same database instance without the need for a dedicated server process for each client.
+</td>
+    </tr>
+</table>
+
