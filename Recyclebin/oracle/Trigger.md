@@ -169,7 +169,7 @@ before
 insert or delete or update on copy_emp
 for each row
 begin
-  if insertING then
+  if inserting then
     RAisE_APPLICATIon_ERRor(-20001,'禁止插入数据');
   elsif DELETING then
     insert into user_test_table(user_name,old_id,new_id)
