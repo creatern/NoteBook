@@ -578,30 +578,6 @@ date "+%Y-%m-%d %H:%M:%S"
 # 2023-12-31 10:24:53
 ```
 
-## 用户输入
-
-### 命令行参数
-
-- 向shell脚本传递数据的最基本方法是使用命令行参数，命令行参数允许运行脚本时在命令行中添加数据。
-- 命令行参数是在命令/脚本名出现的各个单词，而<a href="./环境变量.md#变量引用">位置参数</a>是用于保存命令行参数（以及函数参数）的变量。bash shell会将所有的命令行参数（包括脚本参数）都指派给称作<a href="./环境变量.md#变量引用">位置参数（positional parameter）</a>的特殊变量（<code>$0~$9</code>）
-
-### <a href="./环境变量.md#变量引用"><code>$</code> 特殊参数（位置参数等）</a>
-
-### shift 移动位置参数
-
-
-
-### read 读取变量值
-
-- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
-
-```shell
-#!/bin/bash
-
-read -t 10 -p "请在10秒内输入: " x
-echo "输出：$x"
-```
-
 # 结构化命令
 
 - 结构化命令（structured command）允许脚本根据条件跳过部分命令，改变执行流程。
@@ -1243,6 +1219,140 @@ do
 	echo "adding $logingname"
 	useradd -C "$name" -m "$loginame"
 done < "$input"
+```
+
+# 用户输入
+
+## 命令行参数
+
+- 向shell脚本传递数据的最基本方法是使用命令行参数，命令行参数允许运行脚本时在命令行中添加数据。
+- 命令行参数是在命令/脚本名出现的各个单词，而<a href="./环境变量.md#变量引用">位置参数</a>是用于保存命令行参数（以及函数参数）的变量。bash shell会将所有的命令行参数（包括脚本参数）都指派给称作<a href="./环境变量.md#变量引用">位置参数（positional parameter）</a>的特殊变量（<code>$0~$9</code>）
+
+### <a href="./环境变量.md#变量引用"><code>$</code> 特殊参数（位置参数等）</a>
+
+### shift 移动位置参数
+
+- <code>shift</code>命令会根据命令行参数的相对位置移动，默认情况下会将每个位置的变量值都向左移动一个位置。
+
+1. 在向左移动的过程中，<code>$1</code>原先的值会被移除（<code>$2</code>替代），而不是替代<code>$0</code>的值。<code>$0</code>的值不会<code>shfit</code>命令被影响。
+2. 如果某个位置参数被移出了，那么它原先的值就无法再获取到，而是被之后移入的位置参数的值所替代
+3. 可以指定<code>shift</code>命令向左移动的位数，默认是1。
+
+```shell
+# ./test10-shift 1 2 3
+for i in $*
+do
+	echo $1
+	shift
+done
+echo $1
+# 1
+# 2
+# 3
+# （空）
+```
+
+### 选项与参数的分离
+
+#### 自定义处理
+
+- 通常情况下，我们自己定义的命令行选项一般（规范）是以连字符（<code>-</code>）或双连字符（<code>--</code>）开头的命令行参数，用于改变命令的行为。
+
+```shell
+while [ -n "$1" ]
+do
+        case "$1" in
+                -a) echo "-a option" ;;
+                -b) param=$2
+                        echo "-b option has parameter=$param"
+                        shift ;;
+                -c) echo "-c option" ;;
+                --) shift
+                        break ;;
+                *)
+                        echo "$1 is not a option" ;;
+        esac
+        shift
+done
+```
+
+#### getopt
+
+- <code>getopt</code>可以接受一系列任意形式的命令行选项和参数，并自动将其转换为适当的形式。
+
+```shell
+getopt optstring parameters
+```
+
+- `optstring`定义了有效的命令行选项字母（只能是单个字母），以及哪些选项字母需要参数值，<code>getopt</code>会基于该选项的设置来解析提供的参数。
+- 如果在`parameters`中出现作为选项的字母连用（`-cd`、`-ac`等），且如果是`optstring`中指定为选项的，那么在解析时会自动将他们拆分为单字母选项。（即使在`optstring`中使用`{}`来界定也是如此）
+- <code>getopt</code>命令不善于处理带空格和引号的参数值，会将空格当作分隔符，且不会依据引号的指示来将引号内的内容作为一个整体。
+
+```shell
+# 指定命令行选项-a、-b、-c、-d，其中-b选项带参数值
+getopt ab:cd -a -b Hello -cd
+# -a -b Hello -c -d --
+getopt ab:{cd} -ad -b Hello -cd
+# -a -d -b Hello -c -d --
+
+# 获取命令行的所有参数并进行格式化解析
+getopt "$@"
+
+# 难以处理带空格的值
+getopt a:b -a "test1 test2" -b
+```
+
+```shell
+# getopt命令不善于处理带空格和引号的参数值
+set -- `getopt -q ab:cd "$@"`
+
+while [ -n "$1" ]
+do
+        case "$1" in
+                -a) echo "-a option" ;;
+                -b) param=$2
+                        echo "-b option has parameter=$param"
+                        shift ;;
+                -c) echo "-c option" ;;
+                --) shift
+                        break ;;
+                *)
+                        echo "$1 is not a option" ;;
+        esac
+        shift
+done
+
+# $ ./test12-getopt-set.sh -a -b "test1 test2" -c -d
+# -a option
+# -b option has parameter='test1
+# test2' is not a option
+# -c option
+# -d is not a option
+```
+
+#### <span name="替换位置参数"><a href="./环境变量.md#set"><code>set --</code></a> 替换位置参数</span>
+
+- <code>set --</code>可以将位置参数的值替换称<code>set</code>命令所指定的值。
+
+```shell
+# 使用getopt命令的输出替换位置参数的值
+# ./test12-getopt-set.sh -a -b Hello -c -d
+set -- `getopt -q ab:cd "$@"`
+echo "$*"
+# -a -b 'Hello' -c -d --
+```
+
+#### getopts
+
+## read 读取变量值
+
+- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
+
+```shell
+#!/bin/bash
+
+read -t 10 -p "请在10秒内输入: " x
+echo "输出：$x"
 ```
 
 # 函数

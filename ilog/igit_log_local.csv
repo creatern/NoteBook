@@ -38,3 +38,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-21 19:31:21','recover','success','9a5e51627bc41a1ef8d5c2e11c36cce021f01605 recover'
 'zjk-laptop','zjk','2024-03-21 20:42:10','active-standby','success','24ff2c5774480e2df037151843b2f354c583f3fb active-standby'
 'zjk-laptop','zjk','2024-03-21 22:15:12','vim','success','0571b395e3038b682dc513bcbe78eeb00d19a5b4 vim'
+'zjk-laptop','zjk','2024-03-22 00:32:39','position-parameter','success','1ca873dd77303c3bfea1b18313c0941db899eca2 position-parameter'
