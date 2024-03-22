@@ -1284,7 +1284,7 @@ done
 getopt optstring parameters
 ```
 
-- `optstring`定义了有效的命令行选项字母（只能是单个字母），以及哪些选项字母需要参数值，<code>getopt</code>会基于该选项的设置来解析提供的参数。
+- `optstring`定义了有效的命令行选项字母（只能是单个字母），以及哪些选项字母需要参数值（在字母之后加上<code>:</code>），<code>getopt</code>会基于该选项的设置来解析提供的参数。
 - 如果在`parameters`中出现作为选项的字母连用（`-cd`、`-ac`等），且如果是`optstring`中指定为选项的，那么在解析时会自动将他们拆分为单字母选项。（即使在`optstring`中使用`{}`来界定也是如此）
 - <code>getopt</code>命令不善于处理带空格和引号的参数值，会将空格当作分隔符，且不会依据引号的指示来将引号内的内容作为一个整体。
 
@@ -1344,15 +1344,176 @@ echo "$*"
 
 #### getopts
 
-## read 读取变量值
-
-- read：该命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开；如果没有指定变量名，读取的数据将被自动赋值给特定的变量`REPLY`
+- <code>getopts</code>是bash shell的内建命令，<code>getopts</code>命令每次只处理一个检测到的命令行参数，在处理完所有参数后，<code>getopts</code>会退出并返回一个大于0的退出状态码。
 
 ```shell
-#!/bin/bash
+getopts optstring variable
+```
 
+1. <code>getopts</code>命令能够和已有的shell位置变量更好的配合；而<code>getopt</code>命令在将命令行中选项和参数处理后只生成一个输出。
+2. optstring参数和<code>getopt</code>命令内的用法类似，有效的选项字母会在optstring中列出，如果要求选项字母有参数值，则在其后加上一个冒号（<code>:</code>）。<code>getopts</code>命令会将当前参数保存到命令行中定义的variable中。
+3. <code>getopts</code>命令可以在参数值中加入空格，而不会像<code>getopt</code>命令一样无法处理。同时，<code>getopts</code>命令也可以将选项字母和参数值写在一起，二者之间可以没有空格。
+4. <code>getopts</code>命令会将在命令行中找到的所有未定义的选项统一输出为问号<code>?</code>。也就是说，optstring中未定义的选项字母会以<code>?</code>的形式传递给脚本。
+5. <code>getopts</code>命令知道何时停止处理选项，并将参数留给用户来处理。在处理每个选项时，<code>getopts</code>会将<code>OPTIND</code>环境变量值增加1，处理完选项后，可以使用<code>shift</code>命令和<code>OPTIND</code>环境变量的值来移动参数。
+
+- <code>getopts</code>命令要用到两个环境变量：
+
+<table>
+    <caption>getopts使用到的环境变量</caption>
+    <tr>
+        <td width="15%">OPTARG</td>
+        <td width="85%">保存<code>getopts</code>中选项字母需要加带的参数值</td>
+    </tr>
+    <tr>
+        <td>OPTIND</td>
+        <td>保存参数列表中<code>getopts</code>正在处理的参数位置</td>
+    </tr>
+</table>
+
+```shell
+while getopts :ab:c opt
+do
+        case "$opt" in
+                a) echo "Found -a option" ;;
+                b) echo "Found -b option with parameter value $OPTARG" ;;
+                c) echo "Found -c option" ;;
+                *) echo "Unknown option: $opt"
+        esac
+done
+
+shift $[ $OPTIND - 1 ]
+
+count=1
+for param in "$@"
+do      
+        echo "Parameter $count: $param"
+        count=$[ $count + 1 ]
+done 
+
+# $ ./test-13-getopts.sh  -ab BValue -c -d p1 p2 p3
+# Found -a option
+# Found -b option with parameter value BValue
+# Found -c option
+# Unknown option: ?
+# Parameter 1: p1
+# Parameter 2: p2
+# Parameter 3: p3
+```
+
+### 选项标准化
+
+- Linux中一些常用的选项规范（非必须）：
+
+<table>
+    <tr>
+        <th width="5%">选项</th>
+        <th width="42.5%">描述</th>
+        <th width="5%" rowspan="9"></th>
+        <th width="5%">选项</th>
+        <th width="42.5%">描述</th>
+    </tr>
+    <tr>
+        <td>-a</td>
+        <td>显示所有对象</td>
+        <td>-n</td>
+        <td>使用批处理模式</td>
+    </tr>
+    <tr>
+        <td>-c</td>
+        <td>生成计数</td>
+        <td>-o</td>
+        <td>将所有输出重定向到指定文件</td>
+    </tr>
+    <tr>
+        <td>-d</td>
+        <td>指定目录</td>
+        <td>-q</td>
+        <td>以静默模式运行</td>
+    </tr>
+    <tr>
+        <td>-e</td>
+        <td>扩展对象</td>
+        <td>-r</td>
+        <td>递归处理目录和文件</td>
+    </tr>
+    <tr>
+        <td>-f</td>
+        <td>指定读入数据的文件</td>
+        <td>-s</td>
+        <td>以静默模式运行</td>
+    </tr>
+    <tr>
+        <td>-h</td>
+        <td>显示命令的帮助信息</td>
+        <td>-v</td>
+        <td>生成详细输出</td>
+    </tr>
+    <tr>
+        <td>-i</td>
+        <td>忽略文本大小写</td>
+        <td>-x</td>
+        <td>排除某个对象</td>
+    </tr>
+    <tr>
+        <td>-l</td>
+        <td>产生长格式输出</td>
+        <td>-y</td>
+        <td>对所有问题回答yes</td>
+    </tr>
+</table>
+
+## read 获取用户输入
+
+- <code>read</code>命令从标准输入或另一个文件描述符中接受输入，获取输入后，<code>read</code>命令会将数据存入变量。
+
+1. <code>read</code>命令可以一次读取多个变量的值，变量和输入的值都需要使用空格隔开。
+2. 如果指定多个变量，则输入的每个数据值都会分配给变量列表中的下一个变量。如果变量数量不够，那么剩下的数据就全部分配给最后一个变量。
+3. 如果没有指定变量名，<code>read</code>命令读取的数据将被自动赋值给特定的`REPLY`环境变量。
+
+<table>
+    <tr>
+        <td width="10%">-p</td>
+        <td width="90%">指定读取值时的提示符</td>
+    </tr>
+    <tr>
+        <td>-t</td>
+        <td>指定读取值时等待的时间（秒）。未指定该选项前，read命令默认一直等待输入。如果计时器超时，则read命令会返回非0退出状态码</td>
+    </tr>
+    <tr>
+        <td>-n</td>
+        <td>指定read命令在收到指定个数的字符后退出并传递给变量</td>
+    </tr>
+</table>
+
+
+```shell
+# 要求在10秒内输入，并且有提示信息
 read -t 10 -p "请在10秒内输入: " x
 echo "输出：$x"
+
+# 指定read接受一个字符的输入，且会传递给REPLY
+read -n 1
+echo $REPLY 
+```
+
+### read读取文件
+
+- <code>read</code>命令可用于读取文件，每次调用read命令都会从指定文件中读取一行文本，通常搭配while命令循环使用。当文件中没有内容可读时，read命令会退出并返回非0退出状态码。
+
+```shell
+count=1
+tail -n 8 /etc/profile | while read
+do
+        echo "Line-$count：$REPLY"
+        count=$[ $count + 1 ]
+done
+echo "Finish read file."
+
+#  ./test-14-read.sh
+# Line-1：# GRADLE_HOME
+# Line-2：export GRADLE_HOME=/opt/gradle-8.6
+# Line-3：export PATH=$GRADLE_HOME/bin:$PATH
+# Finish read file.
 ```
 
 # 函数

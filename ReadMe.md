@@ -10,6 +10,8 @@
 
 ### [数据管理实现技术](./Books/数据库理论/数据管理实现技术.md)
 
+## [数据挖掘导论 Data Mining](./Books/数据库理论/数据挖掘导论.md)
+
 ## Oracle
 
 [Oracle参考文档阅读](https://docs.oracle.com/en/database/oracle/oracle-database/19/cncpt/introduction-to-oracle-database.html#GUID-C756D70F-75D4-4234-BEB5-CB05A4742128)
@@ -51,8 +53,6 @@
 ## Redis
 
 ### [数据结构与编码](./Books/NoSQL/Redis/数据结构与编码.md)
-
-## [数据挖掘导论 Data Mining](./Books/数据库理论/数据挖掘导论.md)
 
 # Java
 
