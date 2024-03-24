@@ -365,7 +365,11 @@
 
 #### [队列](./Books/Algorithm/队列.md)
 
-### [树](./Books/Algorithm/树.md)
+### [树](./Books/Algorithm/Tree.md)
+
+#### [树的基本性质](./Books/Algorithm/树的基本性质.md)
+
+#### [二叉树 BinaryTree](./Books/Algorithm/二叉树.md)
 
 ### 图
 
