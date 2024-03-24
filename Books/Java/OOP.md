@@ -1138,3 +1138,87 @@ interface SubInterface extends SuperClass1,SuperClass2
         </tr>
     </tbody>
 </table>
+# 包装类
+
+## 基本数据类型与对应的包装类
+
+<table>
+	<thead>
+		<tr>
+			<th align="left" width="30%">基本类型</th>
+			<th align="left" width="70%">包装类</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align="left">boolean</td>
+			<td align="left">Boolean</td>
+		</tr>
+		<tr>
+			<td align="left">byte</td>
+			<td align="left">Byte</td>
+		</tr>
+		<tr>
+			<td align="left">short</td>
+			<td align="left">Short</td>
+		</tr>
+		<tr>
+			<td align="left">int</td>
+			<td align="left">Integer</td>
+		</tr>
+		<tr>
+			<td align="left">long</td>
+			<td align="left">Long</td>
+		</tr>
+		<tr>
+			<td align="left">float</td>
+			<td align="left">Float</td>
+		</tr>
+		<tr>
+			<td align="left">double</td>
+			<td align="left">Double</td>
+		</tr>
+		<tr>
+			<td align="left">char</td>
+			<td align="left">Character</td>
+		</tr>
+	</tbody>
+</table>
+## 自动装箱/拆箱
+
+
+- 自动装箱/拆箱：在包装类和基本数据类型之间自动调用以下两个方法进行转换。
+
+<table>
+	<thead>
+		<tr>
+			<th align="left" width="10%">工作</th>
+			<th align="left" width="90%">方法</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align="left">装箱</td>
+			<td align="left">包装类.valueOf(基本类型)</td>
+		</tr>
+		<tr>
+			<td align="left">拆箱</td>
+			<td align="left">包装类对象.xxxValue()</td>
+		</tr>
+	</tbody>
+</table>
+
+```java
+Integer a = 1; //自动装箱：Integer a = Integer.valueOf(1)
+int b = a; //自动拆箱：int b = a.intValue();
+```
+
+<img src="../../pictures/521452623244208.png" width="800"/> 
+
+## new与包装类缓存对象
+
+- new获取包装类对象的方式已经过时。new每次都会创建新的对象，而包装类（除了Float和Double）都缓存了包装类对象，通过valueOf()的方式可以减少对象的创建。
+
+```java
+Integer a = new Integer(1);
+```

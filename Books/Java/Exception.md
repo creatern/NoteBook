@@ -22,44 +22,179 @@
 
 - 所有异常类型都是内置类 **java.lang.Throwable** 类的子类，即 Throwable 位于异常类层次结构的顶层。Error（错误）和 Exception（异常）都是 java.lang.Throwable 类的子类，在 Java 代码中只有继承了 Throwable 类的实例才能被 throw 或者catch。
 
-| Exception                                          | 说明                                                         |
-| -------------------------------------------------- | ------------------------------------------------------------ |
-| 运行时异常<br />（不检查异常 Unchecked Exception） | 编译器不要求强制处置的异常。一般是指编程时的逻辑错误，是程序员应该积极避免其出现的异常。对于这类异常，可以不作处理，因为这类异常很普遍，若全处理可能会对程序的可读性和运行效率产生影响。<br />java.lang.RuntimeException类及它的子类都是运行时异常。 |
-| 编译时异常<br />（检查异常 Checked Exception）     | 编译器要求必须处置的异常。即程序在运行时由于外界因素造成的一般性异常。编译器要求Java程序必须捕获或声明所有编译时异常。如果程序不处理，可能会带来意想不到的结果。<br />java.io.IOExeption、java.lang.ClassNotFoundException、java.lang.InterruptedException、java.io.FileNotFoundException、java.sql.SQLException... |
+<table>
+    <thead>
+        <tr>
+            <th width="20%">Exception</th>
+            <th width="80%">说明</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>运行时异常
+                <br />（不检查异常 Unchecked Exception）
+            </td>
+            <td>编译器不要求强制处置的异常。一般是指编程时的逻辑错误，是程序员应该积极避免其出现的异常。对于这类异常，可以不作处理，因为这类异常很普遍，若全处理可能会对程序的可读性和运行效率产生影响。
+                <br />java.lang.RuntimeException类及它的子类都是运行时异常。
+            </td>
+        </tr>
+        <tr>
+            <td>编译时异常
+                <br />（检查异常 Checked Exception）
+            </td>
+            <td>编译器要求必须处置的异常。即程序在运行时由于外界因素造成的一般性异常。编译器要求Java程序必须捕获或声明所有编译时异常。如果程序不处理，可能会带来意想不到的结果。
+                <br />java.io.IOExeption、java.lang.ClassNotFoundException、java.lang.InterruptedException、java.io.FileNotFoundException、java.sql.SQLException...
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ## 常见异常
 
-1. 运行时异常（RuntimeException）：
+### 运行时异常（RuntimeException）
 
-<img src="../../pictures/218961211240179.png" width="483"/> 
+<table>
+    <thead>
+        <tr>
+            <th width="30%">异常类型</th>
+            <th width="70%">意义</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>ArithmeticException</td>
+            <td>算术错误异常，如以零做除数</td>
+        </tr>
+        <tr>
+            <td>ArrayIndexOutOfBoundsException</td>
+            <td>数组索引越界</td>
+        </tr>
+        <tr>
+            <td>ArrayStoreException</td>
+            <td>向类型不兼容的数组元素赋值</td>
+        </tr>
+        <tr>
+            <td>ClassCastException</td>
+            <td>类型转换异常</td>
+        </tr>
+        <tr>
+            <td>IllegalArgumentException</td>
+            <td>使用非法实参调用方法</td>
+        </tr>
+        <tr>
+            <td>IllegalStateException</td>
+            <td>环境或应用程序处于不正确的状态</td>
+        </tr>
+        <tr>
+            <td>IllegalThreadStateException</td>
+            <td>被请求的操作与当前线程状态不兼容</td>
+        </tr>
+        <tr>
+            <td>IndexOutOfBoundsException</td>
+            <td>某种类型的索引越界</td>
+        </tr>
+        <tr>
+            <td>NullPointerException</td>
+            <td>尝试访问 null 对象成员，空指针异常</td>
+        </tr>
+        <tr>
+            <td>NegativeArraySizeException</td>
+            <td>在负数范围内创建数组</td>
+        </tr>
+        <tr>
+            <td>NumberFormatException</td>
+            <td>数字格式异常，比如字符串到 float 类型数字的转换无效</td>
+        </tr>
+        <tr>
+            <td>TypeNotPresentException</td>
+            <td>类型未找到</td>
+        </tr>
+    </tbody>
+</table>
 
-2. 编译时异常：
+### 编译时异常
 
-<img src="../../pictures/222711311236734.png" width="324"/> 
+<table>
+    <thead>
+        <tr>
+            <th width="30%">异常类型</th>
+            <th width="70%">说明</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>ClassNotFoundException</td>
+            <td>没有找到类</td>
+        </tr>
+        <tr>
+            <td>IllegalAccessException</td>
+            <td>访问类被拒绝</td>
+        </tr>
+        <tr>
+            <td>InstantiationException</td>
+            <td>试图创建抽象类或接口的对象</td>
+        </tr>
+        <tr>
+            <td>InterruptedException</td>
+            <td>线程被另一个线程中断</td>
+        </tr>
+        <tr>
+            <td>NoSuchFieldException</td>
+            <td>请求的域不存在</td>
+        </tr>
+        <tr>
+            <td>NoSuchMethodException</td>
+            <td>请求的方法不存在</td>
+        </tr>
+        <tr>
+            <td>ReflectiveOperationException</td>
+            <td>与反射有关的异常的超类</td>
+        </tr>
+    </tbody>
+</table>
 
-3. 错误（Error）：
+### 错误（Error）
 
-- NoClassDefFoundError：找不到 class 定义异常
-- StackOverflowError：深递归导致栈被耗尽而抛出的异常
-- OutOfMemoryError：内存溢出异常
+<table>
+    <thead>
+        <tr>
+            <th>异常名称</th>
+            <th>异常描述</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>NoClassDefFoundError</td>
+            <td>找不到 class 定义异常</td>
+        </tr>
+        <tr>
+            <td>StackOverflowError</td>
+            <td>深递归导致栈被耗尽而抛出的异常</td>
+        </tr>
+        <tr>
+            <td>OutOfMemoryError</td>
+            <td>内存溢出异常</td>
+        </tr>
+    </tbody>
+</table>
 
-## Java异常处理机制
+# Java异常处理机制
 
-> Java采用的异常处理机制是将异常处理的程序代码集中在一起，与正常的程序代码分开。
+- Java采用的异常处理机制是将异常处理的程序代码集中在一起，与正常的程序代码分开。
 
-### 异常处理的抓抛模型
+## 异常处理的抓抛模型
 
 - Java通过面向对象的方法来处理异常。在一个方法的运行过程中，如果发生了异常，则这个方法会产生代表该异常的一个对象，并把它交给运行时的系统，运行时系统寻找相应的代码来处理这一异常。
-- 拋出异常：生成异常对象并把它提交给运行时系统的过程。程序在正常执行的过程中，一旦出现异常，就会在异常代码处生成一个对应异常类的对象，并将此对象抛出。一旦抛出异常对象，其他的代码就不执行。
-- 捕获异常：运行时系统在方法的调用栈中查找，直到找到能够处理该类型异常的对象。如果一个方法内抛出异常，该异常对象会被抛给调用者方法中处理。如果异常没有在调用者方法中处理，它继续被抛给这个调用方法的上层方法，这个过程将一直继续下去，直到异常被处理。如果一个异常回到main()方法，并且main()也不处理，则程序运行终止。
+
+1. 拋出异常：生成异常对象并把它提交给运行时系统的过程。程序在正常执行的过程中，一旦出现异常，就会在异常代码处生成一个对应异常类的对象，并将此对象抛出。一旦抛出异常对象，其他的代码就不执行。
+2. 捕获异常：运行时系统在方法的调用栈中查找，直到找到能够处理该类型异常的对象。如果一个方法内抛出异常，该异常对象会被抛给调用者方法中处理。如果异常没有在调用者方法中处理，它继续被抛给这个调用方法的上层方法，这个过程将一直继续下去，直到异常被处理。如果一个异常回到main()方法，并且main()也不处理，则程序运行终止。
 
 <img src="../../pictures/150934310227344.png" width="600"/> 
 
-### 异常对象的生成
+## 异常对象的生成
 
-- 虚拟机自动生成：程序运行过程中，虚拟机检测到程序发生了问题，如果在当前代码中没有找到相应的处理程序，就会在后台自动创建一个对应的异常对象并抛出。
-
-- 手动创建：Exception exception。
+1. 虚拟机自动生成：程序运行过程中，虚拟机检测到程序发生了问题，如果在当前代码中没有找到相应的处理程序，就会在后台自动创建一个对应的异常对象并抛出。
+2. 手动创建：Exception exception。
 
 # try-catch-finally  
 
