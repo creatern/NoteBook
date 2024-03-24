@@ -54,6 +54,12 @@
 
 ### [数据结构与编码](./Books/NoSQL/Redis/数据结构与编码.md)
 
+# C
+
+## 基础篇
+
+### [基础配置与语法](./Books/C/基础配置与语法.md)
+
 # Java
 
 ## 基础篇
@@ -542,5 +548,3 @@
 ## [基础篇](./Books/Android/Android.md)
 
 ## Kotlin
-
-# C/C++

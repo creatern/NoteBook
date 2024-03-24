@@ -1,0 +1,113 @@
+<mxfile host="Electron" modified="2024-03-24T12:57:18.892Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="059gKp93xgBUXhsCPpyK" version="24.0.4" type="device" pages="3">
+  <diagram name="编译器和链接器" id="6mknZxrXcaN0SPZ0GZ1e">
+    <mxGraphModel dx="1804" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BtfB1_RNgl-5s-Syqek--1" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="170" y="180" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--2" value="concrete.c" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="175" y="180" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--3" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.code_file;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="196.25" y="210" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--4" target="BtfB1_RNgl-5s-Syqek--5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--4" value="源代码" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#FFE6CC;fontColor=#333333;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="260" y="220" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--5" target="BtfB1_RNgl-5s-Syqek--6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--5" value="编译器" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--7" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="390" y="370" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--8" value="concrete.obj" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="390" y="370" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--9" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.code_file;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="416.25" y="400" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--6" target="BtfB1_RNgl-5s-Syqek--10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--6" value="目标代码" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="260" y="400" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--10" target="BtfB1_RNgl-5s-Syqek--15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--10" value="链接器" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="260" y="480" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--16" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="390" y="555" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--17" value="concrete.exe" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="390" y="555" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--18" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.code_file;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="416.25" y="585" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--15" value="可执行代码" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#E6FFCC;" vertex="1" parent="1">
+          <mxGeometry x="260" y="580" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--19" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="415" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--21" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.code_file;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="6.25" y="445" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--12" target="BtfB1_RNgl-5s-Syqek--10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--12" value="库代码" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="70" y="455" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--22" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="515" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--23" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.code_file;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="6.25" y="545" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="BtfB1_RNgl-5s-Syqek--13" target="BtfB1_RNgl-5s-Syqek--10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BtfB1_RNgl-5s-Syqek--13" value="启动代码" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=14;fontStyle=1;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="70" y="525" width="140" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="41hMjNsunH1jgrQ2oLbn" name="C程序的结构">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Iw1wEHXsP-x-TymK-re--1" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;典型的C程序&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fontColor=#333333;labelBackgroundColor=none;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Iw1wEHXsP-x-TymK-re--2" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;#include&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;labelBackgroundColor=none;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="120" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Iw1wEHXsP-x-TymK-re--3" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;int&amp;nbsp; main(void)&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;labelBackgroundColor=none;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="200" width="160" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="e0L-jJDAGXkUspZtmYTs" name="Page-3">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
