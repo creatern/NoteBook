@@ -1405,16 +1405,7 @@ echo "Finish read file."
 
 # 重定向
 
-## 标准文件描述符
-
-- 执行一个Shell命令通常会自动打开3个标准文件：标准输入文件stdin、标准输出文件stout、标准错误输出文件stderr。进程从标准输入文件得到输入数据，将正常输出数据输出到标准输出文件，而错误信息则打印到标准错误文件。
-
-<img src="../../pictures/153845716239573.png" width="369"/> 
-
-1. 如果给定的文件不止一个，则在显示的每个文件前面加一个文件名标题。
-2. 若不指定任何文件名称/给予的文件名为"\-"，则命令从标准输入设备读取数据。
-
-### 重定向操作符
+## 重定向操作符
 
 - 重定向操作符：把命令/可执行程序的标准输入/输出重定向到指定的文件或命令的参数输入。
 
@@ -1463,53 +1454,263 @@ echo "Finish read file."
         <tr>
             <td>如果有错误信息，则不会在屏幕（标准输出文件）输出，而会保存在指定的文件中；即使没有错误信息也会创建/追加</td>
         </tr>
-        <tr>
-            <td>&amp;&gt;</td>
-            <td></td>
-            <td></td>
-        </tr>
 	</tbody>
 </table>
 
+```shell
+# 通过输入重定向搭配wc统计文本
+wc < mylog.txt
+```
 
+### &lt;&lt; 内联输入重定向 与 文本标记符
 
-- `&`用于表示该行命令中上一个重定向操作符重定向到的命令或文件。
+- 内联输入重定向（<code>&lt;&lt;</code>）需要搭配文本标记符号使用，文本标记符可以是任意字符或字符串，用于标记多行文本的开头和结束。
 
+```shell
+# 内联输入重定向
+wc << EOF
+this is title
+this is context
+this is end
+EOF
+      3       9      42
+```
+
+## 文件描述符
+
+### 标准文件描述符
+
+- 文件描述符：Linux系统会将每个对象当作文件来处理，包括输入和输出。Linux是由<b>文件描述符</b>来标识每个文件对象。文件描述符是一个非负整数，唯一会标识的是会话中打开的文件。
+- 每个进程一次最多可以打开9个文件描述符，而bash shell保留了前3个文件描述符（0、1、2），并通过这3个特殊的文件描述符来处理文件的输入和输出。进程从标准输入文件得到输入数据，将正常输出数据输出到标准输出文件，而错误信息则打印到标准错误文件。
+
+<table>
+    <tr>
+        <td width="5%">0</td>
+        <td width="10%">STDIN</td>
+        <td width="10%">标准输入</td>
+        <td width="75%">STDIN（标准输入文件）代表shell的标准输入（对于终端而言，通常是键盘），shell会从键盘中读取输入并进行处理</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>STDOUT</td>
+        <td>标准输出</td>
+        <td>STDOUT（标准输出文件）代表shell的标准输出（在终端界面上，屏幕就是标准输出）</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>STDERR</td>
+        <td>标准错误</td>
+        <td>STDERR（标准错误输出文件）代表了shell的标准错误消息输出（默认也输出到标准输出，即屏幕上），shell或运行在shell中的程序和脚本报错时产生的错误消息就送到该文件处</td>
+    </tr>
+</table>
+
+<img src="../../pictures/153845716239573.png" width="369"/> 
+
+1. 如果给定的文件不止一个，则在显示的每个文件前面加一个文件名标题。
+2. 若不指定任何文件名称/给予的文件名为"\-"，则命令从标准输入设备读取数据。
+
+### &amp; 文件描述符引用
+
+<table>
+    <tr>
+        <td width="10%"><code>&amp;n</code></td>
+        <td width="90%"><code>&amp;n</code>用于表示该行命令中上一个重定向操作符重定向到的命令或文件或文件描述符。</td>
+    </tr>
+    <tr>
+        <td rowspan="2">&amp;-</td>
+        <td>用于关闭文件描述符，只要文件描述符重定向到该符号<code>&amp;-</code>，那么该文件描述符就会被关闭</td>
+    </tr>
+    <tr>
+        <td>一旦文件描述符被关闭，那么就不能其再接收输入或输出，否则shell会发出错误消息</td>
+    </tr>
+</table>
 
 ```shell
 # 重定向操作符可以混合使用，如将标准输出和标准错误输出重定向到同一个文件
 ls >myOutAndErr.txt 2>&
 
-# 通过输入重定向搭配wc统计文本
-wc < mylog.txt
+# 将输出重定向到标准错误文件
+echo "hello" >&2 
+
+# 关闭文件描述符3
+exec 3>&-
 ```
 
-#### &gt;&gt; 内联输入重定向 与 文本标记符
+### exec 更改文件描述符
 
-- 内联输入重定向（<code>&gt;&gt;</code>）需要搭配文本标记符号使用，文本标记符可以是任意字符或字符串，用于标记多行文本的开头和结束。
+- <code>exec</code>命令可用于改变shell进程中的标准输入、输出与错误，这样，在当前的整个shell中的这些标准文件就被修改到指定的文件了。
 
 ```shell
-# 内联输入重定向
-$ wc << EOF
-> this is title
-> this is context
-> this is end
-> EOF
-      3       9      42
+# 将文件描述符3重定向到标准输出（2）
+exec 3>&1
+exec 1>i_stdout.txt
+
+echo "Hello_1"
+
+# 将标准输入文件（2）重定向到 文件描述符3
+exec 1>&3
+
+echo "Hello_2"
+
+# 输出结果：
+# Hello_2
 ```
-
-#### <code>/dev/null</code> 黑洞 &#x1F573;
-
-- 所有送往黑洞（<code>/dev/null</code>）的文件都是有去无回的&#9924;。
 
 ```shell
-echo "I'm here" no-back
-sudo mv no-back /dev/null
-cat /dev/null
-# 是空的，而不是 I'm here
+# 将文件描述符号3的读写重定向到test.txt
+exec 3<>test.txt
 ```
 
-### \| 管道符
+### lsof 文件描述符列表
+
+- <code>lsof</code>命令会列出整个Linux系统（包括后台进程和登录用户）的打开的所有文件描述符。
+- 因为文件描述符（STDIN、STDOUT、STDERR）都指向终端，所以输出文件名就是终端的设备名。（虽然有点奇怪，但这3各文件都支持读写）
+
+<table>
+    <thead>
+        <tr>
+            <th width="15%">选项</th>
+            <th width="85%">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>-a</code></td>
+            <td>列出所有打开文件的进程信息</td>
+        </tr>
+        <tr>
+            <td><code>-c &lt;进程名&gt;</code></td>
+            <td>列出指定进程名所打开的所有文件</td>
+        </tr>
+        <tr>
+            <td><code>-g</code></td>
+            <td>列出基于GID号的进程详细信息</td>
+        </tr>
+        <tr>
+            <td><code>-d &lt;文件号&gt;</code></td>
+            <td>列出占用指定文件描述符的进程</td>
+        </tr>
+        <tr>
+            <td><code>+d &lt;目录&gt;</code></td>
+            <td>列出指定目录下被打开的所有文件</td>
+        </tr>
+        <tr>
+            <td><code>+D &lt;目录&gt;</code></td>
+            <td>递归列出指定目录及其子目录下被打开的所有文件</td>
+        </tr>
+        <tr>
+            <td><code>-n &lt;目录&gt;</code></td>
+            <td>列出使用NFS（网络文件系统）的文件及其相关进程</td>
+        </tr>
+        <tr>
+            <td><code>-i &lt;条件&gt;</code></td>
+            <td>列出符合特定条件（如协议、端口号、IP地址）的进程</td>
+        </tr>
+        <tr>
+            <td><code>-p &lt;进程号&gt;</code></td>
+            <td>列出指定进程号所打开的所有文件</td>
+        </tr>
+        <tr>
+            <td><code>-u</code></td>
+            <td>列出基于UID号的进程详细信息</td>
+        </tr>
+        <tr>
+            <td><code>-h</code></td>
+            <td>显示帮助信息</td>
+        </tr>
+        <tr>
+            <td><code>-v</code></td>
+            <td>显示命令版本信息</td>
+        </tr>
+    </tbody>
+</table>
+
+```shell
+
+lsof -a -p $$ -d 0,1,2
+# bash    53478  zjk    0u   CHR  136,4      0t0    7 /dev/pts/4
+# bash    53478  zjk    1u   CHR  136,4      0t0    7 /dev/pts/4
+# bash    53478  zjk    2u   CHR  136,4      0t0    7 /dev/pts/4
+```
+
+## tee 多目标输出
+
+- <code>tee</code>命令：read from standard input and write to standard output and files. Copy standard input to each FILE, and also to standard output.（默认覆盖）
+
+```shell
+tee [OPTION]... [FILE]...
+```
+
+<table>
+    <thead>
+        <tr>
+            <th width="30%">Option</th>
+            <th width="70%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>-a, --append</code></td>
+            <td>append to the given FILEs, do not overwrite</td>
+        </tr>
+        <tr>
+            <td><code>-i, --ignore-interrupts</code></td>
+            <td>ignore interrupt signals</td>
+        </tr>
+        <tr>
+            <td><code>-p</code></td>
+            <td>operate in a more appropriate MODE with pipes.</td>
+        </tr>
+        <tr>
+            <td><code>--output-error[=MODE]</code></td>
+            <td>set behavior on write error. See MODE below</td>
+        </tr>
+        <tr>
+            <td><code>--help</code></td>
+            <td>display this help and exit</td>
+        </tr>
+        <tr>
+            <td><code>--version</code></td>
+            <td>output version information and exit</td>
+        </tr>
+    </tbody>
+</table>
+
+- The  default  MODE  for  the <code>-p</code> option is '<code>warn-nopipe</code>'.  With "<Code>nopipe</Code>" MODEs, exit immediately if all outputs become broken pipes.  The default operation when <code>--out‐put-error</code> is not specified, is to exit immediately on error writing to a pipe, and diagnose errors writing to non pipe outputs.
+
+<table>
+    <thead>
+        <tr>
+            <th width="20%">Output Error Mode</th>
+            <th width="80%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>warn</td>
+            <td>diagnose errors writing to any output</td>
+        </tr>
+        <tr>
+            <td>warn-nopipe</td>
+            <td>diagnose errors writing to any output that is not a pipe</td>
+        </tr>
+        <tr>
+            <td>exit</td>
+            <td>exit on error writing to any output</td>
+        </tr>
+        <tr>
+            <td>exit-nopipe</td>
+            <td>exit on error writing to any output that is not a pipe</td>
+        </tr>
+    </tbody>
+</table>
+
+```shell
+# 将"Hello"输出到STDOUT以及t1.txt和t2.txt文件
+echo "Hellp" | tee t1.txt t2.txt
+```
+
+## \| 管道符
 
 - \|（管道符）：连接两个命令（管道连接，piping），将一个程序/命令的输出作为另一个程序/命令的参数输入。一般为输入和输出的结合，一个进程向管道的一端发送数据，而另一个进程从该管道的另一端读取数据。
 - 由管道符连接的两个命令并不是依次执行，而是由Linux系统同时运行这两个命令，在系统内部将二者连接起来（实时化）。当第一个命令产生输出时，它会被立即传给第二个命令。此处的数据传输不会用到任何文件或缓冲区。
@@ -1521,6 +1722,17 @@ ll /etc | grep "*.config"
 
 # 分页查看排序后的已安装的软件包列表
 rpm -qa | sort | more
+```
+
+## <code>/dev/null</code> 黑洞 &#x1F573;
+
+- 所有送往黑洞（<code>/dev/null</code>）的文件都是有去无回的&#9924;，以达到抑制消息输出的目的。
+
+```shell
+echo "I'm here" no-back
+sudo mv no-back /dev/null
+cat /dev/null
+# 是空的，而不是 I'm here
 ```
 
 # 函数
