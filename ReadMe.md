@@ -387,6 +387,8 @@
 
 #### [二叉排序/查找树 BST](./Books/Algorithm/二叉排序树.md)
 
+### 堆
+
 ### [字典树/前缀树 Trie-tree](./Books/Algorithm/字典树.md)
 
 ### [B树 B-tree](./Books/Algorithm/B树.md)

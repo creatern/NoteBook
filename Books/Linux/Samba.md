@@ -28,9 +28,12 @@ sudo vim /etc/samba/smb.conf
 
 # 重启samba服务以应用修改后的配置文件
 sudo service smbd restart
+# sudo systemctl restart smb
 
 # 需要打开部分的防火墙来允许访问samba
 sudo ufw allow samba
+#firewall-cmd --permanent --add-service=samba
+#firewall-cmd --reload
 
 # 1. 在文件管理器、浏览器等地方输入该主机的地址即可
 \\127.0.0.1
@@ -46,7 +49,7 @@ comment = share folder
 # 注释信息
 browseable = yes
 # yes表示允许其他用户在网络邻居中看到并访问这个共享文件夹
-path = /home/zjk/MyDisk/samba
+path = /home/zjk/samba
 # 指定共享的实际路径
 create mask = 0700
 # 新建文件的默认权限掩码
@@ -85,10 +88,21 @@ session setup failed: NT_STATUS_LOGON_FAILURE
 tree connect failed: NT_STATUS_BAD_NETWORK_NAME
 ```
 
+# 与Windows交互
+
+<img src="../../pictures/2024-03-25_19-09.png" width="400"/> 
+
+```shell
+# 1. 在文件管理器、浏览器等地方输入该主机的地址即可（运行smb服务的主机 ）
+\\127.0.0.1
+# 2. 通过smbclient访问
+```
+
 # smb命令
 
 ## mget
 
 ```shell
+
 ```
 

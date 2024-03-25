@@ -1,0 +1,23 @@
+[share]
+# 共享资源配置
+comment = share folder 
+# 注释信息
+browseable = yes
+# yes表示允许其他用户在网络邻居中看到并访问这个共享文件夹
+path = /home/zjk/MyDisk/samba
+# 指定共享的实际路径
+create mask = 0700
+# 新建文件的默认权限掩码
+directory mask = 0700
+# 新建目录的默认权限掩码
+valid users = zjk
+# 指定合法用户列表，只有这些用户可以访问此共享
+force user = zjk 
+force group = zjk
+# 强制以用户zjk及其所属组的身份来访问此共享。无论哪个用户连接到此共享，对文件的操作都会映射到用户zjk和zjk组
+public = yes 
+# yes表示任何（valid users范围内的）用户都可以尝试访问此共享，但受到valid users的限制
+available = yes
+# yes表示表明共享始终可用
+writable = yes
+# yes表示所有被允许访问的用户都具有对此共享目录的写入权限

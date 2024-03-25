@@ -142,7 +142,7 @@ echo "=================rsync user================"
 echo "backupman:tiger"
 echo "==========================================="
 
-# set Avahi
+# 4. set Avahi
 if avahi-daemon --version
 then
 	echo "avahi-daemon already setup"
@@ -162,6 +162,47 @@ else
 		exit 127
 	fi
 fi
+
+
+# set Samba
+if dnf --version
+then
+	dnf install samba samba-common smbclient -y
+elif apt --version
+then
+	apt install samba samba-common smbclient -y
+else
+	echo "no suitable installer=====Samba install faild"
+	exit 127
+fi
+
+mkdir $CURR_USER_HOME/samba
+chmod 777 $CURR_USER_HOME/samba
+smbpasswd -a $CURR_USER
+echo "[share]" >> /etc/samba/smb.conf
+echo "comment = share folder " >> /etc/samba/smb.conf
+echo "browseable = yes" >> /etc/samba/smb.conf
+echo "path = $CURR_USER_HOME/samba" >> /etc/samba/smb.conf
+echo "create mask = 0700" >> /etc/samba/smb.conf
+echo "directory mask = 0700" >> /etc/samba/smb.conf
+echo "valid users = $CURR_USER" >> /etc/samba/smb.conf
+echo "force users = $CURR_USER" >> /etc/samba/smb.conf
+echo "force group = $CURR_USER" >> /etc/samba/smb.conf
+echo "public = yes" >> /etc/samba/smb.conf
+echo "avaliable = yes" >> /etc/samba/smb.conf
+echo "writable = yes" >> /etc/samba/smb.conf
+
+if ufw --version
+	ufw allow smaba
+	systemctl enable smbd
+	systemctl start smbd
+else
+	firewall-cmd --permanent --add-service=samba
+	firewall-cmd --reload
+	systemctl enable smb
+	systemctl start smb
+fi
+
 
 # set ssh: rsa.pub
 cd $CURR_USER_HOME;
