@@ -359,35 +359,47 @@
 
 ## [Rasberry Pi](./Books/Linux/RasberryPi.md)
 
-# 算法
+# 数据结构
 
-## 数据结构
+## [线性表](./Books/Algorithm/线性表.md)
 
-### [线性表](./Books/Algorithm/线性表.md)
+### [数组](./Books/Algorithm/数组.md)
 
-#### [数组](./Books/Algorithm/数组.md)
+### [栈](./Books/Algorithm/栈.md)
 
-#### [栈](./Books/Algorithm/栈.md)
+### [队列](./Books/Algorithm/队列.md)
 
-#### [队列](./Books/Algorithm/队列.md)
+## 树
 
 ### 树
 
 #### [树的基本性质](./Books/Algorithm/树的基本性质.md)
 
-#### [二叉树 BinaryTree](./Books/Algorithm/二叉树.md)
+#### [森林](./Books/Algorithm/森林.md)
 
-#### [字典树/前缀树 Trie-tree](./Books/Algorithm/字典树.md)
+### 二叉树
 
-#### [B树 B-tree](./Books/Algorithm/B树.md)
+#### [二叉树的性质 Binary Tree](./Books/Algorithm/二叉树.md)
 
-### 图
+#### [哈夫曼树 Huffman Tree](./Books/Algorithm/哈夫曼树.md)
 
-#### [图的基本性质](./Books/Algorithm/图的基本性质.md)
+#### [线索二叉树]
 
-#### [图的遍历方式](./Books/Algorithm/图的遍历方式.md)
+#### [二叉排序/查找树 BST](./Books/Algorithm/二叉排序树.md)
 
-#### [图的查询模式](./Books/Algorithm/图的查询模式.md)
+### [字典树/前缀树 Trie-tree](./Books/Algorithm/字典树.md)
+
+### [B树 B-tree](./Books/Algorithm/B树.md)
+
+## 图
+
+### [图的基本性质](./Books/Algorithm/图的基本性质.md)
+
+### [图的遍历方式](./Books/Algorithm/图的遍历方式.md)
+
+### [图的查询模式](./Books/Algorithm/图的查询模式.md)
+
+# 算法
 
 ## 基础篇
 
