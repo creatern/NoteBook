@@ -68,7 +68,7 @@
 
 ### [OOP 面向对象编程](./Books/Java/OOP.md)
 
-###  [String 字符串](./Books/JVM/StringTable.md)
+### [String 字符串](./Books/JVM/StringTable.md)
 
 ### [enum 枚举类](./Books/Java/enum.md)
 

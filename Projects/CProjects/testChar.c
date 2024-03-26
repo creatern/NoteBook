@@ -1,8 +1,9 @@
 #include <stdio.h>
 
 void main(){
-	// char ch = 'FATE';
-	// printf("%c \n", ch);
-	printf("11\a22");
+	char ch;
+	printf("Enter a character.\n");
+	scanf("%c", &ch);
+	printf("%c \t %d \n", ch, ch);
 	return;
 }
