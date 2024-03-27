@@ -73,3 +73,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-26 23:54:35','signal','success','35837bd88b59bcb5b3be2958d8853b3a29489aae signal'
 'zjk-laptop','zjk','2024-03-27 13:52:21','none','success','1b0238e31893b3ed04584d4708c83ee4fac748a6 none'
 'zjk-laptop','zjk','2024-03-27 15:35:32','jobs','success','fd4ef7d1f0868ea22c7f627758ff82912ee3bf35 jobs'
+'zjk-laptop','zjk','2024-03-27 16:47:34','at','success','66fc04521fc9bf9c4b0135d80424f248e6067f26 at'
