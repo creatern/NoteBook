@@ -26,17 +26,18 @@
     <caption>第一代DBMS的类型</caption>
     <tr>
         <td width="10%">Hierarchical</td>
-        <td width="90%">A <b>hierarchical database（分层数据库）</b> organizes data in a tree structure. Each parent record has one or more child records (one-to-many), similar to the structure of a file system.</td>
+        <td width="90%">A <b>hierarchical database（分层数据库）</b> organizes data in a tree structure. Each parent record has one or more child records (one-to-many，一对多), similar to the structure of a file system.</td>
     </tr>
     <tr>
         <td>Network</td>
-        <td>A <b>network database（网络数据库）</b> is similar to a hierarchical database, except records have a many-to-many rather than a one-to-many relationship.</td>
+        <td>A <b>network database（网络数据库）</b> is similar to a hierarchical database, except records have a many-to-many（多对多） rather than a one-to-many relationship.</td>
     </tr>
 </table>
 
+
 ## Relational Model 关系模型
 
-- A <b>relational database</b> is a database that conforms to <b>the relational model</b>.
+- A <b>relational database（关系数据库）</b> is a database that conforms to <b>the relational model（关系模型）</b>.
 
 <table>
     <tr>
@@ -53,7 +54,7 @@
     </tr>
 </table>
 
-- A relational database stores data in a set of simple relations. A relation is a set of tuples. A tuple is an unordered set of attribute values.
+- A relational database stores data in a set of simple relations. A relation is a set of tuples. A tuple is an unordered set of attribute values. 关系数据库是关系的集合，而关系是元组的集合，元组是一组无序的属性集（数据集）。
 - A table is a two-dimensional representation of a relation in the form of <b>rows (tuples)</b> and <b>columns (attributes)</b>. Each row in a table has the same set of columns. A relational database is a database that stores data in <b>relations (tables)</b>. 
 
 ## RDBMS 关系数据库管理系统
@@ -74,14 +75,14 @@
 
 ## Oracle Database
 
-- <b>Oracle Database</b> is an <b>RDBMS</b>. An RDBMS that implements object-oriented features such as user-defined types(用户定义类型), inheritance(继承性), and polymorphism(多态性) is called an <b>object-relational database management system (ORDBMS)</b>. Oracle Database has extended the relational model to an object-relational model, making it possible to store complex business models in a relational database.
+- <b>Oracle Database</b> is an <b>RDBMS</b>. An RDBMS that implements object-oriented features such as user-defined types(用户定义类型), inheritance(继承性), and polymorphism(多态性) is called an <b>object-relational database management system (ORDBMS)</b>. Oracle Database has extended the relational model to an object-relational model, making it possible to store complex business models in a relational database. Oracle数据库在关系模型的基础上扩展了面向对象模型。
 
 # Schema Objects 模式对象
 
 - One characteristic of an RDBMS is the independence of physical data storage from logical data structures.（RDBMS的物理数据存储独立于逻辑数据结构）
-- In Oracle Database, a <b>database schema</b> is a collection of logical data structures, or schema objects. A database user owns a database schema, which has the same name as the user name.（数据库用户拥有与用户名同名的数据库架构）
+- In Oracle Database, a <b>database schema（数据库模式）</b> is a collection of logical data structures, or schema objects. A database user owns a database schema, which has the same name as the user name.（数据库用户拥有与用户名同名的数据库架构）
 
-1. <b>Schema objects</b> are user-created structures that directly refer to the data in the database. The database supports many types of schema objects, the most important of which are <b>tables and indexes</b>.（模式中的对象通常包括表、索引、数据类型、序列、视图、存储过程、主键、外键等等）
+1. <b>Schema objects（模式对象）</b> are user-created structures that directly refer to the data in the database. The database supports many types of schema objects, the most important of which are <b>tables and indexes</b>.（模式中的对象通常包括表、索引、数据类型、序列、视图、存储过程、主键、外键等等）
 2. A schema object is <b>one type of database object</b>. Some database objects, such as profiles and roles, do not reside in schemas.（模式对象&sube;数据库对象）
 
 ### Tables 表
@@ -103,7 +104,7 @@
 
 - Structured Query Language （SQL，结构化查询语言）is a set-based declarative language that provides an interface to an RDBMS such as Oracle Database. 
 
-1. SQL is nonprocedural and describes *what* should be done.
+1. SQL is nonprocedural and describes what should be done.
 2. SQL is the <b>ANSI</b> standard language for relational databases. All operations on the data in an Oracle database are performed using SQL statements. 
 3. SQL statements enable you to perform the following tasks:
    1. Query data
@@ -116,33 +117,35 @@
 
 - <b>PL/SQL</b> is a procedural extension to Oracle SQL and integrated with Oracle Database.
 - A primary benefit of PL/SQL is the ability to <b>store application logic in the database itself</b>. A PL/SQL procedure or function is a schema object that consists of a set of SQL statements and other PL/SQL constructs, grouped together, stored in the database, and run as a unit to solve a specific problem or to perform a set of related tasks. The principal benefit of <b>server-side programming</b> is that built-in functionality can be deployed anywhere.
--  <b>Oracle Database can alsostore program units written in Java</b>. A Java stored procedure is a Java method published to SQL and stored in the database for general use. You can call existing PL/SQL programs from Java and Java programs from PL/SQL.
+-  <b>Oracle Database can also store program units written in Java</b>. A Java stored procedure is a Java method published to SQL and stored in the database for general use. You can call existing PL/SQL programs from Java and Java programs from PL/SQL.
 
 # Transaction Management 事务管理
 
-- Oracle Database is designed as a <b>multiuser database</b>. The database must ensure that multiple users can work concurrently without corrupting one another's data.
+- Oracle Database is designed as a <b>multiuser database（多用户数据库）</b>. The database must ensure that multiple users can work concurrently without corrupting one another's data.
 
 ## Transactions 事务
 
-- A <b>transaction（事务）</b> is <b>a logical, atomic unit of work（逻辑上的一个原子性的作业单元）</b> that contains one or more <b>SQL statements（SQL语句）</b>.
-- An RDBMS must be able to group SQL statements so that they are either all <b>committed</b>, which means they are applied to the database, or all <b>rolled back</b>, which means they are undone.
+- A <b>transaction（事务）</b> is <b>a logical, atomic unit of work（逻辑上的一个原子性的作业单元）</b> that contains one or more <b>SQL statements（SQL语句）</b>. 一个事务是在逻辑上呈现原子性的一个作业单元，包含了至少一条SQL语句。
+- An RDBMS must be able to group SQL statements so that they are either all <b>committed</b>, which means they are applied to the database, or all <b>rolled back</b>, which means they are undone. 事务必须能够保证其管理的SQL语句要么全部被提交，要么全部被回滚。
 
-> Transactions are one feature that set Oracle Database apart from a file system. If you perform an atomic operation that updates several files, and if the system fails halfway through, then the files will not be consistent. In contrast, a transaction moves an Oracle database from one consistent state to another. The basic principle of a transaction is "all or nothing": an atomic operation succeeds or fails as a whole.
+> Transactions are one feature that set Oracle Database apart from a file system. If you perform an atomic operation that updates several files, and if the system fails halfway through, then the files will not be consistent. In contrast, a transaction moves an Oracle database from one consistent state to another. The basic principle of a transaction is <b>"all or nothing"</b>: an atomic operation succeeds or fails as a whole.
 
 ## Data Concurrency 数据并发
 
 - A requirement of a multiuser RDBMS is the control of data concurrency, which is <b>the simultaneous access of the same data by multiple users</b>.Without concurrency controls, users could change data improperly.
-- If multiple users access the same data, then one way of managing concurrency is to make users wait. However, the goal of a DBMS is to reduce wait time so it is either nonexistent or negligible. All SQL statements that modify data must proceed with as little interference as possible. <u>Destructive interactions, which are interactions that incorrectly update data or alter underlying data structures, must be avoided.</u>
-- Oracle Database uses locks to control concurrent access to data. A <b>lock（事务锁）</b> is a mechanism that prevents destructive interaction between transactions accessing a shared resource. Locks help ensure data integrity while allowing maximum concurrent access to data.
+- If multiple users access the same data, then one way of managing concurrency is to make users wait. However, the goal of a DBMS is to reduce wait time so it is either nonexistent or negligible. All SQL statements that modify data must proceed with as little interference as possible. <u>Destructive interactions（破坏性交互）, which are interactions that incorrectly update data or alter underlying data structures, must be avoided.</u>
+- Oracle Database uses locks to control concurrent access to data. A <b>lock（事务锁）</b> is a mechanism that prevents destructive interaction between transactions accessing a shared resource. Locks help ensure data integrity while allowing maximum concurrent access to data. Oracle数据库通过封锁机制来控制数据的并发访问。事务锁阻止了访问共享资源的事务之间的破坏性交互。
 
 ## Data Consistency 数据一致性
 
-- In Oracle Database, each user must see <b>a consistent view of the data</b>, including visible changes made by a user's own transactions and committed transactions of other users.
+- In Oracle Database, each user must see <b>a consistent view of the data</b>, including visible changes made by a user's own transactions and committed transactions of other users. 所有的Oracle用户看到的都必须是一致的数据，包括用户自己未提交的事务做出的改变，以及其他用户已经提交的事务做出的改变。
 
-> For example, the database must prevent <b>the dirty read problem（脏读）</b>, which occurs when one transaction sees uncommitted changes made by another concurrent transaction.
+> For example, the database must prevent <b>the dirty read problem（脏读）</b>, which occurs when one transaction sees uncommitted changes made by another concurrent transaction. 如果一个事务看到另一个并发事务所做的未提交的修改，那么就发生了脏读，这是数据库必须避免的。
 
-- Oracle Database always enforces <b>statement-level read consistency（语句级读一致性）</b>, which guarantees that the data that a single query returns is committed and consistent for a single point in time. Depending on the transaction isolation level, this point is the time at which the statement was opened or the time the transaction began. The Oracle Flashback Query feature enables you to specify this point in time explicitly.
-- The database can also provide read consistency to all queries in a transaction, known as <b>transaction-level read consistency（事务级读一致性）</b>. In this case, each statement in a transaction sees data from the same point in time, which is the time at which the transaction began.
+- Oracle Database always enforces <b>statement-level read consistency（语句级读一致性）</b>, which guarantees that the data that a single query returns is committed and consistent for a single point in time. Depending on the transaction isolation level, this point is the time at which the statement was opened or the time the transaction began. The <b>Oracle Flashback Query</b> feature enables you to specify this point in time explicitly. Oracle数据库始终强制执行语句级读一致性，以确保每个查询返回的都是已提交的数据，并且在某一时间点上都是一致的。基于事务的不同隔离级别，这个时间点可以是查询语句开始的时刻或事务开始的时刻。Oracle的闪回查询机制允许查看这个保持一致性的时间点。
+- The database can also provide read consistency to all queries in a transaction, known as <b>transaction-level read consistency（事务级读一致性）</b>. In this case, each statement in a transaction sees data from the same point in time, which is the time at which the transaction began. 数据库也可以支持事务级读一致性，也就是确保一个事务内的所有查询语句的读一致性。
+
+<img src="../../pictures/数据库系统概念-语句级读一致性Oracle.drawio.svg" width="470"/> 
 
 # Oracle Database Architecture Oracle 数据库架构
 
