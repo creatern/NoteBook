@@ -87,3 +87,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-28 17:30:51','comp','success','a186843107c1c5af5def55b5ed0665d5321973ca comp'
 'zjk-laptop','zjk','2024-03-28 19:26:46','comp-1','success','87ed6e1807fe3c3144c44d91005ce8f17a8d90b5 comp-1'
 'zjk-laptop','zjk','2024-03-28 21:29:06','db','success','b9ecbe184f4b4e31f3be6612ffa13b459dca98e7 db'
+'zjk-laptop','zjk','2024-03-29 00:06:50','cron','success','77544a4ebd6f31af43a4f410a557b0e30d80dd65 cron'
