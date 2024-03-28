@@ -84,3 +84,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-03-28 13:51:54','none','72447ac0de1ac1eea618863e242b18c7961d61ab none'
 'zjk-laptop','zjk','2024-03-28 17:20:36','base-comp','921077c9a8cc6e57db0271541c3df8f862393163 none'
 'zjk-laptop','zjk','2024-03-28 17:30:20','comp','0ec64b76013a867c5ad3d1fcfed83501fbcf8d99 base-comp'
+'zjk-laptop','zjk','2024-03-28 19:26:15','comp-1','a186843107c1c5af5def55b5ed0665d5321973ca comp'
