@@ -34,7 +34,6 @@
     </tr>
 </table>
 
-
 ## Relational Model 关系模型
 
 - A <b>relational database（关系数据库）</b> is a database that conforms to <b>the relational model（关系模型）</b>.

@@ -24,6 +24,8 @@
 
 #### [索引](./Books/数据库理论/索引.md)
 
+#### [查询处理和查询优化](./Books/数据库理论/查询处理和查询优化.md)
+
 ## [数据挖掘导论 Data Mining](./Books/数据库理论/数据挖掘导论.md)
 
 ## Oracle
@@ -402,6 +404,8 @@
 #### [二叉排序/查找树 BST](./Books/Algorithm/二叉排序树.md)
 
 ### 堆
+
+#### [堆的性质](./Books/Algorithm/堆的性质.md)
 
 ### [字典树/前缀树 Trie-tree](./Books/Algorithm/字典树.md)
 
