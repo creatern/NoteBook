@@ -178,6 +178,8 @@ fi
 
 mkdir $CURR_USER_HOME/samba
 chmod 777 $CURR_USER_HOME/samba
+echo "======you need to input your password for samba user ($CURR_USER)========"
+sleep 3s
 smbpasswd -a $CURR_USER
 echo "[share]" >> /etc/samba/smb.conf
 echo "comment = share folder " >> /etc/samba/smb.conf
@@ -193,6 +195,7 @@ echo "avaliable = yes" >> /etc/samba/smb.conf
 echo "writable = yes" >> /etc/samba/smb.conf
 
 if ufw --version
+then
 	ufw allow smaba
 	systemctl enable smbd
 	systemctl start smbd
