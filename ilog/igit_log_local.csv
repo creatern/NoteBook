@@ -93,3 +93,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-29 12:16:09','dm','success','df479d729f672b2fed8c0d50c0a2261c2e3de38b dm'
 'zjk-laptop','zjk','2024-03-29 13:44:57','dm','success','01f0a8bd92c51851039589c2db766170b04e719f dm'
 'zjk-laptop','zjk','2024-03-29 15:21:17','dm-bayes','success','d8358b0c274540a229b75d6ff61549d62f72396f dm-bayes'
+'zjk-laptop','zjk','2024-03-29 15:24:53','none','success','f2751f70c3703502da86e2d33b285b0a98b4cef0 none'
