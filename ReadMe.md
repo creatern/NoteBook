@@ -451,7 +451,7 @@
 
 ### [系统总线](./Books/Computer/系统总线.md)
 
-### [数据的表示](./Books/Computer/数据的表示.md)
+### [数据的表示与运算](./Books/Computer/数据的表示与运算.md)
 
 ### [存储器 Memory](./Books/Computer/Memory.md)
 
