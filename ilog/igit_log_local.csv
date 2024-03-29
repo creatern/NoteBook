@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-17 16:26:15','log-v3','success','f6ca7e164d2518746038af3b8673c067bedc7fb1 log-v3'
 'zjk-laptop','zjk','2024-03-17 16:42:18','avahi-daemon','success','8c789c3bf5909a6c4efd4c68bdfd37bff7fb1aa3 avahi-daemon'
 'zjk-laptop','zjk','2024-03-17 17:28:04','setup-v1','success','6615b0b317f918f962ef43c290ffbb79f6cdfc75 setup-v1'
 'zjk-laptop','zjk','2024-03-17 17:31:12','test-01','success','b002000caf87abeb1c0e9a8c63822009f8b57cec test-01'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-03-29 17:12:08','db','success','37f4a3d890a65d1aa8c5430c71e99ffd445338f3 db'
 'zjk-laptop','zjk','2024-03-29 19:52:33','comp','success','459fc5a749fb03400409426ccb62de5885910528 comp'
 'zjk-laptop','zjk','2024-03-29 21:33:08','comp-int','success','de4caa76aedcb6f87419f8a27db33af6362d5711 comp-int'
+'zjk-laptop','zjk','2024-03-29 22:33:34','comp','success','78f620b0ad4780a16d360e5bb27a73a8b9728a13 comp'
