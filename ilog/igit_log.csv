@@ -95,3 +95,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-03-29 15:24:22','none','d8358b0c274540a229b75d6ff61549d62f72396f dm-bayes'
 'zjk-laptop','zjk','2024-03-29 15:27:42','test-exit','f2751f70c3703502da86e2d33b285b0a98b4cef0 none'
 'zjk-laptop','zjk','2024-03-29 17:11:37','db','9259d0979bf2b6f96ccb91388705529110e3c340 test-exit'
+'zjk-laptop','zjk','2024-03-29 19:52:01','comp','37f4a3d890a65d1aa8c5430c71e99ffd445338f3 db'
