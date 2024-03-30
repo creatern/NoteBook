@@ -13,6 +13,7 @@ source /etc/profile
 
 ```shell
 # sudo npm命令找不到的解决，其余（vue等命令）也是如此
+# 其实不必如此。。。
 sudo ln -s /opt/node20.10.0/bin/npm /usr/bin/npm
 sudo ln -s /opt/node20.10.0/bin/node /usr/bin/node
 ```
@@ -21,7 +22,7 @@ sudo ln -s /opt/node20.10.0/bin/node /usr/bin/node
 
 ```shell
 # npm换源
-sudo npm config set registry https://registry.npm.taobao.org
+npm config set registry http://registry.npmmirror.com
 ```
 
 ## 搭建Vue项目
