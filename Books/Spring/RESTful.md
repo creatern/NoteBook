@@ -1,0 +1,1 @@
+- REST API主要包括 <code>@GetMapping</code>、<code>@PostMapping</code>、<code>@PutMapping</code>、<code>@DeleteMapping</code>等。

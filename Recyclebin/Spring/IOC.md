@@ -279,7 +279,7 @@ public UserDao getUserDao01(){return new UserDaoImpl();}
 
 - IoC：工厂设计模式，BeanFactory根据配置文件/配置类来生产Bean实例。
 
-<img src="/home/zjk/Desktop/note-book/pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
 
 1. beans.xml配置文件
 
@@ -313,7 +313,7 @@ System.out.println(userService);
 
 - DI：通过注入的方式反转Bean的创建权。
 
-<img src="/home/zjk/Desktop/note-book/pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
+<img src="../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
 
 1. 定义接口及其实现类，setXxx(Xxx xxx)注入方法。（只要存在setXxx()，即使没有相应的xxx属性，也会执行该setXxx()注入方法）
 
