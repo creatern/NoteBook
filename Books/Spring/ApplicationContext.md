@@ -83,3 +83,46 @@ public void closedEventListner() {
 
 ## 定义事件
 
+```java
+/* 自定义的事件 */
+public class CustomEvent extends ApplicationEvent {
+    public CustomEvent(Object source) {
+        super(source);
+    }
+}
+```
+
+```java
+/* 事件推送 */
+@Component
+public class CustomerEventPublisher implements ApplicationEventPublisherAware {
+
+    private ApplicationEventPublisher publisher;
+
+    public void fire() {
+        publisher.publishEvent(new CustomEvent("Hello"));
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.publisher = applicationEventPublisher;
+    }
+}
+
+```
+
+```java
+/* 事件监听 */
+@EventListener
+public void customerEventListner(CustomEvent customEvent) {
+    System.out.println("##############################################");
+    System.out.println("CustomEvent Source:" + customEvent.getSource());
+}
+```
+
+```java
+// 当容器中使用customEventPublisher的fire()方法时，触发事件
+applicationContext.getBean("customEventPublisher", CustomEventPublisher.class)
+    .fire();
+```
+

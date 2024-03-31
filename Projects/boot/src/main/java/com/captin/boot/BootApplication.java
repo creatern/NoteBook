@@ -1,5 +1,7 @@
 package com.captin.boot;
 
+import com.captin.boot.demo.CustomEvent;
+import com.captin.boot.demo.CustomerEventPublisher;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.event.ContextClosedEvent;
@@ -11,6 +13,7 @@ public class BootApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BootApplication.class, args);
+
 	}
 
 	@EventListener(ContextClosedEvent.class)
@@ -18,4 +21,5 @@ public class BootApplication {
 	public void closedEventListner() {
 		System.out.println("Application is closed");
 	}
+
 }
