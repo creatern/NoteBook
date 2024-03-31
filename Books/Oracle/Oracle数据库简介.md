@@ -150,42 +150,43 @@
 
 - A <b>database server（数据库服务器）</b> is the key to information management.
 
-1.  In general, a server reliably manages a large amount of data in a <b>multiuser</b> environment so that users can concurrently access the same data. 
+1.  In general, a server reliably manages a large amount of data in a <b>multiuser（多用户）</b> environment so that users can concurrently access the same data. 
 2. A database server also <b>prevents unauthorized access</b> and provides efficient solutions for <b>failure recovery（故障恢复）</b>.
 
 ## Database and Instance 数据库和实例
 
-- An Oracle database server consists of a database and at least one <b>database instance（数据库实例 [实例]）</b>, commonly referred to as simply an instance.
+- An Oracle database server consists of a database and at least one <b>database instance（数据库实例 [实例]）</b>, commonly referred to as simply an instance. Oracle数据库服务器由一个数据库和至少一个实例组成。
 
 <table>
     <tr>
-        <td width="20%">Database</td>
-        <td width="80%">A database is a set of <b>files</b>, located on disk, that store data. These files can exist independently of a database instance.</td>
+        <td width="20%">Database<br/>（数据库）</td>
+        <td width="80%">A database is a set of <b>files</b>, located on disk, that store data. These files can exist independently of a database instance. 一个数据库是一组位于磁盘之上的、可独立于实例而存在的、用于存放数据的文件（数据文件）。</td>
     </tr>
     <tr>
-        <td>Database Instance</td>
-        <td>An instance is a set of <b>memory structures</b> that manage database files. The instance consists of a shared memory area, called <b><u>the system global area (SGA)</u></b>, and a set of <u>background processes</u>. An instance can exist independently of database files.</td>
+        <td>Database Instance<br/>（数据库实例）</td>
+        <td>An instance is a set of <b>memory structures</b> that manage database files. The instance consists of a shared memory area, called <b><u>the system global area (SGA)</u></b>, and a set of <u>background processes</u>. An instance can exist independently of database files. 一个实例由一组管理数据库文件的内存结构组成，包括SGA（系统全局区）和后台进程。实例也可独立与数据文件而存在。</td>
     </tr>
 </table>
+
 
 - For each user connection to the instance, a client process runs the application. Each client process is associated with its own server process. The server process has its own private session memory, known as <b><u>the program global area (PGA)</u></b>.
 
 <img src="../../pictures/20240320170811.gif" width="650"/> 
 
-- Within the SGA are the Database Buffer Cache, Redo Log Buffer, Shared Pool, Large Pool, Fixed SGA, Java Pool, and Streams Pool. To the right of the SGA are the background processes PMON, SMON, RECO, MMON, MMNL, and Others. Below the SGA are DBWn, CKPT, LGWR, ARCn, and RVWR. Below the SGA are the PGA and Server Process. The Server Process is connected to a Client Process. To the right of the Client Process are Database Files (Data Files, Control Files, Online Redo Log), Archived Redo Log, and Flashback Log.
+- Within the SGA are the Database Buffer Cache（数据库高速缓存）, Redo Log Buffer（重做日志缓存）, Shared Pool（共享池）, Large Pool（大池）, Fixed SGA（固定系统全局区）, Java Pool（Java池）, and Streams Pool（流池）. To the right of the SGA are the background processes PMON, SMON, RECO, MMON, MMNL, and Others. Below the SGA are DBWn, CKPT, LGWR, ARCn, and RVWR. Below the SGA are the PGA and Server Process. The Server Process is connected to a Client Process. To the right of the Client Process are Database Files (Data Files, Control Files, Online Redo Log), Archived Redo Log, and Flashback Log.
 - Although in the strict sense an Oracle database is a set of physical structures (files and memory structures), applications can interact with multiple logical databases inside a single physical database, or a single logical database distributed across multiple physical databases.
 
 ### Multitenant Architecture 多租户架构（多重服务架构）
 
 - The <b>multitenant architecture（多租户架构、多重服务架构）</b> enables an Oracle database to be a multitenant <b>container database (CDB，容器数据库)</b>.
-- A <b>non-CDB</b> is a traditional Oracle database that cannot contain PDBs. <u>A CDB is a single physical database that contains zero, one, or many user-created pluggable databases.</u> A <b>pluggable database (PDB，可插式数据库)</b>  is a portable collection of schemas, schema objects, and nonschema objects that appears to an <b>Oracle Net</b> client as a non-CDB.
-- By consolidating multiple physical databases on separate computers into a single database on a single computer, the multitenant architecture provides the following benefits:
+- A <b>non-CDB（非容器数据库）</b> is a traditional Oracle database that cannot contain PDBs. <u>A CDB is a single physical database that contains zero, one, or many user-created pluggable databases.</u> A <b>pluggable database (PDB，可插式数据库)</b>  is a portable collection of schemas, schema objects, and nonschema objects that appears to an <b>Oracle Net</b> client as a non-CDB. CDB是一个可以拥有零至多个的可插式数据库的独立的物理数据库，而PDB是一个可移植的模式、模式对象和非模式对象的集合，且PDB在Oracle Net客户端上表现为一个non-CBD（非容器数据库）。
+- By consolidating multiple physical databases on separate computers into a single database on a single computer, the multitenant architecture provides the following benefits: 
 
 1. Cost reduction for hardware
 2. Easier and more rapid movement of data and code
 3. Easier management and monitoring of the physical database
 4. Separation of data and code
-5. Separation of duties between a <u>PDB administrator</u>, who manages only the PDBs to which she or he is granted privileges, and the <u>CDB administrator</u>, who manages the entire CDB
+5. Separation of duties between a <u>PDB administrator</u>, who manages only the PDBs to which she or he is granted privileges, and the <u>CDB administrator</u>, who manages the entire CDB （分离了管理者对PDB和CDB的职责与管理）
 
 - Benefits for manageability include:
 
@@ -203,12 +204,12 @@
 
 <img src="../../pictures/2024-03-20_18-55.png" width="700"/> 
 
-- To administer the CDB itself or any PDB within it, a CDB administrator can connect to the <b>CDB root</b>, which is a collection of schemas, schema objects, and nonschema objects to which all PDBs belong.
+- To administer the CDB itself or any PDB within it, a CDB administrator can connect to the <b>CDB root</b>, which is a collection of schemas, schema objects, and nonschema objects to which all PDBs belong. 要管理CDB本身或其中的任何PDB, CDB管理员可以连接到CDB root，CDB root是所有PDB所属的模式、模式对象和非模式对象的集合。
 
 #### Application Containers 应用程序容器
 
 - Starting in Oracle Database 12c Release 2 (12.2), an <b>application container（应用程序容器）</b> is an optional, user-created container that stores data and metadata for one or more application models.
-- An<b> application</b> (also called an application model) is a named, versioned set of common data and metadata stored in the <b>application root</b>. For example, the application model might include definitions of tables, views, user accounts, and PL/SQL packages that are common to a set of PDBs.
+- An<b> application</b> (also called an application model) is a named, versioned set of common data and metadata stored in the <b>application root</b>. For example, the application model might include definitions of tables, views, user accounts, and PL/SQL packages that are common to a set of PDBs. 应用程序（应用程序模型）是属于应用程序根的一组命名的、版本化的公共数据和元数据
 - In some ways, an application container functions as an application-specific CDB within a CDB. An application container, like the CDB itself, can include multiple application PDBs, and enables these PDBs to share metadata and data. Plugging, unplugging, cloning, and other PDB-level operations are available for individual customer PDBs.
 
 <img src="../../pictures/20240320190522.png" width="450"/> 
