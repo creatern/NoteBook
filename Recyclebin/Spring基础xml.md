@@ -95,203 +95,7 @@
 </beans>
 ```
 
-# IoC、DI
 
-## BeanFactory
-
-- BeanFactory（Bean工厂）：Spring底层核心部分。
-
-<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/>  
-
-<img src="../../pictures/Snipaste_2023-04-01_14-34-11.png" width="700"/> 
-
-### IoC 控制反转
-
-- IoC：工厂设计模式，BeanFactory根据配置文件/配置类来生产Bean实例。
-
-<img src="../../pictures/Snipaste_2023-04-01_11-15-42.png" width="600"/> 
-
-1. beans.xml配置文件
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="userService" class="com.zjk.service.impl.UserServiceImpl"></bean>
-
-</beans>
-```
-
-2. BeanFactory获取Bean对象：创建BeanFactory，加载配置文件，获取UserService实例对象。
-
-```java
-//1. 创建BeanFactory 工厂对象
-DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-//2. 创建一个读取器 xml文件
-XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
-//3. 绑定读取器和工厂对象 读取配置文件给工厂对象
-reader.loadBeanDefinitions("beans.xml");
-//4. 由beans.xml内配置的id获取Bean实例
-UserService userService = (UserService) beanFactory.getBean("userService");
-
-System.out.println(userService);
-```
-
-### DI 依赖注入
-
-- DI：通过注入的方式反转Bean的创建权。
-
-<img src="../../pictures/Snipaste_2023-04-01_11-20-47.png" width="700"/> 
-
-1. 定义接口及其实现类，setXxx(Xxx xxx)注入方法。（只要存在setXxx()，即使没有相应的xxx属性，也会执行该setXxx()注入方法）
-
-```java
-//com.zjk.service.UserService
-public interface UserService {}
-//com.zjk.service.impl.UserServiceImpl
-public class UserServiceImpl implements UserService {
-    //通过BeanFactory调用该方法 从容器中获取userDao设置到此处
-    //需要先在beans.xml中配置对应的<bean>的<property>
-    public void setUserDao(UserDao userDao){
-        System.out.println("" + userDao);
-    }
-}
-//com.zjk.dao
-public interface UserDao{}
-//com.zjk.dao.impl
-public class UserDaoImpl implements UserDao{}
-```
-
-2. 具体的UserServiceImpl实现类
-
-```java
-package com.zjk.service.impl;
-
-import com.zjk.dao.UserDao;
-import com.zjk.service.UserService;
-
-public class UserServiceImpl implements UserService {
-    private UserDao userDao;
-
-    //通过BeanFactory调用该set方法 从容器中获取userDao设置到此处
-    //在beans.xml中的<bean id="userService" name="com.zjk.service.impl.userServiceImpl">中的
-    //<property id="setXxx方法的xxx(即setUserDao的userDao)" name="beans.xml中配置的<bean id="userDao name="com.zjk.dao.UserDao">"的id"></property>
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
-}
-```
-
-3. beans.xml配置文件 `<property>注入`
-
-```xml
-<bean id="userService" class="com.zjk.service.impl.UserServiceImpl">
-    <property name="userDao" ref="userDao"></property>
-    <!-- 配置注入
-        name：UserServiceImpl中的属性名称(userDao) 即：setUserDao中的setXxx中的xxx
-        ref： 在当前的配置文件(beans.xml)(容器)中查找相应的id(userDao)
-    -->
-</bean>
-```
-
-4. beans.xml
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="userService" class="com.zjk.service.impl.UserServiceImpl">
-        <property name="userDao" ref="userDao"></property>
-    </bean>
-    <bean id="userDao" class="com.zjk.dao.impl.UserDaoImpl"></bean>
-</beans>
-```
-
-5. BeanFactory获取Bean对象：创建BeanFactory，加载配置文件，获取UserService实例对象，并提前将其依赖的UserDao注入。
-
-```java
-//1. 创建BeanFactory 工厂对象
-DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-//2. 创建一个读取器 xml文件
-XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
-//3. 绑定读取器和工厂对象 读取配置文件给工厂对象
-reader.loadBeanDefinitions("beans.xml");
-//4. 由id获取Bean实例  在获取时会执行UserService中的注入方法(set方法)setUserDao(UserDao userDao)
-UserService userService = (UserService) beanFactory.getBean("userService");
-
-System.out.println(userService);
-```
-
-### getBean()
-
-| 方法                                    | 返回值和参数                                                 |
-| :-------------------------------------- | :----------------------------------------------------------- |
-| Object getBean (String beanName)        | 根据beanName(`<bean>`的id或别名)从容器中获取Bean实例。<br/>要求容器中Bean(id)唯一。<br/>返回值为Object，需要强转。 |
-| T getBean (Class type)                  | 根据Class类型(`<bean>`的class)从容器中获取Bean实例。<br/>要求容器中Bean类型(class)唯一。<br/>返回值为Class类型实例，无需强转。 |
-| T getBean (String beanName，Class type) | 根据beanName从容器中获得Bean实例。<br/>返回值为Class类型实例，无需强转。 |
-
-```java
-//根据beanName获取容器中的Bean实例，需要手动强转
-UserService userService = (UserService) applicationContext.getBean("userService");
-//根据Bean类型去容器中匹配对应的Bean实例，如存在多个匹配Bean则报错
-UserService userService2 = applicationContext.getBean(UserService.class);
-//根据beanName获取容器中的Bean实例，指定Bean的Type类型
-UserService userService3 = applicationContext.getBean("userService", UserService.class);
-```
-
-## ApplicationContext 容器
-
-- ApplicationContext（Spring容器）：内部封装BeanFactory。
-
-### BeanFactory、ApplicationContext
-
-1. BeanFactory是Spring的早期接口：Bean工厂；ApplicationContext是后期更高级接口：Spring容器。
-
-2. ApplicationContext在BeanFactory基础上对功能进行了扩展，监听功能、国际化功能等。BeanFactory的API更偏向底层，ApplicationContext的API大多数是对这些底层API的封装。
-   <img src="../../pictures/ApplicationContextImplements2023_4_1_14_10.png" width="500"/>  
-
-   - ApplicationContext除了继承了BeanFactory外，还继承了ApplicationEventPublisher（事件发布器）、ResouresPatternResolver（资源解析器）、MessageSource（消息资源）等。但是ApplicationContext的核心功能还是BeanFactory。
-     <img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
-
-3. ApplicationContext与BeanFactory既有继承关系，又有融合关系。Bean创建的主要逻辑和功能都被封装在BeanFactory中，ApplicationContext不仅继承了BeanFactory，而且ApplicationContext内部还维护着BeanFactory的引用。 
-
-4. Bean的初始化时机不同，原始BeanFactory是在首次调用getBean("id")时才进行Bean的创建，而ApplicationContext是加载配置文件、容器创建时就将所有的Bean实例都创建好了，存储到一个单例池中，当调用getBean时直接从单例池中获取Bean实例返回。
-
-```java
-//1. 加载配置文件，实例化容器
-ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-//2. 获取Bean实例对象
-UserService userService = (UserService) applicationContext.getBean("userService");
-
-System.out.println(userService);
-```
-
-### ApplicationContext继承体系
-
-- 只在Spring基础环境下，即只导入spring-context坐标时，此时ApplicationContext的继承体系:
-
-<img src="../../pictures/ApplicationContextImplements2023_4_1.png" width="1000"/>  
-
-<img src="../../pictures/Snipaste_2023-04-01_14-33-10.png" width="700"/>  
-
-- Spring基础环境下，常用的三个ApplicationContext作用如下：
-
-| 实现类                             | 功能描述                                    |
-| :--------------------------------- | :------------------------------------------ |
-| ClassPathXmlApplicationContext     | 加载类路径下的xml配置的ApplicationContext   |
-| FileSystemXmlApplicationContext    | 加载磁盘路径下的xml配置的ApplicationContext |
-| AnnotationConfigApplicationContext | 加载注解配置类的ApplicationContext          |
-
-- 在Spring的web环境下，常用的两个ApplicationContext作用如下：
-
-| 实现类                                | 功能描述                                               |
-| :------------------------------------ | :----------------------------------------------------- |
-| XmlWebApplicationContext              | web环境下，加载类路径下的xml配置的ApplicationContext   |
-| AnnotationConfigWebApplicationContext | web环境下，加载磁盘路径下的xml配置的ApplicationContext |
 
 # 第三方框架
 
@@ -967,58 +771,6 @@ public UserDao getUserDao02(){return new UserDaoImpl2();}
 
 ### Bean配置 `<bean>`
 
-| xml                                         | Annotation     | 功能描述                                                     |
-| :------------------------------------------ | -------------- | :----------------------------------------------------------- |
-| `<bean id="" class="">`                     | @Component     | Bean的id和全限定名配置；<br>在指定扫描范围内被Spring加载并实例化 |
-| `<bean name="">`                            |                | Bean的别名                                                   |
-| `<bean scope="">`                           | @Scope         | Bean的作用范围<br>BeanFactory作为容器时取值singleton和prototype |
-| `<bean lazy-init="">`                       | @Lazy          | Bean的实例化时机，是否延迟加载。BeanFactory作为容器时无效    |
-| `<bean init-method="">`                     | @PostConstruct | Bean实例化后自动执行的初始化方法，method指定方法名           |
-| `<bean destroy-method="">`                  | @PreDestroy    | Bean实例销毁前的方法<br />method指定方法名                   |
-| `<bean autowire="byType"> `                 |                | 设置自动注入模式<br />按照类型byType、按照名字byName         |
-| `<bean factory-bean="" factory-method=""/>` | @Bean          | 指定工厂Bean的方法完成Bean的创建                             |
-
-#### 基础配置 @Component
-
-| 方式   | @Component("beanName") | `<bean id="" class="">` |
-| ------ | ---------------------- | ----------------------- |
-| 默认id | 类名首字母小写         | 全限定名                |
-
-> id：存储到Spring容器 （singletonObjects单例池）中的Bean的beanName。
->
-> class：实例对应的类。
-
-| 构造型      | 层次    |
-| :---------- | :------ |
-| @Repository | Dao     |
-| @Service    | Service |
-| @Controller | Web     |
-
-- bean标签：
-
-```xml
-<bean id="userDao" class="com.zjk.dao.impl.UserDaoImpl"></bean>
-<bean class="com.zjk.dao.impl.UserDaoImpl"></bean>
-```
-
-```java
-applicationContext.getBean("com.zjk.dao.impl.UserDaoImpl")
-```
-
-- @Component：
-
-```java
-@Component
-public class UserDaoImpl implements UserDao {
-}
-```
-
-```java
-ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-UserDaoImpl userDao = applicationContext.getBean("userDaoImpl", UserDaoImpl.class);
-System.out.println(userDao);
-```
-
 #### 别名配置 name、`<alias>`
 
 - Bean可以指定多个别名，根据别名可以获得Bean对象、在配置文件中使用该别名（和id一样的用法）。
@@ -1054,12 +806,7 @@ System.out.println(userDao);
 #### 范围配置 @Scope 、scope
 
 - Spring-Context环境Bean的作用范围有两个：Singleton、Prototype。
-- Spring-webmvc环境：request、session。
-
-| 范围      | 说明                                                         |
-| --------- | ------------------------------------------------------------ |
-| singleton | 单例，默认值。<br/>Spring容器创建的时候，就会进行Bean的实例化，并存储到容器内部的单例池singletonObjects中。<br/>每次getBean()时都是从单例池中获取相同的Bean实例。 |
-| prototype | 原型。<br/>pring容器初始化时不会创建Bean实例，当调用getBean()时才会实例化Bean。<br/>每次getBean()都会创建一个新的Bean实例。信息存放在 beanDefinitionMap 。 |
+- Spring-webmvc环境：request、。
 
 ```xml
 <bean id="userDao" class="com.zjk.dao.impl.UserDaoImpl" scope="singleton"></bean>
@@ -1401,33 +1148,6 @@ public class UserServiceImpl implements UserService {
 | ---------- | -------------------------------------------- |
 | 构造方式   | 底层通过构造方法对Bean进行实例化             |
 | 工厂方式   | 底层通过调用自定义的工厂方法对Bean进行实例化 |
-
-#### 构造器 constructor-arg
-
-- 对于多个构造方法：根据`<consturctor-arg>`的参数来选择相应的构造器。
-
-**无参构造方法** 
-
-**有参构造方法**
-
-- 使用`<bean>`的内嵌标签`<consturctor-arg>`进行参数注入
-- 只要是为了实例化Bean对象而传递的参数都可以通过`<constructor-arg>`标签完成
-
-```xml
-<consturctor-arg name="构造方法中的参数名称" value="参数的值"></consturctor-arg>
-```
-
-```xml
-<bean id="userDao" name="com.zjk.dao.impl.UserDaoImpl">
-    <consturctor-arg name="name" value="Tom"></consturctor-arg>
-    <constructor-arg name="age" value="18"></constructor-arg>
-</bean>
-```
-
-```java
-public UserDaoImpl(String name,int age){
-}
-```
 
 #### 工厂
 
@@ -1915,7 +1635,7 @@ public class TimeLogBeanPostProcessor implements BeanPostProcessor {
 
 ### Bean生命周期
 
-- Spring Bean的生命周期：从 Bean 实例化之后（反射创建出对象之后），到Bean成为一个完整对象，最终存储到单例池。
+- 
 
 | Bean所处阶段 | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
@@ -2138,7 +1858,7 @@ public class UserDaoImpl implements UserDao, InitializingBean {
 | 切面      | Aspect    | 增强和切入点的组合                                   |
 | 织入      | Weaving   | 将通知和切入点组合动态组合的过程                     |
 
-<img src="../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
+<img src="../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
 
 <img src="../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
 
