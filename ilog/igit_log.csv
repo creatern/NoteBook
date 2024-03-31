@@ -1,5 +1,4 @@
 hostname,user,date,msg,pre_log
-'zjk-laptop','zjk','2024-03-18 13:05:29','none','d63cd953eb0162e517313d14e3a47af2c99dca1b none'
 'zjk-laptop','zjk','2024-03-18 13:54:04','kvm','b8f17956c9f9a29e723978b549eafdd76fa82b31 none'
 'zjk-laptop','zjk','2024-03-18 17:23:30','none','52fba02fa62ff5d3aa7bcab8bd328a4084d883f1 kvm'
 'zjk-laptop','zjk','2024-03-18 19:46:07','kvm-arch','7ddeab8efbd87e33b55b404ca174a5e37baec989 none'
@@ -98,3 +97,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-03-30 22:10:01','re-spring','203be98e6e764a53fb1b1864162216ba4bf6008f Spring'
 'zjk-laptop','zjk','2024-03-31 00:35:22','spring','f05407098a492057e0ff0eefbf3b4f9847d31f67 re-spring'
 'zjk-laptop','zjk','2024-03-31 10:50:49','spring-ioc','b0c124985625adfd9a4fbca86e1e7a486bb554ad spring'
+'zjk-laptop','zjk','2024-03-31 11:31:24','ioc-di','e3485ddd97093eee31b406e99e74148995688b83 spring-ioc'

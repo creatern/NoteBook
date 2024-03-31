@@ -25,6 +25,7 @@
         <td>构造方法参数对应的名称</td>
     </tr>
 </table>
+
 1. 如果存在多个构造方法，则可以根据`<consturctor-arg>`的参数来选择相应的构造器。
 2. 只要是为了实例化Bean对象而传递的参数都可以通过`<constructor-arg>`标签完成。
 
@@ -44,4 +45,4 @@ public UserDaoImpl(String name,int age){
 }
 ```
 
-
+- 集合类型可以使用内部标签：`<list><set><map><props>`。

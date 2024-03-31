@@ -271,8 +271,6 @@ public UserDao getUserDao01(){return new UserDaoImpl();}
 
 # Bean
 
-## @Component 基础类
-
 ## 工厂实例化
 
 | 实例化方式                       | 说明                                                         |

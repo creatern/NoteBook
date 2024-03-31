@@ -53,7 +53,12 @@
         <td>基于Setter方法的注入</td>
         <td><a href="./property标签.md">&lt;property/&gt;</a></td>
     </tr>
+    <tr>
+        <td>自动织入</td>
+        <td><a href="./autowired自动织入.md">autowired</a>、<a href="./注解方式注入.md">@Autowired（注解方式注入）</a></td>
+    </tr>
 </table>
+
 
 ##  Bean的配置
 
