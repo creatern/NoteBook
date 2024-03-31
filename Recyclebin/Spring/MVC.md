@@ -1,11 +1,3 @@
-# MVC框架
-
-| MVC层次 | 结构              |
-| ------- | ----------------- |
-| 控制层  | Controller 控制器 |
-| 模型层  | Model 模型        |
-| 视图层  | View 视图         |
-
 # WebMvcConfigurer MVC配置类
 
 - WebMvcConfigurer接口定义了多个Spring MVC的配置方法（default），所有配置类都可以实现该接口并覆盖其方法。

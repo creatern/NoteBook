@@ -4,7 +4,7 @@
 
 - IoC（Inversion of Control，控制反转）是一种决定容器如何装配组件/业务对象（Bean）的模式。容器根据所提供的元数据来创建并管理这些Bean（可重用组件）。
 
-## BeanFactory与ApplicationContext
+## ApplicationContext
 
 <table>
     <tr>
@@ -134,8 +134,6 @@
         </tr>
     </tbody>
 </table> 
-
-
 ## Bean的生命周期
 
 - Spring Bean的生命周期是从Bean实例化之后（反射创建出对象之后），到Bean成为一个完整对象，最终存储到单例池的过程。
@@ -159,4 +157,3 @@
    5. 自定义初始化方法init回调 <a href="#init-method">init-method</a>。
    6. BeanPostProcessor的Object <u>postProcessAfterInitialization</u>(Object bean, String beanName)方法回调。
 3. 完整的Spring Bean被存储到单例池singletonObjects。
-
