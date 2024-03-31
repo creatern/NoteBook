@@ -87,3 +87,73 @@ public class MyBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegi
     }
 }
 ```
+
+# BeanFactoryPostProcessor
+
+- BeanFactoryPostProcessor接口规范：该接口的实现类如果交由Spring容器管理，则Spring自动回调该接口的方法，对BeanDefinition注册、修改。
+  - 如果在postProcessBeanFactory()中修改了BeanDefinition的className，那么不能使用class来getBean()。
+
+```java
+public interface BeanFactoryPostProcessor {
+    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory);
+}
+```
+
+# ConfigurableListableBeanFactory
+
+- postProcessBeanFactory的参数ConfigurableListab实质上是**DefaultListableBeanFactory**。可以对beanDefinitionMap中的BeanDefinition进行操作。
+
+- applicationContext.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="com.zjk.processor.MyBeanFactoryProcessor"></bean>
+    <bean id="userDao" class="com.zjk.dao.impl.UserDaoImpl"></bean>
+    <bean id="userService" class="com.zjk.service.impl.UserServiceImpl">
+<!--        <property name="userDao" ref="userDao"></property>-->
+    </bean>
+</beans>
+```
+
+- MyBeanFactoryProcess
+
+```java
+public class MyBeanFactoryProcessor implements BeanFactoryPostProcessor {
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
+        //修改BeanDefinition
+        //1.获取指定BeanDefinition
+        BeanDefinition userService = configurableListableBeanFactory.getBeanDefinition("userService");
+        //2.将UserService修改为UserDao对象
+        userService.setBeanClassName("com.zjk.dao.impl.UserDaoImpl");
+
+        //注册BeanDefinition
+        //1.新建RootBeanDefinition对象
+        BeanDefinition personDao = new RootBeanDefinition();
+        //2.设置RootBeanDefinition对象的class
+        personDao.setBeanClassName("com.zjk.dao.impl.PersonDaoImpl");
+        //3.强转为DefaultListableBeanFactory
+        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) configurableListableBeanFactory;
+        //4.注册到BeanDefinitionMap中 registerBeanDefinition("id",beanDefinition)
+        defaultListableBeanFactory.registerBeanDefinition("personDao",personDao);
+
+        //使用BeanDefinitionRegistryPostProcessor进行注册
+    }
+}
+```
+
+- test
+
+```java
+ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+UserDao userService = (UserDao) applicationContext.getBean("userService"); //只能使用id来getBean()
+System.out.println(userService); //com.zjk.dao.impl.UserDaoImpl@4fb61f4a
+
+PersonDao personDao = applicationContext.getBean("personDao", PersonDao.class);
+System.out.println(personDao);
+```

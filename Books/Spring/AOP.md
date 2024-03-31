@@ -1,27 +1,78 @@
-# AOP概述
+# AOP 面向切面
 
-> aspectjweaver包。
+- AOP是横向抽取方法（属性、对象等）思想，组装成一个功能性切面。
 
-| 面向 | 说明                                                         |
-| ---- | ------------------------------------------------------------ |
-| OOP  | 纵向对一个事物的抽象                                         |
-| AOP  | 横向的对不同事物的抽象<br />属性与属性、方法与方法、对象与对象都可以组成一个切面。 |
+<table>
+	<thead>
+		<tr>
+			<th width="10%" align="center">编程思想</th>
+			<th width="90%">描述</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align="center">OOP</td>
+			<td>纵向对一个事物的抽象</td>
+		</tr>
+		<tr>
+			<td align="center">AOP</td>
+			<td>横向的对不同事物的抽，属性与属性、方法与方法、对象与对象都可以组成一个切面</td>
+		</tr>
+	</tbody>
+</table>
+<img src="../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/> 
 
-| 概念      | 名词      | 解释                                                 |
-| :-------- | :-------- | :--------------------------------------------------- |
-| 目标对象  | Target    | 被增强方法                                           |
-| 代理对象  | Proxy     | 对目标对象进行增强后的对象，即：客户端实际调用的对象 |
-| 连接点    | Joinpoint | 目标对象可以被增强的方法                             |
-| 切入点    | Pointcut  | 目标对象实际被增强的方法                             |
-| 通知/增强 | Advice    | 增强部分的代码逻辑                                   |
-| 切面      | Aspect    | 增强和切入点的组合                                   |
-| 织入      | Weaving   | 将通知和切入点组合动态组合的过程                     |
-
-<img src="../../pictures/Snipaste_2023-04-01_11-24-45.png" width="700"/>
+<table>
+    <caption>AOP相关概念</caption>
+	<thead>
+		<tr>
+			<th width="12%">概念</th>
+			<th width="10%">名词</th>
+			<th width="78%">解释</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>目标对象</td>
+			<td>Target</td>
+			<td>被增强方法</td>
+		</tr>
+		<tr>
+			<td>代理对象</td>
+			<td>Proxy</td>
+			<td>对目标对象进行增强后的对象，即：客户端实际调用的对象</td>
+		</tr>
+		<tr>
+			<td>连接点</td>
+			<td>Joinpoint</td>
+			<td>目标对象可以被增强的方法</td>
+		</tr>
+		<tr>
+			<td>切入点</td>
+			<td>Pointcut</td>
+			<td>目标对象实际被增强的方法</td>
+		</tr>
+		<tr>
+			<td>通知/增强</td>
+			<td>Advice</td>
+			<td>增强部分的代码逻辑</td>
+		</tr>
+		<tr>
+			<td>切面</td>
+			<td>Aspect</td>
+			<td>增强和切入点的组合</td>
+		</tr>
+		<tr>
+			<td>织入</td>
+			<td>Weaving</td>
+			<td>将通知和切入点组合动态组合的过程</td>
+		</tr>
+	</tbody>
+</table>
 
 <img src="../../pictures/Snipaste_2023-04-10_17-27-26.png" width="1200"/> 
 
-<img src="../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/>
+<img src="../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/> 
 
 # Advice 通知
 
@@ -297,4 +348,3 @@ public class AccountServiceImpl implements AccountService {
     }
 }
 ```
-

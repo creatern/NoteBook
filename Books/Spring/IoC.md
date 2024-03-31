@@ -59,7 +59,6 @@
     </tr>
 </table>
 
-
 ##  Bean的配置
 
 <table>
@@ -74,7 +73,7 @@
     </tr>
     <tr>
         <td>基于Java类的配置</td>
-        <td><a href="./基于Java类的Bean配置.md">@Bean</a></td>
+        <td><a href="./基于Java类的Bean配置.md">@Bean、@Configuration</a></td>
     </tr>
 </table>
 <table>
@@ -146,10 +145,10 @@
 
 1. 实例化阶段
    1. 加载配置类，扫描每个Bean的信息，封装成一个个的BeanDefinition对象;
-   2. 将BeanDefinition存储在<a href="./beanDefinitionMap.md">beanDefinitionMap</a>（`Map<String,BeanDefinition>`）;
+   2. 将BeanDefinition存储在<a href="./DefaultListableBeanFactory.md">beanDefinitionMap</a>（`Map<String,BeanDefinition>`）;
    3. 执行<a href="./BeanFactoryPostProcessor.md">BeanFactoryPostProcessor</a>（Bean工厂<a href="./后处理器.md">后处理器</a>）内定义的逻辑，对BeanDefinition对象进行增强;
    4. ApplicationContext底层遍历beanDefinitionMap，创建Bean实例对象;
-   5. 创建好的Bean实例对象被存储到<a href="./beanDefinitionMap.md">singletonObjects</a>（`Map<String,Object>`）;
+   5. 创建好的Bean实例对象被存储到<a href="./DefaultListableBeanFactory.md">singletonObjects</a>（`Map<String,Object>`）;
 6. 当执行applicationContext.getBean(beanName)时，从singletonObjects去匹配Bean实例返回。   
    
 2. 初始化阶段
@@ -159,4 +158,5 @@
    4. <a href="./InitializingBean.md">InitializingBean</a>接口的afterPropertiesSet()初始化方法回调。
    5. 自定义初始化方法init回调 <a href="#init-method">init-method</a>。
    6. BeanPostProcessor的Object <u>postProcessAfterInitialization</u>(Object bean, String beanName)方法回调。
+3. 完整的Spring Bean被存储到单例池singletonObjects。
 

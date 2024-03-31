@@ -1,3 +1,5 @@
+# DefaultListableBeanFactory
+
 # beanDefinitionMap
 
 - Spring会取出beanDefinitionMap中的每个BeanDefinition信息，反射构造方法或调用指定的工厂方法生成Bean实例对象。只要将BeanDefinition注册到beanDefinitionMap，Spring就会进行对应的Bean的实例化操作。
@@ -6,9 +8,9 @@
 
 <img src="../../pictures/Snipaste_2023-04-04_23-36-40.png" width="600"/>   
 
-> BeanDefinition接口：RootBeanDefinition。
->
-> <img src="../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
+- BeanDefinition接口：RootBeanDefinition。
+
+<img src="../../pictures/Snipaste_2023-04-05_01-06-17.png" width="500"/>   
 
 - <b>DefaultListableBeanFactory</b>内部维护着beanDefinitionMap。
 
