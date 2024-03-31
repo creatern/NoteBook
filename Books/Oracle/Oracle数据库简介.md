@@ -210,15 +210,15 @@
 
 - Starting in Oracle Database 12c Release 2 (12.2), an <b>application container（应用程序容器）</b> is an optional, user-created container that stores data and metadata for one or more application models.
 - An<b> application</b> (also called an application model) is a named, versioned set of common data and metadata stored in the <b>application root</b>. For example, the application model might include definitions of tables, views, user accounts, and PL/SQL packages that are common to a set of PDBs. 应用程序（应用程序模型）是属于应用程序根的一组命名的、版本化的公共数据和元数据
-- In some ways, an application container functions as an application-specific CDB within a CDB. An application container, like the CDB itself, can include multiple application PDBs, and enables these PDBs to share metadata and data. Plugging, unplugging, cloning, and other PDB-level operations are available for individual customer PDBs.
+- In some ways, an application container functions as an application-specific CDB within a CDB. An application container, like the CDB itself, can include multiple application PDBs, and enables these PDBs to share metadata and data. Plugging, unplugging, cloning, and other PDB-level operations are available for individual customer PDBs. 应用程序容器相当于一个特殊的专门用于应用程序的CDB而存在于CDB中。也就是说，应用程序容器可以包含多个应用程序PDB，并且能够管理这些应用程序PDB的共享的元数据和数据。
 
 <img src="../../pictures/20240320190522.png" width="450"/> 
 
 ### Sharding Architecture 分片架构
 
-- <b>Oracle Sharding（Oracle分片）</b> is a database scaling technique based on horizontal partitioning of data across multiple Oracle databases. <u>Applications perceive the pool of databases as a single logical database.</u>
-- In a sharding architecture, each database is hosted on a dedicated server with its own local resources - CPU, memory, flash, or disk. Each database in such configuration is called a <b>shard（分片）</b>. All of the shards together make up a single logical database, which is referred to as a <b>sharded database（分片数据库）</b>.
-- <b>Horizontal partitioning（水平分区）</b> involves splitting a database table across shards so that each shard contains the table with the same columns but a different subset of rows. A table split up in this manner is also known as a <b>sharded table（分区表）</b>.
+- <b>Oracle Sharding（Oracle分片）</b> is a database scaling technique based on horizontal partitioning of data across multiple Oracle databases. <u>Applications perceive the pool of databases as a single logical database.</u> Oracle分片是一种基于跨多个Oracle数据库的水平分区的技术。
+- In a sharding architecture, each database is hosted on a dedicated server with its own local resources - CPU, memory, flash, or disk. Each database in such configuration is called a <b>shard（分片）</b>. All of the shards together make up a single logical database, which is referred to as a <b>sharded database（分片数据库）</b>. 在分片架构中，每个数据库（分片）都托管在一个专用服务器上，并拥有自己的本地资源，共同组合成一个逻辑上的独立数据库。
+- <b>Horizontal partitioning（水平分区）</b> involves splitting a database table across shards so that each shard contains the table with the same columns but a different subset of rows. A table split up in this manner is also known as a <b>sharded table（分区表）</b>. 水平分区技术使得每个分片的表（分区表）的结构一致，但各个分区拥有各自拥有该表的不同数据集。即，水平分区下的分区表具有相同的列和不同的子集。
 
 <img src="../../pictures/20243022200322.png" width="500"/> 
 
@@ -281,7 +281,7 @@
 ## Database Instance Structures 数据库实例结构
 
 - An Oracle database uses memory structures and processes to manage and  access the database. All memory structures exist in the main memory of  the computers that constitute the RDBMS.
-- When applications connect to an Oracle database, they connect to a <b>database instance（数据库实例）</b>. The instance services applications by allocating other memory areas in addition to the SGA, and starting other processes in addition to background processes.
+- When applications connect to an Oracle database, they connect to a <b>database instance（数据库实例）</b>. The instance services applications by allocating other memory areas in addition to the SGA, and starting other processes in addition to background processes. 连接到Oeacle数据库的应用程序实际上连接到了一个实例，而实例通过分配除SGA之外的其他内存区域以及启动除后台进程之外的其他进程来为应用程序提供服务。
 
 ### Oracle Database Processes Oracle数据库进程
 
@@ -307,7 +307,7 @@
 
 - Oracle processes include server processes and background processes. In  most environments, Oracle processes and client processes run on separate computers.
 
-### Instance Memory Structures 
+### Instance Memory Structures 实例的内存结构
 
 - Oracle Database creates and uses memory structures for program code,  data shared among users, and private data areas for each connected user.
 - The following memory structures are associated with a database instance:
