@@ -1,0 +1,4 @@
+2024-04-01 Oracle 2Days DBA
+2024-04-01 Linux shell
+2024-04-01 Spring 兔子书
+2024-04-01 https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/configuring-users-groups-and-environments-for-oracle-grid-infrastructure-and-oracle-database.html#GUID-B65E6113-D056-4DD9-940F-DFF493E413D5
