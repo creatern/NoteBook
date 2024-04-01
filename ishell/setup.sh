@@ -118,7 +118,7 @@ motd file = /etc/rsyncd.motd
 	uid = 0
 	gid = 0
 	secrets file = /etc/rsyncd.secrets
-    auth users = backupman" > /etc/rsyncd.conf
+	auth users = backupman" > /etc/rsyncd.conf
 echo "backupman:tiger" > /etc/rsyncd.secrets
 chmod 600 /etc/rsyncd.secrets
 echo "welcome" > /etc/rsyncd-motd
