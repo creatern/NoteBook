@@ -1,5 +1,4 @@
 hostname,user,date,msg,pre_log
-'zjk-laptop','zjk','2024-03-20 17:11:11','oracle','bb7680b02f887b0d37699cd395bbad33183ce349 oracle'
 'zjk-laptop','zjk','2024-03-20 21:50:22','dbas','9048e2d4450580f247f37f1dcf90e8e1e066b0fa oracle'
 'zjk-laptop','zjk','2024-03-20 22:28:01','dbas','8dc9a4df73204b9ca192a11f43825b2842ad682d dbas'
 'zjk-laptop','zjk','2024-03-21 00:19:19','while','d116aef7275ed93168e0f9ff6354dae3abd46bce dbas'
@@ -98,3 +97,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-04-01 13:47:52','o-preinstall','548168b70d9e28ffebaa91697a0a68a262702c84 none'
 'zjk-laptop','zjk','2024-04-01 18:15:46','oracle','6b5e4d19a49af600af981914ebb2c44dfdf0877c o-preinstall'
 'zjk-laptop','zjk','2024-04-01 20:48:53','oracle','dadb7dbebfee77d83c23ce9002fb4e21d10c99b1 oracle'
+'zjk-laptop','zjk','2024-04-02 00:12:26','sh-func','e1612d8dddeb7030e4cb13e403c3dc08d5c5bb53 oracle'
