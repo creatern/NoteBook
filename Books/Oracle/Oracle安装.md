@@ -15,6 +15,26 @@ dnf install oracle-database-preinstall-19c-1.0-1.el9.x86_64
 1. 安装 oracle-database-preinstall的RPM包，准备需要的所有依赖。
 2. 会自动创建标准（非角色分配）Oracle 安装所有者（只是Oracle dba等标准角色），并根据 Oracle 安装的需要进行分组和设置其他内核配置设置（不包括grid）
 
+```shell
+# vim .bash_profile
+export TMP=/tmp
+export TMPDIR=$TMP
+export ORACLE_SID=orcl
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/19.3.0
+export INVENTORY_LOCATION=/u01/app/oracle/oraInventory
+
+# NLS_LANG 指定Client的字符集
+export NLS_LANG="SIMPLIFIED CHINESE_CHINA.AL32UTF8"
+
+# CLASSPATH 设置 java lib 文件搜索路径
+export CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+# LD_LIBRARY_PATH 设置临时的库文件的 path 路径
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib64:/usr/lib64:/usr/local/lib64
+# PATH 设置搜索路径
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ORACLE_HOME/bin
+```
+
 ### 手动配置
 
 #### 所有者环境
@@ -51,6 +71,26 @@ id oracle
 id grid
 #uid=54331(grid) gid=54321(oinstall) groups=54321(oinstall),54322(dba),
 #54327(asmdba),54328(asmoper),54329(asmadmin),54330(racdba)
+```
+
+```shell
+# vim .bash_profile
+export TMP=/tmp
+export TMPDIR=$TMP
+export ORACLE_SID=orcl
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/19.3.0
+export INVENTORY_LOCATION=/u01/app/oracle/oraInventory
+
+# NLS_LANG 指定Client的字符集
+export NLS_LANG="SIMPLIFIED CHINESE_CHINA.AL32UTF8"
+
+# CLASSPATH 设置 java lib 文件搜索路径
+export CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+# LD_LIBRARY_PATH 设置临时的库文件的 path 路径
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib64:/usr/lib64:/usr/local/lib64
+# PATH 设置搜索路径
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ORACLE_HOME/bin
 ```
 
 #### 资源限制
@@ -100,7 +140,24 @@ fi
 
 ## 网络配置
 
+# 正式安装
 
+```shell
+mkdir -p /u01/app/oracle
+mkdir -p /u01/app/oraInventory
+chown -R oracle:oinstall /u01/app/oracle
+chown -R oracle:oinstall /u01/app/oraInventory
+chmod -R 775 /u01/app
+
+mkdir -p /u01/app/oracle/product/19.0.0/dbhome_1
+cd /u01/app/oracle/product/19.0.0/dbhome_1
+unzip -q /root/backups/LINUX.X64_193000_db_home.zip
+chown -R oracle:oinstall /u01/app/oracle/product/19.0.0/*
+
+# su - oracle
+cd /u01/app/oracle/product/19.0.0/dbhome_1
+./runInstaller
+```
 
 # OUI Oracle通用安装程序
 
