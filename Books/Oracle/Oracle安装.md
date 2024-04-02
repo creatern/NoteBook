@@ -2,7 +2,7 @@
 
 ## 预安装提要
 
-- 如果只是简单的安装，则使用自动配置之后即可进行安装。
+- 如果只是简单的安装，则使用环境配置之后（自动配置或手动配置）即可进行安装。
 
 ## 环境配置
 
@@ -104,19 +104,22 @@ fi
 
 # OUI Oracle通用安装程序
 
+- OUI（Oracle Universal Installer）会自动为Oracle的安装配置环境变量、创建相关目录。
+
 1. 选择数据库的安装类：
    1. Desktop Class（桌面类）：最小的安装配置，入门级。
    2. Server Class（服务器类）：&#127775;。
 2. 数据库版本：
    1. Enterprise Edition（企业版）：最齐全的功能&#127775;。
    2. Standard Edition 2（标准版 2）：中小型企业。
-3. 安装Oracle的目录：/oraInventory （之前配置的oinstall）
-4. 数据库文件位置（存储管理方式）：
+3. Oracle清单目录：`/oraInventory` （之前配置的oinstall）。如果之前未创建该目录，则在OUI中会自动创建在`/home/oracle/oraInventory`目录（也可以设置在`/oraInventory`，但需要有相关的权限来创建），也就是启动GUI程序的用户目录下。
+4. Oracle安装目OUI安装选择合适的安装程序（Enter the full path of the file representing the products you want to install）： 解压后的Oracle安装文件中的runInstaller 。
+5. 数据库文件位置（存储管理方式）：
    1. 文件系统：也就是使用当前系统的文件系统来管理。
    2. ASM（自动存储管理）：需要通过Oracle Grid框架先配置ASM磁盘组，在使用Oracle安装程序。
-5. 数据库标识符：
+6. 数据库标识符：
    1. SID 是一个唯一标识符，用于将此实例与稍后可能创建并在系统上并发运行的其他 Oracle 数据库实例区分开来。
    2. 全局数据库名称是数据库的全名，它唯一地将其与任何其他数据库区分开来。全局数据库名称的格式为`database_name.database_domain`。
-6. 安装选项：
+7. 安装选项：
    1. 典型安装：由Oracle自动完成后续的配置，不推荐。
    2. 高级安装：继续配置。

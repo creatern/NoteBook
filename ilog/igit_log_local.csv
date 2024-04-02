@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-20 21:50:55','dbas','success','8dc9a4df73204b9ca192a11f43825b2842ad682d dbas'
 'zjk-laptop','zjk','2024-03-20 22:28:32','dbas','success','d116aef7275ed93168e0f9ff6354dae3abd46bce dbas'
 'zjk-laptop','zjk','2024-03-21 00:19:52','while
 ','success','7aa5a6492e6cf478de6f218d027430f8e7c36990 while'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-04-01 18:15:53','oracle','success','dadb7dbebfee77d83c23ce9002fb4e21d10c99b1 oracle'
 'zjk-laptop','zjk','2024-04-01 20:49:01','oracle','success','e1612d8dddeb7030e4cb13e403c3dc08d5c5bb53 oracle'
 'zjk-laptop','zjk','2024-04-02 00:12:36','sh-func','success','38944eeb2a8ef0f351d579fa7262bab748a2ac64 sh-func'
+'zjk-laptop','zjk','2024-04-02 10:17:26','dm','success','d87d2c840875ac3da8d67385771ba612f18f5470 dm'
