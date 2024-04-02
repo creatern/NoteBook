@@ -18,7 +18,7 @@
         <tr>
             <td rowspan="2">prototype</td>
             <td rowspan="2">原型</td>
-            <td>pring容器初始化时不会创建Bean实例，当调用getBean()时才会实例化Bean</td>
+            <td>Spring容器初始化时不会创建Bean实例，当调用getBean()时才会实例化Bean</td>
         </tr>
         <tr>
             <td>每次getBean()都会创建一个新的Bean实例。信息存放在 beanDefinitionMap</td>
@@ -52,5 +52,6 @@
         </tr>
     </tbody>
 </table>
+
 
 

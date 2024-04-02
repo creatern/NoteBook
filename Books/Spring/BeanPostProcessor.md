@@ -39,3 +39,4 @@ public interface BeanPostProcessor {
 1. 代理设计模式和包装设计模式。
 2. 使用动态代理 对目标bean进行增强，返回proxy对象，存储在singletonObjects单例池中。
 3. 主要是在postProcessAfterInitialization(Object bean, String beanName)中，对已经init初始化的bean进行增强。
+

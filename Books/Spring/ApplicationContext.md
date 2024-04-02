@@ -126,3 +126,18 @@ applicationContext.getBean("customEventPublisher", CustomEventPublisher.class)
     .fire();
 ```
 
+# [容器的扩展点：后置处理器](./后处理器.md)
+
+# 容器的几种抽象
+
+## 环境抽象
+
+### [Profile 运行环境](./profile环境切换.md)
+
+### [PropertySource 系统属性](./properties配置文件资源导入.md)
+
+## 任务抽象
+
+### [异步执行 TaskExecutor](./TaskExecutor.md)
+
+### [定时任务 TaskScheduler](./TaskScheduler.md)

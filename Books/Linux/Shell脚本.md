@@ -1737,6 +1737,8 @@ cat /dev/null
 
 # 函数 function
 
+## 脚本中的函数
+
 - bash shell提供函数的创建和调用。
 
 ```shell
@@ -1783,7 +1785,7 @@ arrTest ${oldArr[*]} # 数组拆分
 #New Arr：1 2 3
 ```
 
-# 函数库
+## 函数库
 
 - bash shell允许创建函数库文件，然后在多个脚本中引用此库文件。
 
@@ -1811,5 +1813,24 @@ add 1 2
 hi
 ```
 
+## 命令行的函数
 
+1. 在命令行中可以通过单行或多行方式定义和创建函数，和在脚本中定义函数的方式类似。
+
+2. shell会将定义好的函数传递给其子shell。
+
+3. 可以在<code>.bashrc</code>等文件中定义函数以及引入函数库文件。zjk@zjk-laptop:~$ function add(){
+
+   > echo $(($1+$2))
+   > }
+   > zjk@zjk-laptop:~$ add 1 2
+   > 3
+
+```shell
+zjk@zjk-laptop:~$ function add(){
+> echo $(($1+$2))
+> }
+zjk@zjk-laptop:~$ add 1 2
+3
+```
 

@@ -39,7 +39,6 @@
         <td>销毁方法名</td>
     </tr>
 </table>
-
 # @Configuration 配置类
 
 <table>

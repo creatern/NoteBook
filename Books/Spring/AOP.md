@@ -1,6 +1,6 @@
 # AOP 面向切面
 
-- AOP是横向抽取方法（属性、对象等）思想，组装成一个功能性切面。
+- AOP是横向抽取方法（属性、对象等）思想，组装成一个功能性切面；AOP的核心技术是动态代理技术。
 
 <table>
 	<thead>
@@ -45,22 +45,22 @@
 		<tr>
 			<td>连接点</td>
 			<td>Joinpoint</td>
-			<td>目标对象可以被增强的方法</td>
+			<td>目标对象可以被增强的方法；程序执行的某一刻，在这个点上可以添加额外的动作</td>
 		</tr>
 		<tr>
 			<td>切入点</td>
 			<td>Pointcut</td>
-			<td>目标对象实际被增强的方法</td>
+			<td>目标对象实际被增强的方法；切入点是用于描述连接点的，决定了当前代码与连接点是否匹配</td>
 		</tr>
 		<tr>
 			<td>通知/增强</td>
 			<td>Advice</td>
-			<td>增强部分的代码逻辑</td>
+			<td>增强部分的代码逻辑，切面在特定连接点上执行的动作</td>
 		</tr>
 		<tr>
 			<td>切面</td>
 			<td>Aspect</td>
-			<td>增强和切入点的组合</td>
+			<td>增强和切入点的组合；按关注点进行模板分解时，横切关注点就表示为一个切面</td>
 		</tr>
 		<tr>
 			<td>织入</td>
@@ -74,88 +74,158 @@
 
 <img src="../../pictures/Snipaste_2023-04-01_11-27-35.png" width="600"/> 
 
-# Advice 通知
+# @AspectJ
 
-## @Pointcut 切点表达式抽取
+## <code>@EnableAspectJAutoProxy</code>
 
-| 注解 | @Pointcut("execution") |
-| ---- | ---------------------- |
-| 位置 | 通知类中定义的方法     |
-| 作用 | 标注切点表达式         |
-
-```java
-//execution 切入表达式 被增强的目标
-execution([访问修饰符] 返回值类型 包名.类名.方法名(参数))
-```
-
-- 访问修饰符可以省略不写；
-
-- 返回值类型、某一级包名、类名、方法名 可以使用 * 表示任意；
-
-- 包名与类名之间使用单点 . 表示该包下的类，使用双点 .. 表示该包及其子包下的类；
-
-- 参数列表可以使用两个点 .. 表示任意参数。
-
-```java
-//表示访问修饰符为public、无返回值、在com.itheima.aop包下的TargetImpl类的无参方法show
-execution(public void com.itheima.aop.TargetImpl.show())
-    
-//表述com.itheima.aop包下的TargetImpl类的任意方法
-execution(* com.itheima.aop.TargetImpl.*(..))
-    
-//表示com.itheima.aop包下的任意类的任意方法
-execution(* com.itheima.aop.*.*(..))
-    
-//表示com.itheima.aop包及其子包下的任意类的任意方法
-execution(* com.itheima.aop..*.*(..))
-    
-//表示任意包中的任意类的任意方法
-execution(* *..*.*(..))
-```
-
-- 通知中使用如：@Before("通知类.标记方法()") 的形式获取切入。
-
-```java
-@Component
-public class UserServiceAdvice{
-    @Pointcut("execution(* com.zjk.service.*.*(..))")
-    public void userServiceAdvicePointcut(){};
-
-    @Before("userServiceAdvicePointcut()")
-    public void before(){
-        System.out.println("before");
-    }
-}
-```
-
-## @Aspect 织入
-
-| 注解     | @Aspect                     |
-| -------- | --------------------------- |
-| 位置     | 增强类                      |
-| 说明     |                             |
-| **注解** | **@EnableAspectJAutoProxy** |
-| 位置     | 配置类                      |
-| 说明     | 开启AOP自动代理             |
-
-| 通知类型     | 注解                                          |
-| :----------- | :-------------------------------------------- |
-| 前置通知     | @Before("切点表达式")                         |
-| 后置通知     | @AfterReturning("切点表达式")                 |
-| 环绕通知     | @Around("切点表达式")                         |
-| 异常抛出通知 | @Throwable(pointcut="切点表达式" throwing="") |
-| 最终通知     | @Afters("切点表达式")                         |
+- 引入`org.springframework:spring-aspects`，并通过在Java配置类上增加<code>@EnableAspectJAutoProxy</code>注解，来开启<code>@AspectJ</code>支持。
 
 ```java
 @Configuration
-@ComponentScan("com.zjk")
 @EnableAspectJAutoProxy
-public class ApplicationContextConfig {}
+public class config{..}
 ```
 
+## 声明切入点
+
+### @Pointcut 切点表达式抽取
+
+- @Pointcut（切点表达式抽取）用于标注切点表达式。
+
 ```java
-@Component
+// @Pointcut("PCD")
+@Pointcut("execution(* com.zjk.service.*.*(..))")
+public void userServiceAdvicePointcut(){};
+```
+
+### PCD 切入点标识符
+
+#### 常用的PCD
+
+- PCD（pointcut designator，切入点标识符）是AspectJ的表达式，用于在<code>@Pointcut</code>中指定合适的切入点。
+
+<table>
+    <caption>@Pointcut中常用的PCD</caption>
+    <tr>
+        <th>PCD</th>
+        <th>描述</th>
+    </tr>
+    <tr>
+        <td width="10%">execution</td>
+        <td width="90%">最常用的PCD，用来匹配特定方法的执行</td>
+    </tr>
+    <tr>
+        <td>within</td>
+        <td>匹配特定范围内的类型，可以使用通配符来匹配某个Java包内的所有类</td>
+    </tr>
+    <tr>
+        <td>this</td>
+        <td>Spring AOP代理对象这个Bean本身要匹配某个给定的类型</td>
+    </tr>
+    <tr>
+        <td>target</td>
+        <td>目标对象要匹配某个给定的类型</td>
+    </tr>
+    <tr>
+        <td>args</td>
+        <td>传入的方法参数要匹配某个给定的类型，可以用于绑定请求参数</td>
+    </tr>
+    <tr>
+        <td>bean</td>
+        <td>Spring AOP特有的一个PCD，匹配Bean的ID或名称，可以使用通配符</td>
+    </tr>
+</table>
+
+
+```java
+// execution 切入表达式 被增强的目标
+execution([访问修饰符] 返回值类型 [包名.类名].<方法名>(<参数>)[异常])
+```
+
+1. 访问修饰符可以省略不写。
+2. 返回值类型、某一级包名、类名、方法名 可以使用`*`通配符。
+3. 包名与类名之间使用单点 `.` 表示该包下的类，使用双点 .. 表示该包及其子包下的类。
+4. 参数列表可以使用两个点 `..` 表示任意参数；也可以使用类型来指定参数和参数匹配的类型。
+
+```java
+// 表示访问修饰符为public、无返回值、在com.itheima.aop包下的TargetImpl类的无参方法show
+execution(public void com.itheima.aop.TargetImpl.show())
+    
+// 表示访问修饰符为public、无返回值、在com.itheima.aop包下的TargetImpl类的需要两个String类型参数的方法show
+execution(public void com.itheima.aop.TargetImpl.show(String,String))
+    
+// 表述com.itheima.aop包下的TargetImpl类的任意方法
+execution(* com.itheima.aop.TargetImpl.*(..))
+    
+// 表示com.itheima.aop包下的任意类的任意方法
+execution(* com.itheima.aop.*.*(..))
+    
+// 表示com.itheima.aop包及其子包下的任意类的任意方法
+execution(* com.itheima.aop..*.*(..))
+    
+// 表示任意包中的任意类的任意方法
+execution(* *..*.*(..))
+```
+
+#### 针对注解的常用PCD
+
+<table>
+    <caption>针对注解的常用PCD</caption>
+    <tr>
+        <td width="10%">@target</td>
+        <td width="90%">执行的目标对象带有特定类型</td>
+    </tr>
+    <tr>
+        <td>@args</td>
+        <td>传入的方法参数带有特定类型</td>
+    </tr>
+    <tr>
+        <td>@annotation</td>
+        <td>拦截的方法上带有特定类型</td>
+    </tr>
+</table>
+#### Spring AOP 与 AspectJ 的对比
+
+- Spring AOP 的实现是基于动态代理的，只能匹配普通方法的执行，而静态初始化、静态方法、构造方法、属性赋值等操作都是拦截不到的。
+
+## 声明通知
+
+### 声明通知概述
+
+<table>
+	<thead>
+		<tr>
+			<th width="15%">通知类型</th>
+			<th width="85%">注解</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>前置通知</td>
+			<td>@Before(&quot;切点表达式&quot;)</td>
+		</tr>
+		<tr>
+			<td>后置通知</td>
+			<td>@AfterReturning(&quot;切点表达式&quot;)</td>
+		</tr>
+		<tr>
+			<td>环绕通知</td>
+			<td>@Around(&quot;切点表达式&quot;)</td>
+		</tr>
+		<tr>
+			<td>异常抛出通知</td>
+			<td>@Throwable(pointcut=&quot;切点表达式&quot; throwing=&quot;&quot;)</td>
+		</tr>
+		<tr>
+			<td>最终通知</td>
+			<td>@After(&quot;切点表达式&quot;)</td>
+		</tr>
+	</tbody>
+</table>
+
+```java
 @Aspect
+@Component
 public class UserServiceAdvice{
     @Pointcut("execution(* com.zjk.service.impl.*.*(..))")
     public void userServicePointcut() {
@@ -180,21 +250,113 @@ public class UserServiceAdvice{
 }
 ```
 
-## 获取增强的Proxy对象
+### 前置通知 @Before
+
+- @Before注解可以用来声明一个前置通知，注解中可以引用之前定义好的切入点，也可以直接传入一个切入点表达式。在被拦截到的方法开始执行前，会先执行通知的代码。
+
+1. 前置通知的方法没有返回值，因为是在被拦截的方法前执行，其返回值无法被使用。
+2. 前置通知的方法可以用于对被拦截方法的参数进行加工。可以通过<code>args</code>PCD来明确参数，并将其绑定到前置通知方法的参数上。
+3. 要是同时存在多个通知作用于同一处，可以让切面类实现Ordered接口，或者在上面添加@Order注解。指定的Order值越低，优先级越高。
+
+```java
+@Aspect
+@Component
+public class UserServiceAdvice{
+    @Pointcut("execution(* com.zjk.service.*.*(..))")
+    public void userServiceAdvicePointcut(){};
+
+    // @Before("通知类.标记方法()") 的形式获取切入
+    @Before("userServiceAdvicePointcut()")
+    public void before(){
+        System.out.println("before");
+    }
+    
+    // 前置通知的方法可以用于对被拦截方法的参数进行加工
+    @Before("com.zjk.hellodemo.HelloPointcut.say() && args(count)")
+    public void before(AtomicInteger count){
+        // 处理count
+    }
+}
+```
+
+### 后置通知 @After
+
+<table>
+    <tr>
+        <td>@AfterReturning</td>
+        <td>只拦截正常返回的调用</td>
+    </tr>
+    <tr>
+        <td>@AfterThrowing</td>
+        <td>只拦截抛出异常的调用</td>
+    </tr>
+    <tr>
+        <td width="10%">@After</td>
+        <td width="90%">不关注被拦截方法的执行是否成功，且无法获取返回值和异常对象，通常只是用于资源清理</td>
+    </tr>
+</table>
+### 环绕通知 @Around
+
+- @Around（环绕通知）不仅可以在方法执行前后加入自己的逻辑，甚至可以完全替换方法本身的逻辑，或者替换调用函数。
+
+1. @Around注解的签名，第一个参数必须是ProceedingJoinPoint类型的，方法的返回类型是被拦截方法的返回类型，或者直接用Object类型。
+2. <code>pjp.procced()</code>就是调用具体的连接点进行的处理，<code>procced()</code>方法也接受<Code>Object[]</Code>参数来替代原先的参数。
+
+```java
+@Aspect
+@Component
+public class TimerAspect {
+    @Around("execution(public * say(..))")
+    public Object recordTime(ProceedingJoinPoint pjp) throws Throwable {
+        // 环绕前增强
+        long start = System.currentTimeMillis();
+        try {
+            // 执行被拦截的方法
+            return pjp.procced();
+        } finally {
+            // 环绕后增强
+            long end = System.currentTimeMillis();
+            System.out.println("Total time：" + (end - start) + "ms");
+        }
+    }
+}
+```
+
+### 引入通知 @DeclareParents
+
+- <code>@DeclareParents</code>（引入通知）：
+
+1. 引入（Introduction）可以为Bean添加新的接口，并为新增的方法提供默认实现。
+2. 在切面类型里声明一个成员属性，该属性的类型就是要引入的类型，通过<code>@DeclareParents</code>来声明引入。
+3. 引入其实就是对类型进行的增强，可以在<code>@DeclareParents</code>的value属性中填入要匹配的类型，使用AspectJ类型匹配模式。
+
+```java
+@Aspect
+@Component
+public class MyAspect {
+    @DeclareParents(value = "com.zjk.hellodemo.Hello", defaultImpl = DefaultGoodByeImpl.class)
+    private GoodBye goodBye;
+}@Component
+```
+
+
+## 通知原理
+
+### 获取增强的Proxy对象
 
 - xml配置：spring-aop jar包的META-INF下的spring.handlers和sprin.schemas
 
 - AopNamespaceHandler：spring.handlers
 
 ```xml
-http\://www.springframework.org/schema/aop=org.springframework.aop.config.AopNamespaceHandler
+http://www.springframework.org/schema/aop=org.springframework.aop.config.AopNamespaceHandler
 ```
 
 <img src="../../pictures/Snipaste_2023-04-12_14-26-57.png" width="1000"/> 
 
 - **wrapIfNecessary()** 方法最终返回的就是一个Proxy对象：`return this.wrapIfNecessary(bean, beanName, cacheKey);`
 
-## AOP自动代理
+### AOP自动代理
 
 - `<aop:aspectj-autoproxy/>`
 

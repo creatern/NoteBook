@@ -130,6 +130,8 @@
 
 ## 并发篇
 
+JUC（java.utils.concurrent）
+
 ### [Thread](./Books/Java/Thread.md)
 
 ### [Unsafe](./Books/Java/Unsafe.md)
@@ -371,6 +373,8 @@
 ### [环境变量](./Books/Linux/环境变量.md)
 
 ### [Shell脚本](./Books/Linux/Shell脚本.md)
+
+### [图形化](./Books/Linux/图形化.md)
 
 ## Kernel篇
 

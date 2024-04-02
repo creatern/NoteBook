@@ -1,0 +1,1 @@
+- TaskExecutor是对JUC（java.utils.concurrent）中的Executor接口的封装，具有多种实现，例如SyncTaskExecutor、ConcurrentTaskExecutor、SimpleAsyncTaskExecutor等。
