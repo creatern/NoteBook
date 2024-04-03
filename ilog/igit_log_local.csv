@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-21 17:09:50','re-log','success','f9f994f16675de92a29fa0f376efd49d51d199ed re-log'
 'zjk-laptop','zjk','2024-03-21 19:31:21','recover','success','9a5e51627bc41a1ef8d5c2e11c36cce021f01605 recover'
 'zjk-laptop','zjk','2024-03-21 20:42:10','active-standby','success','24ff2c5774480e2df037151843b2f354c583f3fb active-standby'
 'zjk-laptop','zjk','2024-03-21 22:15:12','vim','success','0571b395e3038b682dc513bcbe78eeb00d19a5b4 vim'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-04-03 13:11:36','none','success','3729a565b9f73fee91bf6ea8a0ec6ae20d25ef37 none'
 'zjk-laptop','zjk','2024-04-03 14:52:55','java-memery','success','3f954358b8a2df70ff120fa23e825198a8d59488 java-memery'
 'zjk-laptop','zjk','2024-04-03 16:49:10','JUC','success','4d165b99ba1cb14bf6aeecb0309ff48eb72d9545 JUC'
+'zjk-laptop','zjk','2024-04-03 17:46:10','juc','success','a026fba803f8858449ad5edc810a48b03831cd46 juc'

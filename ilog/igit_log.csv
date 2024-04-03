@@ -1,5 +1,4 @@
 hostname,user,date,msg,pre_log
-'zjk-laptop','zjk','2024-03-21 20:41:37','active-standby','9a5e51627bc41a1ef8d5c2e11c36cce021f01605 recover'
 'zjk-laptop','zjk','2024-03-21 22:14:39','vim','24ff2c5774480e2df037151843b2f354c583f3fb active-standby'
 'zjk-laptop','zjk','2024-03-22 00:32:07','position-parameter','0571b395e3038b682dc513bcbe78eeb00d19a5b4 vim'
 'zjk-laptop','zjk','2024-03-22 09:29:02','getopt','1ca873dd77303c3bfea1b18313c0941db899eca2 position-parameter'
@@ -98,3 +97,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-04-03 14:52:46','java-memery','3729a565b9f73fee91bf6ea8a0ec6ae20d25ef37 none'
 'zjk-laptop','zjk','2024-04-03 16:49:03','JUC','3f954358b8a2df70ff120fa23e825198a8d59488 java-memery'
 'zjk-laptop','zjk','2024-04-03 17:46:00','juc','4d165b99ba1cb14bf6aeecb0309ff48eb72d9545 JUC'
+'zjk-laptop','zjk','2024-04-03 18:54:50','lock','a026fba803f8858449ad5edc810a48b03831cd46 juc'
