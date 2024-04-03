@@ -1,6 +1,6 @@
 # Random
 
-- java.util.Random
+- <code>java.util.Random</code>是使用广泛的随机数生成工具类，<code>java.lang.Math</code>中的随机数生成也使用的是<code>java.util.Random</code>的实例。
 
 ```java
 public Random(long seed) {
