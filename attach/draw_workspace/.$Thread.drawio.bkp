@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-11-06T09:13:38.686Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="aHdt-Gp9-LnS5Orp-9T4" version="21.4.0" type="device" pages="5">
+<mxfile host="Electron" modified="2024-04-03T06:42:30.434Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="HCiEz59i9USUSj2CTy0i" version="24.0.4" type="device" pages="6">
   <diagram name="consume-product-base" id="6dv0487Sd1imH6Vtmh2Y">
-    <mxGraphModel dx="954" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="954" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -422,7 +422,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="qSSYmYDvhrYGPhhtijJs" name="setandget-threadLocal">
-    <mxGraphModel dx="104" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="104" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -537,6 +537,126 @@
         </mxCell>
         <mxCell id="oRM2KtZNI3yHn6trO2R9-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 19px;&quot;&gt;ThreadLocal&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1450" y="210" width="180" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="8-Ujl-4890stzTWYYLfs" name="Java内存模型">
+    <mxGraphModel dx="1804" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-1" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#666666;fillColor=#f5f5f5;fontColor=#333333;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="240" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-2" value="线程A" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-4" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#666666;fillColor=#f5f5f5;fontColor=#333333;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="440" y="240" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-3" value="线程B" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="510" y="240" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="216.25" y="280" width="167.5" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="SkeuHqlGkgRDMkwGpSjx-8" target="SkeuHqlGkgRDMkwGpSjx-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="305" />
+              <mxPoint x="230" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-8" value="控制器" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="290" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-9" value="运算器" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="335" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.344;exitDx=0;exitDy=0;startArrow=blockThin;startFill=1;endArrow=none;endFill=0;strokeWidth=2;exitPerimeter=0;" edge="1" parent="1" source="SkeuHqlGkgRDMkwGpSjx-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="220" y="390" />
+              <mxPoint x="220" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-10" value="&amp;nbsp;L1 Cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="240" y="380" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-11" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="456.25" y="280" width="167.5" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-12" value="控制器" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="480" y="290" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-13" value="运算器" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="480" y="335" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-14" value="&amp;nbsp;L1 Cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="380" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-15" value="&amp;nbsp;L2 Cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="460" width="440" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-16" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="520" width="440" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-17" value="主内存" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="383.75" y="550" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-18" value="共享变量1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="220" y="535" width="110" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-19" value="共享变量2" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="490" y="535" width="110" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-20" value="Java内存模型" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="360" y="620" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.243;entryY=0.033;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=blockThin;endFill=1;strokeWidth=2;" edge="1" parent="1" source="SkeuHqlGkgRDMkwGpSjx-10" target="SkeuHqlGkgRDMkwGpSjx-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="402" />
+              <mxPoint x="220" y="430" />
+              <mxPoint x="307" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="SkeuHqlGkgRDMkwGpSjx-15" target="SkeuHqlGkgRDMkwGpSjx-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="510" />
+              <mxPoint x="275" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-29" value="1. 线程A需要读写 共享变量1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=13;fontColor=default;labelBackgroundColor=default;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-5" y="290" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-30" value="2. 线程A访问 L1 Cache&amp;nbsp; &amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=13;fontColor=default;labelBackgroundColor=default;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-5" y="380" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-31" value="&lt;span style=&quot;font-size: 13px;&quot;&gt;如果存在，则直接操作&lt;/span&gt;&lt;div style=&quot;font-size: 13px;&quot;&gt;&amp;nbsp; 并在完成后将变量值一路修改到主内存&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-35" y="410" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-32" value="&lt;span style=&quot;font-size: 13px;&quot;&gt;如果不存在，则继续访问 L2 Cache&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-35" y="440" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-33" value="3. 线程A访问 L2 Cache&amp;nbsp; &amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=13;fontColor=default;labelBackgroundColor=default;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-5" y="470" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-34" value="4. 线程A访问 主内存 ，&lt;div&gt;&amp;nbsp; &amp;nbsp; 读取共享变量1到工作内存&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; 读写完成后，一路修改到主内存&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=13;fontColor=default;labelBackgroundColor=default;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry y="540" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-35" value="CPU" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=14;fontColor=default;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="333.75" y="240" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SkeuHqlGkgRDMkwGpSjx-36" value="CPU" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=14;fontColor=default;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="240" width="50" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

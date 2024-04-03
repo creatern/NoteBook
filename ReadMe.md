@@ -134,6 +134,8 @@
 
 #### [Thread](./Books/Java/Thread.md)
 
+#### [多并发基础](./Books/Java/多并发基础.md)
+
 #### [Unsafe](./Books/Java/Unsafe.md)
 
 #### [Atomic* 原子性](./Books/Java/Atomic.md)
