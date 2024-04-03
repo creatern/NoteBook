@@ -130,11 +130,9 @@
 
 ## 并发篇
 
-### JUC（java.utils.concurrent）
+### [多并发基础](./Books/Java/多并发基础.md)
 
-#### [Thread](./Books/Java/Thread.md)
-
-#### [多并发基础](./Books/Java/多并发基础.md)
+#### [Thread 线程](./Books/Java/Thread.md)
 
 #### [Atomic* 原子性](./Books/Java/Atomic.md)
 
