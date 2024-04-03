@@ -5,3 +5,4 @@ x 2024-04-01 2024-04-01 https://docs.oracle.com/en/database/oracle/oracle-databa
 x 2024-04-01 2024-04-01 https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/creating-an-asmsnmp-user.html#GUID-42F96652-F891-49C4-AE48-BA18078D5909
 2024-04-01 https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/about-assigning-global-database-names-during-installation.html#GUID-1AC9E18F-0AE4-4263-B3CC-A83B859A178F
 2024-04-02 https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/running-oracle-universal-installer-to-install-oracle-database.html#GUID-DD4800E9-C651-4B08-A6AC-E5ECCC6512B9
+2024-04-03 JUC
