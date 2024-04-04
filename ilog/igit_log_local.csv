@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-22 16:11:24','dbas','success','fd8940346f010ec2b7e2bfb82853a48b8959c8a9 dbas'
 'zjk-laptop','zjk','2024-03-22 17:17:47','dbas','success','e8a4ac7d514cfc6edbc7fc2ecba222d1762388a0 dbas'
 'zjk-laptop','zjk','2024-03-22 19:09:46','cloud','success','4558eba9c6a98c2390ee4c07678030ad936a3977 cloud'
 'zjk-laptop','zjk','2024-03-22 21:16:27','oracle','success','94a350170f2efad1e451ff0e4f5f971f31f1d12b oracle'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-04-04 00:04:01','select','success','47a8ca92f46c94f505b1e303d8900c3c11031462 select'
 'zjk-laptop','zjk','2024-04-04 00:04:58','select','success','c007c628e6a413dbc4687bb2e75869664600b747 select'
 'zjk-laptop','zjk','2024-04-04 10:48:29','getmax-juc','success','3fc1314cf9652c3b69390ad1fc996aab72e5d326 getmax-juc'
+'zjk-laptop','zjk','2024-04-04 10:50:08','none','success','a4aba276448a8450f4859fdd58b6cc577fd8f440 none'

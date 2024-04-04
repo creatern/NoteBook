@@ -25,9 +25,9 @@ public class ThreadTestMaxValue {
         /* 计算每段数组的range */
         range[0] = 0;
         for (int i = 1; i < threadNum + 1; i++) {
-            range[i] = range[i-1] + arrLength / threadNum;
+            range[i] = range[i - 1] + arrLength / threadNum;
             /* 防止最后一个range的范围超过数组长度 */
-            if(range[i] > arrLength){
+            if (range[i] > arrLength) {
                 range[i] = arrLength;
             }
         }
@@ -35,21 +35,21 @@ public class ThreadTestMaxValue {
         Worker[] workers = new Worker[threadNum]; // call
         List<FutureTask<Integer>> futureTasks = new ArrayList<FutureTask<Integer>>(); // get
         for (int i = 0; i < threadNum; i++) {
-            workers[i] = new Worker(arr,range[i],range[i+1]);
+            workers[i] = new Worker(arr, range[i], range[i + 1]);
             FutureTask<Integer> task = new FutureTask<Integer>(workers[i]);
             futureTasks.add(task); // 将任务线程加入List中，以此在之后获取计算的结果
             new Thread(task).start(); // 启动单个任务线程
         }
         /* 获取各线程的计算结果并汇总 */
         int max = Integer.MIN_VALUE; // 最终的最大值
-        for (FutureTask<Integer> task: futureTasks){
+        for (FutureTask<Integer> task : futureTasks) {
             Integer temp = null;
             try {
                 temp = task.get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-            if (max < temp){
+            if (max < temp) {
                 max = temp;
             }
         }
