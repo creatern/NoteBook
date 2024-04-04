@@ -53,6 +53,13 @@ groupadd -g 54330 racdba
 useradd -u 54321 -g oinstall -G dba,asmdba,backupdba,dgdba,kmdba,racdba oracle
 useradd -u 54331 -g oinstall -G dba,asmdba,backupdba,dgdba,kmdba,racdba grid
 usermod -g oinstall -G dba,asmdba,backupdba,dgdba,kmdba,racdba,oper oracle
+
+id oracle
+#uid=54321(oracle) gid=54321(oinstall) #groups=54321(oinstall),54322(dba),54323(oper),54324(backupdba),54325(dgdba),54326(kmdba),54330(racdba)
+
+id grid
+#uid=54331(grid) gid=54321(oinstall) groups=54321(oinstall),54322(dba),
+#54327(asmdba),54328(asmoper),54329(asmadmin),54330(racdba)
 ```
 
 ```shell
@@ -62,15 +69,6 @@ echo umask 022 >> .bash_profile
 
 # 如果安装了现有的 Oracle 软件，并且使用同一用户来安装此安装
 # 请取消设置 $ORACLE_HOME、$ORA_NLS10 和 $TNS_ADMIN 环境变量
-```
-
-```shell
-id oracle
-#uid=54321(oracle) gid=54321(oinstall) #groups=54321(oinstall),54322(dba),54323(oper),54324(backupdba),54325(dgdba),54326(kmdba),54330(racdba)
-
-id grid
-#uid=54331(grid) gid=54321(oinstall) groups=54321(oinstall),54322(dba),
-#54327(asmdba),54328(asmoper),54329(asmadmin),54330(racdba)
 ```
 
 ```shell
@@ -120,7 +118,7 @@ ulimit -Hs
 # 注销这些用户并重新登录
 ```
 
-#### 远程显示与X11转发
+#### 远程显示与X11转发（可选）
 
 ```shell
 vncserver
