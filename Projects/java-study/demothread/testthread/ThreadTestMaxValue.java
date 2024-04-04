@@ -1,4 +1,4 @@
-package demothread;
+package demothread.testthread;
 
 import java.util.ArrayList;
 import java.util.List;

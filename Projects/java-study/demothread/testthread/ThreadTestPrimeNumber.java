@@ -1,14 +1,17 @@
-package demothread;
+package demothread.testthread;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class ThreadTestPrimeNumberAndWorker {
+public class ThreadTestPrimeNumber {
     public static void main(String[] args) {
-        ThreadTestPrimeNumberAndWorker tw = new ThreadTestPrimeNumberAndWorker();
-        System.out.println(tw.countPrimeNumber(100, 5));
+        ThreadTestPrimeNumber tw = new ThreadTestPrimeNumber();
+        long begin = System.currentTimeMillis();
+        System.out.println(tw.countPrimeNumber(103, 30));
+        long end = System.currentTimeMillis();
+        System.out.println("cost time: " + (end-begin));
     }
 
     public int countPrimeNumber(int max, int thread) {
@@ -23,30 +26,41 @@ public class ThreadTestPrimeNumberAndWorker {
         for (int i = 1; i < thread + 1; i++) {
             range[i] = range[i - 1] + max / thread;
         }
+        /* 确保至少有一个线程完成剩余部分的数据 */
+        if (range[thread] < max) {
+            range[thread] = max;
+        }
         /* 对每段数据设置处理任务 */
-        ThreadTestPrimeNumberAndWorker tw = new ThreadTestPrimeNumberAndWorker(); // 用于工具类
+        ThreadTestPrimeNumber tw = new ThreadTestPrimeNumber(); // 用于工具类
         List<FutureTask<Integer>> futureTasks = new ArrayList<FutureTask<Integer>>(); // 任务列表
         for (int i = 0; i < thread; i++) {
             int start = range[i], end = range[i + 1]; // 设置范围
             FutureTask<Integer> task = new FutureTask<>(() -> {
+                System.out.println(Thread.currentThread().getName() + ": " + start + "-" + end);
                 int tmpCount = 0;
                 for (int j = start; j < end; j++) {
-                    if (tw.isPrime(data[start])){
+                    if (tw.isPrime(data[j])) {
                         tmpCount++;
                     }
                 }
                 return tmpCount;
             });
+            new Thread(task).start();
             futureTasks.add(task);
         }
         /* 汇总处理 */
         int count = 0; // 计数器 素数
-        for (FutureTask<Integer> task: futureTasks){
+        System.out.println(tw.isPrime(max) + ":" + max + ":" + count);
+        for (FutureTask<Integer> task : futureTasks) {
+            Integer tmp = null;
             try {
-                count+=task.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                tmp = task.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
             }
+            count += tmp;
         }
         return count;
     }
