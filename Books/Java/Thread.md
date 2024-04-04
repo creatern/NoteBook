@@ -1,88 +1,100 @@
-# Thread 线程
-
-## Thread与线程概述
+# Thread 线程概述
 
 1. 一个进程中有多个线程，多个线程共享进程的堆和方法区，每个线程独立拥有程序计数器和栈。
 2. 线程是占用CPU执行的基本单位，CPU使用时间片轮转的方式让线程轮询占用。
 3. 线程的程序计数器记录当前线程让出CPU时的执行地址。只有执行Java代码时，程序计数器才记录下一条指令的地址，否则记录undefined地址（如native方法）。
 
-<img src="../../pictures/Thread-base-struct.png" width="500" />
+## 线程状态
 
 <img src="../../pictures/Thread-Thread-LifeTime.drawio.svg" width="800"/> 
 
-## 线程创建与运行
+## 线程类别
+
+### 守护线程与用户线程
+
+<table>
+	<tbody>
+		<tr>
+			<td width="20%">守护线程（deamon）</td>
+			<td width="80%">最后一个非守护线程结束后，JVM会正常退出，而不管当前是否有守护线程正在执行</td>
+		</tr>
+		<tr>
+			<td>用户线程（user）</td>
+			<td>只要有一个用户线程还没结束，正常情况下，JVM就不会退出</td>
+		</tr>
+	</tbody>
+</table>
+
+- main线程运行结束之后，JVM会自动启动DestroyJavaVM线程，该线程等待所有用户线程结束后终止JVM进程。
+
+- 若在线程启动（start）前调用setDeamon(true)，则将该线程设置为守护线程。
+
+### 平台线程与虚拟线程
+
+<table>
+    <tr>
+        <td width="20%">平台线程（platform）</td>
+        <td width="80%">平台线程与操作系统中的线程一一对应</td>
+    </tr>
+    <tr>
+        <td>虚拟线程（virtual）</td>
+        <td>虚拟线程通常是由Java运行时而不是操作系统调度的用户模式线程，且虚拟线程是守护线程</td>
+    </tr>
+</table>
+# 线程创建与运行
+
+<img src="../../pictures/Thread-base-struct.png" width="500" /> 
+
+<table>
+    <tr>
+        <td width="20%">java.lang.Thread</td>
+        <td width="10%">run()</td>
+        <td width="70%">Threa类是Runnable接口的实现类</td>
+    </tr>
+    <tr>
+        <td>java.lang.Runnable</td>
+        <td>run()</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>java.util.concurrent.Callable</td>
+        <td>call()</td>
+        <td>相对于Runnable接口，可以有返回值和检查异常；通常用于提供异步计算结果</td>
+    </tr>
+    <tr>
+        <td>java.util.concurrent.Future</td>
+        <td>get()</td>
+        <td>异步计算</td>
+    </tr>
+</table>
+
+- Thread的run()与start()的作用与区别：
 
 1. 每个线程都是通过某个特定Thread对象的run()方法来完成操作的，把run()方法的主体称为线程体。
 2. 调用start()方法启动线程，线程体run()方法由JVM调用（OS的CPU调度决定），如果直接调用run()方法则没有启动线程。
 3. 一个线程对象只能调用一次start()方法启动，如果重复调用了，则将抛出“IllegalThreadStateException”。
 
-### Thread
-
 ```java
-MyThread myThread = new MyThread();
-myThread.start();
+new Thread(()->{
+    for(int i = 0; i < 5; i++) System.out.println(Thread.currentThread().getName());
+}).start();
 ```
 
-```java
-public class MyThread extends Thread{
-    @Override
-    public void run() {
-        System.out.println(getName() + " is Running ...");
-    }
-}
-```
+# 同步
 
-### Runnable
+## [synchronized](./synchronized.md)
 
-```java
-Thread runnableTask = new Thread(new RunnableTask());
-runnableTask.start();
-```
+## [volatile](./volatile.md)
 
-```java
-public class RunnableTask implements Runnable{
+# 线程控制
 
-    @Override
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " is Running...");
-    }
-}
-```
-
-### FutureTask
-
-```java
-FutureTask<String> futureTask = new FutureTask<>(new CallableTask());
-Thread futureTaskThread = new Thread(futureTask);
-futureTaskThread.start();
-try {
-    String result = futureTask.get();
-    System.out.println(result);
-} catch (InterruptedException e) {
-    throw new RuntimeException(e);
-} catch (ExecutionException e) {
-    throw new RuntimeException(e);
-}
-```
-
-```java
-public class CallableTask implements Callable<String> {
-    @Override
-    public String call() throws Exception {
-        return "Call ...";
-    }
-}
-```
-
-## 线程控制
-
-### 线程等待与通知
+## 线程等待与通知
 
 - java.lang.Object中编写了wait()、notify()、notifyAll()方法。
 
 <img src="../../pictures/Thread-consume-product-base.drawio.svg" width="1000"/>
 
-#### wait(..) 线程等待
+### wait(..) 线程等待
 
 - 线程调用共享资源/监视器锁的wait()方法时，该线程会进入阻塞状态，并释放当前持有的监视器锁，直到以下事件发生：
 
@@ -116,12 +128,12 @@ sychronized(obj){
 }
 ```
 
-#### notify()/notifyAll() 唤醒线程
+### notify()/notifyAll() 唤醒线程
 
 - 线程调用共享资源的notify()方法后，随机唤醒一个在该共享变量上调用wait(..)方法而挂起的线程。而notifyAll()会唤醒所有在该共享资源上由于调用wait(..)而挂起的线程集，此时，其他没有竞争到监视器锁的线程会等待拥有监视器锁的线程释放监视器锁，之后再次竞争监视器锁，而不需要再次notify()/notifyAll()来唤醒。
 - 被唤醒的线程必须还要获取了共享资源的监视器锁后，才可以从wait(..)方法返回并继续执行。
 
-### 等待线程终止 join(..)
+## 等待线程终止 join(..)
 
 - 当A线程在main线程内使用join(..)时，main线程要先等待A线程终止或超过等待时间之后，才能继续执行，且main线程仍然持有监视器锁。join()实际调用join(0)，一直等待完成。
 
@@ -152,15 +164,15 @@ public void static main(String[] args){
 }
 ```
 
-### 线程睡眠 sleep(..)
+## 线程睡眠 sleep(..)
 
 - 线程执行sleep(..)方法之后，暂时让出指定时间的执行权（不参与CPU调度），但仍然持有监视器锁。超时后，线程正常返回，并处于就绪状态。
 
-### 线程让步 yield()
+## 线程让步 yield()
 
 - 线程执行yield()方法之后，向调度器提示该线程愿意放弃CPU使用权。此时，该线程让出CPU使用权，处于就绪状态，由调度器从线程就绪队列中获取一个线程优先级最高的线程（也可能调度到该线程）来获取CPU使用权。
 
-### 线程中断 interrupt(..)
+## 线程中断 interrupt(..)
 
 - 线程中断是线程间的一种协作模式，设置线程的中断标志（interrupted）并不能直接终止线程的执行，而是由被中断的线程根据中断状态自行处理。
 
@@ -210,32 +222,6 @@ public boolean isInterrupted() {
     return interrupted;
 }
 ```
-
-# 常见线程问题
-
-## 线程死锁
-
-<img src="../../pictures/Thread-dead-Lock-base.drawio.svg" width="300"/> 
-
-- 死锁的发生需要满足以下4个必要条件：
-
-1. 互斥：线程对持有的资源的使用是排他的。
-2. 请求并持有：线程已经持有资源，但提出了新的资源请求。
-3. 不可剥夺：线程持有的资源只能由线程自己释放。
-4. 环路等待：发生死锁时，必然存在线程\-\-资源的环形链。
-
-- 死锁发生的条件中，只有"请求并持有"、"环路等待"可以被破坏。保持资源申请的有序性原则，即可避免死锁。
-
-## 守护线程与用户线程
-
-| 线程类型           | 区别                                                         |
-| ------------------ | ------------------------------------------------------------ |
-| 守护线程（deamon） | 最后一个非守护线程结束后，JVM会正常退出，而不管当前是否有守护线程正在执行 |
-| 用户线程（user）   | 只要有一个用户线程还没结束，正常情况下，JVM就不会退出        |
-
-- main线程运行结束之后，JVM会自动启动DestroyJavaVM线程，该线程等待所有用户线程结束后终止JVM进程。
-
-- 若在线程启动（start）前调用setDeamon(true)，则将该线程设置为守护线程。
 
 # ThreadLocal
 
