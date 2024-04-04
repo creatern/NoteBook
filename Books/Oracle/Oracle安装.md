@@ -1,43 +1,24 @@
-# 预安装
+# 预安装（自动配置）
 
-## 预安装提要
-
-- 如果只是简单的安装，则使用环境配置之后（自动配置或手动配置）即可进行安装。
-
-## 环境配置
-
-### 自动配置 oracle-database-preinstall
+- 如果只是简单的安装，则使用环境配置之后（自动配置或手动配置），即可准备进行安装。
 
 ```shell
+# 自动配置 oracle-database-preinstall
 dnf install oracle-database-preinstall-19c-1.0-1.el9.x86_64
 ```
 
 1. 安装 oracle-database-preinstall的RPM包，准备需要的所有依赖。
 2. 会自动创建标准（非角色分配）Oracle 安装所有者（只是Oracle dba等标准角色），并根据 Oracle 安装的需要进行分组和设置其他内核配置设置（不包括grid）
 
-```shell
-# vim .bash_profile
-export TMP=/tmp
-export TMPDIR=$TMP
-export ORACLE_SID=orcl
-export ORACLE_BASE=/u01/app/oracle
-export ORACLE_HOME=$ORACLE_BASE/product/19.3.0
-export INVENTORY_LOCATION=/u01/app/oracle/oraInventory
+# 预安装（手动配置）
 
-# NLS_LANG 指定Client的字符集
-export NLS_LANG="SIMPLIFIED CHINESE_CHINA.AL32UTF8"
+## 依赖准备
 
-# CLASSPATH 设置 java lib 文件搜索路径
-export CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
-# LD_LIBRARY_PATH 设置临时的库文件的 path 路径
-export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib64:/usr/lib64:/usr/local/lib64
-# PATH 设置搜索路径
-export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ORACLE_HOME/bin
-```
 
-### 手动配置
 
-#### 所有者环境
+## 环境配置
+
+### 所有者环境
 
 
 ```shell
@@ -71,27 +52,100 @@ echo umask 022 >> .bash_profile
 # 请取消设置 $ORACLE_HOME、$ORA_NLS10 和 $TNS_ADMIN 环境变量
 ```
 
+### 内核参数
+
+#### 内核参数最低要求参考
+
+- 以下为最低的要求：
+
 ```shell
-# vim .bash_profile
-export TMP=/tmp
-export TMPDIR=$TMP
-export ORACLE_SID=orcl
-export ORACLE_BASE=/u01/app/oracle
-export ORACLE_HOME=$ORACLE_BASE/product/19.3.0
-export INVENTORY_LOCATION=/u01/app/oracle/oraInventory
+# /proc/sys/kernel/sem
+# semmsl semmns semopm semmni
+250     32000   100     128
 
-# NLS_LANG 指定Client的字符集
-export NLS_LANG="SIMPLIFIED CHINESE_CHINA.AL32UTF8"
+# /proc/sys/kernel/shmall
+# shmall 要求大于或等于 shmmax 的值（以页为单位）
 
-# CLASSPATH 设置 java lib 文件搜索路径
-export CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
-# LD_LIBRARY_PATH 设置临时的库文件的 path 路径
-export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib64:/usr/lib64:/usr/local/lib64
-# PATH 设置搜索路径
-export PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ORACLE_HOME/bin
+
+# /proc/sys/kernel/shmmax
+# shmmax 物理内存大小的一半（以字节为单位）
+
+
+# /proc/sys/kernel/shmmni
+# shmmni
+4096
+
+# /proc/sys/kernel/panic_on_oops
+# panic_on_oops
+1
+
+# /proc/sys/fs/file-max
+# file-max
+6815744
+
+# /proc/sys/fs/aio-max-nr
+# aio-max-nr
+1048576
+
+# /proc/sys/net/ipv4/ip_local_port_range
+# ip_local_port_range
+# Minimum Maximum 
+9000 65500
+
+# /proc/sys/net/core/rmem_default
+# rmem_default
+262144
+
+# /proc/sys/net/core/rmem_max
+# rmem_max
+4194304
+
+# /proc/sys/net/core/wmem_default
+# wmem_default
+262144
+
+# /proc/sys/net/core/wmem_max
+# wmem_max
+1048576
 ```
 
-#### 资源限制
+#### 2
+
+```shell
+# /etc/sysctl.d/97-oracle-database-sysctl.conf
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 4294967295
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576
+```
+
+```shell
+# 更改内核参数的当前值
+/sbin/sysctl --system
+
+# 查看设置的值
+/sbin/sysctl -a
+```
+
+#### UDP和TCP内核参数
+
+- 确保将UDP和TCP的端口下限范围设置为至少 9000 或更高，以避免使用已知端口，并避免 Oracle 和其他服务器端口常用的“已注册端口”范围内的端口。
+
+```shell
+vim /etc/sysctl.conf
+# net.ipv4.ip_local_port_range = 9000 65500
+
+network restart
+```
+
+### 资源限制
 
 ```shell
 # 参考 https://docs.oracle.com/en/database/oracle/oracle-database/19/ladbi/checking-resource-limits-for-oracle-software-installation-users.html#GUID-293874BD-8069-470F-BEBF-A77C06618D5A
@@ -118,7 +172,7 @@ ulimit -Hs
 # 注销这些用户并重新登录
 ```
 
-#### 远程显示与X11转发（可选）
+## 远程显示与X11转发（可选）
 
 ```shell
 vncserver
