@@ -1,5 +1,4 @@
 hostname,user,date,msg,pre_log
-'zjk-laptop','zjk','2024-03-22 17:17:15','dbas','fd8940346f010ec2b7e2bfb82853a48b8959c8a9 dbas'
 'zjk-laptop','zjk','2024-03-22 19:09:14','cloud','e8a4ac7d514cfc6edbc7fc2ecba222d1762388a0 dbas'
 'zjk-laptop','zjk','2024-03-22 21:15:55','oracle','4558eba9c6a98c2390ee4c07678030ad936a3977 cloud'
 'zjk-laptop','zjk','2024-03-22 22:15:25','bdas','94a350170f2efad1e451ff0e4f5f971f31f1d12b oracle'
@@ -98,3 +97,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-04-04 00:04:00','select','30645c29dddae0e99778cc75d9329cf69d0cc10b juc'
 'zjk-laptop','zjk','2024-04-04 00:04:48','select','47a8ca92f46c94f505b1e303d8900c3c11031462 select'
 'zjk-laptop','zjk','2024-04-04 10:48:23','getmax-juc','c007c628e6a413dbc4687bb2e75869664600b747 select'
+'zjk-laptop','zjk','2024-04-04 10:50:02','none','3fc1314cf9652c3b69390ad1fc996aab72e5d326 getmax-juc'

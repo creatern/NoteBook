@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class ThreadTest {
+public class ThreadTestMaxValue {
     public static void main(String[] args) {
         // 生成伪随机数组
         Integer[] arr = new Integer[1000];
@@ -14,7 +14,7 @@ public class ThreadTest {
             arr[i] = (int) Math.floor(Math.random() * 4000);
         }
 
-        ThreadTest threadTest = new ThreadTest();
+        ThreadTestMaxValue threadTest = new ThreadTestMaxValue();
         System.out.println(threadTest.getMaxValue(arr, 5));
     }
 
