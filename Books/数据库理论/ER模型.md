@@ -60,7 +60,6 @@
         <td></td>
     </tr>
 </table>
-
 <img src="../../pictures/数据库系统概念-E-R实体集和联系集.drawio.svg" width="450"/> 
 
 ## 实体集
@@ -96,11 +95,12 @@
 
 <table>
     <tr>
-        <td width="30%">简单属性（simple）</td>
-        <td width="70%">不能被划分为子部分的属性</td>
+        <td width="30%" rowspan="9"><img src="../../pictures/数据库系统概念-复杂属性.drawio.svg" width="100%" /></td>
+        <td width="15%">简单属性<br/>simple</td>
+        <td width="55%">不能被划分为子部分的属性</td>
     </tr>
     <tr>
-        <td rowspan="2">复合属性（composite）</td>
+        <td rowspan="2">复合属性<br/>composite</td>
         <td>可以被划分为子部分（其他属性）的属性，如电话号码可以被划分为区域号等部分</td>
     </tr>
     <tr>
@@ -111,10 +111,10 @@
         <td></td>
     </tr>
     <tr>
-        <td>单值属性（single-valued）</td>
+        <td>单值属性<br/>single-valued</td>
         <td>一个属性只对应一个值</td>    </tr>
     <tr>
-        <td>多值属性（multivalued）</td>
+        <td>多值属性<br/>multivalued</td>
         <td>一个属性可能对应于一组值（0..n）</td>
     </tr>
     <tr>
@@ -122,16 +122,14 @@
         <td></td>
     </tr>
     <tr>
-        <td>派生属性（derived attribute）</td>
+        <td>派生属性<br/>derived attribute</td>
         <td>该类属性的值可以从其他相关属性或实体的值派生出来。派生属性的值并不存储，而是在需要时被计算出来</td>
     </tr>
     <tr>
-        <td>基属性（base）</td>
+        <td>基属性<br/>base</td>
         <td>存储的属性（stored），用于计算出派生属性的值</td>
     </tr>
-</table>
-
-<img src="../../pictures/数据库系统概念-复杂属性.drawio.svg" width="300"/> 
+</table> 
 
 ## 映射基数
 
