@@ -394,3 +394,9 @@ fusermount -u ~/MyDisk/mysshfs/
 sshfs zjk@zjk-pi:/home/zjk/Docs ~/MyDisk/mysshfs/ -o reconnect
 ```
 
+# /etc/ssh/sshd_config
+
+```shell
+
+```
+
