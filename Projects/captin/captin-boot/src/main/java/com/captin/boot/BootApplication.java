@@ -16,10 +16,4 @@ public class BootApplication {
 
 	}
 
-	@EventListener(ContextClosedEvent.class)
-	@Order(2)
-	public void closedEventListner() {
-		System.out.println("Application is closed");
-	}
-
 }
