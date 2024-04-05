@@ -15,7 +15,35 @@ dnf install oracle-database-preinstall-19c-1.0-1.el9.x86_64
 ## 依赖准备
 
 ```shell
-dnf install 
+dnf install bc -y
+dnf install binutils -y
+dnf install compat-openssl11 -y
+dnf install elfutils-libelf -y
+dnf install fontconfig -y
+dnf install glibc -y
+dnf install glibc-devel -y
+dnf install ksh -y
+dnf install libaio -y
+dnf install libasan -y
+dnf install liblsan -y
+dnf install libX11 -y
+dnf install libXau -y
+dnf install libXi -y
+dnf install libXrender -y
+dnf install libXtst -y
+dnf install libxcrypt-compat -y
+dnf install libgcc -y
+dnf install libibverbs -y
+dnf install libnsl -y
+dnf install librdmacm -y
+dnf install libstdc++ -y
+dnf install libxcb -y
+dnf install libvirt-libs -y
+dnf install make -y
+dnf install policycoreutils -y
+dnf install policycoreutils-python-utils -y
+dnf install smartmontools -y
+dnf install sysstat -y
 ```
 
 ## 环境配置
@@ -301,6 +329,10 @@ systemctl start oracleasm
 ### 预先准备
 
 ```shell
+dnf install bc binutils compat-openssl11 elfutils-libelf fontconfig glibc glibc-devel ksh libaio libasan liblsan libX11 libXau libXi libXrender libXtst libxcrypt-compat libgcc libibverbs libnsl librdmacm libstdc++ libxcb libvirt-libs make policycoreutils policycoreutils-python-utils smartmontools sysstat -y
+```
+
+```shell
 groupadd -g 54321 oinstall
 groupadd -g 54322 dba
 useradd -u 54321 -g oinstall -G dba oracle
@@ -347,9 +379,33 @@ passwd oracle
 - 切换至oracle用户执行：
 
 ```shell
+export CV_ASSUME_DISTID=OEL9.3
 cd /u01/app/oracle/product/19.0.0/dbhome_1
 ./runInstaller
 ```
 
 ### 静默
+
+# 安装常见错误
+
+## INS-08101
+
+```
+[INS-08101] Unexpected error while executing the action at state: 'supportedOSCheck
+Cause - No additional information available.  
+Action - Contact Oracle Support Services or refer to the software manual.
+```
+
+```shell
+export CV_ASSUME_DISTID=OEL9.3
+# echo CV_ASSUME_DISTID=OEL9.3 >> /home/oracle/.bash_profile
+```
+
+## Error in invoking target ...
+
+```
+Error in invoking target 'libasmclntsh19.ohso libasmperl19.ohso client_sharedlib' of makefile '/u01/app/oracle/product/19.0.0/dbhome_1/rdbms/lib/ins_rdbms.mk'. See '/tmp/InstallActions2024-04-05_12-52-22PM/installActions2024-04-05_12-52-22PM.log' for details
+```
+
+- 下载补丁[35775632](https://updates.oracle.com/Orion/PatchDetails/process_form?aru=25398250&patch_password=&no_header=0)
 

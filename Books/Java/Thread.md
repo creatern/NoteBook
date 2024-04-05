@@ -82,7 +82,7 @@ new Thread(()->{
 }).start();
 ```
 
-# 同步
+# 同步控制
 
 ## [synchronized](./synchronized.md)
 
