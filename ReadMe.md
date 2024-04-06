@@ -196,6 +196,8 @@
 
 ##### [JDBC](./Books/Spring/JDBC.md)
 
+##### [JPA](./Books/Spring/JPA.md)
+
 ##### [Cassandra](./Books/Spring/Cassandra.md)
 
 ##### [MongoDB](./Books/Spring/MongoDB.md)
