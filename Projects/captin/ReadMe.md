@@ -14,8 +14,9 @@
 
 # captin-boot
 
-
-
 # captin-vue
 
+<img src="./assets/captin-网页结构.drawio.svg" width="600"/> 
+
 # MySQL
+
