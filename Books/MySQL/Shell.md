@@ -56,13 +56,14 @@ mysql [-h 主机地址] [-u 用户 -p] [数据库名] [< 文件 | 文件 | 文�
         <td><code>mysql -t</code>：以批处理模式获取交互式输出格式</td>
     </tr>
     <tr>
-        <td><code>mysql -v</code>将执行的语句回显到输出中</td>
+        <td><code>mysql -v</code>：将执行的语句回显到输出中</td>
     </tr>
     <tr>
         <td>&gt; 文件</td>
         <td>捕获输出到指定文件</td>
     </tr>
 </table>
+
 ```mysql
 -- 断开连接的3种方式
 exit
@@ -108,5 +109,12 @@ show variables like 'secure_file_priv'
         <td>不限制文件操作的范围，但某些版本的MySQL可能不允许该选项</td>
     </tr>
 </table>
+# 查看MySQL信息
+
+```mysql
+select version(), current_date;
+select version(), now();
+```
+
 
 

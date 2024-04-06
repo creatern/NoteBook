@@ -10,7 +10,7 @@
         <td>Vue</td>
     </tr>
 </table>
-<img src="./assets/captin-spring-vue-mysql.drawio.png" width="600"/> 
+<img src="./assets/captin-技术选型.drawio.svg" width="600"/> 
 
 # captin-boot
 
@@ -18,3 +18,8 @@
 
 # captin-vue
 
+# MySQL
+
+1. documents表（文档）：
+2. repositories表（仓库）：是文档的聚合
+3. todos表（todo）：

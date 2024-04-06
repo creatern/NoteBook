@@ -99,8 +99,8 @@ set names 'utf8mb4'
 
 <table>
     <colgroup>
-        <col style="width: 20%">
-        <col style="width: 80%">
+        <col style="width: 10%">
+        <col style="width: 90%">
     </colgroup>
     <thead>
         <tr>
@@ -129,3 +129,4 @@ set names 'utf8mb4'
         <td>二进制</td>
         </tr></tbody>
 </table>
+
