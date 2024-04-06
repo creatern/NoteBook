@@ -19,7 +19,3 @@
 # captin-vue
 
 # MySQL
-
-1. documents表（文档）：
-2. repositories表（仓库）：是文档的聚合
-3. todos表（todo）：
