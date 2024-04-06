@@ -1,47 +1,22 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+// 引入 RouterView 和 RouterLink 标签
+import { RouterView, RouterLink } from "vue-router";
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div>
+    <!-- RuoterLink 对a标签的一种替代： to 路由，active-class 激活该路由时启用的class -->
+    <RouterLink to="/" active-class="link-active">Home</RouterLink>
+    <RouterLink to="/doc/vue" active-class="link-active">Vue</RouterLink>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <!-- RouterView 标签： 表明路由（src/router/index.js）中配置对应的组件应该存放的位置 -->
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.link-active {
+  background-color: rgb(255, 0, 0);
+  color: rgb(110, 223, 220);
 }
 </style>

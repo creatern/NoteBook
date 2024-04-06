@@ -570,6 +570,3 @@ const vm = new Vue({
 </html>
 ```
 
-# 组件 components
-
-# 路由 router                                                                                                                                                                                                                         
