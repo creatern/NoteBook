@@ -18,7 +18,6 @@ create table if not exists documents (
 	id int auto_increment comment '文档id',
 	repositories_id int not null comment '仓库id',
 	title varchar(255) not null comment '文档标题',
-	context text not null comment '文档简介',
 	category varchar(255) not null comment '文档类型 例如系统篇、shell篇',
 	_level int not null comment '文档级别',
 	_order int not null comment '文档顺序 对文档在仓库内进行排序',
@@ -34,7 +33,7 @@ create table if not exists clips (
 	id int auto_increment comment '片段id',
 	documents_id int not null comment '文档id',
 	title varchar(255) not null comment '片段标题',
-	_level int not null comment '片段级别',
+	_level int not null comment '片段级别 0-表示为文档的简介',
 	_order int not null comment '片段顺序 对片段在文档内进行排序',
 	context text comment '片段内容',
 	constraint clips_id_pk primary key (id),
@@ -56,10 +55,9 @@ create table if not exists keywords (
 
 -- clips_keywords 片段与关键词的联系
 create table if not exists clips_keywords (
-	id int auto_increment comment '片段与关键词 id',
-	clips_id int not null comment '片段id',
-	keywords_id int not null comment '关键词id',
-	constraint clips_keywords_id primary key (id),
+	clips_id int comment '片段id',
+	keywords_id int comment '关键词id',
+	constraint clips_keywords_ckid_pk primary key (clips_id, keywords_id),
 	constraint clips_keywords_clips_id_fk foreign key (clips_id) references clips(id)
 		on delete cascade
 		on update cascade,
@@ -67,6 +65,24 @@ create table if not exists clips_keywords (
 		on delete cascade
 		on update cascade
 );
+
+-- medias 媒体表 管理着图片、视频等媒体的url
+create table if not exists medias (
+	id int auto_increment comment '媒体id',
+	url varchar(255) comment '媒体资源的url',
+	type int comment '媒体的类型 1-png,2-jpg,3-gif,4-mp4,5-pdf'
+);
+
+-- 媒体与片段的联系
+create table if not exists medias_clips (
+	medias_id int comment '媒体id',
+	clips_id int comment '片段id',
+	constraint 'medias_clips_mcid_pk' primary key (medias_id, clips_id)
+);
+
+-- 媒体与关键词的联系
+create table if not exists 
+
 
 -- todos todo表
 create table if not exists todos (

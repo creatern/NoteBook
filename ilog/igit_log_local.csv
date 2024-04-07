@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-25 11:27:14','c','success','2c8b508bfb4b9b9b4839dc8a82922c73524f40e8 c'
 'zjk-laptop','zjk','2024-03-25 13:32:11','c','success','f677f9fa4a246474507440e33fd37dc2fa447c94 c'
 'zjk-laptop','zjk','2024-03-25 13:34:18','c','success','718c12fc1fb52df3a049f497b84ff01ce1069641 c'
 'zjk-laptop','zjk','2024-03-25 17:41:06','none','success','dfb2303a58e68a0b01a708726c83a0842c775cb7 none'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-04-06 17:34:23','db','success','bafb60e2caf979393e2ffee459296201d7f0b827 db'
 'zjk-laptop','zjk','2024-04-06 20:46:08','pre','success','74515798e3cb91077c4da9da2636b2ef1373624f pre'
 'zjk-laptop','zjk','2024-04-06 21:01:18','pro','success','c9f069ae73ca27573fc2e60e96c2875b1236db63 pro'
+'zjk-laptop','zjk','2024-04-07 00:13:19','dialog','success','1b480e01f8c1b177024ee44733cb79fc70f68ed9 dialog'
