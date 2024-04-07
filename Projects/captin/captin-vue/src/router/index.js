@@ -12,16 +12,6 @@ const router = createRouter({
       name: "home",
       component: () => import("../views/HomeView.vue"), // 使用的组件
     },
-    {
-      path: "/doc/vue",
-      name: "vue",
-      component: () => import("../views/DocVue.vue"),
-    },
-    {
-      path: "/doc/java",
-      name: "java",
-      component: () => import("../views/JavaHomeView.vue"),
-    },
   ],
 });
 

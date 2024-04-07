@@ -1,3 +1,8 @@
+<script setup>
+import axios from "axios";
+</script>
+
 <template>
-    <h1>HelloWorld</h1>
+  <!-- 引入导航 -->
+  <Guide />
 </template>

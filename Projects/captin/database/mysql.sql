@@ -69,20 +69,37 @@ create table if not exists clips_keywords (
 -- medias 媒体表 管理着图片、视频等媒体的url
 create table if not exists medias (
 	id int auto_increment comment '媒体id',
-	url varchar(255) comment '媒体资源的url',
-	type int comment '媒体的类型 1-png,2-jpg,3-gif,4-mp4,5-pdf'
+	url varchar(255) not null comment '媒体资源的url',
+	type int not null comment '媒体的类型 1-png,2-jpg,3-gif,4-mp4,5-pdf',
+	constraint medias_id_pk primary key (id),
+	constraint medias_url_uk unique (url) 
 );
 
 -- 媒体与片段的联系
 create table if not exists medias_clips (
 	medias_id int comment '媒体id',
 	clips_id int comment '片段id',
-	constraint 'medias_clips_mcid_pk' primary key (medias_id, clips_id)
+	constraint medias_clips_mcid_pk primary key (medias_id, clips_id),
+	constraint medias_clips_medias_id_fk foreign key (medias_id) references medias(id)
+		on delete cascade
+		on update cascade,
+	constraint medias_clips_clips_id_fk foreign key (clips_id) references clips(id)
+		on delete cascade
+		on update cascade
 );
 
 -- 媒体与关键词的联系
-create table if not exists 
-
+create table if not exists medias_keywords (
+	medias_id int comment '媒体id',
+	keywords_id int comment '关键词id',
+	constraint medias_keywords_mkid_pk primary key (medias_id, keywords_id),
+	constraint medias_keywords_medias_id_fk foreign key (medias_id) references medias(id)
+		on delete cascade
+		on update cascade,
+	constraint medias_keywords_keywords_id_fk foreign key (keywords_id) references keywords(id)
+		on delete cascade
+		on update cascade
+);
 
 -- todos todo表
 create table if not exists todos (

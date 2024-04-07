@@ -1,4 +1,4 @@
-package com.captin.boot.entity;
+package com.captin.boot.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,14 +9,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "keywords")
 @Data
-@Table(name="repositories")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Repository {
+public class Keyword {
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
-    @Column(name="category")
-    private String category;
+    @Column(name = "keyword")
+    private String keyword;
+    @Column(name = "context")
+    private String context;
+    @Column(name = "links")
+    private String links;
 }

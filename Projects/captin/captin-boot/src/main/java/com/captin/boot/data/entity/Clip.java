@@ -1,4 +1,4 @@
-package com.captin.boot.entity;
+package com.captin.boot.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,22 +9,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "documents")
+@Table(name="clips")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Document {
+public class Clip {
     @Id
-    @Column(name = "id")
+    @Column(name="id")
     private Integer id;
-    @Column(name = "repositories_id")
-    private String repId;
-    @Column(name = "title")
+    @Column(name="documents_id")
+    private Integer docId;
+    @Column(name="title")
     private String title;
-    @Column(name = "context")
-    private String context;
     @Column(name="_level")
     private Integer level;
-    @Column(name = "_order")
+    @Column(name="order")
     private Integer order;
+    @Column(name="context")
+    private String context;
 }

@@ -1,4 +1,4 @@
-package com.captin.boot.entity;
+package com.captin.boot.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,19 +8,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-
 @Entity
-@Table(name = "records")
+@Table(name = "documents")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Record {
+public class Document {
     @Id
     @Column(name = "id")
     private Integer id;
+    @Column(name = "repositories_id")
+    private String repId;
+    @Column(name = "title")
+    private String title;
     @Column(name = "context")
     private String context;
-    @Column(name = "create_time")
-    private Date createTime;
+    @Column(name="_level")
+    private Integer level;
+    @Column(name = "_order")
+    private Integer order;
 }
