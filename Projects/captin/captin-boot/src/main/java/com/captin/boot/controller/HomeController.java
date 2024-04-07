@@ -16,7 +16,7 @@ public class HomeController {
     @Autowired
     private RepositoryService repositoryService;
 
-    @GetMapping("/doc/repository/list")
+    @GetMapping("/repository/list")
     public List<Repository> listRepository() {
         return repositoryService.listRepository();
     }
