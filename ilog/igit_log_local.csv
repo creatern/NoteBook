@@ -1,5 +1,4 @@
 hostname,user,date,msg,stat,cur_log
-'zjk-laptop','zjk','2024-03-25 13:34:18','c','success','718c12fc1fb52df3a049f497b84ff01ce1069641 c'
 'zjk-laptop','zjk','2024-03-25 17:41:06','none','success','dfb2303a58e68a0b01a708726c83a0842c775cb7 none'
 'zjk-laptop','zjk','2024-03-25 20:43:12','avl','success','003c7a260b26fbe3a6451251a6e8d4d3c88398fb avl'
 'zjk-laptop','zjk','2024-03-26 00:53:08','signal','success','03d3a78b67dda86b30000e8649f97cbd0b0f719b signal'
@@ -98,3 +97,4 @@ hostname,user,date,msg,stat,cur_log
 'zjk-laptop','zjk','2024-04-06 21:01:18','pro','success','c9f069ae73ca27573fc2e60e96c2875b1236db63 pro'
 'zjk-laptop','zjk','2024-04-07 00:13:19','dialog','success','1b480e01f8c1b177024ee44733cb79fc70f68ed9 dialog'
 'zjk-laptop','zjk','2024-04-07 12:27:59','none','success','902a6a96285b15b2ae0f0c5e40458e4aa67b1b02 none'
+'zjk-laptop','zjk','2024-04-07 16:15:19','vue-spring','success','c0ff3b488c9c08310d7c194136295485a4eb2ba6 vue-spring'
