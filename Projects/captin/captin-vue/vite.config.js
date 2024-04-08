@@ -16,13 +16,10 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8089,
     proxy: {
-      // 匹配所有以 "/api" 开头的请求路径
       "/api": {
-        target: "http://127.0.0.1:8088", // 代理目标的基础路径
-        changeOrigin: true, // 支持跨域 与Spring进行交互
-        pathRewrite: {
-          "^/api": "", // 路径重写，去除路径中的 "/api"
-        },
+        target: "http://127.0.0.1:8088",
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api/, ""),
       },
     },
   },
