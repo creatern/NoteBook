@@ -1,10 +1,12 @@
 <script setup>
-import Guide from "@/components/home/Guide.vue";
-import Repositories from "@/components/home/Repositories.vue";
+/* Get 获取 repositories 的列表，用于生成对应的仓库链接 */
+axios({
+  method: "get",
+  url: "/api/repository/list",
+}).then((response) => {
+  console.log(url);
+  console.log(response.data);
+});
 </script>
 
-<template>
-  <!-- 引入导航 -->
-  <Guide />
-  <Repositories />
-</template>
+<template></template>
