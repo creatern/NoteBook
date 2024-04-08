@@ -79,6 +79,7 @@ create table if not exists medias (
 create table if not exists medias_clips (
 	medias_id int comment '媒体id',
 	clips_id int comment '片段id',
+	times int not null comment '媒体被片段引用的计数，计数为0时删除该联系',
 	constraint medias_clips_mcid_pk primary key (medias_id, clips_id),
 	constraint medias_clips_medias_id_fk foreign key (medias_id) references medias(id)
 		on delete cascade
@@ -92,6 +93,7 @@ create table if not exists medias_clips (
 create table if not exists medias_keywords (
 	medias_id int comment '媒体id',
 	keywords_id int comment '关键词id',
+	times int not null comment '媒体被关键词引用的计数，计数为0时删除该联系',
 	constraint medias_keywords_mkid_pk primary key (medias_id, keywords_id),
 	constraint medias_keywords_medias_id_fk foreign key (medias_id) references medias(id)
 		on delete cascade
