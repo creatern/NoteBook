@@ -6,7 +6,6 @@ const axios = inject("axios");
 const repositoryList = ref(null);
 // axios 请求
 axios.get("/api/repository/list").then((reps) => {
-  // [{"id":2,"category":"Java"},{"id":1,"category":"Linux"}]
   repositoryList.value = reps.data; // 获取响应数据
 });
 </script>
