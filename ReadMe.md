@@ -480,27 +480,27 @@
 
 ## UML
 
-### [基本元素](./Books/Algorithm/基本元素.md)
+### [基本元素](./Books/UML/基本元素.md)
 
-### [关系元素](./Books/Algorithm/关系元素.md)
+### [关系元素](./Books/UML/关系元素.md)
 
-### [视图和图](./Books/Algorithm/视图和图.md)
+### [视图和图](./Books/UML/视图和图.md)
 
-### [静态视图](./Books/Algorithm/静态视图.md)
+### [静态视图](./Books/UML/静态视图.md)
 
-### [用例视图](./Books/Algorithm/用例视图.md)
+### [用例视图](./Books/UML/用例视图.md)
 
-### [状态机视图](./Books/Algorithm/状态机视图.md)
+### [状态机视图](./Books/UML/状态机视图.md)
 
-### [活动视图](./Books/Algorithm/活动视图.md)
+### [活动视图](./Books/UML/活动视图.md)
 
-### [物理视图](./Books/Algorithm/物理视图.md)
+### [物理视图](./Books/UML/物理视图.md)
 
-### [模型管理视图](./Books/Algorithm/模型管理视图.md)
+### [模型管理视图](./Books/UML/模型管理视图.md)
 
-### [Rational Rose](./Books/Algorithm/Rational_Rose.md)
+### [Rational Rose](./Books/UML/Rational_Rose.md)
 
-## GOF
+## GOF 设计模式
 
 ### [设计原则](./Books/Algorithm/设计原则.md)
 
