@@ -1,0 +1,54 @@
+<template>
+  <p>
+    关联分析（association
+    analysis）方法用于发现隐藏在大型数据集中的有意义的联系。所发现的联系可以用关联规则（associationrule）或频繁项集的形式表示。
+  </p>
+
+  <p>项集与支持度计数</p>
+  <ul>
+    <li>
+      <项集（itemset）：在关联分析中，包含0个或多个项的集合被称为项集，如果一个项集包含k各个项，则称为“k-项集”。
+    </li>
+    <li>
+      支持度计数 &sigma;(X)：包含特定项集的事务个数。令<code
+        >I={i<sub>1</sub>, i<sub>2</sub>, ..., i<sub>d</sub>}</code
+      >是所有项的集合、<code
+        >T={t<sub>1</sub>, t<sub>2</sub>, ..., t<sub>3</sub>}</code
+      >是所有事务的集合，则<code>&sigma;(X)=|{t<sub>i</sub>|X&sube;t<sub>i</sub>,t<sub>i</sub>&in;T}|</code>。
+    </li>
+  </ul>
+  <p>
+    关联规则（association
+    rule）反映一个事物与其他事物之间的相互依存性和关联性。如果两个或者多个事物之间存在一定的关联关系，则通过其中一个事物的发生就能预测与之关联的其他事物的发生。
+  </p>
+  <ol>
+    <li>
+      关联规则是形如<code>X&rarr;Y</code>的蕴涵表达式，且<code>X&cap;Y=&empty;</code>。
+    </li>
+    <li>
+      关联规则的强度由其对应的支持度（support）和置信度（confidence）度量。假定<code>X&rarr;Y</code>，且项集的总数为N。
+    </li>
+    1.
+    <ol>
+      <li>
+        支持度（s）：确定规则可以用于给定数据集的频繁程度。<code
+          >s = &sigma;(X) / N</code
+        >
+      </li>
+      <li>
+        置信度（c）：确定Y在包含X的事务中出现的频繁程度。<code
+          >c = &sigma;(X &cup; Y) / &sigma;(X)</code
+        >
+      </li>
+    </ol>
+  </ol>
+  <p>
+    联规则发现：给定事务的集合T，关联规则发现是指找出支持度大于等于minsup并且置信度大于等于minconf的所有规则。
+  </p>
+  1. 频繁项集（frequence
+  itemset）的产生：发现满足最小支持度阈值（minsup）的所有项集。 2.
+  规则的产生：从频繁项集中提取所有高置信度（minconf）的规则（强规则，strong
+  rule）。 先验原理：如果一个项集是频繁的，则其所有子集也一定是频繁的。
+  反单调性：一个项集的支持度绝不会超过其子集的支持度。即如果一个项集是非频繁的，则其所有超集也一定都是非频繁的。
+  Apriori算法（基于支持度的剪枝，support-base pruning）
+</template>
