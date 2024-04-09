@@ -36,6 +36,8 @@
 
 ### [分类：其他技术](./Books/数据库理论/分类其他技术.md)
 
+### [关联：基本概念与算法](./Books/数据库理论/关联基本概念与算法.md)
+
 ## Oracle
 
 [Oracle参考文档阅读](https://docs.oracle.com/en/database/oracle/oracle-database/19/cncpt/introduction-to-oracle-database.html#GUID-C756D70F-75D4-4234-BEB5-CB05A4742128)
