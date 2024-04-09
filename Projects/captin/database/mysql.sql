@@ -8,12 +8,23 @@ use captin;
 -- documents 文档表
 create table if not exists documents (
 	title varchar(255) comment '文档标题',
-	parent_doc_title varchar(255) comment '父文档，此后需要设置一个触发器来处理父文档被删除时的级联',
 	_order int not null comment '文档顺序 对文档在仓库内进行排序',
-	url varchar(255) not null comment '文档路径'
-	constraint documents_title_pk primary key (title),
+	url varchar(255) not null comment '文档路径',
+	constraint documents_title_pk primary key (title)
 );
 
+-- 文档之间的父子关系
+create table if not exists documents_relations (
+	parent_title varchar(255) comment '父文档的标题',
+	child_title varchar(255) comment '子文档的标题',
+	constraint documents_relations_parent_child_pk primary key (parent_title, child_title),
+	constraint documents_relations_parent_title_fk foreign key (parent_title) references documents(title)
+		on delete cascade
+		on update cascade,
+	constraint documents_relations_child_title_fk foreign key (child_title) references documents(title)
+		on delete cascade
+		on update cascade
+);
 
 -- keywords 关键词表
 create table if not exists keywords (
@@ -26,8 +37,8 @@ create table if not exists keywords (
 -- 之后通过该联系在关键词表的解释内容后面追加对应文档的链接
 -- 当keywords对应的keyword在该联系中找不到时，则删除该keywords实体
 create table if not exists clips_keywords (
-	title int comment '文档标题',
-	keyword varchar comment '关键词keyword',
+	title varchar(255) comment '文档标题',
+	keyword varchar(255) comment '关键词keyword',
 	constraint documents_keywords_dktk_pk primary key (title, keyword),
 	constraint documents_keywords_title_fk foreign key (title) references documents(title)
 		on delete cascade
@@ -41,7 +52,7 @@ create table if not exists clips_keywords (
 create table if not exists medias (
 	id int auto_increment comment '媒体id',
 	url varchar(255) not null comment '媒体资源的url',
-	times int not null comment '媒体的引用次数，当次数为0时进行删除'
+	times int not null comment '媒体的引用次数，当次数为0时进行删除',
 	constraint medias_id_pk primary key (id),
 	constraint medias_url_uk unique (url) 
 );

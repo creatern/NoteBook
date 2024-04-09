@@ -8,9 +8,14 @@ const router = createRouter({
   // 配置路由
   routes: [
     {
-      path: "/", // url路径
+      path: "/home", // url路径
       name: "home",
       component: () => import("../views/HomeView.vue"), // 使用的组件
+    },
+    {
+      path: "/document",
+      name: "document",
+      component: () => import("../views/DocumentView.vue"),
     },
   ],
 });

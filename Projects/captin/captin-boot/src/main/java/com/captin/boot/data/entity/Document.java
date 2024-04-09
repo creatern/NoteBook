@@ -15,16 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Document {
     @Id
-    @Column(name = "id")
-    private Integer id;
-    @Column(name = "repositories_id")
-    private String repId;
     @Column(name = "title")
     private String title;
-    @Column(name = "context")
-    private String context;
-    @Column(name="_level")
-    private Integer level;
     @Column(name = "_order")
     private Integer order;
+    @Column(name="url")
+    private String url;
 }

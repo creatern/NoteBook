@@ -15,12 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Keyword {
     @Id
-    @Column(name = "id")
-    private Integer id;
     @Column(name = "keyword")
     private String keyword;
     @Column(name = "context")
     private String context;
-    @Column(name = "links")
-    private String links;
 }
