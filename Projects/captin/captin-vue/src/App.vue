@@ -8,7 +8,11 @@ import { RouterView, RouterLink } from "vue-router";
   <aside class="aside-nav-container">
     <!-- RuoterLink 对a标签的一种替代： to 路由，active-class 激活该路由时启用的class -->
     <RouterLink to="/home" active-class="link-active">Home</RouterLink>
-    <RouterLink to="/document" active-class="link-active">Document</RouterLink>
+    <RouterLink
+      to="/DataBase/Datamining/association_analysis"
+      active-class="link-active"
+      >Document</RouterLink
+    >
   </aside>
   <!-- 页面栏 -->
   <div>

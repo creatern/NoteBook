@@ -13,9 +13,10 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"), // 使用的组件
     },
     {
-      path: "/document",
-      name: "document",
-      component: () => import("../views/DocumentView.vue"),
+      path: "/Database/DataMining/association_analysis",
+      name: "association_analysis",
+      component: () =>
+        import("../repository/documents/association_analysis.vue"),
     },
   ],
 });

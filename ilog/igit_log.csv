@@ -1,5 +1,4 @@
 hostname,user,date,msg,pre_log
-'zjk-laptop','zjk','2024-03-27 19:44:37','db','66fc04521fc9bf9c4b0135d80424f248e6067f26 at'
 'zjk-laptop','zjk','2024-03-27 20:52:54','index','e2f3b551e84e3bdc43f7b2a8771f42902ea28219 db'
 'zjk-laptop','zjk','2024-03-27 22:35:16','computer','7d0b84f343b4844261a2dfa54326dc95cac9565b index'
 'zjk-laptop','zjk','2024-03-28 00:39:57','oracle','a0786eefe0a0d78fa9b8396697a655db5c0b3882 computer'
@@ -98,3 +97,4 @@ hostname,user,date,msg,pre_log
 'zjk-laptop','zjk','2024-04-09 11:08:55','vue','ae7d53579e9b8140565923500010983fb3463f46 er'
 'zjk-laptop','zjk','2024-04-09 12:57:03','dm','5344cad1d6ef052e6a29e55a1a23459c627b9bcf vue'
 'zjk-laptop','zjk','2024-04-09 13:53:24','none','befb260a4287054aeb84550ca7800a9a33c0259e dm'
+'zjk-laptop','zjk','2024-04-09 19:03:53','none','b32209ab04a342e36eafaf6e08e2d24e9006c59d none'
