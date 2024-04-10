@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <ImageButton
+        android:id="@+id/ib_repo_in"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.183"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.079"
+        app:srcCompat="@drawable/tab_repo_in" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_out"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="60dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toEndOf="@+id/ib_repo_in"
+        app:layout_constraintTop_toTopOf="@+id/ib_repo_in"
+        app:srcCompat="@drawable/tab_repo_out" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_manage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_in"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_in"
+        app:srcCompat="@drawable/tab_repo_manage" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_check"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="60dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toEndOf="@+id/ib_repo_manage"
+        app:layout_constraintTop_toTopOf="@+id/ib_repo_manage"
+        app:srcCompat="@drawable/tab_repo_check" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_get"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_manage"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_manage"
+        app:srcCompat="@drawable/tab_repo_get" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_allocation"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="60dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toEndOf="@+id/ib_repo_get"
+        app:layout_constraintTop_toTopOf="@+id/ib_repo_get"
+        app:srcCompat="@drawable/tab_repo_allocation" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_put"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_get"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_get"
+        app:srcCompat="@drawable/tab_repo_put" />
+
+    <ImageButton
+        android:id="@+id/ib_repo_send"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="60dp"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toEndOf="@+id/ib_repo_put"
+        app:layout_constraintTop_toTopOf="@+id/ib_repo_put"
+        app:srcCompat="@drawable/tab_repo_send" />
+
+    <TextView
+        android:id="@+id/tv_repo_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="入库管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_in"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_in" />
+
+    <TextView
+        android:id="@+id/tv_repo_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:text="出库管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_repo_in"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_out" />
+
+    <TextView
+        android:id="@+id/tv_repo_manage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="库存管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_manage"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_manage" />
+
+    <TextView
+        android:id="@+id/tv_repo_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:text="防错校验"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_repo_manage"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_check" />
+
+    <TextView
+        android:id="@+id/tv_repo_put"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="包装管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_put"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_put" />
+
+    <TextView
+        android:id="@+id/tv_repo_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:text="配送管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_repo_put"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_send" />
+
+    <TextView
+        android:id="@+id/tv_repo_get"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="领料管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ib_repo_get"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_get" />
+
+    <TextView
+        android:id="@+id/tv_repo_allocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:text="调拨管理"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_repo_get"
+        app:layout_constraintTop_toBottomOf="@+id/ib_repo_allocation" />
+</androidx.constraintlayout.widget.ConstraintLayout>

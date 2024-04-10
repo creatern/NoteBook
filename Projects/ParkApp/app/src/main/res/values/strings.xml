@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">标签栏</string>
+    <string name="first_tab">主页</string>
+    <string name="second_tab">个人</string>
+</resources>

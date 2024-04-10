@@ -3,7 +3,6 @@
 ## 安装配置
 
 - 环境变量配置
-
 1. JAVA_HOME
 
 2. GRADLE_HOME：gradle-8.2.1/bin/gradle.bat文件。
@@ -24,7 +23,7 @@ gradle init
 ```
 
 > application：
->
+> 
 > <img src="../../pictures/Gradle-project-model.drawio.svg" width="500"/>
 
 ### .gradle
@@ -33,12 +32,12 @@ gradle init
 
 - Gradle指令：需要在包含构建文件（build.gradle）的目录下执行。
 
-| 指令           | 说明                       |
-| -------------- | -------------------------- |
-| gradle clean   | 清空build目录              |
-| gradle classes | 编译业务代码和配置文件     |
+| 指令             | 说明            |
+| -------------- | ------------- |
+| gradle clean   | 清空build目录     |
+| gradle classes | 编译业务代码和配置文件   |
 | gradle test    | 编译测试代码，生成测试报告 |
-| gradle build   | 构建项目                   |
+| gradle build   | 构建项目          |
 
 #### .gradle 执行
 
@@ -48,17 +47,17 @@ gradle init
 
 ![](../../pictures/Gradle-buildFile_System.drawio.svg)
 
-| 项目属性    | 类型              | 默认值               |
-| ----------- | ----------------- | -------------------- |
-| project     | Project           | 该Project实例        |
-| name        | String            | 项目目录的名称。     |
-| path        | String            | 项目的绝对路径。     |
-| description | String 项目说明。 |                      |
-| projectDir  | File              | 包含构建脚本的目录。 |
-| buildDir    | File              | *projectDir* /build  |
-| group       | Object            | unspecified          |
-| version     | Object            | unspecified          |
-| ant         | ant build         | 一个AntBuilder实例   |
+| 项目属性        | 类型           | 默认值                 |
+| ----------- | ------------ | ------------------- |
+| project     | Project      | 该Project实例          |
+| name        | String       | 项目目录的名称。            |
+| path        | String       | 项目的绝对路径。            |
+| description | String 项目说明。 |                     |
+| projectDir  | File         | 包含构建脚本的目录。          |
+| buildDir    | File         | *projectDir* /build |
+| group       | Object       | unspecified         |
+| version     | Object       | unspecified         |
+| ant         | ant build    | 一个AntBuilder实例      |
 
 #### repositories 仓库源
 
@@ -72,21 +71,21 @@ repositories {
 
 #### dependencies 依赖
 
-| 依赖方式                      | 说明                                                         |
-| ----------------------------- | ------------------------------------------------------------ |
-| compileOnly                   | 编译生产代码所必需的依赖关系，<br/>但不应该属于运行时类路径的一部分 |
-| implementation（取代compile） | 编译和运行时                                                 |
-| runtimeOnly（取代runtime）    | 仅在运行时使用，不用于编译                                   |
-| testCompileOnly               | 测试相当于compileOnly                                        |
-| testImplementation            | 测试相当于 implementation                                    |
-| testRuntimeOnly               | 测试相当于 runtimeOnly                                       |
+| 依赖方式                      | 说明                                   |
+| ------------------------- | ------------------------------------ |
+| compileOnly               | 编译生产代码所必需的依赖关系，<br/>但不应该属于运行时类路径的一部分 |
+| implementation（取代compile） | 编译和运行时                               |
+| runtimeOnly（取代runtime）    | 仅在运行时使用，不用于编译                        |
+| testCompileOnly           | 测试相当于compileOnly                     |
+| testImplementation        | 测试相当于 implementation                 |
+| testRuntimeOnly           | 测试相当于 runtimeOnly                    |
 
 ### gradle wrapper
 
 - gradlew指令（gradle wrapper）：对Gradle的包装，不同项目Gradle版本不一致的问题。
 
 > gradlew：对不同版本的Gradle（他人项目、历史项目等）。
->
+> 
 > gradle：本地新建项目。 
 
 - gradle-wrapper.properties：首次执行 ./gradlew build时，gradlew读取gradle-wrapper.properties中的配置信息，将指定的Gradle下载并解压到指定目录（GRADLE_USER_HOME/wrapper/dists），并构建本地缓存（GRADLE_USER_HOME/caches）。
@@ -175,7 +174,6 @@ include(":app")
 [The Apache Groovy programming language - Documentation](http://www.groovy-lang.org/documentation.html)
 
 - Groovy：Java脚本化改良版。
-
 1. 支持函数式编程，不需要main函数。
 
 2. 默认导入常用包。
@@ -216,23 +214,23 @@ obj.getter()
 ```
 
 > getter、setter方法由Groovy自动生成。
->
+> 
 > final修饰不默认生成setter。
 
 4. 方法：
 
-| 方法 | 说明                                                         |
-| ---- | ------------------------------------------------------------ |
-| 声明 | 可省略参数类型、返回值类型<br/>返回值：return、默认使用方法的最后一句的值作为方法的返回值 |
-| 调用 | 不引起歧义时可省略()                                         |
+| 方法  | 说明                                                 |
+| --- | -------------------------------------------------- |
+| 声明  | 可省略参数类型、返回值类型<br/>返回值：return、默认使用方法的最后一句的值作为方法的返回值 |
+| 调用  | 不引起歧义时可省略()                                        |
 
 5. 字符串：
 
-| 引号   | 说明                                                 |
-| ------ | ---------------------------------------------------- |
-| 单引号 | 字符串常量、无计算能力                               |
+| 引号  | 说明                                |
+| --- | --------------------------------- |
+| 单引号 | 字符串常量、无计算能力                       |
 | 双引号 | 变量引用`${}`、有计算能力<br/>不引起歧义时可省略`{}` |
-| 三引号 | 模板字符串、支持换行                                 |
+| 三引号 | 模板字符串、支持换行                        |
 
 6. 集合：Groovy的集合中可存放多种类型。
 
@@ -261,4 +259,3 @@ def run(Closure closure){
     closure(2);
 }
 ```
-
